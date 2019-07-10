@@ -32,7 +32,9 @@ def solve_oneshot(config):
 
     prob = cvx.Problem(cvx.Minimize(cvx.sum(obj)), cnts)
     prob.solve(solver=cvx.GUROBI,
-               verbose=True)
+               verbose=True,
+               MIPGap=5e-2,
+               MIPGapAbs=5e-2)
     # print("solving")
     # prob.solve(solver=cvx.ECOS_BB,
     #            verbose=True,
@@ -41,7 +43,7 @@ def solve_oneshot(config):
     #            mi_rel_eps=1e-2)
     print(prob.status)
 
-    #parse solutions
+    # parse solutions
     for agent in agents:
         agent.makeTrajectory()
 

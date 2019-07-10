@@ -24,7 +24,11 @@ class Trajectory(object):
 
     def __repr__(self):
         # print the trajectory
-        return self.pts.__repr__()
+        outsrt = f""
+        for i in range(self.pts.shape[0]):
+            outsrt += f"[{self.pts[i,0]}, {self.pts[i,1]}], {i}, {la.norm(self.pts[i,:], 1)}\n"
+
+        return outsrt
 
     def append(self, pt):
         # append to the traj history
@@ -37,9 +41,10 @@ class Trajectory(object):
             ax.scatter(*self.pts[0, :],
                        marker="o", color=self.color)
             # path
-            cm = plt.cm.get_cmap('plasma', 20)
+            trajLen = self.pts.shape[0]
+            cm = plt.cm.get_cmap('plasma', trajLen )
             for i in range(self.pts.shape[0]-1):
-                color = cm(i % 20) if colorize else self.color
+                color = cm(i % trajLen) if colorize else self.color
                 ax.plot(self.pts[i:i+2, 0],
                         self.pts[i:i+2, 1],
                         color=color)
@@ -56,11 +61,28 @@ class Agent(object):
 
     def makeTrajectory(self):
         config = self.config
+        x = self.cleanSolution()
         # makes trajectory
-        x = self.cvxVar.value
-        for t in range(1, config.maxTime):
+        for t in range(1, x.shape[1]):
             cord = ind2sub(np.argmax(x[:, t]), config.worldSize)
             self.trajectory.append(cord)
+
+    def cleanSolution(self):
+        # this removes blocks of no motion
+        x = []
+        lastWasZero = False
+        for t in range(self.config.maxTime):
+            if self.cvxVar.value[0, t] == 1:
+                if lastWasZero == True:
+                    # drop if adjacent zeros
+                    continue
+                else:
+                    x.append(self.cvxVar.value[:, t])
+                    lastWasZero = True
+            else:
+                x.append(self.cvxVar.value[:, t])
+                lastWasZero = False
+        return np.array(x).T
 
     def stage(self, obj, cnts):
         # unpack
@@ -87,12 +109,17 @@ class Agent(object):
         for s in range(config.S):
             cnts += [cvx.sum(X[s, :]) >= 1]  # all spots at least once
 
+        # range constraints
+        for t in range(config.maxTime):
+            cnts +=[config.costmap.T* X[:, t] <= max(90-t, 10)]
+
+
         # objective
         for t in range(1, config.maxTime):
-            obj += [cvx.norm(X[:, t] - X[:, t - 1])]
+            obj += [config.costmap.T* X[:, t]]
 
     def plot(self, ax):
-        self.trajectory.plot(ax)
+        self.trajectory.plot(ax, colorize=True)
 
 
 if __name__ == '__main__':

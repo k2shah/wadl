@@ -8,8 +8,8 @@ from lib.utils import *
 class Config:
     def __init__(self, typ='small'):
         if typ == 'small':
-            self.maxTime = 20
-            self.worldSize = (4, 4)
+            self.maxTime = 120
+            self.worldSize = (10, 10)
             self.dim = 2
 
             self.base = (0,0)
@@ -25,6 +25,7 @@ class Config:
         #build helper objects
         self.buildTransition()
         self.buildWorld()
+        self.buildCostmap()
 
     def buildTransition(self):
         #number of states
@@ -48,6 +49,12 @@ class Config:
                 # set x and y values of the world to make a look up from linear idx to cord
                 self.world[0, idx] = i
                 self.world[1, idx] = j
+
+    def buildCostmap(self):
+        self.costmap = np.array([l1(self.base, ind2sub(s, self.worldSize))
+                                 for s in range(self.S)])
+
+
 
     def writeInfo(self, filepath):
         # writes the configuration information of the test
