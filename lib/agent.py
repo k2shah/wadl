@@ -110,8 +110,8 @@ class Agent(object):
             cnts += [cvx.sum(X[s, :]) >= 1]  # all spots at least once
 
         # range constraints
-        for t in range(config.maxTime):
-            cnts +=[config.costmap.T* X[:, t] <= max(90-t, 10)]
+        # for t in range(config.maxTime):
+        #     cnts +=[config.costmap.T* X[:, t] <= 131-t]
 
 
         # objective

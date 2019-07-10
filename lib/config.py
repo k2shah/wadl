@@ -8,8 +8,8 @@ from lib.utils import *
 class Config:
     def __init__(self, typ='small'):
         if typ == 'small':
-            self.maxTime = 120
-            self.worldSize = (10, 10)
+            self.maxTime = 200
+            self.worldSize = (15, 10)
             self.dim = 2
 
             self.base = (0,0)
@@ -61,13 +61,13 @@ class Config:
         if not os.path.exists(filepath):
             os.makedirs(filepath)
         outfile = os.path.join(filepath, 'info.txt')
-        with open(outfile, 'w') as f:
-
-            f.write('\nWorld Size\n')
-            f.write(np.array2string(self.worldSize, formatter={
-                                    'float_kind': lambda x: "%.2f" % x}))
-
-            f.write('\ninitial agent positions\n')
-            f.write(np.array2string(self.initAgent, formatter={
-                                    'float_kind': lambda x: "%.2f" % x}))
+        # with open(outfile, 'w') as f:
+        #
+        #     # f.write('\nWorld Size\n')
+        #     # f.write(np.array2string(self.worldSize, formatter={
+        #     #                         'float_kind': lambda x: "%.2f" % x}))
+        #
+        #     # f.write('\ninitial agent positions\n')
+        #     # f.write(np.array2string(self.initAgent, formatter={
+        #     #                         'float_kind': lambda x: "%.2f" % x}))
 
