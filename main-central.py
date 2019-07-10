@@ -1,4 +1,4 @@
-
+#!bin/bash/python3
 import warnings as warn
 import os
 import sys
@@ -52,7 +52,7 @@ def solve_oneshot(config):
 
 def main(outdir):
     config = Config("small")
-    # config.writeInfo(outdir)
+    config.writeInfo(outdir)
 
 
     agents = solve_oneshot(config)
@@ -60,9 +60,11 @@ def main(outdir):
     fig, ax = plt.subplots()
     print("agents")
     for agent in agents:
-        print(agent.trajectory)
+        #print(agent.trajectory)
         agent.plot(ax)
 
+    outfile = os.path.join(outdir, 'path.png')
+    plt.savefig(outfile)
     plt.show()
 
     return 0
