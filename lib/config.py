@@ -8,8 +8,8 @@ from lib.utils import *
 class Config:
     def __init__(self, typ='small'):
         if typ == 'small':
-            self.maxTime = 200
-            self.worldSize = (15, 10)
+            self.maxTime = 90
+            self.worldSize = (9, 9)
             self.dim = 2
 
             self.base = (0,0)
