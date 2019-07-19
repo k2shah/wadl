@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 # lib
 from lib.agent import Agent
 from lib.config import Config
+from lib.shape import ShapeConfig
 # from lib.utils import *
 
 
@@ -33,8 +34,8 @@ def solve_oneshot(config):
     prob = cvx.Problem(cvx.Minimize(cvx.sum(obj)), cnts)
     prob.solve(solver=cvx.GUROBI,
                verbose=True,
-               MIPGap=5e-2,
-               MIPGapAbs=5e-2)
+               MIPGap=1e-1,
+               MIPGapAbs=1e-1)
     # print("solving")
     # prob.solve(solver=cvx.ECOS_BB,
     #            verbose=True,
@@ -51,7 +52,11 @@ def solve_oneshot(config):
     return agents
 
 def main(outdir):
-    config = Config("small")
+    dateDir = "data/croz_geofence"
+    shapeFile = "croz_outer_bound.shp"
+    file = os.path.join(dateDir, shapeFile)
+    config = ShapeConfig(file, step=100)
+    #config = Config("small")
     config.writeInfo(outdir)
 
 
@@ -60,15 +65,16 @@ def main(outdir):
     fig, ax = plt.subplots()
     print("agents")
     for agent in agents:
-        #print(agent.trajectory)
+        print(agent.trajectory)
         agent.plot(ax)
 
     outfile = os.path.join(outdir, 'path.png')
     plt.savefig(outfile)
+    config.plotPolygon(ax)
     plt.show()
 
     return 0
 
 if __name__ == '__main__':
-    outdir = "tests/test1"
+    outdir = "tests/test2"
     main(outdir)
