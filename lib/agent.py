@@ -55,17 +55,24 @@ class Agent(object):
         self.id = id
         self.config = config
         self.color = color
-        self.cvxVar = cvx.Variable((config.S, config.maxTime), boolean=True)
+        # self.cvxVar = cvx.Variable((config.S, config.maxTime), boolean=True)
         # init trajectory
-        self.trajectory = Trajectory(config.initAgent[id], color=self.color)
+        startPt = config.world[:, config.stateSpace[config.initAgent[id]]]
+        self.trajectory = Trajectory(startPt, color=self.color)
 
     def makeTrajectory(self):
         config = self.config
         x = self.cleanSolution()
+        print(x)
+        statePath = []
         # makes trajectory
         for t in range(1, x.shape[1]):
-            cord = ind2sub(np.argmax(x[:, t]), config.worldSize)
-            self.trajectory.append(cord)
+            stateIdx = np.argmax(x[:, t])
+            worldIdx = config.stateSpace[stateIdx]
+            statePath.append(worldIdx)
+            pt = config.world[:, worldIdx]
+            self.trajectory.append(pt)
+        print(statePath)
 
     def cleanSolution(self):
         # this removes blocks of no motion
@@ -90,11 +97,14 @@ class Agent(object):
         config = self.config
 
         # make variable
-        self.cvxVar = cvx.Variable((config.S, config.maxTime), boolean=True)
+        nStates = len(config.stateSpace)
+        self.cvxVar = cvx.Variable((nStates, config.maxTime), boolean=True)
         X = self.cvxVar
 
         # boundary constraints
-        s = sub2ind(config.initAgent[id], config.worldSize)
+        # index of State space
+        s = config.initAgent[id]
+
         # cnts += [X <= 1]
         cnts += [X[s, 0] == 1]  # initial location
         cnts += [cvx.sum(X[:, 0]) == 1]  # one spot
@@ -106,12 +116,12 @@ class Agent(object):
             cnts += [X[:, t] <= config.Ts * X[:, t - 1]]  # motion
 
         # coverage constraints
-        for s in range(config.S):
+        for s in range(nStates):
             cnts += [cvx.sum(X[s, :]) >= 1]  # all spots at least once
 
         # range constraints
-        for t in range(config.maxTime):
-            cnts +=[config.costmap.T* X[:, t] <= max(90-t, 10)]
+        # for t in range(config.maxTime):
+        #     cnts +=[config.costmap.T* X[:, t] <= max(90-t, 10)]
 
 
         # objective

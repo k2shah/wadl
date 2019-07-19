@@ -3,6 +3,7 @@ import numpy as np
 # import numpy.linalg as la
 
 
+
 def l1(a, b):
     # returns the L1 norm of two vectors that are tuples
     return sum(abs((np.array(a) - np.array(b))))
