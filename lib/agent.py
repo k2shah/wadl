@@ -19,7 +19,7 @@ class Trajectory(object):
     def __init__(self, pt, color='k'):
         # makes the trajectory object
         # pt is the initial point of the trajectory
-        self.pts = np.array(pt)
+        self.pts = np.array([pt])
         self.color = color
 
     def __repr__(self):
@@ -64,21 +64,23 @@ class Agent(object):
         config = self.config
         x = self.cleanSolution()
         print(x)
-        statePath = []
+        statePath = [config.stateSpace[config.initAgent[self.id]]]
         # makes trajectory
         for t in range(1, x.shape[1]):
             stateIdx = np.argmax(x[:, t])
             worldIdx = config.stateSpace[stateIdx]
-            statePath.append(worldIdx)
+
             pt = config.world[:, worldIdx]
-            self.trajectory.append(pt)
+            if worldIdx != statePath[-1]:
+                statePath.append(worldIdx)
+                self.trajectory.append(pt)
         print(statePath)
 
     def cleanSolution(self):
         # this removes blocks of no motion
         x = []
         lastWasZero = False
-        for t in range(self.config.maxTime):
+        for t in range(1, self.config.maxTime):
             if self.cvxVar.value[0, t] == 1:
                 if lastWasZero == True:
                     # drop if adjacent zeros

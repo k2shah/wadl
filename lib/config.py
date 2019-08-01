@@ -12,7 +12,7 @@ class Config(object):
     def __init__(self, typ='small'):
         self.dim = 2
         if typ == 'small':
-            self.maxTime = 100
+            self.maxTime = 20
             # world init
             self.worldSize = (6, 6)
             self.xGrid = np.linspace(0, 100, self.worldSize[0])
