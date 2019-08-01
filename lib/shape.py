@@ -12,7 +12,7 @@ from lib.utils import *
 from lib.config import Config
 # gis
 from osgeo import ogr
-from shapely.geometry import Point
+from shapely.geometry import Point, Polygon
 from shapely.wkb import loads
 
 
@@ -25,23 +25,34 @@ class ShapeConfig(Config):
         feat = list(lyr)[0]
         self.poly = loads(feat.GetGeometryRef().ExportToWkb())
         # make bounds
+
+
+        #baylands (long, lat
+        cords = np.array([[-121.995599, 37.411821],
+                 [-121.995663, 37.412260],
+                 [-121.995319, 37.412439],
+                 [-121.994932, 37.412386],
+                 [-121.995018, 37.411758],
+                 [-121.995599, 37.411821]])*100
+        step = .007
+        self.poly =  Polygon(cords)
+
         minx, miny, maxx, maxy = self.poly.bounds
         self.xGrid = np.linspace(minx, maxx, int((maxx - minx)/step))
         self.yGrid = np.linspace(miny, maxy, int((maxy - miny)/step))
         self.nX = len(self.xGrid)
         self.nY = len(self.yGrid)
         self.worldSize = (self.nX, self.nY)
-
         # launch point
-        baseIdx = 14
+        baseIdx = 18
         self.base = ind2sub(baseIdx, self.worldSize)
         # build world and transition
         super(ShapeConfig, self).__init__(typ=None)
         # remove points outside polygon
         self.polyInside()
         # agent init
-        self.maxTime = 120
-        self.initAgent = [0]
+        self.maxTime = 200
+        self.initAgent = [7]
         self.nAgent = len(self.initAgent)
 
     def inPoly(self, point):

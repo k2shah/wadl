@@ -21,7 +21,7 @@ from lib.shape import ShapeConfig
 def solve_oneshot(config):
     # make objects
     colors = ['b', 'g', 'r', 'm']
-    agents = [Agent(id, config, color=color) for id, color in zip(range(1), colors)]
+    agents = [Agent(id, config, color=color) for id, color in zip(range(config.nAgent), colors)]
 
     # init optimization problem data
     obj = []
@@ -55,7 +55,7 @@ def main(outdir):
     dateDir = "data/croz_geofence"
     shapeFile = "croz_outer_bound.shp"
     file = os.path.join(dateDir, shapeFile)
-    config = ShapeConfig(file, step=100)
+    config = ShapeConfig(file, step=80)
     #config = Config("small")
     config.writeInfo(outdir)
 
@@ -69,12 +69,12 @@ def main(outdir):
         agent.plot(ax)
 
     outfile = os.path.join(outdir, 'path.png')
-    plt.savefig(outfile)
     config.plotPolygon(ax)
+    plt.savefig(outfile)
     plt.show()
 
     return 0
 
 if __name__ == '__main__':
-    outdir = "tests/test2"
+    outdir = "tests/test3"
     main(outdir)
