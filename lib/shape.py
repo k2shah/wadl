@@ -26,14 +26,14 @@ class ShapeConfig(Config):
         self.poly = loads(feat.GetGeometryRef().ExportToWkb())
         # make bounds
 
-
+        self.scaleGPS = 100  # scale gps points so we can see them better
         #baylands (long, lat
         cords = np.array([[-121.995599, 37.411821],
                  [-121.995663, 37.412260],
                  [-121.995319, 37.412439],
                  [-121.994932, 37.412386],
                  [-121.995018, 37.411758],
-                 [-121.995599, 37.411821]])*100
+                 [-121.995599, 37.411821]])* self.scaleGPS
         step = .007
         self.poly =  Polygon(cords)
 
@@ -51,8 +51,8 @@ class ShapeConfig(Config):
         # remove points outside polygon
         self.polyInside()
         # agent init
-        self.maxTime = 200
-        self.initAgent = [7]
+        self.maxTime = 25
+        self.initAgent = [0, 6, 40]
         self.nAgent = len(self.initAgent)
 
     def inPoly(self, point):
