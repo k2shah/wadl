@@ -16,37 +16,49 @@ from lib.utils import *
 
 class Trajectory(object):
 
-    def __init__(self, pt, color='k'):
+    def __init__(self, color='k', scale=100):
         # makes the trajectory object
         # pt is the initial point of the trajectory
-        self.pts = np.array([pt])
+        self.pts = []
         self.color = color
+        self.scale = scale
 
     def __repr__(self):
         # print the trajectory
         outsrt = f""
-        for i in range(self.pts.shape[0]):
-            outsrt += f"[{self.pts[i,0]}, {self.pts[i,1]}], {i}, {la.norm(self.pts[i,:], 1)}\n"
-
+        for pt in self.pts:
+            outsrt += f"[{pt[0]}, {pt[1]}]\n"
         return outsrt
 
     def append(self, pt):
         # append to the traj history
-        self.pts = np.vstack((self.pts, np.array(pt)))
+        self.pts.append(np.array(pt))
+
+    def writeTxt(self, filename, alt):
+        # writes the trajectory as a txt file
+        # Lat,Long,Alt,Speed,Picture,ElevationMap,WP,CameraTilt,UavYaw,DistanceFrom
+        with open(filename, "w+") as f:
+            for pt in self.pts:
+                pt /= self.scale
+                f.write(f"{pt[1]},{pt[0]},{alt},,FALSE,,1\n")
 
     def plot(self, ax, colorize=False):
         # plots the trajectory
-        if len(self.pts.shape) > 1:
+        plotPlot = np.array(self.pts)
+        if len(plotPlot.shape) > 1:
             # start
-            ax.scatter(*self.pts[0, :],
+            ax.scatter(*self.pts[0],
                        marker="o", color=self.color)
+            # end
+            ax.scatter(*self.pts[-1],
+                       marker="^", color=self.color)
             # path
-            trajLen = self.pts.shape[0]
-            cm = plt.cm.get_cmap('plasma', trajLen )
-            for i in range(self.pts.shape[0]-1):
+            trajLen = plotPlot.shape[0]
+            cm = plt.cm.get_cmap('plasma', trajLen)
+            for i in range(plotPlot.shape[0]-1):
                 color = cm(i % trajLen) if colorize else self.color
-                ax.plot(self.pts[i:i+2, 0],
-                        self.pts[i:i+2, 1],
+                ax.plot(plotPlot[i:i+2, 0],
+                        plotPlot[i:i+2, 1],
                         color=color)
 
 
@@ -55,34 +67,36 @@ class Agent(object):
         self.id = id
         self.config = config
         self.color = color
+        self.alt = 30  # altitude in m of the quad
         # self.cvxVar = cvx.Variable((config.S, config.maxTime), boolean=True)
         # init trajectory
-        startPt = config.world[:, config.stateSpace[config.initAgent[id]]]
-        self.trajectory = Trajectory(startPt, color=self.color)
+        self.trajectory = Trajectory(color=self.color, scale=self.config.scaleGPS)
 
     def makeTrajectory(self):
         config = self.config
         x = self.cleanSolution()
-        print(x)
-        statePath = [config.stateSpace[config.initAgent[self.id]]]
+        # print(x)
+        # get start point
+        stateIdx = np.argmax(x[:, 0])
+        path = [config.stateSpace[stateIdx]]
         # makes trajectory
         for t in range(1, x.shape[1]):
             stateIdx = np.argmax(x[:, t])
             worldIdx = config.stateSpace[stateIdx]
-
+            # print(worldIdx)
             pt = config.world[:, worldIdx]
-            if worldIdx != statePath[-1]:
-                statePath.append(worldIdx)
+            if worldIdx != path[-1]:
+                path.append(worldIdx)
                 self.trajectory.append(pt)
-        print(statePath)
+        print(f"{len(path)}: ", path)
 
     def cleanSolution(self):
         # this removes blocks of no motion
         x = []
         lastWasZero = False
-        for t in range(1, self.config.maxTime):
+        for t in range(0, self.config.maxTime):
             if self.cvxVar.value[0, t] == 1:
-                if lastWasZero == True:
+                if lastWasZero:
                     # drop if adjacent zeros
                     continue
                 else:
@@ -92,6 +106,12 @@ class Agent(object):
                 x.append(self.cvxVar.value[:, t])
                 lastWasZero = False
         return np.array(x).T
+
+    def writeTrajTxt(self, outpath):
+        if not os.path.exists(outpath): os.makedirs(outpath)
+        # write the trajectory
+        filename = outpath + str(self.id) + ".csv"
+        self.trajectory.writeTxt(filename, self.alt)
 
     def stage(self, obj, cnts):
         # unpack
@@ -117,21 +137,20 @@ class Agent(object):
             cnts += [cvx.sum(X[:, t]) == 1]  # one spot
             cnts += [X[:, t] <= config.Ts * X[:, t - 1]]  # motion
 
-        # coverage constraints
-        for s in range(nStates):
-            cnts += [cvx.sum(X[s, :]) >= 1]  # all spots at least once
+        # # coverage constraints
+        # for s in range(nStates):
+        #     cnts += [cvx.sum(X[s, :]) >= 1]  # all spots at least once
 
         # range constraints
         # for t in range(config.maxTime):
         #     cnts +=[config.costmap.T* X[:, t] <= max(90-t, 10)]
 
-
         # objective
         for t in range(1, config.maxTime):
-            obj += [config.costmap.T* X[:, t]]
+            obj += [config.costmap.T * X[:, t]]
 
     def plot(self, ax):
-        self.trajectory.plot(ax, colorize=True)
+        self.trajectory.plot(ax, colorize=False)
 
 
 if __name__ == '__main__':
