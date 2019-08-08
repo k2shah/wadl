@@ -51,8 +51,8 @@ class ShapeConfig(Config):
         # remove points outside polygon
         self.polyInside()
         # agent init
-        self.maxTime = 25
-        self.initAgent = [0, 6, 40]
+        self.maxTime = 32
+        self.initAgent = [4, 6]
         self.nAgent = len(self.initAgent)
 
     def inPoly(self, point):
