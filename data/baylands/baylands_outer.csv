@@ -1,29 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-<Document id="root_doc">
-<Schema name="baylands_outer" id="baylands_outer">
-	<SimpleField name="Id" type="int"></SimpleField>
-	<SimpleField name="col_side" type="int"></SimpleField>
-	<SimpleField name="pa_ratio" type="float"></SimpleField>
-	<SimpleField name="subcol_are" type="float"></SimpleField>
-</Schema>
-<Folder><name>baylands_outer</name>
-  <Placemark>
-	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#croz_outer">
-		<SimpleData name="Id">0</SimpleData>
-		<SimpleData name="col_side">1</SimpleData>
-		<SimpleData name="pa_ratio">0.92912370000</SimpleData>
-		<SimpleData name="subcol_are">762394.52893200004</SimpleData>
-	</SchemaData></ExtendedData>
-      <MultiGeometry><Polygon><altitudeMode>absolute</altitudeMode><outerBoundaryIs><LinearRing><altitudeMode>absolute</altitudeMode><coordinates>
-      -121.995599, 37.411821 
-      -121.995663, 37.412260
-      -121.995319, 37.412439
-      -121.994932, 37.412386
-      -121.995018, 37.411758
-      -121.995599, 37.411821
-  </coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
-  </Placemark>
-</Folder>
-</Document></kml>
+ID, Long, Lat
+0, -121.995599, 37.411821 
+1, -121.995663, 37.412260
+2, -121.995319, 37.412439
+3. -121.994932, 37.412386
+4, -121.995018, 37.411758
+5, -121.995599, 37.411821

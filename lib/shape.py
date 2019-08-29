@@ -1,6 +1,7 @@
 #!bin/bash/python3
 # import warnings as warn
 import os
+import csv
 # import sys
 # import time
 # math
@@ -12,6 +13,7 @@ from lib.utils import *
 from lib.config import Config
 # gis
 from osgeo import ogr
+import utm
 from shapely.geometry import Point, Polygon
 from shapely.wkb import loads
 
@@ -19,24 +21,33 @@ from shapely.wkb import loads
 class ShapeConfig(Config):
     def __init__(self, file, step=100):
         # reads file and returns a x and y cord list as well as polygon object
-        driver = ogr.GetDriverByName('ESRI Shapefile')
-        shapeData = driver.Open(file)
-        lyr = shapeData.GetLayer(0)
-        feat = list(lyr)[0]
-        self.poly = loads(feat.GetGeometryRef().ExportToWkb())
+
+        # for shape files
+        # driver = ogr.GetDriverByName('ESRI Shapefile')
+        # shapeData = driver.Open(file)
+        # lyr = shapeData.GetLayer(0)
+        # feat = list(lyr)[0]
+        # self.poly = loads(feat.GetGeometryRef().ExportToWkb())
         # make bounds
 
-        self.scaleGPS = 100  # scale gps points so we can see them better
-        #baylands (long, lat
-        cords = np.array([[-121.995599, 37.411821],
-                 [-121.995663, 37.412260],
-                 [-121.995319, 37.412439],
-                 [-121.994932, 37.412386],
-                 [-121.995018, 37.411758],
-                 [-121.995599, 37.411821]])* self.scaleGPS
-        step = .007
-        self.poly =  Polygon(cords)
+        #read cords and convert to utm (long, lat)
+        print(file)
+        with open(file) as csvfile:
+            data =[(line[1], line[2]) for line in csv.reader(csvfile, delimiter=',')]
+            # toss 1st line and convert to float
+            self.GPSData = [tuple(map(float, line)) for line in data[1:]]
+        # convert to utm
+        UTMData = ([utm.from_latlon(cords[1], cords[0]) for cords in self.GPSData])
+        self.UTMZone = UTMData[0][2:]
+        print(self.UTMZone)
+        self.UTMCords = [(data[0], data[1]) for data in UTMData]
+        print(self.UTMCords)
 
+
+
+
+
+        self.poly =  Polygon(self.UTMCords)
         minx, miny, maxx, maxy = self.poly.bounds
         self.xGrid = np.linspace(minx, maxx, int((maxx - minx)/step))
         self.yGrid = np.linspace(miny, maxy, int((maxy - miny)/step))
@@ -81,10 +92,11 @@ class ShapeConfig(Config):
 
 
 if __name__ == '__main__':
-    dateDir = "../data/croz_geofence"
-    shapeFile = "croz_outer_bound.shp"
-    file = os.path.join(dateDir, shapeFile)
-    config = ShapeConfig(file, step=100)
+    dateDir = "../data/baylands"
+    # shapeFile = "croz_outer_bound.shp"
+    cordsFile = "outer.csv"
+    file = os.path.join(dateDir, cordsFile)
+    config = ShapeConfig(file, step=8)
 
     # plot
     fig, ax = plt.subplots()
