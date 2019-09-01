@@ -19,6 +19,10 @@ class Config(object):
             self.yGrid = np.linspace(0, 100, self.worldSize[1])
             self.nX = len(self.xGrid)
             self.nY = len(self.yGrid)
+            # number of states
+            self.nStates = int(np.prod(self.worldSize))
+            self.stateSpace = range(self.nStates)
+            self.buildWorld()
 
             # robot init
             self.base = (0, 0)
@@ -34,16 +38,11 @@ class Config(object):
         self.buildCostmap()
 
     def buildTransition(self):
-        # number of states
-        self.nStates = int(np.prod(self.worldSize))
-        self.stateSpace = range(self.nStates)
         # make transition matrix
         self.Ts = np.eye(self.nStates, dtype=int)
-        # world map index to point
-        self.world = np.zeros((2, self.nStates))
         # connective graph node to list of connected nodes
         self.con = []
-        for s in self.stateSpace:
+        for s in range(self.nStates):
             adj = []
             i, j = ind2sub(s, self.worldSize)
             if i - 1 >= 0:
@@ -57,18 +56,12 @@ class Config(object):
 
             self.Ts[s, adj] = len(adj)*[1]
             self.con.append(adj)
+    def buildWorld(self):
+        self.world = np.zeros((2, self.nStates))
+        for s in range(self.nStates):
             xIdx, yIdx = ind2sub(s, self.worldSize)
             self.world[:, s] = [self.xGrid[xIdx],
                                 self.yGrid[yIdx]]
-        # self.Ts = np.eye(self.nStates) * .5
-        # for i in range(self.nStates):
-        #     for j in range(i):
-        #         inp = np.unravel_index(j, (self.worldSize), order="F")
-        #         out = np.unravel_index(i, (self.worldSize), order="F")
-        #         if l1(inp, out) == 1:
-        #             self.Ts[i, j] = 1
-        #
-        # self.Ts += self.Ts.T  # some leet hacks
 
     def buildCostmap(self):
         self.costmap = np.array([l1(self.base, ind2sub(s, self.worldSize))
@@ -76,7 +69,7 @@ class Config(object):
 
     def plot(self, ax):
         for i, node in enumerate(self.stateSpace):
-            ax.scatter(*self.world[:, node], color='k')
+            ax.scatter(*self.world[:, node], color='k', s=.1)
             for j, adj in enumerate(self.con[node]):
                 if adj in self.stateSpace:
                     ax.plot([self.world[0, node], self.world[0, adj]],
