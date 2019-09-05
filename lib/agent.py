@@ -16,12 +16,11 @@ from lib.utils import *
 
 class Trajectory(object):
 
-    def __init__(self, color='k', scale=100):
+    def __init__(self, color='k'):
         # makes the trajectory object
         # pt is the initial point of the trajectory
         self.pts = []
         self.color = color
-        self.scale = scale
 
     def __repr__(self):
         # print the trajectory
@@ -34,13 +33,13 @@ class Trajectory(object):
         # append to the traj history
         self.pts.append(np.array(pt))
 
-    def writeTxt(self, filename, alt):
+    def writeTxt(self, filename, mapFunc, alt):
         # writes the trajectory as a txt file
         # Lat,Long,Alt,Speed,Picture,ElevationMap,WP,CameraTilt,UavYaw,DistanceFrom
         with open(filename, "w+") as f:
             for pt in self.pts:
-                pt /= self.scale
-                f.write(f"{pt[1]},{pt[0]},{alt},,FALSE,,1\n")
+                lat, long = mapFunc(pt)
+                f.write(f"{lat},{long},{alt},,FALSE,,1\n")
 
     def plot(self, ax, colorize=False):
         # plots the trajectory
@@ -70,7 +69,7 @@ class Agent(object):
         self.alt = 30  # altitude in m of the quad
         # self.cvxVar = cvx.Variable((config.S, config.maxTime), boolean=True)
         # init trajectory
-        self.trajectory = Trajectory(color=self.color, scale=self.config.scaleGPS)
+        self.trajectory = Trajectory(color=self.color)
 
     def makeTrajectory(self):
         config = self.config
@@ -111,7 +110,7 @@ class Agent(object):
         if not os.path.exists(outpath): os.makedirs(outpath)
         # write the trajectory
         filename = outpath + str(self.id) + ".csv"
-        self.trajectory.writeTxt(filename, self.alt)
+        self.trajectory.writeTxt(filename, self.config.UTM2LatLong, self.alt)
 
     def stage(self, obj, cnts):
         # unpack

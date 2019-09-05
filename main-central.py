@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 # lib
 from lib.agent import Agent
 from lib.config import Config
-from lib.shape import ShapeConfig
+from lib.crozConfig import CrozConfig
 # from lib.utils import *
 
 
@@ -30,15 +30,12 @@ def solve_oneshot(config):
     # fill problems
     for agent in agents:
         agent.stage(obj, cnts)
-
-    #add multi agent
+    # add multi agent
     nStates = len(config.stateSpace)
     # coverage constraints
     # all spots at least once
     for s in range(nStates):
         cnts += [cvx.sum([cvx.sum(agent.cvxVar[s, :]) for agent in agents]) >= 1]
-
-
     prob = cvx.Problem(cvx.Minimize(cvx.sum(obj)), cnts)
     prob.solve(solver=cvx.GUROBI,
                verbose=True,
@@ -59,27 +56,23 @@ def solve_oneshot(config):
 
     return agents
 
+
 def main(outDir):
-    #input files
+    # input files
     dateDir = "data/croz_geofence"
     shapeFile = "croz_outer_bound.shp"
     file = os.path.join(dateDir, shapeFile)
-    config = ShapeConfig(file, step=80)
-    #config = Config("small")
-
-
+    config = CrozConfig(step=40)
+    # config = Config("small")
     config.writeInfo(outDir)
     routeDir = os.path.join(outDir, "routes/")
 
     # SOLVE THE PROBLEM
     agents = solve_oneshot(config)
-
-
-
     fig, ax = plt.subplots()
     print("agents trajectories")
     for agent in agents:
-        print(agent.trajectory)
+        # print(agent.trajectory)
         agent.plot(ax)
         agent.writeTrajTxt(routeDir)
 
@@ -87,9 +80,9 @@ def main(outDir):
     config.plotPolygon(ax)
     plt.savefig(outfile)
     plt.show()
-
     return 0
 
+
 if __name__ == '__main__':
-    outDir = "tests/test4"
+    outDir = "tests/croz4_3_2"
     main(outDir)
