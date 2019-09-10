@@ -62,7 +62,7 @@ def main(outDir):
     dateDir = "data/croz_geofence"
     shapeFile = "croz_outer_bound.shp"
     file = os.path.join(dateDir, shapeFile)
-    config = CrozConfig(step=40)
+    config = CrozConfig(step=35)
     # config = Config("small")
     config.writeInfo(outDir)
     routeDir = os.path.join(outDir, "routes/")
@@ -84,5 +84,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/croz4_3_2"
+    outDir = "tests/croz4_3_2_small"
     main(outDir)

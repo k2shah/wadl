@@ -81,8 +81,8 @@ class CrozConfig(Config):
         self.Ts = self.Ts[np.ix_(self.stateSpace, self.stateSpace)]
         # self.costmap = self.costmap[self.stateSpace]
         # agent init
-        self.maxTime = 35
-        self.initAgent = [86, 87, 88]
+        self.maxTime = 65
+        self.initAgent = [126, 127, 128]
         self.nAgent = len(self.initAgent)
 
     def inPoly(self, poly, point):
