@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 # lib
 from lib.agent import Agent
 from lib.config import Config
+from lib.shape import ShapeConfig
 from lib.crozConfig import CrozConfig
 # from lib.utils import *
 
@@ -63,6 +64,11 @@ def main(outDir):
     shapeFile = "croz_outer_bound.shp"
     file = os.path.join(dateDir, shapeFile)
     config = CrozConfig(step=35)
+
+    dataDir = "data/baylands"
+    cordsFile = "outer.csv"
+    file = os.path.join(dataDir, cordsFile)
+    config = ShapeConfig(file, step=20)
     # config = Config("small")
     config.writeInfo(outDir)
     routeDir = os.path.join(outDir, "routes/")
@@ -84,5 +90,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/croz4_3_2_small"
+    outDir = "tests/baylands_35"
     main(outDir)
