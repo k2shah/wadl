@@ -41,22 +41,15 @@ class ShapeConfig(Config):
         self.UTMZone = UTMData[0][2:]
         UTMCords = np.array([[data[0], data[1]] for data in UTMData])
         # rotate
-        theta = 15 * np.pi/180
-        R = rot2D(theta)
-        UTMCordsRot = np.dot(R, UTMCords.T)
+        theta = 0 * np.pi/180
+        self.R = rot2D(theta)
+        UTMCordsRot = np.dot(self.R, UTMCords.T)
 
         # build polygon
         self.UTMCords = array2ListTuples(UTMCordsRot.T)
         print(self.UTMCords)
         self.poly = Polygon(self.UTMCords)
 
-        zoneCords = [[(78200, 1473000), (78700, 1473000), (78700, 1472500), (78200, 1472500)],
-                     [(78700, 1472800), (79000, 1472800), (79000, 1472200), (78700, 1472200)],
-                     [(79000, 1472500), (79500, 1472500), (79500, 1471800), (79000, 1471800)],
-                     [(78200, 1472500), (78700, 1472500), (78700, 1472000), (78200, 1472000)],
-                     [(78700, 1472200), (79000, 1472200), (79000, 1471500), (78700, 1471500)]]
-        self.zoneIdx = 4
-        self.zonePolys = [Polygon(z) for z in zoneCords]
 
         # for i in range(len(splits)-1):
         #    self.polys.append(Polygon(self.UTMCords[splits[i]:splits[i+1]]))
@@ -84,19 +77,20 @@ class ShapeConfig(Config):
         # self.costmap = self.costmap[self.stateSpace]
         # agent init
         self.maxTime = 32
-        self.initAgent = [4, 6]
+        self.initAgent = [1]
         self.nAgent = len(self.initAgent)
 
     def inPoly(self, poly, point):
         # checks if point (tuple) is in the polygon
         pt = Point(point)
+        return True
         return poly.contains(pt)
 
     def polyPrune(self):
         # prune for containment
         inPolyStates = [s for s in range(self.nStates) if self.inPoly(self.poly, self.world[:, s])]
         self.stateSpace = [s for s in inPolyStates
-                           if self.inPoly(self.zonePolys[self.zoneIdx], self.world[:, s])]
+                           if self.inPoly(self.poly, self.world[:, s])]
         print(self.stateSpace)
         print(len(self.stateSpace))
 
@@ -104,23 +98,20 @@ class ShapeConfig(Config):
         x = [point[0] for point in self.poly.exterior.coords]
         y = [point[1] for point in self.poly.exterior.coords]
         ax.plot(x, y, color = 'k')
-    def plotZones(self, ax):
-        colors = ['b', 'r', 'g', 'm', 'c', 'y']
-        for zone, color in zip(self.zonePolys, colors):
-            x = [point[0] for point in zone.exterior.coords]
-            y = [point[1] for point in zone.exterior.coords]
-            ax.plot(x, y, color = color)
+
+    def UTM2LatLong(self, utmCord):
+        utmAligned = np.dot(self.R.T, np.array(utmCord))
+        return utm.to_latlon(utmAligned[0], utmAligned[1], *self.UTMZone)
 
 
     def plot(self, ax):
         super(ShapeConfig, self).plot(ax)
         self.plotPolygon(ax)
-        self.plotZones(ax)
 
 
 if __name__ == '__main__':
-    # dataDir = "../data/baylands"
-    dataDir = "../data/croz_geofence"
+    dataDir = "../data/baylands"
+    # dataDir = "../data/croz_geofence"
     # shapeFile = "croz_outer_bound.shp"
     cordsFile = "outer.csv"
     file = os.path.join(dataDir, cordsFile)

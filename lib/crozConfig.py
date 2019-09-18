@@ -22,7 +22,7 @@ class CrozConfig(Config):
     def __init__(self, step=100):
         # reads file and returns a x and y cord list as well as polygon object
         # import file
-        dataDir = "data/croz_geofence"
+        dataDir = "../data/croz_geofence"
         # shapeFile = "croz_outer_bound.shp"
         cordsFile = "outer.csv"
         file = os.path.join(dataDir, cordsFile)
@@ -55,6 +55,17 @@ class CrozConfig(Config):
                      [(78700, 1472200), (79000, 1472200), (79000, 1471500), (78700, 1471500)]]
         self.zoneIdx = 4
         self.zonePolys = [Polygon(z) for z in zoneCords]
+
+
+        #plot some key points
+
+        self.keyPoints = {'p': (-77.455917, 169.21753),
+                        'c': (-77.454753, 169.216886),
+                        'bn': (-77.44906, 169.22322),
+                        'mle': (-77.45362, 169.23247),
+                        'fg': (-77.45029, 169.24518),
+                        'erook': (-77.4632, 169.27899)}
+
 
         # for i in range(len(splits)-1):
         #    self.polys.append(Polygon(self.UTMCords[splits[i]:splits[i+1]]))
@@ -109,6 +120,17 @@ class CrozConfig(Config):
             x = [point[0] for point in zone.exterior.coords]
             y = [point[1] for point in zone.exterior.coords]
             ax.plot(x, y, color = color)
+    def plotKeyPonts(self, ax):
+        for key, val in self.keyPoints.items():
+            print(val)
+            easting, northing, _ , _  = utm.from_latlon(val[0], val[1])
+            UTMCords = np.array([easting, northing])
+            #ROTATE THE DAMN CORDS
+            UTMCordsRot = np.dot(self.R, UTMCords.T)
+            print(UTMCordsRot)
+            ax.scatter(*UTMCordsRot[0:2], color='k')
+            ax.annotate(key, xy=UTMCordsRot[0:2], xycoords='data')
+
 
     def UTM2LatLong(self, utmCord):
         utmAligned = np.dot(self.R.T, np.array(utmCord))
@@ -120,6 +142,7 @@ class CrozConfig(Config):
         super(CrozConfig, self).plot(ax)
         self.plotPolygon(ax)
         self.plotZones(ax)
+        self.plotKeyPonts(ax)
 
 
 if __name__ == '__main__':
