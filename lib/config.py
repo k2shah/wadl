@@ -9,7 +9,7 @@ from lib.utils import *
 
 
 class Config(object):
-    def __init__(self, typ='small'):
+    def __init__(self, typ=None):
         self.dim = 2
         if typ == 'small':
             self.maxTime = 20
