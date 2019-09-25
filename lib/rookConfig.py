@@ -23,35 +23,26 @@ class RookConfig(ShapeConfig):
     def __init__(self, file, step=100):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
-        zoneCords = [[(78200, 1473000), (78700, 1473000), (78700, 1472500), (78200, 1472500)],
-                     [(78700, 1472800), (79000, 1472800), (79000, 1472200), (78700, 1472200)],
-                     [(79000, 1472500), (79500, 1472500), (79500, 1471800), (79000, 1471800)],
-                     [(78200, 1472500), (78700, 1472500), (78700, 1472000), (78200, 1472000)],
-                     [(78700, 1472200), (79000, 1472200), (79000, 1471500), (78700, 1471500)]]
-        self.zoneIdx = 4
+        zoneCords = [[(80200, 1473000), (80700, 1473000), (80700, 1470500), (78200, 1470500)],]
+        self.zoneIdx = 0
         self.zonePolys = [Polygon(z) for z in zoneCords]
 
         # overlay key points
-        self.keyPoints = {'p':     (-77.455917, 169.21753),
-                          'c':     (-77.454753, 169.216886),
-                          'bn':    (-77.44906,  169.22322),
-                          'mle':   (-77.45362,  169.23247),
-                          'fg':    (-77.459294, 169.245182)}
-                          # 'erook': (-77.4632,   169.27899)}
+        self.keyPoints = {'erook': (-77.4632,   169.27899)}
 
         super(RookConfig, self).__init__(file, step)
 
     def setAgentParameters(self):
         # base point
-        baseIdx = self.stateSpace[-1]
+        baseIdx = self.stateSpace[0]
         self.base = ind2sub(baseIdx, self.worldSize)
         # agent init
-        self.maxTime = 47
+        self.maxTime = 50
         # agent index is in subrange NOT global statespace
-        self.initAgent = [57, 58, 59]
+        self.initAgent = [2, 8]
         self.nAgent = len(self.initAgent)
 
-    def parseFile(self, file):
+    def parseFile(self, file, longLat=False):
         super(RookConfig, self).parseFile(file)
         self.theta = 15 * np.pi / 180
         self.R = rot2D(self.theta)
@@ -59,9 +50,14 @@ class RookConfig(ShapeConfig):
 
     def polyPrune(self):
         # prune for containment
+        if self.zoneIdx == -1:
+            # ignore the zone splits
+            polys = [self.poly]
+        else:
+            polys = [self.poly, self.zonePolys[self.zoneIdx]]
+
         self.stateSpace = [s for s in range(self.nStates) if self.inPoly(
-                                          [self.poly, self.zonePolys[self.zoneIdx]],
-                                          self.world[:, s])]
+                                          polys, self.world[:, s])]
 
     def plotZones(self, ax):
         colors = ['b', 'r', 'g', 'm', 'c', 'y']
@@ -88,15 +84,15 @@ class RookConfig(ShapeConfig):
 
     def plot(self, ax, showGrid=True):
         super(RookConfig, self).plot(ax, showGrid=showGrid)
-        self.plotZones(ax)
+        # self.plotZones(ax)
         self.plotKeyPonts(ax)
 
 
 if __name__ == '__main__':
-    dataDir = "../data/croz_geofence"
-    cordsFile = "croz_west.csv"
+    dataDir = "../data/croz_east"
+    cordsFile = "croz_rook.csv"
     file = os.path.join(dataDir, cordsFile)
-    config = RookConfig(file, step=40)
+    config = RookConfig(file, step=30)
 
     # plot
     fig, ax = plt.subplots()

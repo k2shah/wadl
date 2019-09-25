@@ -16,6 +16,8 @@ from lib.agent import Agent
 from lib.config import Config
 from lib.shape import ShapeConfig
 from lib.crozConfig import CrozConfig
+from lib.rookConfig import RookConfig
+
 # from lib.utils import *
 
 
@@ -60,10 +62,18 @@ def solve_oneshot(config):
 
 def main(outDir):
     # input files
-    dateDir = "data/croz_geofence"
-    cordsFile = "outer.csv"
+    # croz west
+    # dateDir = "data/croz_geofence"
+    # cordsFile = "outer.csv"
+    # file = os.path.join(dateDir, cordsFile)
+    # config = CrozConfig(file, step=40)
+    # crox east
+    dateDir = "data/croz_east"
+    cordsFile = "croz_rook.csv"
     file = os.path.join(dateDir, cordsFile)
-    config = CrozConfig(file, step=40)
+    config = RookConfig(file, step=35)
+
+
     config.writeInfo(outDir)
     print("Configuration loaded")
     routeDir = os.path.join(outDir, "routes/")
