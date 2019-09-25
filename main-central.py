@@ -61,19 +61,15 @@ def solve_oneshot(config):
 def main(outDir):
     # input files
     dateDir = "data/croz_geofence"
-    shapeFile = "croz_outer_bound.shp"
-    file = os.path.join(dateDir, shapeFile)
-    config = CrozConfig(step=35)
-
-    dataDir = "data/baylands"
     cordsFile = "outer.csv"
-    file = os.path.join(dataDir, cordsFile)
-    config = ShapeConfig(file, step=20)
-    # config = Config("small")
+    file = os.path.join(dateDir, cordsFile)
+    config = CrozConfig(file, step=40)
     config.writeInfo(outDir)
+    print("Configuration loaded")
     routeDir = os.path.join(outDir, "routes/")
 
     # SOLVE THE PROBLEM
+    print("\nSolving Problem\n")
     agents = solve_oneshot(config)
     fig, ax = plt.subplots()
     print("agents trajectories")
@@ -83,12 +79,12 @@ def main(outDir):
         agent.writeTrajTxt(routeDir)
 
     outfile = os.path.join(outDir, 'path.png')
-    config.plotPolygon(ax)
+    config.plot(ax, showGrid = False)
     plt.savefig(outfile)
     plt.show()
     return 0
 
 
 if __name__ == '__main__':
-    outDir = "tests/baylands_35"
+    outDir = "tests/test_null"
     main(outDir)
