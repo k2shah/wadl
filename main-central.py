@@ -71,7 +71,7 @@ def main(outDir):
     dateDir = "data/croz_east"
     cordsFile = "croz_rook.csv"
     file = os.path.join(dateDir, cordsFile)
-    config = RookConfig(file, step=35)
+    config = RookConfig(file, step=25)
 
 
     config.writeInfo(outDir)
