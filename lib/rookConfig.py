@@ -23,7 +23,8 @@ class RookConfig(ShapeConfig):
     def __init__(self, file, step=100):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
-        zoneCords = [[(80200, 1473000), (80700, 1473000), (80700, 1470500), (78200, 1470500)],]
+        zoneCords = [[(80000, 1472200), (80550, 1472200), (80550, 1472050), (80000, 1471850)],
+                     [(80000, 1471850), (80550, 1472050), (80550, 1471700), (80000, 1471700)],]
         self.zoneIdx = 0
         self.zonePolys = [Polygon(z) for z in zoneCords]
 
@@ -34,12 +35,12 @@ class RookConfig(ShapeConfig):
 
     def setAgentParameters(self):
         # base point
-        baseIdx = self.stateSpace[0]
+        baseIdx = self.stateSpace[4]
         self.base = ind2sub(baseIdx, self.worldSize)
         # agent init
-        self.maxTime = 50
+        self.maxTime = 60
         # agent index is in subrange NOT global statespace
-        self.initAgent = [2, 8]
+        self.initAgent = [0, 9]
         self.nAgent = len(self.initAgent)
 
     def parseFile(self, file, longLat=False):
@@ -84,7 +85,7 @@ class RookConfig(ShapeConfig):
 
     def plot(self, ax, showGrid=True):
         super(RookConfig, self).plot(ax, showGrid=showGrid)
-        # self.plotZones(ax)
+        self.plotZones(ax)
         self.plotKeyPonts(ax)
 
 
@@ -92,7 +93,7 @@ if __name__ == '__main__':
     dataDir = "../data/croz_east"
     cordsFile = "croz_rook.csv"
     file = os.path.join(dataDir, cordsFile)
-    config = RookConfig(file, step=30)
+    config = RookConfig(file, step=25)
 
     # plot
     fig, ax = plt.subplots()

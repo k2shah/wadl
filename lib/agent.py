@@ -67,6 +67,7 @@ class Agent(object):
         self.config = config
         self.color = color
         self.alt = 30  # altitude in m of the quad
+        self.speed = 3.0 # speed in m/s
         # self.cvxVar = cvx.Variable((config.S, config.maxTime), boolean=True)
         # init trajectory
         self.trajectory = Trajectory(color=self.color)
@@ -88,6 +89,8 @@ class Agent(object):
                 path.append(worldIdx)
                 self.trajectory.append(pt)
         print(f"{len(path)}: ", path)
+        pathLen= len(path)*config.step
+        print(f"path len: {pathLen}. Flight time: {pathLen/self.speed}")
 
     def cleanSolution(self):
         # this removes blocks of no motion
