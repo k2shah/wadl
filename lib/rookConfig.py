@@ -25,7 +25,7 @@ class RookConfig(ShapeConfig):
         # break up zones
         zoneCords = [[(80000, 1472200), (80550, 1472200), (80550, 1472050), (80000, 1471850)],
                      [(80000, 1471850), (80550, 1472050), (80550, 1471700), (80000, 1471700)],]
-        self.zoneIdx = 0
+        self.zoneIdx = -1
         self.zonePolys = [Polygon(z) for z in zoneCords]
 
         # overlay key points
@@ -35,12 +35,12 @@ class RookConfig(ShapeConfig):
 
     def setAgentParameters(self):
         # base point
-        baseIdx = self.stateSpace[4]
+        baseIdx = self.stateSpace[10]
         self.base = ind2sub(baseIdx, self.worldSize)
         # agent init
-        self.maxTime = 60
+        self.maxTime = 33
         # agent index is in subrange NOT global statespace
-        self.initAgent = [0, 9]
+        self.initAgent = [10, 10]
         self.nAgent = len(self.initAgent)
 
     def parseFile(self, file, longLat=False):
@@ -85,7 +85,7 @@ class RookConfig(ShapeConfig):
 
     def plot(self, ax, showGrid=True):
         super(RookConfig, self).plot(ax, showGrid=showGrid)
-        self.plotZones(ax)
+        # self.plotZones(ax)
         self.plotKeyPonts(ax)
 
 
