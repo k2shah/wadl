@@ -42,7 +42,7 @@ def solve_oneshot(config):
     prob = cvx.Problem(cvx.Minimize(cvx.sum(obj)), cnts)
     prob.solve(solver=cvx.GUROBI,
                verbose=True,
-               MIPGap=1e-1,
+               MIPGap=5e-2,
                MIPGapAbs=5e-2)
     # print("solving")
     # prob.solve(solver=cvx.ECOS_BB,
@@ -71,7 +71,7 @@ def main(outDir):
     dateDir = "data/croz_east"
     cordsFile = "croz_rook.csv"
     file = os.path.join(dateDir, cordsFile)
-    config = RookConfig(file, step=25)
+    config = RookConfig(file, step=40)
 
 
     config.writeInfo(outDir)
@@ -96,5 +96,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/test_null"
+    outDir = "tests/test_royde_40_n3"
     main(outDir)
