@@ -96,5 +96,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/test_royde_40_n3"
+    outDir = "tests/erook_40_n2"
     main(outDir)

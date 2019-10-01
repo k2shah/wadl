@@ -24,8 +24,8 @@ class ShapeConfig(Config):
         # reads file and returns a x and y cord list as well as polygon object
         self.parseFile(file)
         # flat cords are the gps cords mapped to a 2d plane, with no rotaiton this is UTM
-        print("boundary cords in utm")
-        print(self.flatCords)
+        # print("boundary cords in utm")
+        # print(self.flatCords)
 
         # make the polygon overlay
         self.buildPolygonGrid()
