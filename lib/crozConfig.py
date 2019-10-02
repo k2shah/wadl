@@ -20,7 +20,7 @@ from shapely.wkb import loads
 
 
 class CrozConfig(ShapeConfig):
-    def __init__(self, file, step=100):
+    def __init__(self, file, step=100, zone=-1):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
         zoneCords = [[(78200, 1473000), (78700, 1473000), (78700, 1472500), (78200, 1472500)],
@@ -28,7 +28,7 @@ class CrozConfig(ShapeConfig):
                      [(79000, 1472500), (79500, 1472500), (79500, 1471800), (79000, 1471800)],
                      [(78200, 1472500), (78700, 1472500), (78700, 1472000), (78200, 1472000)],
                      [(78700, 1472200), (79000, 1472200), (79000, 1471500), (78700, 1471500)]]
-        self.zoneIdx = 4
+        self.zoneIdx = zone
         self.zonePolys = [Polygon(z) for z in zoneCords]
 
         # overlay key points
