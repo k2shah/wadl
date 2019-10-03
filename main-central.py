@@ -17,7 +17,7 @@ from lib.config import Config
 from lib.shape import ShapeConfig
 from lib.crozConfig import CrozConfig
 from lib.rookConfig import RookConfig
-
+from lib.roydsConfig import RoydsConfig
 # from lib.utils import *
 
 
@@ -61,6 +61,16 @@ def solve_oneshot(config):
 
 
 def main(outDir):
+    #agent parameters
+    agentParameters={}
+
+    agentParameters["base"] = 9
+    agentParameters["maxTime"] = 40
+    agentParameters["initPos"] = [9]
+
+    #gen parameters
+    step = 20
+
     # input files
     # croz west
     # dateDir = "data/croz_geofence"
@@ -68,10 +78,13 @@ def main(outDir):
     # file = os.path.join(dateDir, cordsFile)
     # config = CrozConfig(file, step=40)
     # crox east
-    dateDir = "data/croz_east"
+    dataDir = "data/croz_east"
     cordsFile = "croz_rook.csv"
-    file = os.path.join(dateDir, cordsFile)
-    config = RookConfig(file, step=40)
+
+    dataDir = "data/royds"
+    cordsFile = "royds_geofence_latlon.csv"
+    file = os.path.join(dataDir, cordsFile)
+    config = RoydsConfig(file, agentParameters, step=step)
 
 
     config.writeInfo(outDir)
@@ -96,5 +109,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/erook_40_n2"
+    outDir = "tests/royds_20_n1"
     main(outDir)
