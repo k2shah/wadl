@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="royds" id="royds">
+	<SimpleField name="Id" type="int"></SimpleField>
+	<SimpleField name="area" type="float"></SimpleField>
+</Schema>
+<Folder><name>royds</name>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#royds">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="area">26558.34880730000</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>166.15989476346,-77.5532540786586 166.161157990794,-77.5533756759014 166.161630393184,-77.5535770507088 166.16267111049,-77.5537079098836 166.163307169601,-77.5538148746621 166.164198378758,-77.5540937142388 166.16550622759,-77.5542573553854 166.167073040709,-77.5543765314347 166.168159871093,-77.554543515632 166.166363524239,-77.5552288192736 166.16547012956,-77.5554973365222 166.163926870242,-77.5555030616065 166.162107075478,-77.5551850596362 166.161134538056,-77.5550015817754 166.160666066215,-77.5544560245189 166.160317671843,-77.5540899188648 166.15936395236,-77.5537226692207 166.159023060964,-77.5533269741184 166.15989476346,-77.5532540786586</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+  </Placemark>
+</Folder>
+</Document></kml>
