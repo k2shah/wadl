@@ -19,7 +19,7 @@ from shapely.wkb import loads
 
 
 class ShapeConfig(Config):
-    def __init__(self, file, agentParameters, step=100):
+    def __init__(self, file, agentParameters, step):
         self.agentParameters = agentParameters
         self.step = step
         # reads file and returns a x and y cord list as well as polygon object
@@ -55,11 +55,10 @@ class ShapeConfig(Config):
         else:
             # agent init
             self.maxTime = self.agentParameters["maxTime"]
-            self.initAgent = self.agentParameters["initPos"]
+            self.initAgent = np.array(self.agentParameters["initPos"])
             self.nAgent = len(self.initAgent)
             baseIdx = self.stateSpace[self.agentParameters["base"]]
         self.base = ind2sub(baseIdx, self.worldSize)
-
 
     def parseFile(self, file, longLat=False):
         print(file)
@@ -118,6 +117,13 @@ class ShapeConfig(Config):
         if showGrid:
             super(ShapeConfig, self).plot(ax)
         self.plotPolygon(ax)
+
+    def writeInfo(self, filepath):
+        # writes the configuration information of the test
+        super(ShapeConfig, self).writeInfo(filepath)
+        with open(self.outfile, 'a') as f:
+            f.write('\nstep\n')
+            f.write(str(self.step))
 
 
 if __name__ == '__main__':

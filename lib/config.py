@@ -80,16 +80,21 @@ class Config(object):
         # writes the configuration information of the test
         if not os.path.exists(filepath):
             os.makedirs(filepath)
-        outfile = os.path.join(filepath, 'info.txt')
-        # with open(outfile, 'w') as f:
-        #
-        #     # f.write('\nWorld Size\n')
-        #     # f.write(np.array2string(self.worldSize, formatter={
-        #     #                         'float_kind': lambda x: "%.2f" % x}))
-        #
-        #     # f.write('\ninitial agent positions\n')
-        #     # f.write(np.array2string(self.initAgent, formatter={
-        #     #                         'float_kind': lambda x: "%.2f" % x}))
+        self.outfile = os.path.join(filepath, 'info.txt')
+        with open(self.outfile, 'w') as f:
+
+            f.write('\nWorld Size\n')
+            f.write(str(self.worldSize))
+
+            f.write('\nbase pt\n')
+            f.write(str(self.base))
+
+            f.write('\nmax time\n')
+            f.write(str(self.maxTime))
+
+            f.write('\ninitial agent positions\n')
+            f.write(np.array2string(self.initAgent, formatter={
+                                    'float_kind': lambda x: "%.2f" % x}))
 
 
 if __name__ == '__main__':
