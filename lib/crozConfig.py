@@ -20,13 +20,13 @@ from shapely.wkb import loads
 
 
 class CrozConfig(ShapeConfig):
-    def __init__(self, file, step=100, zone=-1):
+    def __init__(self, file, agentParameters, step, zone=-1):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
-        zoneCords = [[(78200, 1473000), (78700, 1473000), (78700, 1472500), (78200, 1472500)],
+        zoneCords = [[(78200, 1473000), (78700, 1473000), (78700, 1472550), (78200, 1472550)],
                      [(78700, 1472800), (79000, 1472800), (79000, 1472200), (78700, 1472200)],
                      [(79000, 1472500), (79500, 1472500), (79500, 1471800), (79000, 1471800)],
-                     [(78200, 1472500), (78700, 1472500), (78700, 1472000), (78200, 1472000)],
+                     [(78200, 1472550), (78700, 1472550), (78700, 1472000), (78200, 1472000)],
                      [(78700, 1472200), (79000, 1472200), (79000, 1471500), (78700, 1471500)]]
         self.zoneIdx = zone
         self.zonePolys = [Polygon(z) for z in zoneCords]
@@ -39,19 +39,9 @@ class CrozConfig(ShapeConfig):
                           'fg':    (-77.459294, 169.245182)}
                           # 'erook': (-77.4632,   169.27899)}
 
-        super(CrozConfig, self).__init__(file, step)
+        super(CrozConfig, self).__init__(file, agentParameters, step)
 
-    def setAgentParameters(self):
-        # base point
-        baseIdx = self.stateSpace[-1]
-        self.base = ind2sub(baseIdx, self.worldSize)
-        # agent init
-        self.maxTime = 47
-        # agent index is in subrange NOT global statespace
-        self.initAgent = [57, 58, 59]
-        self.nAgent = len(self.initAgent)
-
-    def parseFile(self, file):
+    def parseFile(self, file, longLat=False):
         super(CrozConfig, self).parseFile(file)
         self.theta = 15 * np.pi / 180
         self.R = rot2D(self.theta)
@@ -96,7 +86,7 @@ if __name__ == '__main__':
     dataDir = "../data/croz_geofence"
     cordsFile = "croz_west.csv"
     file = os.path.join(dataDir, cordsFile)
-    config = CrozConfig(file, step=40)
+    config = CrozConfig(file, agentParameters=None, step=40, zone=1)
 
     # plot
     fig, ax = plt.subplots()

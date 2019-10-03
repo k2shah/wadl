@@ -64,19 +64,25 @@ def main(outDir):
     #agent parameters
     agentParameters={}
 
-    agentParameters["base"] = 9
-    agentParameters["maxTime"] = 40
-    agentParameters["initPos"] = [9]
+    # zone 0
+    agentParameters["base"] = 10
+    agentParameters["maxTime"] = 60
+    agentParameters["initPos"] = [10, 21]
+
+    #
+    # agentParameters["base"] = 35
+    # agentParameters["maxTime"] = 35
+    # agentParameters["initPos"] = [30, 35, 40]
 
     #gen parameters
-    step = 20
+    step = 40
 
     # input files
     # croz west
-    # dateDir = "data/croz_geofence"
-    # cordsFile = "outer.csv"
-    # file = os.path.join(dateDir, cordsFile)
-    # config = CrozConfig(file, step=40)
+    dateDir = "data/croz_geofence"
+    cordsFile = "croz_west.csv"
+    file = os.path.join(dateDir, cordsFile)
+    config = CrozConfig(file, agentParameters, step=step, zone=4)
     # crox east
     dataDir = "data/croz_east"
     cordsFile = "croz_rook.csv"
@@ -84,7 +90,7 @@ def main(outDir):
     dataDir = "data/royds"
     cordsFile = "royds_geofence_latlon.csv"
     file = os.path.join(dataDir, cordsFile)
-    config = RoydsConfig(file, agentParameters, step=step)
+    # config = RoydsConfig(file, agentParameters, step=step)
 
 
     config.writeInfo(outDir)
@@ -109,5 +115,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/royds_20_n1"
+    outDir = "tests/croz_40_n2_z0"
     main(outDir)
