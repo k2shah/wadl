@@ -19,7 +19,8 @@ from shapely.wkb import loads
 
 
 class ShapeConfig(Config):
-    def __init__(self, file, step=100):
+    def __init__(self, file, agentParameters, step=100):
+        self.agentParameters = agentParameters
         self.step = step
         # reads file and returns a x and y cord list as well as polygon object
         self.parseFile(file)
@@ -49,12 +50,16 @@ class ShapeConfig(Config):
 
     def setAgentParameters(self):
         # base point
-        baseIdx = self.stateSpace[0]
+        if self.agentParameters is None:
+           baseIdx = self.stateSpace[0]
+        else:
+            # agent init
+            self.maxTime = self.agentParameters["maxTime"]
+            self.initAgent = self.agentParameters["initPos"]
+            self.nAgent = len(self.initAgent)
+            baseIdx = self.stateSpace[self.agentParameters["base"]]
         self.base = ind2sub(baseIdx, self.worldSize)
-        # agent init
-        self.maxTime = 32
-        self.initAgent = [1]
-        self.nAgent = len(self.initAgent)
+
 
     def parseFile(self, file, longLat=False):
         print(file)
