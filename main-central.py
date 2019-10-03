@@ -76,13 +76,14 @@ def main(outDir):
 
     #gen parameters
     step = 40
+    zone = 1
 
     # input files
     # croz west
     dateDir = "data/croz_geofence"
     cordsFile = "croz_west.csv"
     file = os.path.join(dateDir, cordsFile)
-    config = CrozConfig(file, agentParameters, step=step, zone=4)
+    config = CrozConfig(file, agentParameters, step=step, zone=zone)
     # crox east
     dataDir = "data/croz_east"
     cordsFile = "croz_rook.csv"
