@@ -1,4 +1,4 @@
-#!bin/bash/python3
+#!/usr/bin/python3
 import warnings as warn
 import os
 import sys
@@ -65,9 +65,9 @@ def main(outDir):
     agentParameters={}
 
     # zone 0
-    agentParameters["base"] = 10
-    agentParameters["maxTime"] = 60
-    agentParameters["initPos"] = [10, 21]
+    agentParameters["base"] = 41
+    agentParameters["maxTime"] = 40
+    agentParameters["initPos"] = [41, 46]
 
     #
     # agentParameters["base"] = 35
@@ -115,5 +115,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/croz_40_n2_z0"
+    outDir = "tests/croz_40_n2_z1"
     main(outDir)
