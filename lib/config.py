@@ -5,7 +5,7 @@ import os as os
 # plot
 import matplotlib.pyplot as plt
 # lib
-from lib.utils import *
+from utils import *
 
 
 class Config(object):

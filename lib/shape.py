@@ -9,8 +9,8 @@ import csv
 # plot
 import matplotlib.pyplot as plt
 # lib
-from lib.utils import *
-from lib.config import Config
+from utils import *
+from config import Config
 # gis
 from osgeo import ogr
 import utm
@@ -30,7 +30,6 @@ class ShapeConfig(Config):
 
         # make the polygon overlay
         self.buildPolygonGrid()
-        
         # build map from linear index to global 2d location
         self.buildWorld()
 
@@ -38,7 +37,7 @@ class ShapeConfig(Config):
         self.polyPrune()
         print("global indices in state space")
         print(self.stateSpace)
-        print(f'size of the state space: {len(self.stateSpace)}')
+        print('size of the state space', len(self.stateSpace))
 
         # get agent parameters
         self.setAgentParameters()
@@ -85,7 +84,7 @@ class ShapeConfig(Config):
         # for i in range(len(splits)-1):
         #    self.polys.append(Polygon(self.UTMCords[splits[i]:splits[i+1]]))
         minx, miny, maxx, maxy = self.poly.bounds
-        print(f'boundary extends in meters. x: {maxx - minx} y: {maxy - miny}')
+        print('boundary extends in meters', (maxx - minx), (maxy - miny))
         self.xGrid = np.linspace(minx, maxx, int((maxx - minx) / self.step))
         self.yGrid = np.linspace(miny, maxy, int((maxy - miny) / self.step))
         self.nX = len(self.xGrid)
@@ -101,14 +100,36 @@ class ShapeConfig(Config):
 
     def polyPrune(self):
         # prune for containment
-        self.stateSpace = [s for s in range(self.nStates)
-                           if self.inPoly([self.poly], self.world[:, s])]
+        if self.zoneIdx == -1:
+            # ignore the zone splits
+            polys = [self.poly]
+        else:
+            polys = [self.poly, self.zonePolys[self.zoneIdx]]
 
+        self.stateSpace = [s for s in range(self.nStates) if self.inPoly(
+                                          polys, self.world[:, s])]
 
     def plotPolygon(self, ax):
         x = [point[0] for point in self.poly.exterior.coords]
         y = [point[1] for point in self.poly.exterior.coords]
         ax.plot(x, y, color='k')
+
+    def plotZones(self, ax):
+        colors = ['b', 'r', 'g', 'm', 'c', 'y']
+        for zone, color in zip(self.zonePolys, colors):
+            x = [point[0] for point in zone.exterior.coords]
+            y = [point[1] for point in zone.exterior.coords]
+            ax.plot(x, y, color=color)
+
+    def plotKeyPonts(self, ax):
+        for key, val in self.keyPoints.items():
+            easting, northing, _ , _  = utm.from_latlon(val[0], val[1])
+            UTMCords = np.array([easting, northing])
+            # ROTATE THE DAMN CORDS
+            UTMCordsRot = np.dot(self.R, UTMCords.T)
+            # print(UTMCordsRot)
+            ax.scatter(*UTMCordsRot[0:2], color='k')
+            ax.annotate(key, xy=UTMCordsRot[0:2], xycoords='data')
 
     def UTM2LatLong(self, utmCord):
         return utm.to_latlon(utmCord[0], utmCord[1], *self.UTMZone)
@@ -117,6 +138,9 @@ class ShapeConfig(Config):
         if showGrid:
             super(ShapeConfig, self).plot(ax)
         self.plotPolygon(ax)
+        if self.zoneIdx != -1:
+            self.plotZones(ax)
+        self.plotKeyPonts(ax)
 
     def writeInfo(self, filepath):
         # writes the configuration information of the test
