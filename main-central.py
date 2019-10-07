@@ -65,9 +65,9 @@ def main(outDir):
     agentParameters={}
 
     # zone 0
-    agentParameters["base"] = 41
-    agentParameters["maxTime"] = 40
-    agentParameters["initPos"] = [41, 46]
+    agentParameters["base"] = 1
+    agentParameters["maxTime"] = 55
+    agentParameters["initPos"] = [1, 2]
 
     #
     # agentParameters["base"] = 35
@@ -76,7 +76,7 @@ def main(outDir):
 
     #gen parameters
     step = 40
-    zone = 1
+    zone = 0
 
     # input files
     # croz west
@@ -116,5 +116,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/croz_40_n2_z1"
+    outDir = "tests/croz_40_n2_z0_v1"
     main(outDir)
