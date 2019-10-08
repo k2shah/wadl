@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 # lib
 from lib.agent import Agent
 from lib.capeConfig import CrozConfig, RookConfig, RoydsConfig
-# from lib.utils import *
+from lib.utils import *
 from gurobipy import *
 
 
