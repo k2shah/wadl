@@ -8,17 +8,13 @@ import numpy as np
 import numpy.linalg as la
 import numpy.random as rand
 import cvxpy as cvx
-from gurobipy import *
 # plot
 import matplotlib.pyplot as plt
 # lib
 from lib.agent import Agent
-from lib.config import Config
-from lib.shape import ShapeConfig
-from lib.crozConfig import CrozConfig
-from lib.rookConfig import RookConfig
-from lib.roydsConfig import RoydsConfig
+from lib.capeConfig import CrozConfig, RookConfig, RoydsConfig
 # from lib.utils import *
+from gurobipy import *
 
 
 def solve_oneshot(config):

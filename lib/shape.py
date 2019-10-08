@@ -5,14 +5,17 @@ import csv
 # import sys
 # import time
 # math
-# import numpy as np
+import numpy as np
 # plot
 import matplotlib.pyplot as plt
 # lib
-from utils import *
-from config import Config
+try:
+    from .config import Config
+    from .utils import *
+except (SystemError, ImportError):
+    from config import Config
+    from utils import *
 # gis
-from osgeo import ogr
 import utm
 from shapely.geometry import Point, Polygon
 from shapely.wkb import loads
@@ -115,7 +118,7 @@ class ShapeConfig(Config):
         ax.plot(x, y, color='k')
 
     def plotZones(self, ax):
-        colors = ['b', 'r', 'g', 'm', 'c', 'y']
+        colors = ['b', 'g', 'r', 'm', 'c', 'y']
         for zone, color in zip(self.zonePolys, colors):
             x = [point[0] for point in zone.exterior.coords]
             y = [point[1] for point in zone.exterior.coords]
@@ -123,13 +126,21 @@ class ShapeConfig(Config):
 
     def plotKeyPonts(self, ax):
         for key, val in self.keyPoints.items():
-            easting, northing, _ , _  = utm.from_latlon(val[0], val[1])
+            easting, northing, _, _ = utm.from_latlon(val[0], val[1])
             UTMCords = np.array([easting, northing])
             # ROTATE THE DAMN CORDS
             UTMCordsRot = np.dot(self.R, UTMCords.T)
             # print(UTMCordsRot)
             ax.scatter(*UTMCordsRot[0:2], color='k')
             ax.annotate(key, xy=UTMCordsRot[0:2], xycoords='data')
+
+    def plotAgents(self, ax):
+        colors = ['b', 'g', 'r', 'm', 'c', 'y']
+        for agentIdx, color in zip(self.initAgent, colors):
+            worldIdx = self.stateSpace[agentIdx]
+            pt = self.world[:, worldIdx]
+            ax.scatter(pt[0], pt[1], color=color)
+
 
     def UTM2LatLong(self, utmCord):
         return utm.to_latlon(utmCord[0], utmCord[1], *self.UTMZone)
@@ -141,6 +152,7 @@ class ShapeConfig(Config):
         if self.zoneIdx != -1:
             self.plotZones(ax)
         self.plotKeyPonts(ax)
+        self.plotAgents(ax)
 
     def writeInfo(self, filepath):
         # writes the configuration information of the test
