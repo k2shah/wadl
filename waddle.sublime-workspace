@@ -519,6 +519,53 @@
 	},
 	"buffers":
 	[
+		{
+			"contents": "#!bin/bash/python3\n# import warnings as warn\nimport os\nimport csv\n# import sys\n# import time\n# math\nimport numpy as np\n# plot\nimport matplotlib.pyplot as plt\n# lib\ntry:\n    from .config import Config\n    from .shape import ShapeConfig\n    from .utils import *\nexcept (SystemError, ImportError):\n    from config import Config\n    from shape import ShapeConfig\n    from utils import *\n# gis\nimport utm\nfrom shapely.geometry import Point, Polygon\nfrom shapely.wkb import loads\n\n\nclass CrozConfig(ShapeConfig):\n    def __init__(self, agentParameters, step, zone=-1, prefix=None):\n        # reads file and returns a x and y cord list as well as polygon object\n        # break up zones \n        zoneCords = [[(78200, 1473000), (78700, 1473000), (78700, 1472550), (78200, 1472550)],\n                     [(78700, 1472800), (79000, 1472800),\n                      (79000, 1472200), (78700, 1472200)],\n                     [(79000, 1472500), (79500, 1472500),\n                      (79500, 1471800), (79000, 1471800)],\n                     [(78200, 1472550), (78700, 1472550),\n                      (78700, 1472000), (78200, 1472000)],\n                     [(78700, 1472200), (79000, 1472200), (79000, 1471500), (78700, 1471500)]]\n        self.zoneIdx = zone\n        self.zonePolys = [Polygon(z) for z in zoneCords]\n\n        # overlay key points\n        self.keyPoints = {'p':     (-77.455917, 169.21753),\n                          'c':     (-77.454753, 169.216886),\n                          'bn':    (-77.44906,  169.22322),\n                          'mle':   (-77.45362,  169.23247),\n                          'fg':    (-77.459294, 169.245182)}\n\n        dataDir = \"../data/croz_geofence\"\n        cordsFile = \"croz_west.csv\"\n        file = os.path.join(dataDir, cordsFile)\n\n        super(CrozConfig, self).__init__(file, agentParameters, step)\n\n    def parseFile(self, file, longLat=False):\n        super(CrozConfig, self).parseFile(file)\n        self.theta = 15 * np.pi / 180\n        self.R = rot2D(self.theta)\n        self.flatCords = np.dot(self.R, self.flatCords.T).T\n\n    def UTM2LatLong(self, utmCord):\n        # overwrite utm to gps to reverse the rotation\n        utmAligned = np.dot(self.R.T, np.array(utmCord))\n        return super(RookConfig, self).UTM2LatLong(utmAligned)\n\n\nclass RookConfig(ShapeConfig):\n    def __init__(self, agentParameters, step):\n        # reads file and returns a x and y cord list as well as polygon object\n        # break up zones\n        zoneCords = [[(80000, 1472200), (80550, 1472200), (80550, 1472050), (80000, 1471850)],\n                     [(80000, 1471850), (80550, 1472050), (80550, 1471700), (80000, 1471700)],]\n        self.zoneIdx = -1\n        self.zonePolys = [Polygon(z) for z in zoneCords]\n\n        # overlay key points\n        self.keyPoints = {'erook': (-77.4632,   169.27899)}\n\n        dataDir = \"../data/croz_east\"\n        cordsFile = \"croz_rook.csv\"\n        file = os.path.join(dataDir, cordsFile)\n        super(RookConfig, self).__init__(file, agentParameters, step=step)\n\n    def parseFile(self, file, longLat=False):\n        super(RookConfig, self).parseFile(file)\n        self.theta = 15 * np.pi / 180\n        self.R = rot2D(self.theta)\n        self.flatCords = np.dot(self.R, self.flatCords.T).T\n\n    def UTM2LatLong(self, utmCord):\n        # overwrite utm to gps to reverse the rotation\n        utmAligned = np.dot(self.R.T, np.array(utmCord))\n        return super(RookConfig, self).UTM2LatLong(utmAligned)\n\n\nclass RoydsConfig(ShapeConfig):\n    def __init__(self, agentParameters, step=100):\n        # reads file and returns a x and y cord list as well as polygon object\n        # break up zones\n        self.zoneIdx = -1\n\n        # zoneCords = [[(80000, 1472200), (80550, 1472200), (80550, 1472050), (80000, 1471850)],\n        #              [(80000, 1471850), (80550, 1472050), (80550, 1471700), (80000, 1471700)],]\n        # self.zonePolys = [Polygon(z) for z in zoneCords]\n\n        # overlay key points\n        self.keyPoints = {}\n\n        dataDir = \"../data/royds\"\n        cordsFile = \"royds_geofence_latlon.csv\"\n        file = os.path.join(dataDir, cordsFile)\n        super(RoydsConfig, self).__init__(file, agentParameters, step)\n\n\nif __name__ == '__main__':\n    step = 40\n    agentParameters = {}\n    agentParameters[\"base\"] = -1\n    agentParameters[\"maxTime\"] = 55\n    agentParameters[\"initPos\"] = [-1, -12]\n\n    config = CrozConfig(agentParameters=agentParameters,\n                        step=step, zone=3)\n    # config = RookConfig(agentParameters=None, step=25)\n    # config = RoydsConfig(agentParameters=None, step=20)\n    # plot\n    fig, ax = plt.subplots()\n    config.plot(ax)\n    plt.show()\n",
+			"file": "lib/capeConfig.py",
+			"file_size": 4664,
+			"file_write_time": 132149975545861369,
+			"settings":
+			{
+				"buffer_size": 4664,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/shape.py",
+			"settings":
+			{
+				"buffer_size": 6119,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/config.py",
+			"settings":
+			{
+				"buffer_size": 3564,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/utils.py",
+			"settings":
+			{
+				"buffer_size": 654,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "main-central.py",
+			"settings":
+			{
+				"buffer_size": 2704,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -597,6 +644,12 @@
 	],
 	"file_history":
 	[
+		"/home/kunal/projects/wadl/lib/agent.py",
+		"/home/kunal/projects/wadl/lib/config.py",
+		"/home/kunal/projects/wadl/lib/shape.py",
+		"/home/kunal/projects/wadl/lib/crozConfig.py",
+		"/home/kunal/projects/wadl/lib/utils.py",
+		"/home/kunal/projects/wadl/waddle.sublime-project",
 		"/home/kunal/projects/wadl/capeConfig.py",
 		"/home/kunal/projects/waddle/Untitled Document",
 		"/home/kunal/projects/distributed_trajectory_optimization_paper/data/record/traj_record0.txt",
@@ -718,13 +771,7 @@
 		"/home/kunal/ros/src/vrpn_client_ros/launch/asl.launch",
 		"/home/kunal/ros/src/GRAPE/sims/Bound_3D_single_sim.py",
 		"/home/kunal/ros/src/GRAPE/grape_ros/scripts/observer.py",
-		"/home/kunal/ros/src/GRAPE/lib/config.py",
-		"/home/kunal/ros/src/GRAPE/grape_ros/scripts/grape_2d_test.py",
-		"/home/kunal/ros/src/ouijabot/ouijabot_proxy/scipts/ouijaBot_team_dance.py",
-		"/home/kunal/Desktop/notes-on-ellipsoids/archive/proj.py",
-		"/home/kunal/ros/src/ouijabot/ouijabot_proxy/CMakeLists.txt",
-		"/home/kunal/ros/src/ouijabot/ouijabot_proxy/scripts/_init_.py",
-		"/home/kunal/ros/src/ouijabot/ouijabot_proxy/launch/tests/ouija_vrpn_test.launch"
+		"/home/kunal/ros/src/GRAPE/lib/config.py"
 	],
 	"find":
 	{
@@ -759,8 +806,232 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "lib/capeConfig.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4664,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4472,
+								4472
+							]
+						],
+						"settings":
+						{
+							"SL.37.region_keys":
+							[
+								"SL.pycodestyle.Highlights.|d3a7db58a340370bde60df633ebb05ed075a2b80602bd7285668b79c1ded6e2f|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|44cc0bf3a304ff32804de60721df2f71beeb10c778e873a6cfcc1d98d1407315|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|8074fbe832ddc7929643316baf9167804a6d11f8deea93ed6e613c4ce6f1dfaa|region.yellowish markup.warning.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|c10a5006dc1e599ca8505643588a0b45de345283a0ceb924167832e8a731d48a|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|5e47aecec68a73de5ee4b155b8bdabe0e1b5a344b63cadbd4a755988a83f8934|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|ba31da5f2020642e58c9143734f0c46c8c08316a5ceaf0cf1e752bc32135412f|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|cfbef657fe8ccfa38e97f19481d1532a15e18580c83aa3a73f531406100d0ac9|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Gutter.|region.yellowish markup.warning.sublime_linter|dot",
+								"sublime_linter.protected_regions",
+								"SL.pycodestyle.Highlights.|687a82ef83ed7929967b6d6b736c48bf011af2391c747ba4ec978b9d7e148e3d|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot"
+							],
+							"SL.92.region_keys":
+							[
+								"SL.pycodestyle.Highlights.|ba31da5f2020642e58c9143734f0c46c8c08316a5ceaf0cf1e752bc32135412f|region.redish markup.error.sublime_linter|32",
+								"sublime_linter.protected_regions",
+								"SL.pycodestyle.Highlights.|cfbef657fe8ccfa38e97f19481d1532a15e18580c83aa3a73f531406100d0ac9|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|d3a7db58a340370bde60df633ebb05ed075a2b80602bd7285668b79c1ded6e2f|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|8074fbe832ddc7929643316baf9167804a6d11f8deea93ed6e613c4ce6f1dfaa|region.yellowish markup.warning.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|5e47aecec68a73de5ee4b155b8bdabe0e1b5a344b63cadbd4a755988a83f8934|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|c10a5006dc1e599ca8505643588a0b45de345283a0ceb924167832e8a731d48a|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Gutter.|region.yellowish markup.warning.sublime_linter|dot",
+								"SL.pycodestyle.Highlights.|44cc0bf3a304ff32804de60721df2f71beeb10c778e873a6cfcc1d98d1407315|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.pycodestyle.Highlights.|687a82ef83ed7929967b6d6b736c48bf011af2391c747ba4ec978b9d7e148e3d|region.redish markup.error.sublime_linter|32"
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2260.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "lib/shape.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6119,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								299,
+								299
+							]
+						],
+						"settings":
+						{
+							"SL.106.region_keys":
+							[
+								"sublime_linter.protected_regions",
+								"SL.pycodestyle.Highlights.|a84871061381d6d73108e7ca4b2fc3981129d636ae3a17e724e71878cfe06007|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|564cf10caeedf3868fca7bd2617fc4662556398971ea90c598f32a2c1b6772b4|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|3d890960651b75ded57863fcd0576c79b1cfb076c1ad6e4d303631b4271f593c|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|e3388a4f51ea0d2f8516d9ee895fbb00c76f81c1953b4e8a17f2c7f5aacde6a3|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|0d3a80afe7112a2b00a57d3a58b644f070f7ec627268d2453e21f3aa7ea9688d|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.pycodestyle.Highlights.|2eed67302447b1b334e03a494e80ff2dfa6c25cf52e34c8e87f1396a809ddd4f|region.redish markup.error.sublime_linter|32"
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "lib/config.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3564,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								222,
+								222
+							]
+						],
+						"settings":
+						{
+							"SL.107.region_keys":
+							[
+								"sublime_linter.protected_regions",
+								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.pycodestyle.Highlights.|ebfbf43d07dc8c1f0561909f04429d213f270fa1970f61bf9c324948be1cff4c|region.redish markup.error.sublime_linter|32"
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "lib/utils.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 654,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								18,
+								18
+							]
+						],
+						"settings":
+						{
+							"SL.109.region_keys":
+							[
+								"sublime_linter.protected_regions",
+								"SL.pycodestyle.Highlights.|aef4e94eab64bf53a21512349647ab713530f6de1cf00854438bfb75bcdbbd14|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|8209e6d5d122c547fd522de2c6a92cb22c89739bf8d94a8fdb4f4fabd37b9a49|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.pycodestyle.Highlights.|07878922ffe4b1005cff5de7413db6c3955668c1543965b192a7792d8516ea76|region.redish markup.error.sublime_linter|32"
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 4,
+					"file": "main-central.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2704,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1381,
+								1381
+							]
+						],
+						"settings":
+						{
+							"SL.41.region_keys":
+							[
+								"SL.pycodestyle.Highlights.|3f0511e596b8c2755bee1cd7bf62d6e6fb5e19b9ed92be0946d73d72508dbb27|region.redish markup.error.sublime_linter|32",
+								"sublime_linter.protected_regions",
+								"SL.pycodestyle.Highlights.|ee8c09bf2df7cb86b19d5ba1e3af233ed0883292bcc98c6b658eb47e73fa820a|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot"
+							],
+							"SL.97.region_keys":
+							[
+								"sublime_linter.protected_regions",
+								"SL.pycodestyle.Highlights.|ee8c09bf2df7cb86b19d5ba1e3af233ed0883292bcc98c6b658eb47e73fa820a|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.pycodestyle.Highlights.|3f0511e596b8c2755bee1cd7bf62d6e6fb5e19b9ed92be0946d73d72508dbb27|region.redish markup.error.sublime_linter|32"
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1458.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -781,11 +1052,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.391122445799,
 			1.0
 		],
 		"rows":
@@ -849,7 +1127,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},

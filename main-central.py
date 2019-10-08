@@ -11,7 +11,7 @@ import cvxpy as cvx
 # plot
 import matplotlib.pyplot as plt
 # lib
-from lib.agent import Agent
+#from lib.agent import Agent
 from lib.capeConfig import CrozConfig, RookConfig, RoydsConfig
 from lib.utils import *
 from gurobipy import *
@@ -52,50 +52,39 @@ def solve_oneshot(config):
     for agent in agents:
         agent.makeTrajectory()
 
-
     return agents
 
 
 def main(outDir):
-    #agent parameters
-    agentParameters={}
+    # agent parameters
+    agentParameters = {}
 
     # zone 0
-    agentParameters["base"] = 1
-    agentParameters["maxTime"] = 55
-    agentParameters["initPos"] = [1, 2]
+    agentParameters["base"] = -1
+    agentParameters["maxTime"] = 50
+    agentParameters["initPos"] = [-1, -12]
+    nAgent = len(agentParameters["initPos"])
 
-    #
-    # agentParameters["base"] = 35
-    # agentParameters["maxTime"] = 35
-    # agentParameters["initPos"] = [30, 35, 40]
-
-    #gen parameters
+    # gen parameters
     step = 40
-    zone = 0
-
+    zone = 3
+    ver = 1
     # input files
     # croz west
-    dateDir = "data/croz_geofence"
-    cordsFile = "croz_west.csv"
-    file = os.path.join(dateDir, cordsFile)
-    config = CrozConfig(file, agentParameters, step=step, zone=zone)
+    config = CrozConfig(agentParameters, step=step, zone=zone,
+                        prefix=True)
     # crox east
-    dataDir = "data/croz_east"
-    cordsFile = "croz_rook.csv"
-
-    dataDir = "data/royds"
-    cordsFile = "royds_geofence_latlon.csv"
-    file = os.path.join(dataDir, cordsFile)
     # config = RoydsConfig(file, agentParameters, step=step)
 
-
+    outDir += '_' + str(step) + '_n' + str(nAgent) + '_z' + str(zone)
+    outDir += '_v' + str(ver)
+    print(outDir)
     config.writeInfo(outDir)
     print("Configuration loaded")
     routeDir = os.path.join(outDir, "routes/")
 
     # SOLVE THE PROBLEM
-    print("\nSolving Problem\n")
+    print("Solving Problem")
     agents = solve_oneshot(config)
     fig, ax = plt.subplots()
     print("agents trajectories")
@@ -105,12 +94,12 @@ def main(outDir):
         agent.writeTrajTxt(routeDir)
 
     outfile = os.path.join(outDir, 'path.png')
-    config.plot(ax, showGrid = False)
+    config.plot(ax, showGrid=False)
     plt.savefig(outfile)
     plt.show()
     return 0
 
 
 if __name__ == '__main__':
-    outDir = "tests/croz_40_n2_z0_v1"
+    outDir = "tests/croz"
     main(outDir)

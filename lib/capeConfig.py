@@ -24,7 +24,7 @@ from shapely.wkb import loads
 
 
 class CrozConfig(ShapeConfig):
-    def __init__(self, agentParameters, step, zone=-1, prefix=None):
+    def __init__(self, agentParameters, step, zone=-1, prefix=False):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones 
         zoneCords = [[(78200, 1473000), (78700, 1473000), (78700, 1472550), (78200, 1472550)],
@@ -44,8 +44,10 @@ class CrozConfig(ShapeConfig):
                           'bn':    (-77.44906,  169.22322),
                           'mle':   (-77.45362,  169.23247),
                           'fg':    (-77.459294, 169.245182)}
-
-        dataDir = "../data/croz_geofence"
+        if prefix:
+            dataDir = "data/croz_geofence"
+        else:
+            dataDir = "../data/croz_geofence"
         cordsFile = "croz_west.csv"
         file = os.path.join(dataDir, cordsFile)
 
