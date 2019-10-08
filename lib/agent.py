@@ -12,7 +12,7 @@ import cvxpy as cvx
 import matplotlib.pyplot as plt
 # lib
 try:
-    from .utils import Config
+    from .utils import *
 except (SystemError, ImportError):
     from utils import *
 
