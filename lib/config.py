@@ -5,7 +5,10 @@ import os as os
 # plot
 import matplotlib.pyplot as plt
 # lib
-from utils import *
+try:
+    from .utils import *
+except (SystemError, ImportError):
+    from utils import *
 
 
 class Config(object):

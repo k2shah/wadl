@@ -5,15 +5,19 @@ import csv
 # import sys
 # import time
 # math
-# import numpy as np
+import numpy as np
 # plot
 import matplotlib.pyplot as plt
 # lib
-from utils import *
-from config import Config
-from shape import ShapeConfig
+try:
+    from .config import Config
+    from .shape import ShapeConfig
+    from .utils import *
+except (SystemError, ImportError):
+    from config import Config
+    from shape import ShapeConfig
+    from utils import *
 # gis
-from osgeo import ogr
 import utm
 from shapely.geometry import Point, Polygon
 from shapely.wkb import loads
@@ -93,7 +97,7 @@ class RoydsConfig(ShapeConfig):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
         self.zoneIdx = -1
-        
+
         # zoneCords = [[(80000, 1472200), (80550, 1472200), (80550, 1472050), (80000, 1471850)],
         #              [(80000, 1471850), (80550, 1472050), (80550, 1471700), (80000, 1471700)],]
         # self.zonePolys = [Polygon(z) for z in zoneCords]
@@ -108,9 +112,16 @@ class RoydsConfig(ShapeConfig):
 
 
 if __name__ == '__main__':
-    # config = CrozConfig(agentParameters=None, step=40, zone=1)
+    step = 40
+    agentParameters = {}
+    agentParameters["base"] = -1
+    agentParameters["maxTime"] = 55
+    agentParameters["initPos"] = [-1, -12]
+
+    config = CrozConfig(agentParameters=agentParameters,
+                        step=step, zone=3)
     # config = RookConfig(agentParameters=None, step=25)
-    config = RoydsConfig(agentParameters=None, step=20)
+    # config = RoydsConfig(agentParameters=None, step=20)
     # plot
     fig, ax = plt.subplots()
     config.plot(ax)
