@@ -11,7 +11,7 @@ import cvxpy as cvx
 # plot
 import matplotlib.pyplot as plt
 # lib
-#from lib.agent import Agent
+from lib.agent import Agent
 from lib.capeConfig import CrozConfig, RookConfig, RoydsConfig
 from lib.utils import *
 from gurobipy import *
