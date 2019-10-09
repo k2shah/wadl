@@ -62,7 +62,7 @@ class CrozConfig(ShapeConfig):
     def UTM2LatLong(self, utmCord):
         # overwrite utm to gps to reverse the rotation
         utmAligned = np.dot(self.R.T, np.array(utmCord))
-        return super(RookConfig, self).UTM2LatLong(utmAligned)
+        return super(CrozConfig, self).UTM2LatLong(utmAligned)
 
 
 class RookConfig(ShapeConfig):
