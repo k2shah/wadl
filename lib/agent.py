@@ -113,14 +113,14 @@ class Agent(object):
         return np.array(x).T
 
     def writeTrajTxt(self, outpath):
-        if not os.path.exists(outpath): os.makedirs(outpath)
+        if not os.path.exists(outpath):
+            os.makedirs(outpath)
         # write the trajectory
         filename = outpath + str(self.id) + ".csv"
         self.trajectory.writeTxt(filename, self.config.UTM2LatLong, self.alt)
 
     def stage(self, obj, cnts):
         # unpack
-        id = self.id
         config = self.config
 
         # make variable
@@ -130,7 +130,7 @@ class Agent(object):
 
         # boundary constraints
         # index of State space
-        s = config.initAgent[id]
+        s = config.initAgent[self.id]
 
         # cnts += [X <= 1]
         cnts += [X[s, 0] == 1]  # initial location
