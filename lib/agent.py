@@ -27,10 +27,11 @@ class Trajectory(object):
 
     def __repr__(self):
         # print the trajectory
-        outsrt = f""
-        for pt in self.pts:
-            outsrt += f"[{pt[0]}, {pt[1]}]\n"
-        return outsrt
+        return "no"
+        # outsrt = f""
+        # for pt in self.pts:
+        #     outsrt += f"[{pt[0]}, {pt[1]}]\n"
+        # return outsrt
 
     def append(self, pt):
         # append to the traj history
@@ -42,7 +43,7 @@ class Trajectory(object):
         with open(filename, "w+") as f:
             for pt in self.pts:
                 lat, long = mapFunc(pt)
-                f.write(f"{lat},{long},{alt},,FALSE,,1\n")
+                #f.write(f"{lat},{long},{alt},,FALSE,,1\n")
 
     def plot(self, ax, colorize=False):
         # plots the trajectory
@@ -75,31 +76,31 @@ class Agent(object):
         # init trajectory
         self.trajectory = Trajectory(color=self.color)
 
-    def makeTrajectory(self):
+    def makeTrajectory(self, statePath):
+        # takes the state path and return the tranformed path in UMT
         config = self.config
-        x = self.cleanSolution()
-        # print(x)
         # get start point
         stateIdx = np.argmax(x[:, 0])
         path = [config.stateSpace[stateIdx]]
         # makes trajectory
-        for t in range(1, x.shape[1]):
-            stateIdx = np.argmax(x[:, t])
-            worldIdx = config.stateSpace[stateIdx]
-            # print(worldIdx)
+        for state in statePath[1:]:
+            # convert to world index
+            worldIdx = config.stateSpace[state]
+            # convert to world point
             pt = config.world[:, worldIdx]
             if worldIdx != path[-1]:
                 path.append(worldIdx)
                 self.trajectory.append(pt)
-        print(f"{len(path)}: ", path)
-        pathLen= len(path)*config.step
-        print(f"path len: {pathLen}. Flight time: {pathLen/self.speed}")
+        # print(f"{len(path)}: ", path)
+        pathLen = len(path)*config.step
+        # print(f"path len: {pathLen}. Flight time: {pathLen/self.speed}")
 
     def cleanSolution(self):
         # this removes blocks of no motion
+        config = self.config
         x = []
         lastWasZero = False
-        for t in range(0, self.config.maxTime):
+        for t in range(0, config.maxTime):
             if self.cvxVar.value[0, t] == 1:
                 if lastWasZero:
                     # drop if adjacent zeros
@@ -110,7 +111,13 @@ class Agent(object):
             else:
                 x.append(self.cvxVar.value[:, t])
                 lastWasZero = False
-        return np.array(x).T
+        x = np.array(x).T
+        # process path
+        x = self.cleanSolution()
+        # print(x)
+        # get start point
+        stateIdx = np.argmax(x[:, 0])
+        return [np.argmax(x[:, t]) for t in range(1, x.shape[1])]
 
     def writeTrajTxt(self, outpath):
         if not os.path.exists(outpath):
