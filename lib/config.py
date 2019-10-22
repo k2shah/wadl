@@ -35,6 +35,7 @@ class Config(object):
                               (6, 0),
                               (7, 0)]
             self.nAgent = len(self.initAgent)
+            self.nStates = int(np.prod(self.worldSize))
 
         # build helper objects
         self.buildTransition()
@@ -59,6 +60,7 @@ class Config(object):
 
             self.Ts[s, adj] = len(adj)*[1]
             self.con.append(adj)
+
     def buildWorld(self):
         self.world = np.zeros((2, self.nStates))
         for s in range(self.nStates):
@@ -101,7 +103,7 @@ class Config(object):
 
 
 if __name__ == '__main__':
-    config = Config()
+    config = Config('small')
     fig, ax = plt.subplots()
     config.plot(ax)
     plt.show()

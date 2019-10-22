@@ -114,17 +114,19 @@ class RoydsConfig(ShapeConfig):
 
 
 if __name__ == '__main__':
-    step = 40
+    step = 80
     agentParameters = {}
     agentParameters["base"] = 11
     agentParameters["maxTime"] = 55
-    agentParameters["initPos"] = [5, 11, 20]
+    agentParameters["initPos"] = [0, 1, 3]
 
     config = CrozConfig(agentParameters=agentParameters,
                         step=step, zone=2)
     # config = RookConfig(agentParameters=None, step=25)
     # config = RoydsConfig(agentParameters=None, step=20)
     # plot
+    print(config.Ts)
+    print(config.Ts[0, :])
     fig, ax = plt.subplots()
     config.plot(ax)
     plt.show()
