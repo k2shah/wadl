@@ -71,6 +71,8 @@ class SAT(object):
 
     def solve(self):
         # solve the problem
+        z3.set_param('parallel.enable', True)
+        z3.set_param('verbose', 1)
         if self.problem.check() == z3.sat:
             print("Solution Found")
         else:
@@ -80,7 +82,7 @@ class SAT(object):
         m = self.problem.model()
         colors = ['b', 'g', 'r', 'm']
         agents = [Agent(ID, self.config, color=color)
-                  for ID, color in zip(range(config.nAgent), colors)]
+                  for ID, color in zip(range(self.config.nAgent), colors)]
 
         for i in range(self.config.nAgent):
             path = []
@@ -89,8 +91,10 @@ class SAT(object):
                     # print(i, t, s)
                     # print(m.evaluate(self.satVars[i][t][s]))
                     if m.evaluate(self.satVars[i][t][s]):
-                        print(i, t, s)
-    
+                        path.append(s)
+            print(path)
+            agents[i].makeTrajectory(path)
+        return agents
 
     def atMostOne(self, varList):
         # constrains at most one of the vars in the list to be true
@@ -105,24 +109,19 @@ class SAT(object):
         self.problem.add(z3.PbEq([(v, 1) for v in varList], 1))
 
 
-
-
-
-
-
 def main(outDir):
     # agent parameters
     agentParameters = {}
 
     # zone 0
     agentParameters["base"] = 11
-    agentParameters["maxTime"] = 55
-    agentParameters["initPos"] = [5, 11]
+    agentParameters["maxTime"] = 28
+    agentParameters["initPos"] = [41, 48]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
-    step = 60
-    zone = 2
+    step = 40
+    zone = 5
     ver = 1
     # input files
     # croz west
@@ -135,6 +134,8 @@ def main(outDir):
     outDir += '_sat_' + str(step) + '_n' + str(nAgent) + '_z' + str(zone)
     outDir += '_v' + str(ver)
     print(outDir)
+    fig, ax = plt.subplots()
+    config.plot(ax, showGrid=False)
     config.writeInfo(outDir)
     print("Configuration loaded")
     routeDir = os.path.join(outDir, "routes/")
@@ -143,8 +144,7 @@ def main(outDir):
     # # SOLVE THE PROBLEM
     print("Solving Problem")
     sat.solve()
-    sat.readSolution()
-    fig, ax = plt.subplots()
+    agents = sat.readSolution()
     print("agents trajectories")
     for agent in agents:
         print(agent.trajectory)
@@ -152,9 +152,8 @@ def main(outDir):
         agent.writeTrajTxt(routeDir)
 
     # outfile = os.path.join(outDir, 'path.png')
-    # config.plot(ax, showGrid=False)
     # plt.savefig(outfile)
-    # plt.show()
+    plt.show()
     # return 0
 
 

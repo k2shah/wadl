@@ -42,8 +42,8 @@ class Trajectory(object):
         # Lat,Long,Alt,Speed,Picture,ElevationMap,WP,CameraTilt,UavYaw,DistanceFrom
         with open(filename, "w+") as f:
             for pt in self.pts:
-                lat, long = mapFunc(pt)
-                #f.write(f"{lat},{long},{alt},,FALSE,,1\n")
+                lat, lng = mapFunc(pt)
+                f.write("%s,%s,%s,,FALSE,,1\n" % (lat, lng, alt))
 
     def plot(self, ax, colorize=False):
         # plots the trajectory
@@ -80,15 +80,14 @@ class Agent(object):
         # takes the state path and return the tranformed path in UMT
         config = self.config
         # get start point
-        stateIdx = np.argmax(x[:, 0])
-        path = [config.stateSpace[stateIdx]]
+        path = [config.stateSpace[statePath[0]]]
         # makes trajectory
         for state in statePath[1:]:
             # convert to world index
             worldIdx = config.stateSpace[state]
             # convert to world point
             pt = config.world[:, worldIdx]
-            if worldIdx != path[-1]:
+            if worldIdx != path[-1]:  # remove no motion
                 path.append(worldIdx)
                 self.trajectory.append(pt)
         # print(f"{len(path)}: ", path)
