@@ -38,8 +38,8 @@ def solve_oneshot(config):
     prob = cvx.Problem(cvx.Minimize(cvx.sum(obj)), cnts)
     prob.solve(solver=cvx.GUROBI,
                verbose=True,
-               MIPGap=5e-2,
-               MIPGapAbs=5e-2)
+               MIPGap=7e-2,
+               MIPGapAbs=7e-2)
     # print("solving")
     # prob.solve(solver=cvx.ECOS_BB,
     #            verbose=True,
@@ -59,15 +59,14 @@ def main(outDir):
     # agent parameters
     agentParameters = {}
 
-    # zone 0
-    agentParameters["base"] = -1
-    agentParameters["maxTime"] = 50
-    agentParameters["initPos"] = [-1, -12]
+    agentParameters["base"] = 11
+    agentParameters["maxTime"] = 45
+    agentParameters["initPos"] = [5, 11, 20]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 40
-    zone = 3
+    zone = 2
     ver = 1
     # input files
     # croz west
