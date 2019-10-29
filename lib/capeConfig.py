@@ -120,11 +120,11 @@ if __name__ == '__main__':
     step = 40
     agentParameters = {}
     agentParameters["base"] = 11
-    agentParameters["maxTime"] = 30
-    agentParameters["initPos"] = [41, 48]
+    agentParameters["maxTime"] = 60
+    agentParameters["initPos"] = [6, 11, 19]
 
     config = CrozConfig(agentParameters=agentParameters,
-                        step=step, zone=5)
+                        step=step, zone=2)
     # config = RookConfig(agentParameters=None, step=25)
     # config = RoydsConfig(agentParameters=None, step=20)
     # plot
