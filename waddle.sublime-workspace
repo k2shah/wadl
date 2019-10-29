@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"cvx",
+				"cvxVars"
+			],
+			[
 				"s",
 				"s_t"
 			],
@@ -510,10 +514,6 @@
 			[
 				"thet",
 				"thetaBounds"
-			],
-			[
-				"theta",
-				"thetaBounds"
 			]
 		]
 	},
@@ -568,7 +568,8 @@
 			"file": "main-central.py",
 			"settings":
 			{
-				"buffer_size": 2619,
+				"buffer_size": 4418,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -576,7 +577,7 @@
 			"file": "lib/agent.py",
 			"settings":
 			{
-				"buffer_size": 5311,
+				"buffer_size": 3407,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -659,6 +660,8 @@
 	],
 	"file_history":
 	[
+		"/home/kunal/projects/wadl/tests/croz_40_n2_z2_v1/info.txt",
+		"/home/kunal/projects/wadl/main-sat.py",
 		"/home/kunal/projects/wadl/z3_tests.py",
 		"/home/kunal/projects/wadl/tests/erook_40_n2/rook-mission.json",
 		"/home/kunal/projects/wadl/data/DEM/croz_west_and_east_dem_tile_adjust_polarstereo.tfw",
@@ -784,9 +787,7 @@
 		"/home/kunal/ros/src/GRAPE/grape_ros/scripts/ouijabotProxy.py",
 		"/home/kunal/ros/src/ouijabot/ouijabot_proxy/launch/ouija_vrpn_test.launch",
 		"/home/kunal/ros/src/ouijabot/ouijabot/launch/ouijabot.launch",
-		"/home/kunal/ros/src/ouijabot/ouijabot_proxy/setup.py",
-		"/home/kunal/ros/src/GRAPE/grape_ros/scripts/import_test.py",
-		"/home/kunal/ros/src/GRAPE/grape_ros/scripts/grape_ros_camera.py"
+		"/home/kunal/ros/src/ouijabot/ouijabot_proxy/setup.py"
 	],
 	"find":
 	{
@@ -804,6 +805,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"sat",
+			"SAT",
+			"sat",
+			"cnts",
 			"outdir"
 		],
 		"highlight": true,
@@ -838,8 +843,8 @@
 						"selection":
 						[
 							[
-								4454,
-								4454
+								0,
+								0
 							]
 						],
 						"settings":
@@ -847,8 +852,8 @@
 							"SL.14.region_keys":
 							[
 								"SL.pycodestyle.Highlights.|2819b220d48bcc65ea16cc39c55b8448fc7ecd7766496b4c01a9f885e0fa837a|region.yellowish markup.warning.sublime_linter|32",
-								"SL.pycodestyle.Gutter.|region.yellowish markup.warning.sublime_linter|dot",
-								"sublime_linter.protected_regions"
+								"sublime_linter.protected_regions",
+								"SL.pycodestyle.Gutter.|region.yellowish markup.warning.sublime_linter|dot"
 							],
 							"SL.37.region_keys":
 							[
@@ -883,10 +888,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2398.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -902,8 +907,8 @@
 						"selection":
 						[
 							[
-								5275,
-								5275
+								0,
+								0
 							]
 						],
 						"settings":
@@ -921,15 +926,14 @@
 							],
 							"SL.15.region_keys":
 							[
+								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.pycodestyle.Highlights.|b17bd136519f1064bcd976dde0267c27fda12640ce38a98d6fa8882fd04cb7c9|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|8ae48eb755ae0748535cc959969e6c21ce25f5092e1ee6b659897ec269b865cc|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|844535e2f114507160d0676a5a225f3798219db3e896890b6052433bcbf88afe|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|2f337c2096c250d42c00d7558d45fa45ba21459872f392fafe238b0170135704|region.redish markup.error.sublime_linter|32",
 								"sublime_linter.protected_regions",
-								"SL.pycodestyle.Highlights.|186ce66ae1e2501512723442c66c4c0623762bec46f58cc6c89391dd02fd304c|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Highlights.|ac611d65997fd0d505eada2c7a9780592eb7b7f9b37b4d1d78266af3af1956fc|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Highlights.|feb14e442532d2c5dbfedc4afbebfe7fb21b99ba0d76b568670c5c248e5b383b|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Highlights.|1a4678e9b28aad13740f8a0b0c883aadedcdc24ed9ccfa37e0045a83286e905e|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Highlights.|451d2815c59c53c79b32c7965ca441b60946ead5e629b014b0a4d31b90bd9ec2|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Highlights.|564cf10caeedf3868fca7bd2617fc4662556398971ea90c598f32a2c1b6772b4|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Highlights.|2eed67302447b1b334e03a494e80ff2dfa6c25cf52e34c8e87f1396a809ddd4f|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot"
+								"SL.pycodestyle.Highlights.|79f583a58f5524bdfb1a382d04e5e4f12a92f5dde20271cf596acb17258dad84|region.redish markup.error.sublime_linter|32",
+								"SL.pycodestyle.Highlights.|9e2fa0b67b69a83c3407ebd27cbca9048068638b912d5194067a2cc93e27dbd7|region.redish markup.error.sublime_linter|32"
 							],
 							"SL.16.region_keys":
 							[
@@ -950,7 +954,7 @@
 						"translation.y": 3381.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -966,8 +970,8 @@
 						"selection":
 						[
 							[
-								1972,
-								1972
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1009,8 +1013,8 @@
 						"selection":
 						[
 							[
-								349,
-								349
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1044,7 +1048,7 @@
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1060,46 +1064,25 @@
 						"selection":
 						[
 							[
-								346,
-								346
+								4812,
+								4812
 							]
 						],
 						"settings":
 						{
-							"SL.18.region_keys":
-							[
-								"SL.pycodestyle.Highlights.|53f2130c300452d486bfb4a09e5cf4e805dbed7034ab5c844730757d430b598a|region.redish markup.error.sublime_linter|32",
-								"sublime_linter.protected_regions",
-								"SL.pycodestyle.Highlights.|6d1b5ac90529b902e35af1dcd288a9c68ebf6e3b0dbcff5620852eabefec4f17|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot"
-							],
-							"SL.19.region_keys":
+							"SL.23.region_keys":
 							[
 								"sublime_linter.protected_regions"
-							],
-							"SL.41.region_keys":
-							[
-								"SL.pycodestyle.Highlights.|3f0511e596b8c2755bee1cd7bf62d6e6fb5e19b9ed92be0946d73d72508dbb27|region.redish markup.error.sublime_linter|32",
-								"sublime_linter.protected_regions",
-								"SL.pycodestyle.Highlights.|ee8c09bf2df7cb86b19d5ba1e3af233ed0883292bcc98c6b658eb47e73fa820a|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot"
-							],
-							"SL.97.region_keys":
-							[
-								"sublime_linter.protected_regions",
-								"SL.pycodestyle.Highlights.|ee8c09bf2df7cb86b19d5ba1e3af233ed0883292bcc98c6b658eb47e73fa820a|region.redish markup.error.sublime_linter|32",
-								"SL.pycodestyle.Gutter.|region.redish markup.error.sublime_linter|dot",
-								"SL.pycodestyle.Highlights.|3f0511e596b8c2755bee1cd7bf62d6e6fb5e19b9ed92be0946d73d72508dbb27|region.redish markup.error.sublime_linter|32"
 							],
 							"syntax": "Packages/Python/Python.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2154.0,
+						"translation.y": 2508.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1108,19 +1091,23 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2619,
+						"buffer_size": 4418,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								411,
-								411
+								3348,
+								3348
 							]
 						],
 						"settings":
 						{
+							"SL.19.region_keys":
+							[
+								"sublime_linter.protected_regions"
+							],
 							"SL.20.region_keys":
 							[
 								"SL.pycodestyle.Highlights.|a71f98c0b0bb81ac9f2fd4d86cda64d9de13961c9ea35694d94ff9f7d8cff136|region.redish markup.error.sublime_linter|32",
@@ -1139,11 +1126,11 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 2.0,
-						"translation.y": 1057.0,
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1152,19 +1139,23 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5311,
+						"buffer_size": 3407,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1138,
-								1138
+								3023,
+								3023
 							]
 						],
 						"settings":
 						{
+							"SL.20.region_keys":
+							[
+								"sublime_linter.protected_regions"
+							],
 							"SL.21.region_keys":
 							[
 								"sublime_linter.protected_regions"
@@ -1173,11 +1164,11 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 17.0,
-						"translation.y": 531.0,
+						"translation.x": 0.0,
+						"translation.y": 924.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -1241,7 +1232,7 @@
 	"project": "waddle.sublime-project",
 	"replace":
 	{
-		"height": 79.0
+		"height": 58.0
 	},
 	"save_all_on_build": true,
 	"select_file":

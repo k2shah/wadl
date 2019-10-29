@@ -92,7 +92,7 @@ class SAT(object):
                     # print(m.evaluate(self.satVars[i][t][s]))
                     if m.evaluate(self.satVars[i][t][s]):
                         path.append(s)
-            print(path)
+            # print(path)
             agents[i].makeTrajectory(path)
         return agents
 
@@ -115,13 +115,13 @@ def main(outDir):
 
     # zone 0
     agentParameters["base"] = 11
-    agentParameters["maxTime"] = 53
-    agentParameters["initPos"] = [6]
+    agentParameters["maxTime"] = 40
+    agentParameters["initPos"] = [6, 11, 19]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 40
-    zone = 4
+    zone = 2
     ver = 1
     # input files
     # croz west
@@ -139,22 +139,21 @@ def main(outDir):
     config.writeInfo(outDir)
     print("Configuration loaded")
     routeDir = os.path.join(outDir, "routes/")
-    sat = SAT(config)
 
+    sat = SAT(config)
     # # SOLVE THE PROBLEM
     print("Solving Problem")
     sat.solve()
     agents = sat.readSolution()
     print("agents trajectories")
     for agent in agents:
-        print(agent.trajectory)
         agent.plot(ax)
         agent.writeTrajTxt(routeDir)
 
-    # outfile = os.path.join(outDir, 'path.png')
-    # plt.savefig(outfile)
+    outfile = os.path.join(outDir, 'path.png')
+    plt.savefig(outfile)
     plt.show()
-    # return 0
+    return 0
 
 
 if __name__ == '__main__':
