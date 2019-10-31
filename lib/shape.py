@@ -54,6 +54,7 @@ class ShapeConfig(Config):
         # base point
         if self.agentParameters is None:
            baseIdx = self.stateSpace[0]
+           self.nAgent = 0
         else:
             # agent init
             self.maxTime = self.agentParameters["maxTime"]
@@ -141,8 +142,7 @@ class ShapeConfig(Config):
             pt = self.world[:, worldIdx]
             ax.scatter(pt[0], pt[1], color=color)
 
-
-    def                                             UTM2LatLong(self, utmCord):
+    def UTM2LatLong(self, utmCord):
         return utm.to_latlon(utmCord[0], utmCord[1], *self.UTMZone)
 
     def plot(self, ax, showGrid=True):
