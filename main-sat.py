@@ -115,13 +115,13 @@ def main(outDir):
 
     # zone 0
     agentParameters["base"] = 11
-    agentParameters["maxTime"] = 40
-    agentParameters["initPos"] = [6, 11, 19]
+    agentParameters["maxTime"] = 55
+    agentParameters["initPos"] = [10, 21]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 40
-    zone = 2
+    zone = 0
     ver = 1
     # input files
     # croz west
