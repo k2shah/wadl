@@ -7,15 +7,17 @@ def l1(a, b):
     # returns the L1 norm of two vectors that are tuples
     return sum(abs((np.array(a) - np.array(b))))
 
+
 def rot2D(theta):
     c = np.cos(theta)
     s = np.sin(theta)
     return np.array([[c, -s],
                      [s, c]])
 
+
 def array2ListTuples(A):
     R, C = A.shape
-    return [tuple(A[i,:]) for i in range(R)]
+    return [tuple(A[i, :]) for i in range(R)]
 
 
 def sub2ind(cord, grid):

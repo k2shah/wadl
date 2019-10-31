@@ -27,14 +27,18 @@ class CrozConfig(ShapeConfig):
     def __init__(self, agentParameters, step, zone=-1, prefix=False):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones 
-        zoneCords = [[(78200, 1473000), (78700, 1473000), (78700, 1472550), (78200, 1472550)],
+        zoneCords = [[(78200, 1473000), (78700, 1473000),
+                      (78700, 1472550), (78200, 1472550)],
                      [(78700, 1472800), (79000, 1472800),
                       (79000, 1472200), (78700, 1472200)],
                      [(79000, 1472500), (79500, 1472500),
                       (79500, 1471800), (79000, 1471800)],
                      [(78200, 1472550), (78700, 1472550),
                       (78700, 1472000), (78200, 1472000)],
-                     [(78700, 1472200), (79000, 1472200), (79000, 1471500), (78700, 1471500)]]
+                     [(78700, 1472200), (79000, 1472200),
+                      (79000, 1471900), (78700, 1471900)],
+                     [(78700, 1471900), (79000, 1471900),
+                      (79000, 1471500), (78700, 1471500)]]
         self.zoneIdx = zone
         self.zonePolys = [Polygon(z) for z in zoneCords]
 
@@ -69,8 +73,10 @@ class RookConfig(ShapeConfig):
     def __init__(self, agentParameters, step):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
-        zoneCords = [[(80000, 1472200), (80550, 1472200), (80550, 1472050), (80000, 1471850)],
-                     [(80000, 1471850), (80550, 1472050), (80550, 1471700), (80000, 1471700)],]
+        zoneCords = [[(80000, 1472200), (80550, 1472200),
+                      (80550, 1472050), (80000, 1471850)],
+                     [(80000, 1471850), (80550, 1472050),
+                      (80550, 1471700), (80000, 1471700)]]
         self.zoneIdx = -1
         self.zonePolys = [Polygon(z) for z in zoneCords]
 
@@ -99,9 +105,6 @@ class RoydsConfig(ShapeConfig):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
         self.zoneIdx = -1
-
-        # zoneCords = [[(80000, 1472200), (80550, 1472200), (80550, 1472050), (80000, 1471850)],
-        #              [(80000, 1471850), (80550, 1472050), (80550, 1471700), (80000, 1471700)],]
         # self.zonePolys = [Polygon(z) for z in zoneCords]
 
         # overlay key points
@@ -117,11 +120,11 @@ if __name__ == '__main__':
     step = 40
     agentParameters = {}
     agentParameters["base"] = 11
-    agentParameters["maxTime"] = 55
-    agentParameters["initPos"] = [5, 11, 20]
+    agentParameters["maxTime"] = 60
+    agentParameters["initPos"] = [10, 21]
 
     config = CrozConfig(agentParameters=agentParameters,
-                        step=step, zone=2)
+                        step=step, zone=0)
     # config = RookConfig(agentParameters=None, step=25)
     # config = RoydsConfig(agentParameters=None, step=20)
     # plot
