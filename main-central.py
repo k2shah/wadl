@@ -60,14 +60,14 @@ def main(outDir):
     agentParameters = {}
 
     agentParameters["base"] = 11
-    agentParameters["maxTime"] = 45
+    agentParameters["maxTime"] = 40
     agentParameters["initPos"] = [5, 11, 20]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 40
     zone = 2
-    ver = 1
+    ver = 2
     # input files
     # croz west
     config = CrozConfig(agentParameters, step=step, zone=zone,
