@@ -38,7 +38,6 @@ class MILP(object):
         for i, X in enumerate(self.cvxVars):
             # boundary constraints
             s = self.config.initAgent[i]
-            print(s)
             # index of State space
             self.cnts += [X[s, 0] == 1]  # initial location
             self.cnts += [cvx.sum(X[:, 0]) == 1]  # one spot
@@ -105,7 +104,6 @@ class MILP(object):
         return agents
 
 
-
 def main(outDir):
     # agent parameters
     agentParameters = {}
@@ -117,7 +115,7 @@ def main(outDir):
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
-    step = 50
+    step = 60
     zone = 3
     ver = 1
     # input files
