@@ -26,7 +26,7 @@ from shapely.wkb import loads
 class CrozConfig(ShapeConfig):
     def __init__(self, agentParameters, step, zone=-1, prefix=False):
         # reads file and returns a x and y cord list as well as polygon object
-        # break up zones 
+        # break up zones
         zoneCords = [[(78200, 1473000), (78700, 1473000),
                       (78700, 1472550), (78200, 1472550)],
                      [(78700, 1472800), (79000, 1472800),
@@ -48,10 +48,8 @@ class CrozConfig(ShapeConfig):
                           'bn':    (-77.44906,  169.22322),
                           'mle':   (-77.45362,  169.23247),
                           'fg':    (-77.459294, 169.245182)}
-        if prefix:
-            dataDir = "data/croz_geofence"
-        else:
-            dataDir = "../data/croz_geofence"
+
+        dataDir = "data/croz_geofence"
         cordsFile = "croz_west.csv"
         file = os.path.join(dataDir, cordsFile)
 
@@ -70,7 +68,8 @@ class CrozConfig(ShapeConfig):
 
 
 class RookConfig(ShapeConfig):
-    def __init__(self, agentParameters, step):
+    def __init__(self, agentParameters, step, prefix=False):
+
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
         zoneCords = [[(80000, 1472200), (80550, 1472200),
@@ -83,10 +82,11 @@ class RookConfig(ShapeConfig):
         # overlay key points
         self.keyPoints = {'erook': (-77.4632,   169.27899)}
 
-        dataDir = "../data/croz_east"
+        dataDir = "data/croz_east"
         cordsFile = "croz_rook.csv"
         file = os.path.join(dataDir, cordsFile)
-        super(RookConfig, self).__init__(file, agentParameters, step=step)
+        super(RookConfig, self).__init__(file, agentParameters,
+                                         step=step, prefix=prefix)
 
     def parseFile(self, file, longLat=False):
         super(RookConfig, self).parseFile(file)
@@ -101,7 +101,7 @@ class RookConfig(ShapeConfig):
 
 
 class RoydsConfig(ShapeConfig):
-    def __init__(self, agentParameters, step=100):
+    def __init__(self, agentParameters, step, prefix=False):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
         self.zoneIdx = -1
@@ -110,23 +110,24 @@ class RoydsConfig(ShapeConfig):
         # overlay key points
         self.keyPoints = {}
 
-        dataDir = "../data/royds"
+        dataDir = "data/royds"
         cordsFile = "royds_geofence_latlon.csv"
         file = os.path.join(dataDir, cordsFile)
-        super(RoydsConfig, self).__init__(file, agentParameters, step)
+        super(RoydsConfig, self).__init__(file, agentParameters,
+                                          step=step, prefix=prefix)
 
 
 if __name__ == '__main__':
     step = 40
     agentParameters = {}
-    agentParameters["base"] = 11
+    agentParameters["base"] = 7
     agentParameters["maxTime"] = 60
-    agentParameters["initPos"] = [10, 21]
+    agentParameters["initPos"] = [3, 10]
 
-    config = CrozConfig(agentParameters=agentParameters,
-                        step=step, zone=0)
-    # config = RookConfig(agentParameters=None, step=25)
-    # config = RoydsConfig(agentParameters=None, step=20)
+    # config = CrozConfig(agentParameters=agentParameters,
+    #                     step=step, zone=0)
+    config = RookConfig(agentParameters=agentParameters, step=step)
+    # config = RoydsConfig(agentParameters=agentParameters, step=step)
     # plot
     fig, ax = plt.subplots()
     config.plot(ax)
