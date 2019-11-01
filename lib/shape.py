@@ -22,10 +22,13 @@ from shapely.wkb import loads
 
 
 class ShapeConfig(Config):
-    def __init__(self, file, agentParameters, step):
+    def __init__(self, file, agentParameters, step, prefix=False):
         self.agentParameters = agentParameters
         self.step = step
         # reads file and returns a x and y cord list as well as polygon object
+        # fix pathing
+        if not prefix:
+            file = "../" + file
         self.parseFile(file)
         # flat cords are the gps cords mapped to a 2d plane, with no rotaiton this is UTM
         # print("boundary cords in utm")
@@ -45,6 +48,7 @@ class ShapeConfig(Config):
         # get agent parameters
         self.setAgentParameters()
 
+
         # build transitions and costmaps
         super(ShapeConfig, self).__init__()
         # slice transition and costmap to only the valid states
@@ -53,8 +57,9 @@ class ShapeConfig(Config):
     def setAgentParameters(self):
         # base point
         if self.agentParameters is None:
-           baseIdx = self.stateSpace[0]
-           self.nAgent = 0
+            baseIdx = self.stateSpace[0]
+            self.nAgent = 0
+            self.initAgent = [0]
         else:
             # agent init
             self.maxTime = self.agentParameters["maxTime"]

@@ -50,11 +50,9 @@ class Trajectory(object):
         plotPlot = np.array(self.pts)
         if len(plotPlot.shape) > 1:
             # start
-            ax.scatter(*self.pts[0],
-                       marker="o", color=self.color)
+            ax.scatter(*self.pts[0], marker="*", color=self.color)
             # end
-            ax.scatter(*self.pts[-1],
-                       marker="^", color=self.color)
+            # ax.scatter(*self.pts[-1], marker="^", color=self.color)
             # path
             trajLen = plotPlot.shape[0]
             cm = plt.cm.get_cmap('plasma', trajLen)

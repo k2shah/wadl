@@ -73,8 +73,10 @@ class SAT(object):
         # solve the problem
         z3.set_param('parallel.enable', True)
         z3.set_param('verbose', 1)
+        startTime = time.time()
         if self.problem.check() == z3.sat:
-            print("Solution Found")
+            print("Solution Found: {:2.5f} min"
+                  .format((time.time()-startTime)/60))
         else:
             raise RuntimeError("I will never be satisfiiiiied")
 
@@ -113,26 +115,30 @@ def main(outDir):
     # agent parameters
     agentParameters = {}
 
-    # zone 0
-    agentParameters["base"] = 11
-    agentParameters["maxTime"] = 55
-    agentParameters["initPos"] = [10, 21]
+    agentParameters["base"] = 0
+    agentParameters["maxTime"] = 32
+    agentParameters["initPos"] = [3, 10]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 40
-    zone = 0
     ver = 1
     # input files
-    # croz west
-    config = CrozConfig(agentParameters,
-                        step=step, zone=zone,
-                        prefix=True)
-    # crox east
-    # config = RoydsConfig(file, agentParameters, step=step)
 
-    outDir += '_sat_' + str(step) + '_n' + str(nAgent) + '_z' + str(zone)
-    outDir += '_v' + str(ver)
+    # croz west
+    # config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
+    # zone = 0
+    # outDir += "croz" + "_z' + str(zone)
+
+    # croz east
+    config = RookConfig(agentParameters, step=step, prefix=True)
+    outDir += "rook"
+
+    # royds
+    # config = RoydsConfig(agentParameters, step=step, prefix=True)
+    # outDir += "royds"
+
+    outDir += '_sat_' + str(step) + '_n' + str(nAgent) + '_v' + str(ver)
     print(outDir)
     fig, ax = plt.subplots()
     config.plot(ax, showGrid=False)
@@ -144,6 +150,7 @@ def main(outDir):
     # # SOLVE THE PROBLEM
     print("Solving Problem")
     sat.solve()
+    print("Solution Time:")
     agents = sat.readSolution()
     print("agents trajectories")
     for agent in agents:
@@ -157,5 +164,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/croz"
+    outDir = "tests/"
     main(outDir)
