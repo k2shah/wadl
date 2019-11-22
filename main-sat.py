@@ -116,23 +116,23 @@ def main(outDir):
     agentParameters = {}
 
     agentParameters["base"] = 0
-    agentParameters["maxTime"] = 32
-    agentParameters["initPos"] = [3, 10]
+    agentParameters["maxTime"] = 48
+    agentParameters["initPos"] = [1, 15]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 40
-    ver = 1
+    ver = 2
     # input files
 
     # croz west
-    # config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
-    # zone = 0
-    # outDir += "croz" + "_z' + str(zone)
+    zone = 3
+    config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
+    outDir += "croz" + '_z' + str(zone)
 
     # croz east
-    config = RookConfig(agentParameters, step=step, prefix=True)
-    outDir += "rook"
+    # config = RookConfig(agentParameters, step=step, prefix=True)
+    # outDir += "rook"
 
     # royds
     # config = RoydsConfig(agentParameters, step=step, prefix=True)

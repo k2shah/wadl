@@ -84,6 +84,7 @@ class ShapeConfig(Config):
             UTMData = [utm.from_latlon(cords[0], cords[1]) for cords in self.GPSData]
 
         self.UTMZone = UTMData[0][2:]
+        print(self.UTMZone)
         self.flatCords = np.array([[data[0], data[1]] for data in UTMData])
 
     def buildPolygonGrid(self):
