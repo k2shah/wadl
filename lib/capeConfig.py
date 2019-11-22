@@ -53,7 +53,8 @@ class CrozConfig(ShapeConfig):
         cordsFile = "croz_west.csv"
         file = os.path.join(dataDir, cordsFile)
 
-        super(CrozConfig, self).__init__(file, agentParameters, step)
+        super(CrozConfig, self).__init__(file, agentParameters,
+                                         step=step, prefix=prefix)
 
     def parseFile(self, file, longLat=False):
         super(CrozConfig, self).parseFile(file)
@@ -121,12 +122,12 @@ if __name__ == '__main__':
     step = 40
     agentParameters = {}
     agentParameters["base"] = 7
-    agentParameters["maxTime"] = 60
-    agentParameters["initPos"] = [3, 10]
+    agentParameters["maxTime"] = 50
+    agentParameters["initPos"] = [1, 15]
 
-    # config = CrozConfig(agentParameters=agentParameters,
-    #                     step=step, zone=0)
-    config = RookConfig(agentParameters=agentParameters, step=step)
+    config = CrozConfig(agentParameters=agentParameters,
+                        step=step, zone=3)
+    # config = RookConfig(agentParameters=agentParameters, step=step)
     # config = RoydsConfig(agentParameters=agentParameters, step=step)
     # plot
     fig, ax = plt.subplots()
