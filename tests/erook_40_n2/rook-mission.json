@@ -55,7 +55,7 @@
       "safeDistanceToTerrain" : 5.0,
       "safeDistanceToObstacle" : 20.0,
       "waypointAcceptanceRadius" : 2.0,
-      "fenceRadius" : 500.0,
+      "fenceRadius" : 3000.0,
       "lowTelemetryLevel" : 50.0,
       "normalTelemetryLevel" : 70.0,
       "defaultClimbRate" : 2.0,
@@ -63,7 +63,7 @@
       "glideSlope" : null,
       "defaultHorizontalSpeed" : 5.0,
       "landingGroundSpeed" : null,
-      "maxAltitudeAgl" : 120.0,
+      "maxAltitudeAgl" : 300.0,
       "landingFlareAltitude" : null,
       "landingFlareTime" : null,
       "minLandingPitch" : null,
@@ -83,7 +83,7 @@
   } ],
   "vehicles" : [ ],
   "mission" : {
-    "name" : "Mission of 10/2/2019 1:11 PM",
+    "name" : "Mission of 10/2/2019 1:11 PM (import 2019/11/25 23:32:45)",
     "description" : null,
     "creationTime" : 1570047115299,
     "routes" : [ {
@@ -115,6 +115,36 @@
         "type" : "Waypoint",
         "actions" : [ ],
         "point" : {
+          "latitude" : -1.351952004443632,
+          "longitude" : 2.95285309038536,
+          "altitude" : 90.0,
+          "altitudeType" : "AGL"
+        },
+        "parameters" : {
+          "avoidObstacles" : true,
+          "avoidTerrain" : true,
+          "speed" : 15.0,
+          "wpTurnType" : "STRAIGHT"
+        }
+      }, {
+        "type" : "Waypoint",
+        "actions" : [ ],
+        "point" : {
+          "latitude" : -1.3519662859664745,
+          "longitude" : 2.9540561492337316,
+          "altitude" : 89.46549337659962,
+          "altitudeType" : "AGL"
+        },
+        "parameters" : {
+          "avoidObstacles" : true,
+          "avoidTerrain" : true,
+          "speed" : 15.0,
+          "wpTurnType" : "STRAIGHT"
+        }
+      }, {
+        "type" : "Waypoint",
+        "actions" : [ ],
+        "point" : {
           "latitude" : -1.3519855377065102,
           "longitude" : 2.9545539328993122,
           "altitude" : 40.0,
@@ -123,7 +153,7 @@
         "parameters" : {
           "avoidObstacles" : true,
           "avoidTerrain" : true,
-          "speed" : 3.0,
+          "speed" : 15.0,
           "wpTurnType" : "STRAIGHT"
         }
       }, {
@@ -550,15 +580,30 @@
         "type" : "Waypoint",
         "actions" : [ ],
         "point" : {
-          "latitude" : -1.3519834170168146,
-          "longitude" : 2.9545213309144707,
-          "altitude" : 40.0,
+          "latitude" : -1.3519665429226015,
+          "longitude" : 2.95406171582853,
+          "altitude" : 89.87176825269125,
           "altitudeType" : "AGL"
         },
         "parameters" : {
           "avoidObstacles" : true,
           "avoidTerrain" : true,
-          "speed" : 3.0,
+          "speed" : 15.0,
+          "wpTurnType" : "STRAIGHT"
+        }
+      }, {
+        "type" : "Waypoint",
+        "actions" : [ ],
+        "point" : {
+          "latitude" : -1.351951452505497,
+          "longitude" : 2.952854472820651,
+          "altitude" : 90.0,
+          "altitudeType" : "AGL"
+        },
+        "parameters" : {
+          "avoidObstacles" : true,
+          "avoidTerrain" : true,
+          "speed" : 15.0,
           "wpTurnType" : "STRAIGHT"
         }
       } ]

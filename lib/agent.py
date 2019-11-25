@@ -25,6 +25,9 @@ class Trajectory(object):
         self.pts = []
         self.color = color
 
+        self.keyPoints = {"hut": [-77.4610948, 169.1860094]}
+        self.transferSpeed = 12.0
+
     def __repr__(self):
         pass
         # print the trajectory
@@ -41,9 +44,14 @@ class Trajectory(object):
         # writes the trajectory as a txt file
         # Lat,Long,Alt,Speed,Picture,ElevationMap,WP,CameraTilt,UavYaw,DistanceFrom
         with open(filename, "w+") as f:
-            for pt in self.pts:
+            for i, pt in enumerate(self.pts):
                 lat, lng = mapFunc(pt)
-                f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, alt, spd))
+                if i == 0:
+                    f.write("%s,%s,%s,%s,FALSE,,1,90\n" % (lat, lng, alt, spd))
+                elif i == len(self.pts)-1:
+                    f.write("%s,%s,%s,%s,FALSE,,1,0\n" % (lat, lng, alt, spd))
+                else:
+                    f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, alt, spd))
 
     def plot(self, ax, colorize=False):
         # plots the trajectory
