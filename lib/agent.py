@@ -76,8 +76,8 @@ class Agent(object):
         self.id = ID
         self.config = config
         self.color = color
-        self.alt = 40  # altitude in m of the quad
-        self.speed = 3.0  # speed in m/s
+        self.alt = 50  # altitude in m of the quad
+        self.speed = 4.0  # speed in m/s
         # init trajectory
         self.trajectory = Trajectory(color=self.color)
 
