@@ -39,14 +39,14 @@ class Log(object):
         missionEndTag = 'Mission Upload - Result - SUCCESS'
 
         # trajectory
-        flightStartTag_asit = 'onFlightMode change: GPS_ATTI -> ASSISTED_TAKEOFF'
+        flightStartTag_asit = '''onFlightMode change: GPS_ATTI
+                                 ->  ASSISTED_TAKEOFF'''
         flightStartTag_auto = 'onFlightMode change: GPS_ATTI -> AUTO_TAKEOFF'
         autoFlightStartTag = 'Toast message: Route started'
         batteryTag = 'Battery updated:'
         autoFlightEndTag = 'Toast message: Route ended'
         autoFlightCancelTag = 'Toast message: Route canceled'
         flightEndTag = 'TAKEOFF_POSITION_UPDATED as landed'
-
 
         with open(self.file) as f:
             for line in f:
@@ -79,14 +79,15 @@ class Log(object):
                         if batteryTag in ls[1]:
                             percent, volt, temperature = self.getBattery(ls[1])
                             time = ls[0].split(" ")[0]
-                            flight.addBatteryLog(time, percent, volt, temperature)
+                            flight.addBatteryLog(
+                                time, percent, volt, temperature)
 
                         elif autoFlightStartTag in ls[1]:
                             time = ls[0].split(" ")[0]
                             flight.setRouteStart(time)
                             # add the mission to the flight
                             flight.setMission(WPbuffer)
-                        elif autoFlightEndTag in ls[1] or autoFlightCancelTag in ls[1] :
+                        elif autoFlightEndTag in ls[1] or autoFlightCancelTag in ls[1]:
                             time = ls[0].split(" ")[0]
                             flight.setRouteEnd(time)
 
@@ -147,6 +148,25 @@ class Flight(object):
         self.mission = []  # planned mission uploaded
         self.trajectory = []  # flown trajectory
 
+    def __repr__(self):
+        if len(self.mission) == 0:
+            return "no mission for this flight"
+        else:
+            # time
+            printStr = "mission started at: "
+            printStr += "{:s}:{:s}:{:s}\n".format(*self.startTime)
+            # duration
+            printStr += "flight duration: {:2.3f}m\n".format(self.duration/60.)
+            printStr += "autonomous duration: {:2.3f}m\n".format(
+                         (self.routeEnd-self.routeStart)/60.)
+            printStr += "lat\t\tlng\t\talt\n"
+            # plan
+            for pt in self.mission:
+                printStr += "{:2.5f}\t{:2.5f}\t{:-2.3f}\n".format(
+                             pt[1], pt[2], pt[3])
+
+            return printStr
+
     def setMission(self, mission):
         # sets the mission
         self.mission = mission
@@ -189,8 +209,9 @@ class Flight(object):
 
 if __name__ == '__main__':
     # file = 'logs/2.18.98_2019_11_21_12_16.txt'
-    file = 'logs/2.18.98_2019_11_25_15_01.txt'
+    file = '../logs/2.18.98_2019_11_25_15_01.txt'
     log = Log(file)
+
     for i, flight in enumerate(log.flights):
         print(i)
         fig, ax = plt.subplots()
