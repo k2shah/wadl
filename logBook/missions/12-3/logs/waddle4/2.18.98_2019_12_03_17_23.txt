@@ -1,0 +1,588 @@
+17:23:45.840 I/DjiSharedApp : Phone information: manufacturer(samsung), model(SM-T510), version(28), release(9), totalMemory(1970008064)
+17:23:45.842 I/ApplicationMainServiceBase : ---> onCreate (DjiAppMainServiceImpl), creationTimeStamp=1575347025842
+17:23:45.844 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onCreate
+17:23:46.008 I/MediaStreamerContainerImpl : initializing mstreamer... 
+17:23:46.045 I/WithAppMainServiceActivity : (DjiUsbAccessoryAttachedActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+17:23:46.073 I/DjiSharedUsbAccessoryAttachedActivity : onServiceConnectionChanged : CONNECTED to 1575347025842
+17:23:46.073 I/DroneBridgeImpl : onUsbAccessoryAttached
+17:23:46.079 I/UsbAccessoryManagerImplV2 : There are 1 attached UsbAccessory
+17:23:46.081 I/UsbAccessoryManagerImplV2 : permission(true) - UsbAccessory[mManufacturer=DJI, mModel=T600, mDescription=DJI Inspire 1, mVersion=v2.35.0.0, mUri=www.dji.com, mSerial=000000000000000]
+17:23:46.235 I/WithAppMainServiceActivity : (DjiSelectDroneTypeActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+17:23:46.292 I/DjiSharedSelectDroneTypeActivity : permissions granted.
+17:23:46.298 I/DroneBridgeImpl : DJISDKManager -> registerApp...
+17:23:46.299 I/DroneBridgeImpl : DJISDKManager -> SDK VERSION = 4.9
+17:23:48.030 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+17:23:48.032 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+17:23:48.032 I/DjiSharedSelectDroneTypeActivity : DJI SDK Registration SUCCESS
+17:23:48.056 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+17:23:48.057 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+17:23:48.068 I/DjiSharedSelectDroneTypeActivity : DJI SDK Registration SUCCESS
+17:23:48.363 I/BaseActivityVsm : setUpKeyListeners for: isLandingConfirmationNeeded
+17:23:48.365 W/BaseActivityVsm : isLandingConfirmationNeeded ERROR : Not Support
+17:23:48.373 I/DjiSharedMainActivity : setUpKeyListeners... (IS_OPTICAL_ZOOM_SUPPORTED)
+17:23:48.374 W/DjiSharedMainActivity : opticalZoomSupportedKey ERROR : Not Support
+17:23:48.379 I/MainIndicatorsFragment : setUpKeyListeners for: SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold
+17:23:48.380 W/MainIndicatorsFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+17:23:48.381 W/MainIndicatorsFragment : LowBatteryWarningThreshold ERROR : Not Support
+17:23:48.384 I/RemainingFlightTimeFragment : setUpKeyListeners for: Connection, ChargeRemainingInPercent, CurrentLandImmediatelyBattery, BatteryPercentageNeededToGoHome, SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold, RemainingFlightTime
+17:23:48.385 W/RemainingFlightTimeFragment : ChargeRemainingInPercent ERROR : Not Support
+17:23:48.386 W/RemainingFlightTimeFragment : CurrentLandImmediatelyBattery ERROR : Not Support
+17:23:48.387 W/RemainingFlightTimeFragment : BatteryPercentageNeededToGoHome ERROR : Not Support
+17:23:48.388 W/RemainingFlightTimeFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+17:23:48.389 W/RemainingFlightTimeFragment : LowBatteryWarningThreshold ERROR : Not Support
+17:23:48.391 W/RemainingFlightTimeFragment : RemainingFlightTime ERROR : Not Support
+17:23:48.930 I/ObstacleAvoidanceFragment : setUpKeyListeners for: VisionDetectionState
+17:23:48.968 W/ObstacleAvoidanceFragment : VisionDetectionState ERROR : Not Support
+17:23:48.982 I/WithAppMainServiceActivity : (DjiMainActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+17:23:49.033 I/VsmToUcsConnectorBase : UCS connector started on 54322
+17:23:49.034 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+17:23:49.035 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+17:23:49.121 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+17:23:49.139 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for DjiFpvFullscreenFragment.
+17:23:49.141 I/DjiVideoFeedProvider : InternalFeedConsumer is SET.
+17:23:49.143 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+17:23:49.161 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+17:23:49.162 I/DjiVideoFeedProvider : PhysicalSource of a PrimaryVideoFeed is NULL
+17:23:49.163 I/DjiVideoFeedProvider : PhysicalSource of a SecondaryVideoFeed is NULL
+17:23:49.174 I/DjiVideoFeedProvider : PhysicalSource of a TranscodedVideoFeed is NULL
+17:23:49.269 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=0
+trans.=NULL(UNUSED)
+17:23:49.271 W/DjiFpvFragment : No need to re-init codecManager!
+17:23:49.272 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=1
+trans.=NULL(UNUSED)
+17:23:49.276 I/DjiFpvFragment : Starting CodecManager, w=1920 h=1035 src=Camera
+17:23:49.291 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:23:49.925 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+17:23:49.927 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+17:23:49.930 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+17:23:49.931 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+17:23:49.933 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+17:23:49.944 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:23:49.946 W/DjiFpvFragment : No need to re-init codecManager!
+17:23:49.947 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:23:49.948 W/DjiFpvFragment : No need to re-init codecManager!
+17:23:50.168 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:23:50.816 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (CAMERA), but vm is NULL, so far ignore
+17:23:50.823 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (GIMBAL), but vm is NULL, so far ignore
+17:23:50.842 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (FLIGHT_CONTROLLER), but vm is NULL, so far ignore
+17:23:50.844 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (BATTERY), but vm is NULL, so far ignore
+17:23:50.853 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (AIR_LINK), but vm is NULL, so far ignore
+17:23:50.864 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (REMOTE_CONTROLLER), but vm is NULL, so far ignore
+17:23:50.888 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+17:23:50.889 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+17:23:50.891 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+17:23:50.893 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:23:50.894 W/DjiFpvFragment : No need to re-init codecManager!
+17:23:50.896 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:23:50.896 W/DjiFpvFragment : No need to re-init codecManager!
+17:23:52.048 I/SsdpPortsMonitor : Service discovery: Network interface enabled: wlan0
+17:23:52.053 I/SsdpPortsMonitor : Service discovery: Network interface enabled: lo
+17:23:52.109 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30794
+17:23:52.112 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:23:52.112 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30794
+17:23:54.115 I/DroneBridgeImpl : OK, starting drone init...
+17:23:54.130 I/DroneBridgeImpl : OK, connected DJI_M100 (041DF30794)
+17:23:54.133 I/MyBatteryUpdateCallback : initDroneUpdate - Battery - singleBatteryMode (1)
+17:23:54.141 I/MyBatteryUpdateCallback : setUpKeyListeners for: AggregationState, isInSingleBatteryMode, Overviews
+17:23:54.147 W/MyBatteryUpdateCallback : AggregationState ERROR : The feature is unsupported.
+17:23:54.149 I/MyBatteryUpdateCallback : singleBatteryModeKey = false
+17:23:54.151 W/MyBatteryUpdateCallback : Overviews ERROR : The feature is unsupported.
+17:23:54.162 I/MyBatteryUpdateCallback : setUpKeyListeners for [0]: ChargeRemainingInPercent, ChargeRemaining, Voltage, Current, Temperature, LifetimeRemaining, FullChargeCapacity, NumberOfDischarges, isSmartBattery, ConnectionState, FirmwareVersion, SerialNumber
+17:23:54.224 I/MyBatteryUpdateCallback : Battery #1 has NORMAL ConnectionState
+17:23:54.228 I/FailsafeControllerDjiImpl : setUpKeyListeners for: GoHomeAltitude, MaxFlightHeight, SmartReturnToHomeEnabled, LowBatteryWarningThreshold, SeriousLowBatteryWarningThreshold
+17:23:54.232 I/MyFlightControllerUpdateCallback : setUpKeyListeners for: AircraftLocationLatitude, AircraftLocationLongitude, Altitude, GPSSignalLevel, SatelliteCount, AttitudePitch, AttitudeRoll, AttitudeYaw, VelocityX, VelocityY, VelocityZ, FlightMode, AreMotorsOn, IsFlying, HomeLocationLatitude, HomeLocationLongitude, AircraftName, FirmwarePackageVersion, FirmwareVersion
+17:23:54.270 I/DroneMainControllerDjiImpl : onFlightMode change: UNKNOWN -> ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 142)
+17:23:54.272 I/MyFlightControllerUpdateCallback : Home None / NULL
+17:23:54.273 I/MyFlightControllerUpdateCallback : Home NULL / None
+17:23:54.274 I/MyFlightControllerUpdateCallback : AircraftName = waddle 4
+17:23:54.275 I/MyFlightControllerUpdateCallback : FirmwareVersion = 1.3.1.82+
+17:23:54.275 I/MyFlightControllerUpdateCallback : FlightControllerVersion = 03.01.06.108
+17:23:54.276 I/MyRtkUpdateCallback : setUpKeyListeners for: RTKEnabled, RTKState, RTKFusionHeading, RTKFusionLocation, IsRTKConnected, IsRTKFusionDataUsable
+17:23:54.277 W/MyRtkUpdateCallback : RTKEnabled ERROR : The feature is unsupported.
+17:23:54.278 W/MyRtkUpdateCallback : RTKState ERROR : The feature is unsupported.
+17:23:54.279 W/MyRtkUpdateCallback : RTKFusionHeading ERROR : The feature is unsupported.
+17:23:54.279 W/MyRtkUpdateCallback : RTKFusionLocation ERROR : The feature is unsupported.
+17:23:54.280 W/MyRtkUpdateCallback : IsRTKConnected ERROR : The feature is unsupported.
+17:23:54.281 W/MyRtkUpdateCallback : IsRTKFusionDataUsable ERROR : The feature is unsupported.
+17:23:54.281 I/MyGimbalUpdateCallback : setUpKeyListeners for: AttitudeInDegrees, AttitudeYaw, Capabilities, FirmwareVersion, SerialNumber
+17:23:54.283 I/MyGimbalUpdateCallback : gimbal.getCapabilities RESULT: pitch [-90..30], roll [-15..15], yaw [-180..180]
+17:23:54.286 W/MyGimbalUpdateCallback : SerialNumber ERROR : The feature is unsupported.
+17:23:54.287 I/MyRemoteControllerUpdateCallback : setUpKeyListeners for: ChargeRemaining, FirmwareVersion, SerialNumber
+17:23:54.288 I/MySdCardUpdateCallback : setUpKeyListeners for: SDCardRemainingSpaceInMB, SDCardTotalSpaceInMB, SDCardIsInserted
+17:23:54.289 I/MySignalQualityUpdateCallback : setUpKeyListeners... (uplinkKey, downlinkKey) for LB
+17:23:54.291 I/MySimulatorUpdateCallbackAndController : setUpKeyListeners for: IsSimulatorStarted
+17:23:54.297 I/DjiOnboardMessageSender : setUpKeyListeners... (IsOnBoardSDKAvailable)
+17:23:54.297 I/DjiOnboardMessageSender : IS_ON_BOARD_SDK_AVAILABLE = true
+17:23:54.299 I/DjiOnboardMessageSender : Set flight controller callback prev: (0) new: (112905982)
+17:23:54.299 I/DjiOnboardMessageSender : Bind to flight controller
+17:23:54.300 I/DjiMoveController : setUpKeyListeners for: VirtualStickControlModeEnabled, isVirtualStickControlModeAvailable
+17:23:54.302 I/CameraSettingsControllerDjiImpl : setUpKeyListeners for: FocusTarget
+17:23:54.305 I/CameraPhotoSettingsControllerImpl : setUpKeyListeners for: ShootPhotoModeRange, ShootPhotoMode, PhotoBurstCount, PhotoAEBCount, PhotoTimeIntervalSettings, PhotoAspectRatioRange, PhotoAspectRatio, PhotoFileFormatRange, PhotoFileFormat
+17:23:54.309 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_4_3
+17:23:54.309 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_16_9
+17:23:54.311 I/CameraVideoSettingsControllerImpl : setUpKeyListeners for: VideoResolutionFrameRateRange, ResolutionFrameRate, VideoFileFormat, VideoStandard
+17:23:54.315 I/CameraExposureSettingsControllerImpl : setUpKeyListeners for: IsMeteringModeSupported, MeteringMode, ExposureMode, ISO, ISORange, Aperture, ApertureRange, ShutterSpeed, ShutterSpeedRange, ExposureCompensation, ExposureCompensationRange
+17:23:54.316 W/CameraExposureSettingsControllerImpl : IsMeteringModeSupported ERROR : The feature is unsupported.
+17:23:54.319 I/CameraOtherSettingsControllerImpl : setUpKeyListeners for: AntiFlickerFrequency, WhiteBalance
+17:23:54.321 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR The feature is unsupported.
+17:23:54.325 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR Camera param get failed
+17:23:54.325 I/CameraZoomControllerDjiImpl : setUpKeyListeners for: isTapZoomSupported, TapZoomEnabled
+17:23:54.326 W/CameraZoomControllerDjiImpl : TapZoomEnabled ERROR : The feature is unsupported.
+17:23:54.328 I/CameraZoomControllerDjiImpl : IS_OPTICAL_ZOOM_SUPPORTED = false
+17:23:54.362 I/VsmToUcsConnectorBase : Sending registerDevice (2022754546)to ALL 
+17:23:54.376 I/VsmToUcsConnectorBase : Sending initial statuses (2022754546) to ALL
+17:23:54.377 I/MegaTask : MegaTask: DISARMED downlink/uplink
+17:23:54.377 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+17:23:54.378 W/HomeLocationTask : home position INVALID, sending NAN
+17:23:54.381 I/DroneStateController : setUpKeyListeners for: CompassHasError, FlightWindWarning, MaxFlightRadius, MaxFlightRadiusEnabled, HasReachedMaxFlightRadius
+17:23:54.383 I/DroneStateController : FLIGHT_WIND_WARNING state: LEVEL_0
+17:23:54.387 I/DroneStateController : HAS_REACHED_MAX_FLIGHT_RADIUS: false
+17:23:54.399 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+17:23:54.506 I/DroneStateController : MAX_FLIGHT_RADIUS: 2500
+17:23:54.511 I/DroneStateController : MAX_FLIGHT_RADIUS_ENABLED: false
+17:23:54.513 I/MyFlightControllerUpdateCallback : FirmwareVersion = 1.3.1.82
+17:23:56.278 W/HomeLocationTask : home position INVALID, sending NAN
+17:23:56.280 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+17:23:56.593 I/VsmToUcsConnectorBase : UgCS 3.3.490 @ 10.10.10.110:55630 (ucsId = -617527986)
+17:23:56.601 I/VsmToUcsConnectorBase : Sending registerDevice (2022754546)to ONE 
+17:23:56.604 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=25481, currentCurrent=742, remainPowerPercent=92, smartBattery=true, temperature=27.050018}.
+17:23:56.605 I/ExceptionLogger : Battery update ignored.
+17:23:56.634 I/VsmToUcsConnectorBase : Sending initial statuses (2022754546) to ONE
+17:23:56.636 I/MegaTask : MegaTask: DISARMED downlink/uplink
+17:23:56.642 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+17:23:56.644 W/HomeLocationTask : home position INVALID, sending NAN
+17:24:09.450 I/CommandHandler : Got Mission Upload cmd
+17:24:09.468 I/AbstractDroneMainController : Command 0 locked.
+17:24:09.494 E/DroneMainControllerDjiImpl : Mission Upload - Step 1 failed - The GPS signal of the aircraft is weak
+17:24:13.788 I/ExceptionLogger : Battery update ignored.
+17:25:05.433 I/DjiSharedMainActivity : onPause
+17:25:05.441 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for CameraControlFragment.
+17:25:05.442 I/DjiVideoFeedProvider : InternalFeedConsumer is NULL.
+17:25:05.445 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+17:25:05.446 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+17:25:05.449 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for DjiFpvFullscreenFragment.
+17:25:16.998 I/DroneStateController : New diagnostics messages:
+17:25:16.999 I/DroneStateController : Code #8012: Reason: "Compass error, calibration required" Solution: ""
+17:25:17.363 I/DroneStateController : Removed diagnostics messages:
+17:25:17.365 I/DroneStateController : Code #8012: Reason: "Navigation System Error. Check Redundancy Status." Solution: ""
+17:25:26.388 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:25:26.389 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:25:26.390 W/DroneBridgeImpl : KeyManager -> onConnectionChanged = false
+17:25:26.391 I/DroneBridgeImpl : Tear Down All Key Listeners...
+17:25:26.420 I/DjiOnboardMessageSender : Unbind from flight controller (112905982) on tearDownKeyListeners
+17:25:26.422 W/DroneBridgeImpl : KeyManager -> onConnectionChanged = false
+17:25:26.423 I/DroneBridgeImpl : Tear Down All Key Listeners...
+17:25:26.913 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+17:25:26.915 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+17:25:26.916 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+17:25:26.922 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:25:26.924 I/DjiFpvFragment : Destroying CodecManager
+17:25:26.966 I/DjiFpvFragment : Starting CodecManager, w=1920 h=1035 src=Camera
+17:25:26.995 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:25:26.996 W/DjiFpvFragment : No need to re-init codecManager!
+17:25:52.050 I/SsdpPortsMonitor : Service discovery: Network interface disabled: wlan0
+17:25:52.061 W/DatagramParty : Socket error
+java.net.SocketException: Socket closed
+	at libcore.io.Linux.recvfromBytes(Native Method)
+	at libcore.io.Linux.recvfrom(Linux.java:205)
+	at libcore.io.BlockGuardOs.recvfrom(BlockGuardOs.java:279)
+	at libcore.io.IoBridge.recvfrom(IoBridge.java:583)
+	at java.net.PlainDatagramSocketImpl.doRecv(PlainDatagramSocketImpl.java:153)
+	at java.net.PlainDatagramSocketImpl.receive0(PlainDatagramSocketImpl.java:141)
+	at java.net.AbstractPlainDatagramSocketImpl.receive(AbstractPlainDatagramSocketImpl.java:162)
+	at java.net.DatagramSocket.receive(DatagramSocket.java:849)
+	at com.ugcs.android.connector.ssdp.common.net.DatagramParty.receive(DatagramParty.java:98)
+	at com.ugcs.android.connector.ssdp.common.net.DatagramParty.receive(DatagramParty.java:81)
+	at com.ugcs.android.connector.ssdp.common.net.DatagramParty$1.run(DatagramParty.java:146)
+	at java.lang.Thread.run(Thread.java:764)
+
+17:25:52.061 W/DatagramParty : Socket error
+java.net.SocketException: Socket closed
+	at libcore.io.Linux.recvfromBytes(Native Method)
+	at libcore.io.Linux.recvfrom(Linux.java:205)
+	at libcore.io.BlockGuardOs.recvfrom(BlockGuardOs.java:279)
+	at libcore.io.IoBridge.recvfrom(IoBridge.java:583)
+	at java.net.PlainDatagramSocketImpl.doRecv(PlainDatagramSocketImpl.java:153)
+	at java.net.PlainDatagramSocketImpl.receive0(PlainDatagramSocketImpl.java:141)
+	at java.net.AbstractPlainDatagramSocketImpl.receive(AbstractPlainDatagramSocketImpl.java:162)
+	at java.net.DatagramSocket.receive(DatagramSocket.java:849)
+	at com.ugcs.android.connector.ssdp.common.net.DatagramParty.receive(DatagramParty.java:98)
+	at com.ugcs.android.connector.ssdp.common.net.DatagramParty.receive(DatagramParty.java:81)
+	at com.ugcs.android.connector.ssdp.common.net.DatagramParty$1.run(DatagramParty.java:146)
+	at java.lang.Thread.run(Thread.java:764)
+
+17:25:56.102 I/PingHandler : Session timed out 10.10.10.110 Last ping: 1575347149077 Last pong: 1575347145292
+17:25:57.565 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:25:57.566 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:26:34.001 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+17:26:34.001 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+17:26:34.006 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+17:26:34.007 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+17:26:34.008 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+17:26:34.010 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:26:34.011 W/DjiFpvFragment : No need to re-init codecManager!
+17:26:34.012 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:26:34.013 W/DjiFpvFragment : No need to re-init codecManager!
+17:26:34.039 W/CameraSettingsControllerDjiImpl : onValueChange, but vm == NULL
+17:26:34.041 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_4_3
+17:26:34.042 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_16_9
+17:26:34.542 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (AIR_LINK), but vm is NULL, so far ignore
+17:26:34.544 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+17:26:34.545 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+17:26:34.547 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+17:26:34.550 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:26:34.551 W/DjiFpvFragment : No need to re-init codecManager!
+17:26:34.553 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:26:34.554 W/DjiFpvFragment : No need to re-init codecManager!
+17:26:34.921 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:26:35.945 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30794
+17:26:35.947 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:26:35.950 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30794
+17:26:37.954 I/DroneBridgeImpl : OK, starting drone init...
+17:26:37.959 I/DroneBridgeImpl : OK, connected DJI_M100 (041DF30794)
+17:26:37.961 I/MyBatteryUpdateCallback : initDroneUpdate - Battery - singleBatteryMode (1)
+17:26:37.968 I/MyBatteryUpdateCallback : setUpKeyListeners for: AggregationState, isInSingleBatteryMode, Overviews
+17:26:37.971 W/MyBatteryUpdateCallback : AggregationState ERROR : The feature is unsupported.
+17:26:37.975 I/MyBatteryUpdateCallback : singleBatteryModeKey = false
+17:26:37.979 W/MyBatteryUpdateCallback : Overviews ERROR : The feature is unsupported.
+17:26:37.983 I/MyBatteryUpdateCallback : setUpKeyListeners for [0]: ChargeRemainingInPercent, ChargeRemaining, Voltage, Current, Temperature, LifetimeRemaining, FullChargeCapacity, NumberOfDischarges, isSmartBattery, ConnectionState, FirmwareVersion, SerialNumber
+17:26:37.992 I/MyBatteryUpdateCallback : Battery #1 has NORMAL ConnectionState
+17:26:37.998 I/FailsafeControllerDjiImpl : setUpKeyListeners for: GoHomeAltitude, MaxFlightHeight, SmartReturnToHomeEnabled, LowBatteryWarningThreshold, SeriousLowBatteryWarningThreshold
+17:26:38.004 I/MyFlightControllerUpdateCallback : setUpKeyListeners for: AircraftLocationLatitude, AircraftLocationLongitude, Altitude, GPSSignalLevel, SatelliteCount, AttitudePitch, AttitudeRoll, AttitudeYaw, VelocityX, VelocityY, VelocityZ, FlightMode, AreMotorsOn, IsFlying, HomeLocationLatitude, HomeLocationLongitude, AircraftName, FirmwarePackageVersion, FirmwareVersion
+17:26:38.014 I/MyFlightControllerUpdateCallback : Home None / NULL
+17:26:38.016 I/MyFlightControllerUpdateCallback : Home NULL / None
+17:26:38.018 I/MyFlightControllerUpdateCallback : AircraftName = waddle 4
+17:26:38.020 I/MyFlightControllerUpdateCallback : FirmwareVersion = 1.3.1.82
+17:26:38.022 I/MyFlightControllerUpdateCallback : FlightControllerVersion = 03.01.06.108
+17:26:38.024 I/MyRtkUpdateCallback : setUpKeyListeners for: RTKEnabled, RTKState, RTKFusionHeading, RTKFusionLocation, IsRTKConnected, IsRTKFusionDataUsable
+17:26:38.025 W/MyRtkUpdateCallback : RTKEnabled ERROR : The feature is unsupported.
+17:26:38.027 W/MyRtkUpdateCallback : RTKState ERROR : The feature is unsupported.
+17:26:38.029 W/MyRtkUpdateCallback : RTKFusionHeading ERROR : The feature is unsupported.
+17:26:38.031 W/MyRtkUpdateCallback : RTKFusionLocation ERROR : The feature is unsupported.
+17:26:38.032 W/MyRtkUpdateCallback : IsRTKConnected ERROR : The feature is unsupported.
+17:26:38.035 W/MyRtkUpdateCallback : IsRTKFusionDataUsable ERROR : The feature is unsupported.
+17:26:38.036 I/MyGimbalUpdateCallback : setUpKeyListeners for: AttitudeInDegrees, AttitudeYaw, Capabilities, FirmwareVersion, SerialNumber
+17:26:38.038 I/MyGimbalUpdateCallback : gimbal.getCapabilities RESULT: pitch [-90..30], roll [-15..15], yaw [-180..180]
+17:26:38.039 W/MyGimbalUpdateCallback : SerialNumber ERROR : The feature is unsupported.
+17:26:38.040 I/MyRemoteControllerUpdateCallback : setUpKeyListeners for: ChargeRemaining, FirmwareVersion, SerialNumber
+17:26:38.042 I/MySdCardUpdateCallback : setUpKeyListeners for: SDCardRemainingSpaceInMB, SDCardTotalSpaceInMB, SDCardIsInserted
+17:26:38.043 I/MySignalQualityUpdateCallback : setUpKeyListeners... (uplinkKey, downlinkKey) for LB
+17:26:38.045 I/MySimulatorUpdateCallbackAndController : setUpKeyListeners for: IsSimulatorStarted
+17:26:38.046 I/DjiOnboardMessageSender : setUpKeyListeners... (IsOnBoardSDKAvailable)
+17:26:38.047 I/DjiOnboardMessageSender : IS_ON_BOARD_SDK_AVAILABLE = true
+17:26:38.048 I/DjiOnboardMessageSender : Set flight controller callback prev: (0) new: (112905982)
+17:26:38.048 I/DjiOnboardMessageSender : Bind to flight controller
+17:26:38.049 I/DjiMoveController : setUpKeyListeners for: VirtualStickControlModeEnabled, isVirtualStickControlModeAvailable
+17:26:38.055 I/CameraSettingsControllerDjiImpl : setUpKeyListeners for: FocusTarget
+17:26:38.058 I/CameraPhotoSettingsControllerImpl : setUpKeyListeners for: ShootPhotoModeRange, ShootPhotoMode, PhotoBurstCount, PhotoAEBCount, PhotoTimeIntervalSettings, PhotoAspectRatioRange, PhotoAspectRatio, PhotoFileFormatRange, PhotoFileFormat
+17:26:38.060 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_4_3
+17:26:38.061 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_16_9
+17:26:38.063 I/CameraVideoSettingsControllerImpl : setUpKeyListeners for: VideoResolutionFrameRateRange, ResolutionFrameRate, VideoFileFormat, VideoStandard
+17:26:38.066 I/CameraExposureSettingsControllerImpl : setUpKeyListeners for: IsMeteringModeSupported, MeteringMode, ExposureMode, ISO, ISORange, Aperture, ApertureRange, ShutterSpeed, ShutterSpeedRange, ExposureCompensation, ExposureCompensationRange
+17:26:38.067 W/CameraExposureSettingsControllerImpl : IsMeteringModeSupported ERROR : The feature is unsupported.
+17:26:38.070 I/CameraOtherSettingsControllerImpl : setUpKeyListeners for: AntiFlickerFrequency, WhiteBalance
+17:26:38.073 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR The feature is unsupported.
+17:26:38.075 I/CameraZoomControllerDjiImpl : setUpKeyListeners for: isTapZoomSupported, TapZoomEnabled
+17:26:38.075 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR Camera param get failed
+17:26:38.077 W/CameraZoomControllerDjiImpl : TapZoomEnabled ERROR : The feature is unsupported.
+17:26:38.078 I/CameraZoomControllerDjiImpl : IS_OPTICAL_ZOOM_SUPPORTED = false
+17:26:38.086 I/VsmToUcsConnectorBase : Sending registerDevice (1682641149)to ALL 
+17:26:38.091 I/VsmToUcsConnectorBase : Sending initial statuses (1682641149) to ALL
+17:26:38.092 I/MegaTask : MegaTask: DISARMED downlink/uplink
+17:26:38.094 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+17:26:38.095 W/HomeLocationTask : home position INVALID, sending NAN
+17:26:38.099 I/DroneStateController : New diagnostics messages:
+17:26:38.099 I/DroneStateController : setUpKeyListeners for: CompassHasError, FlightWindWarning, MaxFlightRadius, MaxFlightRadiusEnabled, HasReachedMaxFlightRadius
+17:26:38.099 I/DroneStateController : Code #8012: Reason: "IMU is initializing. Do not move the aircraft until initialization is complete" Solution: ""
+17:26:38.101 I/DroneStateController : FLIGHT_WIND_WARNING state: LEVEL_0
+17:26:40.018 W/HomeLocationTask : home position INVALID, sending NAN
+17:26:42.292 I/BaseActivityVsm : setUpKeyListeners for: isLandingConfirmationNeeded
+17:26:42.294 I/DjiSharedMainActivity : setUpKeyListeners... (IS_OPTICAL_ZOOM_SUPPORTED)
+17:26:42.296 I/MainIndicatorsFragment : setUpKeyListeners for: SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold
+17:26:42.299 I/RemainingFlightTimeFragment : setUpKeyListeners for: Connection, ChargeRemainingInPercent, CurrentLandImmediatelyBattery, BatteryPercentageNeededToGoHome, SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold, RemainingFlightTime
+17:26:42.303 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+17:26:42.309 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for DjiFpvFullscreenFragment.
+17:26:42.309 I/ObstacleAvoidanceFragment : setUpKeyListeners for: VisionDetectionState
+17:26:42.310 I/DjiVideoFeedProvider : InternalFeedConsumer is SET.
+17:26:42.310 W/ObstacleAvoidanceFragment : VisionDetectionState ERROR : The feature is unsupported.
+17:26:42.310 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+17:26:42.311 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+17:26:42.446 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+17:26:42.446 W/DjiFpvFragment : No need to re-init codecManager!
+17:26:42.613 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:26:51.854 I/DroneMainControllerDjiImpl : onFlightMode change: ATTI -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 13897)
+17:26:52.615 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:26:52.889 I/DroneStateController : Removed diagnostics messages:
+17:26:52.891 I/DroneStateController : Code #8012: Reason: "IMU is initializing. Do not move the aircraft until initialization is complete" Solution: ""
+17:26:57.516 I/MyFlightControllerUpdateCallback : Home -77.4611004 / NULL
+17:26:57.517 I/MyFlightControllerUpdateCallback : Home NULL / 169.1871062
+17:26:59.518 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+17:26:59.521 I/HomeLocationTask : sending new home position = -77.4611004 169.1871062
+17:26:59.522 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+17:26:59.554 I/WithAppMainServiceActivity : Toast message: Drone initialized
+17:26:59.571 I/TakeOffPointTask : sending new takeOff position = -77.4611004 169.1871062
+17:27:02.613 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:27:07.413 I/DroneMainControllerDjiImpl : onFlightMode change: GPS_ATTI -> ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 29456)
+17:27:08.232 I/DroneMainControllerDjiImpl : onFlightMode change: ATTI -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 30275)
+17:27:12.614 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:27:22.614 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:27:32.614 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:27:42.614 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:27:52.614 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:28:02.614 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:28:12.615 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:28:15.033 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=25394, currentCurrent=873, remainPowerPercent=90, smartBattery=true, temperature=24.450012}.
+17:28:15.034 I/ExceptionLogger : Battery update ignored.
+17:28:22.614 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:28:32.615 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:28:42.616 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:28:52.592 I/CameraControllerDjiImpl : on Format SD
+17:28:52.615 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:28:53.593 I/WithAppMainServiceActivity : Toast message: SD Card Formatting completed
+17:28:56.225 I/BatteryHealthFragment : setUpKeyListeners for [0]: CellVoltages
+17:28:56.227 I/BatteryHealthFragment : setUpKeyListeners for [0]: CellVoltages
+17:29:02.615 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:29:12.616 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:29:13.949 I/AbstractDroneMainController : Command 1 locked.
+17:29:13.952 E/DroneMainControllerDjiImpl : Mission Upload - Step 1 failed - The route first waypoint must be within 30m of aircraft takeoff location
+17:29:22.616 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:29:32.616 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:29:38.347 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:29:38.360 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+17:29:42.057 I/SsdpPortsMonitor : Service discovery: Network interface enabled: wlan0
+17:29:42.615 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+17:29:46.362 I/VsmToUcsConnectorBase : UgCS 3.3.490 @ 10.10.10.110:56898 (ucsId = -617527986)
+17:29:46.365 I/VsmToUcsConnectorBase : Sending registerDevice (1682641149)to ONE 
+17:29:46.371 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=25348, currentCurrent=893, remainPowerPercent=90, smartBattery=true, temperature=22.649994}.
+17:29:46.373 I/ExceptionLogger : Battery update ignored.
+17:29:46.397 I/VsmToUcsConnectorBase : Sending initial statuses (1682641149) to ONE
+17:29:46.400 I/MegaTask : MegaTask: DISARMED downlink/uplink
+17:29:46.410 I/TakeOffPointTask : sending new takeOff position = -77.4611004 169.1871062
+17:29:46.423 I/HomeLocationTask : sending new home position = -77.4611004 169.1871062
+17:30:25.335 I/CommandHandler : Got Mission Upload cmd
+17:30:25.363 I/AbstractDroneMainController : Command 0 locked.
+17:30:25.375 I/DroneMainControllerDjiImpl : 
+
+Mission 'hut-test.ugcs' (id=1082793215)
+  Home source FIRST_WAYPOINT
+  GotoFirstWaypointMode DEFAULT
+  Return Alt 50.0, on RemoteController Lost CONTINUE
+     1 | Spline Waypoint alt=50.00m lat=-77.4611828 lon=169.1869358 maxCR=0.0m
+     2 | Change Speed 12.0
+     3 | Spline Waypoint alt=30.05m lat=-77.4602961 lon=169.1858690 maxCR=0.0m
+     4 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+     5 | Change Speed 15.0
+     6 | Spline Waypoint alt=-3.56m lat=-77.4586157 lon=169.1857988 maxCR=0.0m
+     7 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+     8 | Change Speed 5.0
+     9 | Spline Waypoint alt=5.35m lat=-77.4584973 lon=169.1838093 maxCR=0.0m
+    10 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    12 | Spline Waypoint alt=18.87m lat=-77.4591228 lon=169.1818092 maxCR=0.0m
+    13 | Change Speed 14.0
+    14 | Spline Waypoint alt=54.90m lat=-77.4609166 lon=169.1833680 maxCR=0.0m
+    15 | Change Speed 12.0
+    16 | Spline Waypoint alt=52.93m lat=-77.4613755 lon=169.1843844 maxCR=0.0m
+    17 | Change Speed 6.0
+    18 | Spline Waypoint alt=23.23m lat=-77.4614071 lon=169.1847820 maxCR=0.0m
+    19 | Change Speed 3.0
+    20 | Land
+  minAlt=-3.56m maxAlt=54.90m
+17:30:25.407 I/DroneMainControllerDjiImpl : 
+  DJI_M100, simulator=OFF, FC=03.01.06.108 (OLD FC)
+  Generated DJIWaypointMission task contains 9 Waypoints
+  Fly CURVED with 12.00 m/s 
+  GotoFirstWaypointMode SAFELY
+  Heading AUTO and AUTO_LAND at the end
+    WP # 1 heading=-14 (-14), alt=50.00m lat=-77.4611828 lon=169.1869358 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=103.94m 2d=102.01m vert=-19.95m
+    WP # 2 heading=  0 (  0), alt=30.05m lat=-77.4602961 lon=169.1858690 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=15.00
+        distToNext 3d=190.07m 2d=187.07m vert=-33.62m
+    WP # 3 heading=-74 (-74), alt=-3.56m lat=-77.4586157 lon=169.1857988 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=5.00
+        distToNext 3d=50.66m 2d=49.87m vert=8.91m
+    WP # 4 heading=-145 (-145), alt=5.35m lat=-77.4584973 lon=169.1838093 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=85.84m 2d=84.77m vert=13.51m
+    WP # 5 heading=169 (169), alt=18.87m lat=-77.4591228 lon=169.1818092 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=14.00
+        distToNext 3d=206.37m 2d=203.20m vert=36.04m
+    WP # 6 heading=154 (154), alt=54.90m lat=-77.4609166 lon=169.1833680 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=56.72m 2d=56.68m vert=-1.97m
+    WP # 7 heading=110 (110), alt=52.93m lat=-77.4613755 lon=169.1843844 corn=5.02 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=6.00
+        distToNext 3d=31.42m 2d=10.23m vert=-29.71m
+    WP # 8 heading=120 (120), alt=23.23m lat=-77.4614071 lon=169.1847820 corn=4.81 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=3.00
+        distToNext 3d=9.85m 2d=9.83m vert=0.65m
+    WP # 9 heading=120 (120), alt=23.88m lat=-77.4614523 lon=169.1851312 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToFirst 3d=59.03m 2d=52.94m vert=-26.12m
+17:30:25.408 I/DroneMainControllerDjiImpl : Mission Upload - ReturnAltitude - set to 50.00m SKIPPED as GoHomeAltitude = 50.00m
+17:30:25.409 W/DroneMainControllerDjiImpl : Mission Upload - HomeLocation - set skipped, as drone landed
+17:30:25.411 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - check for cnt = 255, timeS = 2
+17:30:25.412 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - set skipped, as CameraSettings has same values
+17:30:25.413 I/DroneMainControllerDjiImpl : Mission Upload - ValidateReceivedMission...
+17:30:25.416 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - loadMission... (state = READY_TO_UPLOAD)
+17:30:25.427 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - uploadMission... (state = READY_TO_UPLOAD)
+17:30:25.747 E/MyMissionGlobalEventListener : (MyMissionGlobalEventListener) Mission Upload - FAILED - Mode error, please make sure the remote controller's mode switch is in 'F' mode.
+17:30:25.748 E/DroneMainControllerDjiImpl : Mission Upload - Result - FAILED
+17:30:25.750 E/DroneMainControllerDjiImpl : dji.common.error.DJIMissionError Mode error, please make sure the remote controller's mode switch is in 'F' mode.
+17:30:34.607 I/CommandHandler : Got Mission Upload cmd
+17:30:34.625 I/AbstractDroneMainController : Command 1 locked.
+17:30:34.630 I/DroneMainControllerDjiImpl : 
+
+Mission 'hut-test.ugcs' (id=1040904992)
+  Home source FIRST_WAYPOINT
+  GotoFirstWaypointMode DEFAULT
+  Return Alt 50.0, on RemoteController Lost CONTINUE
+     1 | Spline Waypoint alt=50.00m lat=-77.4611828 lon=169.1869358 maxCR=0.0m
+     2 | Change Speed 12.0
+     3 | Spline Waypoint alt=30.05m lat=-77.4602961 lon=169.1858690 maxCR=0.0m
+     4 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+     5 | Change Speed 15.0
+     6 | Spline Waypoint alt=-3.56m lat=-77.4586157 lon=169.1857988 maxCR=0.0m
+     7 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+     8 | Change Speed 5.0
+     9 | Spline Waypoint alt=5.35m lat=-77.4584973 lon=169.1838093 maxCR=0.0m
+    10 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    12 | Spline Waypoint alt=18.87m lat=-77.4591228 lon=169.1818092 maxCR=0.0m
+    13 | Change Speed 14.0
+    14 | Spline Waypoint alt=54.90m lat=-77.4609166 lon=169.1833680 maxCR=0.0m
+    15 | Change Speed 12.0
+    16 | Spline Waypoint alt=52.93m lat=-77.4613755 lon=169.1843844 maxCR=0.0m
+    17 | Change Speed 6.0
+    18 | Spline Waypoint alt=23.23m lat=-77.4614071 lon=169.1847820 maxCR=0.0m
+    19 | Change Speed 3.0
+    20 | Land
+  minAlt=-3.56m maxAlt=54.90m
+17:30:34.653 I/DroneMainControllerDjiImpl : 
+  DJI_M100, simulator=OFF, FC=03.01.06.108 (OLD FC)
+  Generated DJIWaypointMission task contains 9 Waypoints
+  Fly CURVED with 12.00 m/s 
+  GotoFirstWaypointMode SAFELY
+  Heading AUTO and AUTO_LAND at the end
+    WP # 1 heading=-14 (-14), alt=50.00m lat=-77.4611828 lon=169.1869358 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=103.94m 2d=102.01m vert=-19.95m
+    WP # 2 heading=  0 (  0), alt=30.05m lat=-77.4602961 lon=169.1858690 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=15.00
+        distToNext 3d=190.07m 2d=187.07m vert=-33.62m
+    WP # 3 heading=-74 (-74), alt=-3.56m lat=-77.4586157 lon=169.1857988 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=5.00
+        distToNext 3d=50.66m 2d=49.87m vert=8.91m
+    WP # 4 heading=-145 (-145), alt=5.35m lat=-77.4584973 lon=169.1838093 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=85.84m 2d=84.77m vert=13.51m
+    WP # 5 heading=169 (169), alt=18.87m lat=-77.4591228 lon=169.1818092 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=14.00
+        distToNext 3d=206.37m 2d=203.20m vert=36.04m
+    WP # 6 heading=154 (154), alt=54.90m lat=-77.4609166 lon=169.1833680 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=56.72m 2d=56.68m vert=-1.97m
+    WP # 7 heading=110 (110), alt=52.93m lat=-77.4613755 lon=169.1843844 corn=5.02 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=6.00
+        distToNext 3d=31.42m 2d=10.23m vert=-29.71m
+    WP # 8 heading=120 (120), alt=23.23m lat=-77.4614071 lon=169.1847820 corn=4.81 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=3.00
+        distToNext 3d=9.85m 2d=9.83m vert=0.65m
+    WP # 9 heading=120 (120), alt=23.88m lat=-77.4614523 lon=169.1851312 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToFirst 3d=59.03m 2d=52.94m vert=-26.12m
+17:30:34.655 I/DroneMainControllerDjiImpl : Mission Upload - ReturnAltitude - set to 50.00m SKIPPED as GoHomeAltitude = 50.00m
+17:30:34.656 W/DroneMainControllerDjiImpl : Mission Upload - HomeLocation - set skipped, as drone landed
+17:30:34.657 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - check for cnt = 255, timeS = 2
+17:30:34.659 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - set skipped, as CameraSettings has same values
+17:30:34.660 I/DroneMainControllerDjiImpl : Mission Upload - ValidateReceivedMission...
+17:30:34.663 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - loadMission... (state = READY_TO_UPLOAD)
+17:30:34.666 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - uploadMission... (state = READY_TO_UPLOAD)
+17:30:35.729 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.000 (0/9)
+17:30:35.930 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.111 (1/9)
+17:30:36.135 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.222 (2/9)
+17:30:36.338 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.333 (3/9)
+17:30:36.550 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.444 (4/9)
+17:30:36.753 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.556 (5/9)
+17:30:36.958 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.667 (6/9)
+17:30:37.167 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.778 (7/9)
+17:30:37.370 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.889 (8/9)
+17:30:37.581 I/DroneMainControllerDjiImpl : Mission Upload - Result - SUCCESS
+17:30:37.581 I/MyMissionGlobalEventListener : (MyMissionGlobalEventListener) Mission Upload - OK - error is null
+17:31:06.641 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=25311, currentCurrent=902, remainPowerPercent=89, smartBattery=true, temperature=21.050018}.
+17:31:06.642 I/ExceptionLogger : Battery update ignored.
+17:31:47.546 I/MyFlightControllerUpdateCallback : Home -77.4611187 / NULL
+17:31:47.549 I/MyFlightControllerUpdateCallback : Home NULL / 169.1871059
+17:31:49.504 I/DroneMainControllerDjiImpl : onFlightMode change: GPS_ATTI -> ASSISTED_TAKEOFF (state = READY_TO_EXECUTE) (sinceEpoch = 311547)
+17:31:49.549 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+17:31:49.549 I/HomeLocationTask : sending new home position = -77.4611187 169.1871059
+17:31:49.551 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+17:31:49.578 I/TakeOffPointTask : sending new takeOff position = -77.4611187 169.1871059
+17:31:52.798 I/DroneMainControllerDjiImpl : onFlightMode change: ASSISTED_TAKEOFF -> GPS_ATTI (state = READY_TO_EXECUTE) (sinceEpoch = 314841)
+17:31:52.801 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as landed
+17:31:52.810 I/TakeOffPointTask : sending new takeOff position = -77.4611185 169.1871062
+17:32:12.984 I/AbstractDroneMainController : Command 2 locked.
+17:32:12.986 I/DroneMainControllerDjiImpl : WaypointMissionOperator().startMission requested... (state = READY_TO_EXECUTE ) (sinceEpoch = 335029)
+17:32:13.103 I/DroneMainControllerDjiImpl : onSwitchAutoModeResult = SUCCESS
+17:32:13.203 I/MyMissionGlobalEventListener : onExecutionStart
+17:32:13.205 I/DroneMainControllerDjiImpl : MyMissionGlobalEventListener.onMissionExecutionStart (sinceEpoch = 335248) (ignore)
+17:32:13.306 I/MyMissionGlobalEventListener : onExecutionUpdate tp=0 reached=FALSE state=INITIALIZING total=9 0/0ms
+17:32:13.522 I/MyFlightControllerUpdateCallback : Home -77.4611181 / NULL
+17:32:13.528 I/MyFlightControllerUpdateCallback : Home NULL / 169.1871054
+17:32:14.215 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=25270, currentCurrent=914, remainPowerPercent=89, smartBattery=true, temperature=19.950012}.
+17:32:14.216 I/ExceptionLogger : Battery update ignored.
+17:32:15.269 I/DroneMainControllerDjiImpl : onFlightMode change: GPS_ATTI -> AUTO_TAKEOFF (state = EXECUTING) (sinceEpoch = 337312)
+17:32:15.526 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+17:32:15.542 I/HomeLocationTask : sending new home position = -77.4611181 169.1871054
+17:32:15.543 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+17:32:15.568 I/TakeOffPointTask : sending new takeOff position = -77.4611181 169.1871054
+17:32:18.475 I/DroneMainControllerDjiImpl : onFlightMode change: AUTO_TAKEOFF -> GPS_WAYPOINT (state = EXECUTING) (sinceEpoch = 340519)
+17:32:18.477 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #1
+17:32:18.487 I/WithAppMainServiceActivity : Toast message: Route started
+17:32:19.200 I/PingHandler : Session timed out 10.10.10.110 Last ping: 1575347532189 Last pong: 1575347528883
+17:32:23.548 I/ExceptionLogger : Battery update ignored.
+17:32:27.768 I/BatteryHealthFragment : setUpKeyListeners for [0]: CellVoltages
