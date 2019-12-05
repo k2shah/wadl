@@ -36,8 +36,8 @@ class CrozConfig(ShapeConfig):
                      [(78200, 1472550), (78700, 1472550),
                       (78700, 1472000), (78200, 1472000)],
                      [(78700, 1472200), (79000, 1472200),
-                      (79000, 1471900), (78700, 1471900)],
-                     [(78700, 1471900), (79000, 1471900),
+                     #  (79000, 1471900), (78700, 1471900)],
+                     # [(78700, 1471900), (79000, 1471900),
                       (79000, 1471500), (78700, 1471500)]]
         self.zoneIdx = zone
         self.zonePolys = [Polygon(z) for z in zoneCords]
@@ -119,16 +119,16 @@ class RoydsConfig(ShapeConfig):
 
 
 if __name__ == '__main__':
-    step = 40
+    step = 17
     agentParameters = {}
     agentParameters["base"] = 7
-    agentParameters["maxTime"] = 50
-    agentParameters["initPos"] = [4, 61]
+    agentParameters["maxTime"] = 35
+    agentParameters["initPos"] = [30]
 
-    config = CrozConfig(agentParameters=agentParameters,
-                        step=step, zone=0)
+    # config = CrozConfig(agentParameters=agentParameters,
+    #                     step=step, zone=2)
     # config = RookConfig(agentParameters=agentParameters, step=step)
-    # config = RoydsConfig(agentParameters=agentParameters, step=step)
+    config = RoydsConfig(agentParameters=agentParameters, step=step)
     # plot
     fig, ax = plt.subplots()
     config.plot(ax)

@@ -25,8 +25,10 @@ class Trajectory(object):
         self.pts = []
         self.color = color
 
-        self.keyPoints = {"hut": [-77.4610948, 169.1860094]}
-        self.transferSpeed = 12.0
+        self.keyPoints = {"hut": [-77.4610948, 169.1860094],
+                          "hut-tz": [-77.461540, 169.18600],
+                          "hut-lz": [-77.4614790, 169.1849841]}
+        self.transferSpeed = 14.0
 
     def __repr__(self):
         pass
@@ -44,14 +46,25 @@ class Trajectory(object):
         # writes the trajectory as a txt file
         # Lat,Long,Alt,Speed,Picture,ElevationMap,WP,CameraTilt,UavYaw,DistanceFrom
         with open(filename, "w+") as f:
+            # take off
+            # add hut-lz as takeoff point
+            lat, lng = self.keyPoints['hut-tz']
+            f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, 70, self.transferSpeed))
+            # routes
             for i, pt in enumerate(self.pts):
                 lat, lng = mapFunc(pt)
-                if i == 0:
-                    f.write("%s,%s,%s,%s,FALSE,,1,90\n" % (lat, lng, alt, spd))
-                elif i == len(self.pts)-1:
-                    f.write("%s,%s,%s,%s,FALSE,,1,0\n" % (lat, lng, alt, spd))
-                else:
-                    f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, alt, spd))
+                offset = .05 - .1 * (i % 2)  # to force speed chg each point
+                f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, alt, spd+offset))
+            # end route
+            # get higher above last point
+            pt = self.pts[-1]
+            lat, lng = mapFunc(pt)
+            f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, 70, self.transferSpeed))
+            # fly to lz
+            lat, lng = self.keyPoints['hut-lz']
+            f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, 50, 5))
+            # move to land alt
+            f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, 20, 3))
 
     def plot(self, ax, colorize=False):
         # plots the trajectory

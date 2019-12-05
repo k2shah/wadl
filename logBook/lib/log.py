@@ -35,6 +35,7 @@ class Log(object):
 
         # mission
         misisonStartTag = 'DJI_M100, simulator=OFF'
+        missionNameTag = 'mission'
         missionWPTag = "WP #"
         missionEndTag = 'Mission Upload - Result - SUCCESS'
 
@@ -142,30 +143,40 @@ class Flight(object):
     def __init__(self, startTime):
         self.startTime = startTime  # time of start
         self.duration = None  # duration in (sec) of flight
-        self.routeStart = None  # start of auto route
-        self.routeEnd = None  # end of auto route
+        self.routeStart = 0  # start of auto route
+        self.routeEnd = 0  # end of auto route
         self.batteryLog = []  # history of the battery
         self.mission = []  # planned mission uploaded
         self.trajectory = []  # flown trajectory
 
     def __repr__(self):
+        # prints the information for the mission
+        # start time
+        printStr = "flight started at: "
+        printStr += "{:s}:{:s}:{:s}\n".format(*self.startTime)
+        # duration
+        printStr += "flight duration: {:2.3f}m\n".format(self.duration/60.)
         if len(self.mission) == 0:
-            return "no mission for this flight"
+            printStr += "no mission for this flight\n\n"
         else:
-            # time
-            printStr = "mission started at: "
-            printStr += "{:s}:{:s}:{:s}\n".format(*self.startTime)
-            # duration
-            printStr += "flight duration: {:2.3f}m\n".format(self.duration/60.)
+            # mission time
+            printStr += "====Mission===="
             printStr += "autonomous duration: {:2.3f}m\n".format(
                          (self.routeEnd-self.routeStart)/60.)
             printStr += "lat\t\tlng\t\talt\n"
-            # plan
+            # mission
             for pt in self.mission:
                 printStr += "{:2.5f}\t{:2.5f}\t{:-2.3f}\n".format(
                              pt[1], pt[2], pt[3])
+        # battery
+        if len(self.batteryLog) > 0:
+            printStr += "====Battery====\n"
+            printStr += "start:\t{:2.4f}%\t{:2.4f}C\n".format(
+                         self.batteryLog[0][1], self.batteryLog[0][3])
+            printStr += "end:\t{:2.4f}%\t{:2.4f}C\n".format(
+                         self.batteryLog[-1][1], self.batteryLog[-1][3])
 
-            return printStr
+        return printStr
 
     def setMission(self, mission):
         # sets the mission
