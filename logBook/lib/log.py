@@ -16,6 +16,8 @@ class Log(object):
 
     def __init__(self, file):
         self.file = file  # log file
+        # [year, mon, day]
+        self.flightDate = file.split("_")[1:4]
         # header info
         self.header = {'name': None,
                        'firmwareVer': None,
@@ -27,6 +29,7 @@ class Log(object):
 
         # flags
         parseMission = False
+        missionName = None
         parseFlight = False
         # tags
         # headers
@@ -35,7 +38,7 @@ class Log(object):
 
         # mission
         misisonStartTag = 'DJI_M100, simulator=OFF'
-        missionNameTag = 'mission'
+        missionNameTag = ".ugcs'"
         missionWPTag = "WP #"
         missionEndTag = 'Mission Upload - Result - SUCCESS'
 
@@ -54,6 +57,10 @@ class Log(object):
                 ls = line.split(" : ")
                 if len(ls) < 2:
                     # finds a mission being uploaded
+                    if missionNameTag in line and missionName is None:
+                        missionName = line.split()[1]
+                        missionName = missionName.split(".")[0]
+                        missionName = missionName.strip("'")
                     if misisonStartTag in line:
                         WPbuffer = []  # holds waypoints until they are flown
                         # buffer is overwritten when new route is uploaded
@@ -87,7 +94,8 @@ class Log(object):
                             time = ls[0].split(" ")[0]
                             flight.setRouteStart(time)
                             # add the mission to the flight
-                            flight.setMission(WPbuffer)
+                            flight.setMission(WPbuffer, missionName)
+                            missionName = None
                         elif autoFlightEndTag in ls[1] or autoFlightCancelTag in ls[1]:
                             time = ls[0].split(" ")[0]
                             flight.setRouteEnd(time)
@@ -104,7 +112,7 @@ class Log(object):
                         time = ls[0].split(" ")[0]
                         # split time to [HH, MM, SS.dd]
                         time = time.split(":")
-                        flight = Flight(time)
+                        flight = Flight(time, self.flightDate)
 
                     # Parse for Header #
                     # uav name
@@ -140,14 +148,17 @@ class Log(object):
 class Flight(object):
     """container for a single flight"""
 
-    def __init__(self, startTime):
-        self.startTime = startTime  # time of start
+    def __init__(self, startTime, flightDate):
+        self.startTime = list(map(float, startTime))  # time of start
+        self.flightDate = flightDate
         self.duration = None  # duration in (sec) of flight
         self.routeStart = 0  # start of auto route
         self.routeEnd = 0  # end of auto route
         self.batteryLog = []  # history of the battery
+        self.missionName = None
         self.mission = []  # planned mission uploaded
         self.trajectory = []  # flown trajectory
+        self.isManual = False  # manual flight
 
     def __repr__(self):
         # prints the information for the mission
@@ -158,6 +169,7 @@ class Flight(object):
         printStr += "flight duration: {:2.3f}m\n".format(self.duration/60.)
         if len(self.mission) == 0:
             printStr += "no mission for this flight\n\n"
+            self.isManual = True
         else:
             # mission time
             printStr += "====Mission===="
@@ -178,9 +190,10 @@ class Flight(object):
 
         return printStr
 
-    def setMission(self, mission):
+    def setMission(self, mission, missionName):
         # sets the mission
         self.mission = mission
+        self.missionName = missionName
 
     def addBatteryLog(self, time, percent, voltage, temperature):
         time = self.getRelativeTime(time)
