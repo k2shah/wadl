@@ -164,7 +164,7 @@ class Flight(object):
         # prints the information for the mission
         # start time
         printStr = "flight started at: "
-        printStr += "{:s}:{:s}:{:s}\n".format(*self.startTime)
+        printStr += "{:2.0f}:{:02.0f}:{:02.0f}\n".format(*self.startTime)
         # duration
         printStr += "flight duration: {:2.3f}m\n".format(self.duration/60.)
         if len(self.mission) == 0:
@@ -173,6 +173,7 @@ class Flight(object):
         else:
             # mission time
             printStr += "====Mission===="
+            printStr += "route: {:s}\n".format(self.missionName)
             printStr += "autonomous duration: {:2.3f}m\n".format(
                          (self.routeEnd-self.routeStart)/60.)
             printStr += "lat\t\tlng\t\talt\n"
