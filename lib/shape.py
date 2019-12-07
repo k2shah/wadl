@@ -124,6 +124,23 @@ class ShapeConfig(Config):
         y = [point[1] for point in self.poly.exterior.coords]
         ax.plot(x, y, color='k')
 
+    def plotCameras(self, ax):
+        cameraBox = [110, 82]
+        for i, node in enumerate(self.stateSpace):
+            point = self.world[:, node]
+            imageBox_X = [point[0]-cameraBox[0]/2.,
+                          point[0]+cameraBox[0]/2.,
+                          point[0]+cameraBox[0]/2.,
+                          point[0]-cameraBox[0]/2.,
+                          point[0]-cameraBox[0]/2.]
+
+            imageBox_Y = [point[1]+cameraBox[1]/2.,
+                          point[1]+cameraBox[1]/2.,
+                          point[1]-cameraBox[1]/2.,
+                          point[1]-cameraBox[1]/2.,
+                          point[1]+cameraBox[1]/2.]
+            ax.plot(imageBox_X, imageBox_Y, color=(1, .6, 0))
+
     def plotZones(self, ax):
         colors = ['b', 'g', 'r', 'm', 'c', 'y']
         for zone, color in zip(self.zonePolys, colors):
@@ -151,7 +168,7 @@ class ShapeConfig(Config):
     def UTM2LatLong(self, utmCord):
         return utm.to_latlon(utmCord[0], utmCord[1], *self.UTMZone)
 
-    def plot(self, ax, showGrid=True):
+    def plot(self, ax, showGrid=True, showCamera=False):
         if showGrid:
             super(ShapeConfig, self).plot(ax)
         self.plotPolygon(ax)
@@ -159,6 +176,8 @@ class ShapeConfig(Config):
             self.plotZones(ax)
         self.plotKeyPonts(ax)
         self.plotAgents(ax)
+        if showCamera:
+            self.plotCameras(ax)
 
     def writeInfo(self, filepath):
         # writes the configuration information of the test
@@ -166,6 +185,8 @@ class ShapeConfig(Config):
         with open(self.outfile, 'a') as f:
             f.write('\nstep\n')
             f.write(str(self.step))
+            f.write('\nstate space size\n')
+            f.write(str(len(self.stateSpace)))
 
 
 if __name__ == '__main__':

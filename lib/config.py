@@ -14,6 +14,7 @@ except (SystemError, ImportError):
 class Config(object):
     def __init__(self, typ=None):
         self.dim = 2
+        self.solTime = 0
         if typ == 'small':
             self.maxTime = 20
             # world init
@@ -81,6 +82,10 @@ class Config(object):
                             [self.world[1, node], self.world[1, adj]],
                             color='k')
 
+    def setSolTime(self, solTime):
+        # store the solution time of the solve
+        self.solTime = solTime
+
     def writeInfo(self, filepath):
         # writes the configuration information of the test
         if not os.path.exists(filepath):
@@ -96,6 +101,9 @@ class Config(object):
 
             f.write('\nmax time\n')
             f.write(str(self.maxTime))
+
+            f.write('\nsolution  time\n')
+            f.write(str(self.solTime))
 
             f.write('\ninitial agent positions\n')
             f.write(np.array2string(self.initAgent, formatter={

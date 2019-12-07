@@ -30,12 +30,12 @@ class CrozConfig(ShapeConfig):
         zoneCords = [[(78050, 1473100), (78650, 1472900),
                       (78650, 1472550), (78200, 1472550)],
                      [(78650, 1472740), (79100, 1472500),
-                      (79100, 1472200), (78650, 1472200)],
+                      (79100, 1472250), (78650, 1472250)],
                      [(79100, 1472500), (79500, 1472300),
                       (79500, 1471840), (79100, 1471900)],
                      [(78200, 1472550), (78650, 1472550),
                       (78650, 1471900), (78290, 1472100)],
-                     [(78650, 1472200), (79100, 1472200),
+                     [(78650, 1472250), (79100, 1472250),
                       (79100, 1471900), (78650, 1471900)],
                      [(78650, 1471900), (79000, 1471900),
                       (79000, 1471450), (78700, 1471450)]]
@@ -123,12 +123,12 @@ if __name__ == '__main__':
     agentParameters = {}
     agentParameters["base"] = 7
     agentParameters["maxTime"] = 35
-    agentParameters["initPos"] = [30]
+    agentParameters["initPos"] = [2, 9]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=3)
+    config = CrozConfig(agentParameters=agentParameters, step=step, zone=0)
     # config = RookConfig(agentParameters=agentParameters, step=step)
     # config = RoydsConfig(agentParameters=agentParameters, step=step)
     # plot
     fig, ax = plt.subplots()
-    config.plot(ax)
+    config.plot(ax, showCamera=False)
     plt.show()
