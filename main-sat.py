@@ -75,8 +75,9 @@ class SAT(object):
         z3.set_param('verbose', 1)
         startTime = time.time()
         if self.problem.check() == z3.sat:
-            print("Solution Found: {:2.5f} min"
-                  .format((time.time()-startTime)/60))
+            solTime = (time.time()-startTime)/60.
+            self.config.setSolTime(solTime)
+            print("Solution Found: {:2.5f} min".format(solTime))
         else:
             raise RuntimeError("I will never be satisfiiiiied")
 
@@ -117,32 +118,31 @@ def main(outDir):
 
     agentParameters["base"] = 0
     agentParameters["maxTime"] = 55
-    agentParameters["initPos"] = [45]
+    agentParameters["initPos"] = [3, 17]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
-    step = 18
-    ver = 2
+    step = 38
+    ver = 1
     # input files
 
     # croz west
-    # zone = 2
-    # config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
-    # outDir += "croz" + '_z' + str(zone)
+    zone = 4
+    config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
+    outDir += "croz" + '_z' + str(zone)
 
     # croz east
     # config = RookConfig(agentParameters, step=step, prefix=True)
     # outDir += "rook"
 
     # royds
-    config = RoydsConfig(agentParameters, step=step, prefix=True)
-    outDir += "royds"
+    # config = RoydsConfig(agentParameters, step=step, prefix=True)
+    # outDir += "royds"
 
     outDir += '_sat_' + str(step) + '_n' + str(nAgent) + '_v' + str(ver)
     print(outDir)
     fig, ax = plt.subplots()
     config.plot(ax, showGrid=False)
-    config.writeInfo(outDir)
     print("Configuration loaded")
     routeDir = os.path.join(outDir, "routes/")
 
@@ -150,8 +150,8 @@ def main(outDir):
     # # SOLVE THE PROBLEM
     print("Solving Problem")
     sat.solve()
-    print("Solution Time:")
     agents = sat.readSolution()
+    config.writeInfo(outDir)
     print("agents trajectories")
     for agent in agents:
         agent.plot(ax)
@@ -164,5 +164,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "tests/"
+    outDir = "out/croz2/"
     main(outDir)
