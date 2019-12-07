@@ -27,18 +27,18 @@ class CrozConfig(ShapeConfig):
     def __init__(self, agentParameters, step, zone=-1, prefix=False):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
-        zoneCords = [[(78200, 1473000), (78700, 1473000),
-                      (78700, 1472550), (78200, 1472550)],
-                     [(78700, 1472800), (79000, 1472800),
-                      (79000, 1472200), (78700, 1472200)],
-                     [(79000, 1472500), (79500, 1472500),
-                      (79500, 1471800), (79000, 1471800)],
-                     [(78200, 1472550), (78700, 1472550),
-                      (78700, 1472000), (78200, 1472000)],
-                     [(78700, 1472200), (79000, 1472200),
-                     #  (79000, 1471900), (78700, 1471900)],
-                     # [(78700, 1471900), (79000, 1471900),
-                      (79000, 1471500), (78700, 1471500)]]
+        zoneCords = [[(78050, 1473100), (78650, 1472900),
+                      (78650, 1472550), (78200, 1472550)],
+                     [(78650, 1472740), (79100, 1472500),
+                      (79100, 1472200), (78650, 1472200)],
+                     [(79100, 1472500), (79500, 1472300),
+                      (79500, 1471840), (79100, 1471900)],
+                     [(78200, 1472550), (78650, 1472550),
+                      (78650, 1471900), (78290, 1472100)],
+                     [(78650, 1472200), (79100, 1472200),
+                      (79100, 1471900), (78650, 1471900)],
+                     [(78650, 1471900), (79000, 1471900),
+                      (79000, 1471450), (78700, 1471450)]]
         self.zoneIdx = zone
         self.zonePolys = [Polygon(z) for z in zoneCords]
 
@@ -50,7 +50,7 @@ class CrozConfig(ShapeConfig):
                           'fg':    (-77.459294, 169.245182)}
 
         dataDir = "data/croz_geofence"
-        cordsFile = "croz_west.csv"
+        cordsFile = "croz_west_2.csv"
         file = os.path.join(dataDir, cordsFile)
 
         super(CrozConfig, self).__init__(file, agentParameters,
@@ -125,7 +125,7 @@ if __name__ == '__main__':
     agentParameters["maxTime"] = 35
     agentParameters["initPos"] = [30]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=4)
+    config = CrozConfig(agentParameters=agentParameters, step=step, zone=3)
     # config = RookConfig(agentParameters=agentParameters, step=step)
     # config = RoydsConfig(agentParameters=agentParameters, step=step)
     # plot
