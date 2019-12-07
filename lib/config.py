@@ -102,7 +102,7 @@ class Config(object):
             f.write('\nmax time\n')
             f.write(str(self.maxTime))
 
-            f.write('\nsolution  time\n')
+            f.write('\nsolution  time (min)\n')
             f.write(str(self.solTime))
 
             f.write('\ninitial agent positions\n')
