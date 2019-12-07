@@ -28,7 +28,7 @@ class Trajectory(object):
         self.keyPoints = {"hut": [-77.4610948, 169.1860094],
                           "hut-tz": [-77.461540, 169.18600],
                           "hut-lz": [-77.4614790, 169.1849841]}
-        self.transferSpeed = 14.0
+        self.transferSpeed = 12.0
 
     def __repr__(self):
         pass
