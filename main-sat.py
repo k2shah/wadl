@@ -24,6 +24,7 @@ class SAT(object):
         self.config = config
         self.satVars = []
         self.makeVars()
+        self.findBlackList()
         self.setConts()
 
     def makeVars(self):
@@ -33,7 +34,33 @@ class SAT(object):
             self.satVars.append([[z3.Bool("x%s_t%s_s%s" % (i, t, s))
                                 for s in range(len(self.config.stateSpace))]
                                 for t in range(self.config.maxTime)])
-            # print(self.satVars[0][0])
+        print("number of sat vars {:d}".format(self.config.nAgent
+                                               * len(self.config.stateSpace)
+                                               * self.config.maxTime))
+
+    def findBlackList(self):
+        self.blackList = []
+        # force to false a subset of the variables.
+        for i in range(self.config.nAgent):
+            agentInit = self.config.initAgent[i]
+            # convert base to world point
+            worldIdx = self.config.stateSpace[agentInit]
+            worldBase = ind2sub(worldIdx, self.config.worldSize)
+            # print(worldBase)
+            for si, s in enumerate(self.config.stateSpace):
+                worldLoc = ind2sub(s, self.config.worldSize)
+                worldDist = l1(worldBase, worldLoc)
+                for t in range(worldDist):
+                    if t < 2:
+                        continue
+                    # forward reachable from  start
+                    self.blackList.append(self.satVars[i][t][si])
+                    # backward reachable from end
+                    self.blackList.append(self.satVars[i][-1-t][si])
+        print("number of ff sat vars {:d}".format(len(self.blackList)))
+
+        for boolVar in self.blackList:
+            self.problem.add(z3.Not(boolVar))
 
     def setConts(self):
         # sets the constraints for the problem
@@ -115,17 +142,17 @@ def main(outDir):
     # agent parameters
     agentParameters = {}
     agentParameters["base"] = 0
-    agentParameters["maxTime"] = 61
-    agentParameters["initPos"] = [2, 42]
+    agentParameters["maxTime"] = 57
+    agentParameters["initPos"] = [3, 10]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 29
-    ver = 2
+    ver = 1
     # input files
 
     # croz west
-    zone = 0
+    zone = 3
     config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
     outDir += "croz" + '_z' + str(zone)
 
