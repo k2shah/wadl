@@ -109,8 +109,8 @@ class Agent(object):
                 path.append(worldIdx)
                 self.trajectory.append(pt)
         pathLen = len(path)*config.step
-        print("Path Length (km): {:2.4f}. Flight Time (min): {:2.4f}".format(
-               pathLen, pathLen/self.speed/60))
+        # print("Path Length (km): {:2.4f}. Flight Time (min): {:2.4f}".format(
+        #        pathLen, pathLen/self.speed/60))
 
     def writeTrajTxt(self, outpath):
         if not os.path.exists(outpath):

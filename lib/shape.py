@@ -30,7 +30,8 @@ class ShapeConfig(Config):
         if not prefix:
             file = "../" + file
         self.parseFile(file)
-        # flat cords are the gps cords mapped to a 2d plane, with no rotaiton this is UTM
+        # flat cords are the gps cords mapped to a 2d plane
+        # with no rotaiton this is UTM
         # print("boundary cords in utm")
         # print(self.flatCords)
 
@@ -47,7 +48,6 @@ class ShapeConfig(Config):
 
         # get agent parameters
         self.setAgentParameters()
-
 
         # build transitions and costmaps
         super(ShapeConfig, self).__init__()
@@ -142,11 +142,11 @@ class ShapeConfig(Config):
             ax.plot(imageBox_X, imageBox_Y, color=(1, .6, 0))
 
     def plotZones(self, ax):
-        colors = ['b', 'g', 'r', 'm', 'c', 'y']
-        for zone, color in zip(self.zonePolys, colors):
+        colors = cols = plt.cm.get_cmap('tab10', 8)
+        for i, zone in enumerate(self.zonePolys):
             x = [point[0] for point in zone.exterior.coords]
             y = [point[1] for point in zone.exterior.coords]
-            ax.plot(x, y, color=color)
+            ax.plot(x, y, color=colors(i))
 
     def plotKeyPonts(self, ax):
         for key, val in self.keyPoints.items():
