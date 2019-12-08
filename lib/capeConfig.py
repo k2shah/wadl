@@ -28,29 +28,34 @@ class CrozConfig(ShapeConfig):
         # reads file and returns a x and y cord list as well as polygon object
         # break up zones
         zoneCords = []
-        zoneCords.append([(78040, 1473100), (78540, 1472950),
-                          (78540, 1472700), (78200, 1472700)])
 
-        zoneCords.append([(78540, 1472950), (79100, 1472500),
-                          (79100, 1472450), (78540, 1472450)])
 
-        zoneCords.append([(79100, 1472450), (79500, 1472300),
-                          (79500, 1471840), (79100, 1471900)])
 
-        zoneCords.append([(78200, 1472700), (78540, 1472700),
-                          (78540, 1472450), (78200, 1472450)])
+        # croz fine
 
-        zoneCords.append([(78200, 1472450), (78900, 1472450),
-                          (78900, 1472250), (78200, 1472250)])
+        # zoneCords.append([(78040, 1473100), (78540, 1472950),
+        #                   (78540, 1472700), (78200, 1472700)])
 
-        zoneCords.append([(78200, 1472250), (78900, 1472250),
-                          (78900, 1471900), (78200, 1471900)])
+        # zoneCords.append([(78540, 1472950), (79100, 1472500),
+        #                   (79100, 1472450), (78540, 1472450)])
 
-        zoneCords.append([(78900, 1472450), (79100, 1472450),
-                          (79100, 1471900), (78900, 1471900)])
+        # zoneCords.append([(79100, 1472450), (79500, 1472300),
+        #                   (79500, 1471840), (79100, 1471900)])
 
-        zoneCords.append([(78650, 1471900), (79000, 1471900),
-                          (79000, 1471450), (78700, 1471450)])
+        # zoneCords.append([(78200, 1472700), (78540, 1472700),
+        #                   (78540, 1472450), (78200, 1472450)])
+
+        # zoneCords.append([(78200, 1472450), (78900, 1472450),
+        #                   (78900, 1472250), (78200, 1472250)])
+
+        # zoneCords.append([(78200, 1472250), (78900, 1472250),
+        #                   (78900, 1471900), (78200, 1471900)])
+
+        # zoneCords.append([(78900, 1472450), (79100, 1472450),
+        #                   (79100, 1471900), (78900, 1471900)])
+
+        # zoneCords.append([(78650, 1471900), (79000, 1471900),
+        #                   (79000, 1471450), (78700, 1471450)])
 
         self.zoneIdx = zone
         self.zonePolys = [Polygon(z) for z in zoneCords]
@@ -132,13 +137,13 @@ class RoydsConfig(ShapeConfig):
 
 
 if __name__ == '__main__':
-    step = 31
+    step = 32
     agentParameters = {}
     agentParameters["base"] = 7
     agentParameters["maxTime"] = 35
-    agentParameters["initPos"] = [3, 10]
+    agentParameters["initPos"] = [1, 5, 16]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=1)
+    config = CrozConfig(agentParameters=agentParameters, step=step, zone=2)
     # config = RookConfig(agentParameters=agentParameters, step=step
     # config = RoydsConfig(agentParameters=agentParameters, step=step)
     # plot
