@@ -51,9 +51,8 @@ class SAT(object):
                     nextMoves = [self.satVars[i][t+1][ss]
                                  for ss in range(len(self.config.stateSpace))
                                  if self.config.Ts[s, ss]]
-                    self.problem.add(z3.Or(
-                                     z3.Not(self.satVars[i][t][s]),
-                                     *nextMoves))
+                    self.problem.add(z3.Or(z3.Not(self.satVars[i][t][s]),
+                                           *nextMoves))
         # for all agent and times each space must be true at least once
         for s in range(len(self.config.stateSpace)):
             tempList = []
@@ -115,14 +114,13 @@ class SAT(object):
 def main(outDir):
     # agent parameters
     agentParameters = {}
-
     agentParameters["base"] = 0
-    agentParameters["maxTime"] = 51
-    agentParameters["initPos"] = [2, 9]
+    agentParameters["maxTime"] = 61
+    agentParameters["initPos"] = [2, 42]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
-    step = 40
+    step = 29
     ver = 2
     # input files
 
@@ -164,5 +162,5 @@ def main(outDir):
 
 
 if __name__ == '__main__':
-    outDir = "out/croz2/"
+    outDir = "out/croz2-fine/"
     main(outDir)
