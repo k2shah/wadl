@@ -142,17 +142,17 @@ def main(outDir):
     # agent parameters
     agentParameters = {}
     agentParameters["base"] = 0
-    agentParameters["maxTime"] = 57
-    agentParameters["initPos"] = [3, 10]
+    agentParameters["maxTime"] = 45
+    agentParameters["initPos"] = [1, 5, 16]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
-    step = 29
-    ver = 1
+    step = 32
+    ver = 2
     # input files
 
     # croz west
-    zone = 3
+    zone = 2
     config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
     outDir += "croz" + '_z' + str(zone)
 
@@ -176,7 +176,10 @@ def main(outDir):
     print("Solving Problem")
     sat.solve()
     agents = sat.readSolution()
-    config.writeInfo(outDir)
+    try:
+        config.writeInfo(outDir)
+    except Exception as e:
+        print(e)
     print("agents trajectories")
     for agent in agents:
         agent.plot(ax)
