@@ -12,13 +12,13 @@ except (SystemError, ImportError):
 
 
 class Config(object):
-    def __init__(self, typ=None):
+    def __init__(self, typ=None, size=(6, 6)):
         self.dim = 2
         self.solTime = 0
         if typ == 'small':
             self.maxTime = 20
             # world init
-            self.worldSize = (6, 6)
+            self.worldSize = size
             self.xGrid = np.linspace(0, 100, self.worldSize[0])
             self.yGrid = np.linspace(0, 100, self.worldSize[1])
             self.nX = len(self.xGrid)
@@ -46,7 +46,7 @@ class Config(object):
         # make transition matrix
         self.Ts = np.eye(self.nStates, dtype=int)
         # connective graph node to list of connected nodes
-        self.con = []
+        self.con = dict()
         for s in range(self.nStates):
             adj = []
             i, j = ind2sub(s, self.worldSize)
@@ -60,7 +60,7 @@ class Config(object):
                 adj.append(sub2ind((i, j+1), self.worldSize))  # top
 
             self.Ts[s, adj] = len(adj)*[1]
-            self.con.append(adj)
+            self.con[s] = adj
 
     def buildWorld(self):
         self.world = np.zeros((2, self.nStates))
