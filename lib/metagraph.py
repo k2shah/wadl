@@ -34,10 +34,17 @@ class Metagraph(object):
         self.baseCon = con
         # world size of the space filled, used to get gird cord in the "world"
         self.worldSize = worldSize
+        # dict of the meta nodes, value is the reduced cluster
+        self.metaNodes = dict()
 
     def __repr__(self):
         printStr = ''
         for n in self.nodes:
+            try:
+                self.metaNodes[n]
+                printStr += 'm-'
+            except KeyError as e:
+                pass
             printStr += str(n) + ": " + str(self.con[n]) + "\n"
         return printStr
 
@@ -53,8 +60,6 @@ class Metagraph(object):
                     continue
                 walk.append((dx, dy))
 
-        # dict of the meta nodes, value is the reduced cluster
-        self.metaNodes = dict()
         # dict of all nodes, reduced nodes point to the parent
         self.reducedNodes = dict()
 
@@ -73,7 +78,11 @@ class Metagraph(object):
                 continue
             cluster = [sub2ind((x+dx, y+dy), self.worldSize) for dx, dy in walk]
             if nodeSet.issuperset(set(cluster)):
+                # add to nodes
+                self.nodes.append(node)
+                # add to meta nodes
                 self.metaNodes[node] = cluster
+                # point to self
                 self.reducedNodes[node] = node
                 # point reduced nodes to the parent node
                 for ln in cluster:
@@ -96,12 +105,13 @@ class Metagraph(object):
             con = set()
             try:
                 cluster = self.metaNodes[node]
-                self.nodes.append(node)
                 # for each node in the reduced cluster
                 for ln in cluster:
                     # for each node connected
+                    # add the
                     for nn in self.baseCon[ln]:
-                        con.add((self.reducedNodes[nn]))
+                        if nn in self.baseNodes:
+                            con.add((self.reducedNodes[nn]))
             except KeyError as e:
                 # for a normal node
                 for nn in self.baseCon[node]:
@@ -130,18 +140,14 @@ class Metagraph(object):
                         [world[1, node], world[1, adj]],
                         color='b')
 
-
-
-
-
 if __name__ == '__main__':
-    size = (7, 7)
+    size = (10, 15)
     config = Config(typ='small', size=size)
     metagraph = Metagraph(config.stateSpace,
                           config.con,
                           config.worldSize)
     metagraph.reduce(3, verbose=True)
-    # print(metagraph)
+    print(metagraph)
 
     fig, ax = plt.subplots()
     config.plot(ax)

@@ -45,7 +45,7 @@ class Config(object):
     def buildTransition(self):
         # make transition matrix
         self.Ts = np.eye(self.nStates, dtype=int)
-        # connective graph node to list of connected nodes
+        # graph node to list of connected nodes
         self.con = dict()
         for s in range(self.nStates):
             adj = []
