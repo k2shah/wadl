@@ -84,14 +84,13 @@ class CrozConfig(ShapeConfig):
                           'fg':    (-77.459294, 169.245182)}
 
         dataDir = "data/croz_geofence"
-        cordsFile = "croz_west_2.csv"
+        cordsFile = "croz_west_3.csv"
         file = os.path.join(dataDir, cordsFile)
-
         super(CrozConfig, self).__init__(file, agentParameters,
                                          step=step, prefix=prefix)
 
     def parseFile(self, file, longLat=False):
-        super(CrozConfig, self).parseFile(file)
+        super(CrozConfig, self).parseFile(file, longLat=True)
         self.theta = 15 * np.pi / 180
         self.R = rot2D(self.theta)
         self.flatCords = np.dot(self.R, self.flatCords.T).T
@@ -118,13 +117,13 @@ class RookConfig(ShapeConfig):
         self.keyPoints = {'erook': (-77.4632,   169.27899)}
 
         dataDir = "data/croz_east"
-        cordsFile = "croz_rook.csv"
+        cordsFile = "croz_rook_3.csv"
         file = os.path.join(dataDir, cordsFile)
         super(RookConfig, self).__init__(file, agentParameters,
                                          step=step, prefix=prefix)
 
     def parseFile(self, file, longLat=False):
-        super(RookConfig, self).parseFile(file)
+        super(RookConfig, self).parseFile(file, longLat=True)
         self.theta = 15 * np.pi / 180
         self.R = rot2D(self.theta)
         self.flatCords = np.dot(self.R, self.flatCords.T).T
@@ -153,14 +152,14 @@ class RoydsConfig(ShapeConfig):
 
 
 if __name__ == '__main__':
-    step = 32
+    step = 40
     agentParameters = {}
     agentParameters["base"] = 7
     agentParameters["maxTime"] = 35
-    agentParameters["initPos"] = [1, 5, 16]
+    agentParameters["initPos"] = [0, 55]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=2)
-    # config = RookConfig(agentParameters=agentParameters, step=step
+    config = CrozConfig(agentParameters=agentParameters, step=step, zone=1)
+    # config = RookConfig(agentParameters=agentParameters, step=step)
     # config = RoydsConfig(agentParameters=agentParameters, step=step)
     # plot
     fig, ax = plt.subplots()

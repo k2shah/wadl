@@ -125,7 +125,7 @@ class ShapeConfig(Config):
         ax.plot(x, y, color='k')
 
     def plotCameras(self, ax):
-        cameraBox = [110, 82]
+        cameraBox = [55, 55]
         for i, node in enumerate(self.stateSpace):
             point = self.world[:, node]
             imageBox_X = [point[0]-cameraBox[0]/2.,
