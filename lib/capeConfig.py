@@ -33,14 +33,14 @@ class CrozConfig(ShapeConfig):
 
         # croz 40
 
-        zoneCords.append([(78050, 1473100), (78650, 1472900),
+        zoneCords.append([(78030, 1473100), (78650, 1472900),
                          (78650, 1472550), (78200, 1472550)])
         zoneCords.append([(78650, 1472740), (79100, 1472500),
                          (79100, 1472250), (78650, 1472250)])
         zoneCords.append([(79100, 1472500), (79500, 1472300),
                          (79500, 1471840), (79100, 1471900)])
         zoneCords.append([(78200, 1472550), (78650, 1472550),
-                         (78650, 1471900), (78290, 1472100)])
+                         (78650, 1471900), (78210, 1472100)])
         zoneCords.append([(78650, 1472250), (79100, 1472250),
                           (79100, 1471900), (78650, 1471900)])
         zoneCords.append([(78650, 1471900), (79000, 1471900),
@@ -168,8 +168,7 @@ if __name__ == '__main__':
                           config.con,
                           config.worldSize)
     metagraph.reduce(3, verbose=True)
-    # print(metagraph)
-
+    print(metagraph)
     # plot
     fig, ax = plt.subplots()
     config.plot(ax, showCamera=False)
