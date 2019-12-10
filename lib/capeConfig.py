@@ -13,10 +13,12 @@ try:
     from .config import Config
     from .shape import ShapeConfig
     from .utils import *
+    from .metagraph import Metagraph
 except (SystemError, ImportError):
     from config import Config
     from shape import ShapeConfig
     from utils import *
+    from metagraph import Metagraph
 # gis
 import utm
 from shapely.geometry import Point, Polygon
@@ -158,10 +160,18 @@ if __name__ == '__main__':
     agentParameters["maxTime"] = 35
     agentParameters["initPos"] = [0, 55]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=1)
+    config = CrozConfig(agentParameters=agentParameters, step=step, zone=0)
     # config = RookConfig(agentParameters=agentParameters, step=step)
     # config = RoydsConfig(agentParameters=agentParameters, step=step)
+
+    metagraph = Metagraph(config.stateSpace,
+                          config.con,
+                          config.worldSize)
+    metagraph.reduce(3, verbose=True)
+    # print(metagraph)
+
     # plot
     fig, ax = plt.subplots()
     config.plot(ax, showCamera=False)
+    metagraph.plot(ax, config.world)
     plt.show()
