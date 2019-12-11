@@ -140,6 +140,7 @@ class Metagraph(object):
                         [world[1, node], world[1, adj]],
                         color='b')
 
+
 if __name__ == '__main__':
     size = (10, 15)
     config = Config(typ='small', size=size)
@@ -153,4 +154,3 @@ if __name__ == '__main__':
     config.plot(ax)
     metagraph.plot(ax, config.world)
     plt.show()
-
