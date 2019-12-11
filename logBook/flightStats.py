@@ -149,6 +149,7 @@ def writeStatsMD(flightStats):
                 flightCounter += 1
     f.close()
 
+
 def writeStatsCSV(flightStats):
     waddleName = list(flightStats.keys())
     waddleName.sort()

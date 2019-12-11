@@ -160,7 +160,7 @@ if __name__ == '__main__':
     agentParameters["maxTime"] = 35
     agentParameters["initPos"] = [0, 55]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=0)
+    config = CrozConfig(agentParameters=agentParameters, step=step, zone=2)
     # config = RookConfig(agentParameters=agentParameters, step=step)
     # config = RoydsConfig(agentParameters=agentParameters, step=step)
 
@@ -168,7 +168,7 @@ if __name__ == '__main__':
                           config.con,
                           config.worldSize)
     metagraph.reduce(3, verbose=True)
-    print(metagraph)
+    # print(metagraph)
     # plot
     fig, ax = plt.subplots()
     config.plot(ax, showCamera=False)
