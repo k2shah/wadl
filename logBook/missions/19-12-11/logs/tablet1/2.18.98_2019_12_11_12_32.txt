@@ -1,0 +1,26 @@
+12:32:49.539 I/DjiSharedApp : Phone information: manufacturer(samsung), model(SM-T510), version(28), release(9), totalMemory(1970008064)
+12:32:49.540 I/ApplicationMainServiceBase : ---> onCreate (DjiAppMainServiceImpl), creationTimeStamp=1576020769540
+12:32:49.541 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onCreate
+12:32:49.791 I/MediaStreamerContainerImpl : initializing mstreamer... 
+12:32:49.882 I/DjiSharedUsbAccessoryAttachedActivity : DjiUsbAccessoryAttachedActivity -> onCreate
+12:32:49.913 I/WithAppMainServiceActivity : (DjiSelectDroneTypeActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+12:32:49.986 I/WithAppMainServiceActivity : (DjiUsbAccessoryAttachedActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+12:32:50.007 I/DjiSharedUsbAccessoryAttachedActivity : onServiceConnectionChanged : CONNECTED to 1576020769540
+12:32:50.007 I/DroneBridgeImpl : onUsbAccessoryAttached
+12:32:50.016 I/UsbAccessoryManagerImplV2 : There are 1 attached UsbAccessory
+12:32:50.019 I/UsbAccessoryManagerImplV2 : permission(true) - UsbAccessory[mManufacturer=DJI, mModel=T600, mDescription=DJI Inspire 1, mVersion=v2.35.0.0, mUri=www.dji.com, mSerial=000000000000000]
+12:32:50.031 I/DjiSharedUsbAccessoryAttachedActivity : onServiceConnectionChanged : CONNECTED to 1576020769540
+12:32:50.032 I/DroneBridgeImpl : onUsbAccessoryAttached
+12:32:50.045 I/UsbAccessoryManagerImplV2 : There are 1 attached UsbAccessory
+12:32:50.047 I/UsbAccessoryManagerImplV2 : permission(true) - UsbAccessory[mManufacturer=DJI, mModel=T600, mDescription=DJI Inspire 1, mVersion=v2.35.0.0, mUri=www.dji.com, mSerial=000000000000000]
+12:32:52.825 I/VsmToUcsConnectorBase : UCS connector started on 54322
+12:32:52.827 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+12:32:52.828 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+12:32:55.873 I/SsdpPortsMonitor : Service discovery: Network interface enabled: wlan0
+12:32:55.878 I/SsdpPortsMonitor : Service discovery: Network interface enabled: lo
+12:33:26.465 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onDestroy
+12:33:26.470 I/DroneBridgeImpl : tearDownKeyListeners... (ALL)
+12:33:27.205 I/DroneBridgeImpl : DJISDKManager.getInstance().stopConnectionToProduct -> NullPointer again
+12:33:27.232 I/VsmToUcsConnectorBase : UCS connector stopped.
+12:33:27.243 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+12:33:27.246 I/ApplicationMainServiceBase : ---> onDestroy (DjiAppMainServiceImpl), creationTimeStamp=1576020769540
