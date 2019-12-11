@@ -36,7 +36,7 @@ class FlightStat(object):
 
 def main():
     logPath = os.getcwd()
-    # get wildcard path missions/DATE/logs/WADDLE_ID/LOGFILE_NAME.txt
+    # get wildcard path missions/DATE/logs/*/LOGFILE_NAME.txt
     logPath = os.path.join(logPath, "missions/*/logs/*/*.txt")
     logFiles = glob.glob(logPath)
     logFiles.sort()
@@ -148,6 +148,7 @@ def writeStatsMD(flightStats):
 
                 flightCounter += 1
     f.close()
+
 
 def writeStatsCSV(flightStats):
     waddleName = list(flightStats.keys())
