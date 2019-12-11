@@ -22,21 +22,29 @@ class FlightStat(object):
         # store the name of the units
         self.name = name
         self.flightTime = 0.0  # flight time in minutes
-        self.flightCount = 0  # number of flights =
-        self.flights = []  # list of flights
+        self.flightCount = 0  # number of flights
+        # dict of flights. k: epoch time of flight, v: flight
+        self.flights = dict()
 
     def addFights(self, log):
         for flight in log.flights:
             # check if flight actually as a duration
             if flight.duration:
-                self.flights.append(flight)
+                flightTime = time.struct_time((flight.flightDate[0],
+                                               flight.flightDate[1],
+                                               flight.flightDate[2],
+                                               int(flight.startTime[0]),
+                                               int(flight.startTime[1]),
+                                               int(flight.startTime[2]),
+                                               1, 1, 1))
+                self.flights[flightTime] = flight
                 self.flightCount += 1
                 self.flightTime += flight.duration
 
 
 def main():
     logPath = os.getcwd()
-    # get wildcard path missions/DATE/logs/WADDLE_ID/LOGFILE_NAME.txt
+    # get wildcard path missions/DATE/logs/*/LOGFILE_NAME.txt
     logPath = os.path.join(logPath, "missions/*/logs/*/*.txt")
     logFiles = glob.glob(logPath)
     logFiles.sort()
@@ -98,7 +106,10 @@ def writeStatsMD(flightStats):
                 flightStats[waddle].flightTime/60))
             # Track last date
             lastDate = None
-            for i, flight in enumerate(flightStats[waddle].flights):
+            flightKeys = list(flightStats[waddle].flights.keys())
+            flightKeys.sort()
+            for i, flightKey in enumerate(flightKeys):
+                flight = flightStats[waddle].flights[flightKey]
                 # f.write("- {:d}".format(i))
 
                 # date information
@@ -169,7 +180,10 @@ def writeStatsCSV(flightStats):
         for waddle in waddleName:
             # Track last date
             lastDate = None
-            for i, flight in enumerate(flightStats[waddle].flights):
+            flightKeys = list(flightStats[waddle].flights.keys())
+            flightKeys.sort()
+            for i, flightKey in enumerate(flightKeys):
+                flight = flightStats[waddle].flights[flightKey]
                 f.write("{:s},".format(waddle))
                 # date information
                 f.write("{:s}/{:s}/{:s},".format(
@@ -226,7 +240,6 @@ def calcDistFromLatLng(gps0, gps1):
     e0, n0, _, _ = utm.from_latlon(*gps0)
     e1, n1, _, _ = utm.from_latlon(*gps1)
     return np.linalg.norm([e0-e1, n0-n1])
-
 
 
 if __name__ == '__main__':
