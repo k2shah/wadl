@@ -87,7 +87,7 @@
     "icaoAddress" : null,
     "tailNumber" : "B1",
     "type" : "MULTICOPTER",
-    "altitudeOrigin" : 231.54916381835938,
+    "altitudeOrigin" : null,
     "platformCode" : "DjiMatrice100",
     "profile" : "DJI Matrice 100",
     "emulator" : false,
@@ -100,7 +100,7 @@
     "icaoAddress" : null,
     "tailNumber" : "B2",
     "type" : "MULTICOPTER",
-    "altitudeOrigin" : 229.83335876464844,
+    "altitudeOrigin" : null,
     "platformCode" : "DjiMatrice100",
     "profile" : "DJI Matrice 100",
     "emulator" : false,
@@ -118,6 +118,19 @@
     "profile" : "DJI Matrice 100",
     "emulator" : false,
     "serialNumber" : "041df30752",
+    "port" : null,
+    "source" : "VSM"
+  }, {
+    "name" : "waddle4",
+    "vehicleId" : 2224745955,
+    "icaoAddress" : null,
+    "tailNumber" : "B4",
+    "type" : "MULTICOPTER",
+    "altitudeOrigin" : null,
+    "platformCode" : "DjiMatrice100",
+    "profile" : "DJI Matrice 100",
+    "emulator" : false,
+    "serialNumber" : "041df30794",
     "port" : null,
     "source" : "VSM"
   } ],
@@ -2380,8 +2393,29 @@
           "autoCalc" : false
         } ],
         "point" : {
-          "latitude" : -1.351818362547014,
-          "longitude" : 2.953338805212152,
+          "latitude" : -1.3518213495758398,
+          "longitude" : 2.953336571592681,
+          "altitude" : 50.0,
+          "altitudeType" : "AGL"
+        },
+        "parameters" : {
+          "avoidObstacles" : true,
+          "avoidTerrain" : true,
+          "speed" : 4.05,
+          "wpTurnType" : "STRAIGHT"
+        }
+      }, {
+        "type" : "Waypoint",
+        "actions" : [ {
+          "type" : "CameraSeriesByTime",
+          "interval" : 2.0,
+          "shotsNumber" : null,
+          "startDelay" : null,
+          "autoCalc" : false
+        } ],
+        "point" : {
+          "latitude" : -1.3518130102967536,
+          "longitude" : 2.953354024450386,
           "altitude" : 50.0,
           "altitudeType" : "AGL"
         },
@@ -2653,8 +2687,8 @@
           "autoCalc" : false
         } ],
         "point" : {
-          "latitude" : -1.3518150551391839,
-          "longitude" : 2.953383333704128,
+          "latitude" : -1.3518146276720628,
+          "longitude" : 2.953374747057453,
           "altitude" : 50.0,
           "altitudeType" : "AGL"
         },
@@ -3151,8 +3185,8 @@
         "type" : "Waypoint",
         "actions" : [ ],
         "point" : {
-          "latitude" : -1.3518112612490325,
-          "longitude" : 2.9533252977577886,
+          "latitude" : -1.3518124569168837,
+          "longitude" : 2.953321719034047,
           "altitude" : 50.0,
           "altitudeType" : "AGL"
         },
@@ -5443,8 +5477,8 @@
           "autoCalc" : false
         } ],
         "point" : {
-          "latitude" : -1.3517949719142954,
-          "longitude" : 2.9533869865846873,
+          "latitude" : -1.3517978562086428,
+          "longitude" : 2.9534050960457283,
           "altitude" : 50.0,
           "altitudeType" : "AGL"
         },
@@ -5821,7 +5855,7 @@
           "autoCalc" : false
         } ],
         "point" : {
-          "latitude" : -1.3517178602147266,
+          "latitude" : -1.3517178779689416,
           "longitude" : 2.953359662095183,
           "altitude" : 50.0,
           "altitudeType" : "AGL"
@@ -5842,8 +5876,8 @@
           "autoCalc" : false
         } ],
         "point" : {
-          "latitude" : -1.3517241252391292,
-          "longitude" : 2.9533509928069073,
+          "latitude" : -1.3517234222713876,
+          "longitude" : 2.9533143624317013,
           "altitude" : 50.0,
           "altitudeType" : "AGL"
         },
@@ -5863,29 +5897,8 @@
           "autoCalc" : false
         } ],
         "point" : {
-          "latitude" : -1.3517260221123402,
-          "longitude" : 2.9533799994036514,
-          "altitude" : 50.0,
-          "altitudeType" : "AGL"
-        },
-        "parameters" : {
-          "avoidObstacles" : true,
-          "avoidTerrain" : true,
-          "speed" : 3.95,
-          "wpTurnType" : "STRAIGHT"
-        }
-      }, {
-        "type" : "Waypoint",
-        "actions" : [ {
-          "type" : "CameraSeriesByTime",
-          "interval" : 2.0,
-          "shotsNumber" : null,
-          "startDelay" : null,
-          "autoCalc" : false
-        } ],
-        "point" : {
-          "latitude" : -1.3517279188071487,
-          "longitude" : 2.953409006495626,
+          "latitude" : -1.3517300041905291,
+          "longitude" : 2.95343782568934,
           "altitude" : 50.0,
           "altitudeType" : "AGL"
         },
@@ -5893,27 +5906,6 @@
           "avoidObstacles" : true,
           "avoidTerrain" : true,
           "speed" : 4.05,
-          "wpTurnType" : "STRAIGHT"
-        }
-      }, {
-        "type" : "Waypoint",
-        "actions" : [ {
-          "type" : "CameraSeriesByTime",
-          "interval" : 2.0,
-          "shotsNumber" : null,
-          "startDelay" : null,
-          "autoCalc" : false
-        } ],
-        "point" : {
-          "latitude" : -1.3517298153235513,
-          "longitude" : 2.9534380140827974,
-          "altitude" : 50.0,
-          "altitudeType" : "AGL"
-        },
-        "parameters" : {
-          "avoidObstacles" : true,
-          "avoidTerrain" : true,
-          "speed" : 3.95,
           "wpTurnType" : "STRAIGHT"
         }
       }, {
@@ -6229,27 +6221,6 @@
           "avoidObstacles" : true,
           "avoidTerrain" : true,
           "speed" : 4.05,
-          "wpTurnType" : "STRAIGHT"
-        }
-      }, {
-        "type" : "Waypoint",
-        "actions" : [ {
-          "type" : "CameraSeriesByTime",
-          "interval" : 2.0,
-          "shotsNumber" : null,
-          "startDelay" : null,
-          "autoCalc" : false
-        } ],
-        "point" : {
-          "latitude" : -1.35175487590115,
-          "longitude" : 2.953403340938852,
-          "altitude" : 50.0,
-          "altitudeType" : "AGL"
-        },
-        "parameters" : {
-          "avoidObstacles" : true,
-          "avoidTerrain" : true,
-          "speed" : 3.95,
           "wpTurnType" : "STRAIGHT"
         }
       }, {
@@ -6637,8 +6608,8 @@
           "autoCalc" : false
         } ],
         "point" : {
-          "latitude" : -1.3518065386348173,
-          "longitude" : 2.953619647255907,
+          "latitude" : -1.3518104732873768,
+          "longitude" : 2.95361106240331,
           "altitude" : 50.0,
           "altitudeType" : "AGL"
         },
@@ -14505,6 +14476,6 @@
         }
       } ]
     } ],
-    "vehicles" : [ "waddle1", "waddle2", "waddle3" ]
+    "vehicles" : [ "waddle1", "waddle2", "waddle3", "waddle4" ]
   }
 }
