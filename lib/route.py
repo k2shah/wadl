@@ -4,12 +4,13 @@ import os
 import csv
 import json
 import glob
+import time
 # import sys
-# import time
 # gis
 import utm
 # math
 import numpy as np
+import numpy.linalg as la
 # plot
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as axes3d
@@ -29,8 +30,10 @@ class Route(object):
             print(self.cords.shape)
             # raise RuntimeError("path lengths do not mathch: {:s}".format(
             #       KMLfile))
-        self.cameraSize = (2, 3)
-        self.speed = 4.0
+        self.cameraSize = (54.5, 72.6)  # m
+        self.speed = 4.0  # m/s
+        self.triggerInt = 2  # secs
+        self.interpRoute()
 
     def parseKML(self, KMLfile):
         # parse KMLfile
@@ -51,7 +54,45 @@ class Route(object):
     def readJSON(self, JSONdata):
         self.actions = [wp["actions"] != [] for wp in JSONdata["segments"]]
 
+    def interpRoute(self):
+        self.xpath = []
+        self.ypath = []
+        for i, action in enumerate(self.actions):
+            if action:
+                # 1st cords cuz fwd path progress
+                if len(self.xpath) == 0:
+                    cords = utm.from_latlon(self.cords[i, 1], self.cords[i, 0])
+                    self.xpath.append(cords[0])
+                    self.ypath.append(cords[1])
+                # rest of cords   
+                cords = utm.from_latlon(self.cords[i+1, 1], self.cords[i+1, 0])
+                self.xpath.append(cords[0])
+                self.ypath.append(cords[1])
+        self.pathLen = [0]
+        self.UTMZone = cords[2:]
+
+        # get diffs
+        xdiff = np.diff(self.xpath)
+        ydiff = np.diff(self.ypath)
+
+        self.arcLen = np.cumsum([0] +
+                                [la.norm([dx, dy])
+                                 for dx, dy in zip(xdiff, ydiff)])
+        # interp at speed * photo interval
+        interpols = np.arange(0, self.arcLen[-1],
+                              self.speed*self.triggerInt)
+        self.xinterp = np.interp(interpols, self.arcLen, self.xpath)
+        self.yinterp = np.interp(interpols, self.arcLen, self.ypath)
+
+    def plotInterp(self, ax):
+        for x, y, in zip(self.xinterp, self.yinterp):
+            lat, lng = utm.to_latlon(x, y, *self.UTMZone)
+            ax.scatter(lng, lat, c='c')
+            # plt.draw()
+            # plt.pause(.00001)
+
     def plotRoute(self, ax):
+        # plots the route
         for i, action in enumerate(self.actions):
             if i < 1 or i > (len(self.actions)-2):
                 # skip the 1st and last fe
@@ -63,11 +104,12 @@ class Route(object):
 
             ax.plot(self.cords[i:i+2, 0],
                     self.cords[i:i+2, 1],
-                    c=col)
+                    c=col, s=.01)
 
     def plot(self, ax):
-        # plots the route
-        self.plotRoute(ax)
+        # runs all the plot subruts
+        # self.plotRoute(ax)
+        self.plotInterp(ax)
 
 
 class Fence(object):
@@ -125,14 +167,22 @@ def main(mission):
             print("kml file does not exist: {:s}".format(routeName))
 
     # plot stuff
-    fig = plt.figure(figsize=(25, 16))
+    fig = plt.figure(figsize=(8, 8))
     # ax = fig.add_subplot(1, 1, 1, projection='3d')
-    ax  = fig.add_subplot(111)
+    ax = fig.add_subplot(111)
     crozFence.plot(ax)
 
-
-    for key in routes:
+    # build route sequence
+    routeSeq = [(float(r.split('-')[0].strip('r')), r)
+                for r in list(routes.keys())]
+    routeSeq.sort()
+    print(routeSeq)
+    for rnum, key in routeSeq:
         routes[key].plot(ax)
+        plt.title(key)
+        plt.draw()
+        plt.pause(.0000001)
+        time.sleep(1)
 
     plt.show()
 

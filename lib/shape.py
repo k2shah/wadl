@@ -6,7 +6,7 @@ import csv
 # import time
 # math
 import numpy as np
-# plot
+# plotPolygon
 import matplotlib.pyplot as plt
 # lib
 try:
