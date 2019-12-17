@@ -81,7 +81,46 @@
       "normalBatteryPowerLevel" : 40.0
     }
   } ],
-  "vehicles" : [ ],
+  "vehicles" : [ {
+    "name" : "waddle1",
+    "vehicleId" : 1529636822,
+    "icaoAddress" : null,
+    "tailNumber" : "B1",
+    "type" : "MULTICOPTER",
+    "altitudeOrigin" : 231.8233184814453,
+    "platformCode" : "DjiMatrice100",
+    "profile" : "DJI Matrice 100",
+    "emulator" : false,
+    "serialNumber" : "041df30782",
+    "port" : null,
+    "source" : "VSM"
+  }, {
+    "name" : "waddle2",
+    "vehicleId" : 3110350719,
+    "icaoAddress" : null,
+    "tailNumber" : "B2",
+    "type" : "MULTICOPTER",
+    "altitudeOrigin" : 229.87002563476562,
+    "platformCode" : "DjiMatrice100",
+    "profile" : "DJI Matrice 100",
+    "emulator" : false,
+    "serialNumber" : "041df30831",
+    "port" : null,
+    "source" : "VSM"
+  }, {
+    "name" : "waddle3",
+    "vehicleId" : 1223845661,
+    "icaoAddress" : null,
+    "tailNumber" : "B3",
+    "type" : "MULTICOPTER",
+    "altitudeOrigin" : 230.3572235107422,
+    "platformCode" : "DjiMatrice100",
+    "profile" : "DJI Matrice 100",
+    "emulator" : false,
+    "serialNumber" : "041df30752",
+    "port" : null,
+    "source" : "VSM"
+  } ],
   "mission" : {
     "name" : "croz2-fine",
     "description" : null,
@@ -11251,8 +11290,8 @@
         "type" : "Waypoint",
         "actions" : [ ],
         "point" : {
-          "latitude" : -1.3519589166652883,
-          "longitude" : 2.952852748279126,
+          "latitude" : -1.3519542743409045,
+          "longitude" : 2.952849395053377,
           "altitude" : 80.0,
           "altitudeType" : "AGL"
         },
@@ -25904,6 +25943,21 @@
         }
       }, {
         "type" : "Waypoint",
+        "actions" : [ ],
+        "point" : {
+          "latitude" : -1.3519417236344236,
+          "longitude" : 2.953837568573289,
+          "altitude" : 70.0,
+          "altitudeType" : "AGL"
+        },
+        "parameters" : {
+          "avoidObstacles" : true,
+          "avoidTerrain" : true,
+          "speed" : 15.0,
+          "wpTurnType" : "STRAIGHT"
+        }
+      }, {
+        "type" : "Waypoint",
         "actions" : [ {
           "type" : "CameraSeriesByTime",
           "interval" : 2.0,
@@ -27307,6 +27361,21 @@
         "type" : "Waypoint",
         "actions" : [ ],
         "point" : {
+          "latitude" : -1.3519399198038229,
+          "longitude" : 2.9538304481261233,
+          "altitude" : 70.0,
+          "altitudeType" : "AGL"
+        },
+        "parameters" : {
+          "avoidObstacles" : true,
+          "avoidTerrain" : true,
+          "speed" : 15.0,
+          "wpTurnType" : "STRAIGHT"
+        }
+      }, {
+        "type" : "Waypoint",
+        "actions" : [ ],
+        "point" : {
           "latitude" : -1.3519572521049346,
           "longitude" : 2.9528410205872113,
           "altitude" : 70.0,
@@ -27348,6 +27417,6 @@
         }
       } ]
     } ],
-    "vehicles" : [ ]
+    "vehicles" : [ "waddle1", "waddle2", "waddle3" ]
   }
 }
