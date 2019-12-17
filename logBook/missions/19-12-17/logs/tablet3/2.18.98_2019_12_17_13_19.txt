@@ -1,0 +1,65 @@
+13:19:43.011 I/DjiSharedApp : Phone information: manufacturer(samsung), model(SM-T510), version(28), release(9), totalMemory(1970008064)
+13:19:43.012 I/ApplicationMainServiceBase : ---> onCreate (DjiAppMainServiceImpl), creationTimeStamp=1576541983012
+13:19:43.013 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onCreate
+13:19:43.159 I/MediaStreamerContainerImpl : initializing mstreamer... 
+13:19:43.197 I/WithAppMainServiceActivity : (DjiSelectDroneTypeActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+13:19:43.259 I/DjiSharedSelectDroneTypeActivity : permissions granted.
+13:19:43.264 I/DroneBridgeImpl : DJISDKManager -> registerApp...
+13:19:43.298 I/DroneBridgeImpl : DJISDKManager -> SDK VERSION = 4.9
+13:19:44.746 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+13:19:44.747 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+13:19:44.747 I/DjiSharedSelectDroneTypeActivity : DJI SDK Registration SUCCESS
+13:19:44.783 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+13:19:44.785 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+13:19:45.055 I/BaseActivityVsm : setUpKeyListeners for: isLandingConfirmationNeeded
+13:19:45.058 W/BaseActivityVsm : isLandingConfirmationNeeded ERROR : Not Support
+13:19:45.077 I/DjiSharedMainActivity : setUpKeyListeners... (IS_OPTICAL_ZOOM_SUPPORTED)
+13:19:45.078 W/DjiSharedMainActivity : opticalZoomSupportedKey ERROR : Not Support
+13:19:45.089 I/MainIndicatorsFragment : setUpKeyListeners for: SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold
+13:19:45.090 W/MainIndicatorsFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+13:19:45.091 W/MainIndicatorsFragment : LowBatteryWarningThreshold ERROR : Not Support
+13:19:45.094 I/RemainingFlightTimeFragment : setUpKeyListeners for: Connection, ChargeRemainingInPercent, CurrentLandImmediatelyBattery, BatteryPercentageNeededToGoHome, SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold, RemainingFlightTime
+13:19:45.095 W/RemainingFlightTimeFragment : ChargeRemainingInPercent ERROR : Not Support
+13:19:45.096 W/RemainingFlightTimeFragment : CurrentLandImmediatelyBattery ERROR : Not Support
+13:19:45.097 W/RemainingFlightTimeFragment : BatteryPercentageNeededToGoHome ERROR : Not Support
+13:19:45.098 W/RemainingFlightTimeFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+13:19:45.099 W/RemainingFlightTimeFragment : LowBatteryWarningThreshold ERROR : Not Support
+13:19:45.100 W/RemainingFlightTimeFragment : RemainingFlightTime ERROR : Not Support
+13:19:45.609 I/ObstacleAvoidanceFragment : setUpKeyListeners for: VisionDetectionState
+13:19:45.610 W/ObstacleAvoidanceFragment : VisionDetectionState ERROR : Not Support
+13:19:45.622 I/WithAppMainServiceActivity : (DjiMainActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+13:19:45.688 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+13:19:45.771 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for DjiFpvFullscreenFragment.
+13:19:45.772 I/DjiVideoFeedProvider : InternalFeedConsumer is SET.
+13:19:45.773 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+13:19:45.789 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+13:19:45.791 I/DjiVideoFeedProvider : PhysicalSource of a PrimaryVideoFeed is NULL
+13:19:45.792 I/DjiVideoFeedProvider : PhysicalSource of a SecondaryVideoFeed is NULL
+13:19:45.827 I/DjiVideoFeedProvider : PhysicalSource of a TranscodedVideoFeed is NULL
+13:19:45.860 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=0
+trans.=NULL(UNUSED)
+13:19:45.862 W/DjiFpvFragment : No need to re-init codecManager!
+13:19:45.863 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=1
+trans.=NULL(UNUSED)
+13:19:45.863 I/DjiFpvFragment : Starting CodecManager, w=1920 h=1035 src=Camera
+13:19:45.930 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+13:19:46.193 I/VsmToUcsConnectorBase : UCS connector started on 54322
+13:19:46.204 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+13:19:46.206 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+13:19:49.228 I/SsdpPortsMonitor : Service discovery: Network interface enabled: wlan0
+13:19:49.232 I/SsdpPortsMonitor : Service discovery: Network interface enabled: lo
+13:19:52.228 I/VsmToUcsConnectorBase : UgCS 3.3.490 @ 10.10.10.106:45788 (ucsId = 531891866)
+13:19:55.257 I/PingHandler : Sending a PONG message
+13:20:03.487 I/PingHandler : Sending a PONG message
+13:20:12.031 I/DjiSharedMainActivity : onPause
+13:20:12.042 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for CameraControlFragment.
+13:20:12.045 I/DjiVideoFeedProvider : InternalFeedConsumer is NULL.
+13:20:12.046 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+13:20:12.049 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+13:20:12.051 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for DjiFpvFullscreenFragment.
+13:20:12.543 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onDestroy
+13:20:12.547 I/DroneBridgeImpl : tearDownKeyListeners... (ALL)
+13:20:12.879 I/VsmToUcsConnectorBase : UCS connector stopped.
+13:20:12.884 I/ApplicationMainServiceBase : ---> onDestroy (DjiAppMainServiceImpl), creationTimeStamp=1576541983012
