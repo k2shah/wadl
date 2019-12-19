@@ -1,6 +1,7 @@
 import numpy as np
+import numpy.linalg as la
+import warnings as warn
 # import numpy.random as rand
-# import numpy.linalg as la
 
 
 def l1(a, b):
@@ -9,6 +10,7 @@ def l1(a, b):
 
 
 def rot2D(theta):
+    # theta is in rads
     c = np.cos(theta)
     s = np.sin(theta)
     return np.array([[c, -s],
@@ -28,3 +30,13 @@ def sub2ind(cord, grid):
 def ind2sub(idx, grid):
     # returns the coordinate from the linear index
     return np.unravel_index(idx, grid, order="F")
+
+
+def normalize(v):
+    # reutns a normalized vector
+    v = np.array(v)
+    norm = la.norm(v)
+    if norm < 10e-7:
+        warn.warn("vector has near zero magnatiude")
+        return 0*v
+    return v/norm
