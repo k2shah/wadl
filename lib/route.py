@@ -14,6 +14,11 @@ import numpy.linalg as la
 # plot
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as axes3d
+# lib
+try:
+    from .utils import *
+except (SystemError, ImportError):
+    from utils import *
 
 
 class Route(object):
@@ -31,6 +36,12 @@ class Route(object):
             # raise RuntimeError("path lengths do not mathch: {:s}".format(
             #       KMLfile))
         self.cameraSize = (54.5, 72.6)  # m
+        l, w = self.cameraSize
+        self.cameraBox = np.array([[l/2., w/2.],
+                                  [l/2., -w/2.],
+                                  [-l/2., -w/2.],
+                                  [-l/2., w/2.],
+                                  [l/2., w/2.]])
         self.speed = 4.0  # m/s
         self.triggerInt = 2  # secs
         self.interpRoute()
@@ -64,7 +75,7 @@ class Route(object):
                     cords = utm.from_latlon(self.cords[i, 1], self.cords[i, 0])
                     self.xpath.append(cords[0])
                     self.ypath.append(cords[1])
-                # rest of cords   
+                # rest of cords
                 cords = utm.from_latlon(self.cords[i+1, 1], self.cords[i+1, 0])
                 self.xpath.append(cords[0])
                 self.ypath.append(cords[1])
@@ -74,22 +85,45 @@ class Route(object):
         # get diffs
         xdiff = np.diff(self.xpath)
         ydiff = np.diff(self.ypath)
-
+        # calculate path lenght at each section
         self.arcLen = np.cumsum([0] +
                                 [la.norm([dx, dy])
                                  for dx, dy in zip(xdiff, ydiff)])
         # interp at speed * photo interval
+        # arc lenght is the lambda for x,y = curve(lambda)
         interpols = np.arange(0, self.arcLen[-1],
                               self.speed*self.triggerInt)
         self.xinterp = np.interp(interpols, self.arcLen, self.xpath)
         self.yinterp = np.interp(interpols, self.arcLen, self.ypath)
+        # get vectors for photo alignments\
+        self.dirInterp = [[dx, dy] for dx, dy
+                          in zip(np.diff(self.xinterp),
+                                 np.diff(self.yinterp))]
+        # copy the last element for the last image
+        self.dirInterp.append(self.dirInterp[-1])
+
+    def pt2gBox(self, p, v):
+        # returns the ground ppints of the image corners
+        alpha = np.arctan2(v[1], v[0])
+        R90 = rot2D(alpha)
+
+        cameraRot = np.dot(R90, self.cameraBox.T).T.tolist()
+        camera = [utm.to_latlon(p[0] + z[0], p[1] + z[1], *self.UTMZone)
+                  for z in cameraRot]
+
+        return camera
 
     def plotInterp(self, ax):
-        for x, y, in zip(self.xinterp, self.yinterp):
+        for x, y, v in zip(self.xinterp, self.yinterp, self.dirInterp):
             lat, lng = utm.to_latlon(x, y, *self.UTMZone)
-            ax.scatter(lng, lat, c='c')
+            # plot the camera
+            camera = np.array(self.pt2gBox([x, y], v))
+            ax.fill(camera[:, 1], camera[:, 0],
+                    color=(.5625, 0, 0, .3))
+            # plot the point
+            ax.scatter(lng, lat, c='c', s=2)
             # plt.draw()
-            # plt.pause(.00001)
+            # plt.pause(.00000001)
 
     def plotRoute(self, ax):
         # plots the route
@@ -104,7 +138,7 @@ class Route(object):
 
             ax.plot(self.cords[i:i+2, 0],
                     self.cords[i:i+2, 1],
-                    c=col, s=.01)
+                    c=col, s=2)
 
     def plot(self, ax):
         # runs all the plot subruts
@@ -178,11 +212,10 @@ def main(mission):
     routeSeq.sort()
     print(routeSeq)
     for rnum, key in routeSeq:
-        routes[key].plot(ax)
         plt.title(key)
+        routes[key].plot(ax)
         plt.draw()
         plt.pause(.0000001)
-        time.sleep(1)
 
     plt.show()
 
