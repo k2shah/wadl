@@ -119,9 +119,9 @@ class Route(object):
             # plot the camera
             camera = np.array(self.pt2gBox([x, y], v))
             ax.fill(camera[:, 1], camera[:, 0],
-                    color=(.5625, 0, 0, .3))
+                    color=(.5625, 0, 0, .6))
             # plot the point
-            ax.scatter(lng, lat, c='c', s=2)
+            # ax.scatter(lng, lat, c='c', s=2)
             # plt.draw()
             # plt.pause(.00000001)
 
@@ -149,24 +149,18 @@ class Route(object):
 class Fence(object):
     """Holds the gps cords of the boundary of the area"""
 
-    def __init__(self, file, longLat=True):
+    def __init__(self, file):
         print(file)
         # parse file
         with open(file) as csvfile:
             data = [(line[1], line[2])
                     for line in csv.reader(csvfile, delimiter=',')]
-            # toss 1st line and convert to float
-            self.GPScords = [list(map(float, line))
-                             for line in data[1:]]
+        # toss 1st line and convert to float
+        self.GPScords = [list(map(float, line)) for line in data[1:]]
         # convert to utm
-        if longLat:
-            # assumes the file is in long, lat
-            UTMData = [utm.from_latlon(cords[1], cords[0])
-                       for cords in self.GPScords]
-        else:
-            # assumes the file is in lat, long
-            UTMData = [utm.from_latlon(cords[0], cords[1])
-                       for cords in self.GPScords]
+        # assumes the file is in long, lat (x,y)
+        UTMData = [utm.from_latlon(cords[1], cords[0])
+                   for cords in self.GPScords]
         self.UTMZone = UTMData[0][2:]
         print(self.UTMZone)
         self.flatCords = np.array([[data[0], data[1]] for data in UTMData])
@@ -179,7 +173,7 @@ class Fence(object):
 
 def main(mission):
     # get geo fence
-    fenceFile = '../data/croz_geofence/croz_west_3.csv'
+    fenceFile = '../data/croz_geofence/croz_west.csv'
     crozFence = Fence(fenceFile)
 
     # get route files
@@ -222,6 +216,7 @@ def main(mission):
 
 if __name__ == '__main__':
     missionDir = "../missions"
-    missionName = "croz2-fine"
+    # missionName = "croz2-fine"
+    missionName = "croz3-full"
     missionPath = os.path.join(missionDir, missionName)
     main(missionPath)

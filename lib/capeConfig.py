@@ -33,17 +33,17 @@ class CrozConfig(ShapeConfig):
 
         # croz 40
 
-        zoneCords.append([(78030, 1473100), (78650, 1472900),
-                         (78650, 1472550), (78200, 1472550)])
-        zoneCords.append([(78650, 1472740), (79100, 1472500),
-                         (79100, 1472250), (78650, 1472250)])
+        zoneCords.append([(78030, 1473100), (78635, 1472920),
+                         (78635, 1472550), (78200, 1472550)])
+        zoneCords.append([(78635, 1472780), (79100, 1472500),
+                         (79100, 1472250), (78635, 1472250)])
         zoneCords.append([(79100, 1472500), (79500, 1472300),
                          (79500, 1471840), (79100, 1471900)])
-        zoneCords.append([(78200, 1472550), (78650, 1472550),
-                         (78650, 1471900), (78210, 1472100)])
-        zoneCords.append([(78650, 1472250), (79100, 1472250),
-                          (79100, 1471900), (78650, 1471900)])
-        zoneCords.append([(78650, 1471900), (79000, 1471900),
+        zoneCords.append([(78200, 1472550), (78635, 1472550),
+                         (78635, 1471900), (78210, 1472100)])
+        zoneCords.append([(78635, 1472250), (79100, 1472250),
+                          (79100, 1471900), (78635, 1471900)])
+        zoneCords.append([(78635, 1471900), (79000, 1471900),
                           (79000, 1471450), (78700, 1471450)])
 
 
@@ -158,19 +158,18 @@ if __name__ == '__main__':
     agentParameters = {}
     agentParameters["base"] = 7
     agentParameters["maxTime"] = 35
-    agentParameters["initPos"] = [0, 55]
+    agentParameters["initPos"] = [0]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=2)
+    config = CrozConfig(agentParameters=agentParameters, step=step, zone=5)
     # config = RookConfig(agentParameters=agentParameters, step=step)
     # config = RoydsConfig(agentParameters=agentParameters, step=step)
-
-    metagraph = Metagraph(config.stateSpace,
-                          config.con,
-                          config.worldSize)
-    metagraph.reduce(3, verbose=True)
+    # metagraph = Metagraph(config.stateSpace,
+    #                       config.con,
+    #                       config.worldSize)
+    # metagraph.reduce(3, verbose=True)
     # print(metagraph)
     # plot
     fig, ax = plt.subplots()
     config.plot(ax, showCamera=False)
-    metagraph.plot(ax, config.world)
+    # metagraph.plot(ax, config.world)
     plt.show()
