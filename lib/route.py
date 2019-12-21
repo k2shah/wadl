@@ -17,8 +17,10 @@ import mpl_toolkits.mplot3d.axes3d as axes3d
 # lib
 try:
     from .utils import *
+    from .fence import Fence, Areas
 except (SystemError, ImportError):
     from utils import *
+    from fence import Fence, Areas
 
 
 class Route(object):
@@ -35,13 +37,13 @@ class Route(object):
             print(self.cords.shape)
             # raise RuntimeError("path lengths do not mathch: {:s}".format(
             #       KMLfile))
-        self.cameraSize = (54.5, 72.6)  # m
+        self.cameraSize = (55, 73)  # m
         l, w = self.cameraSize
         self.cameraBox = np.array([[l/2., w/2.],
-                                  [l/2., -w/2.],
-                                  [-l/2., -w/2.],
-                                  [-l/2., w/2.],
-                                  [l/2., w/2.]])
+                                   [l/2., -w/2.],
+                                   [-l/2., -w/2.],
+                                   [-l/2., w/2.],
+                                   [l/2., w/2.]])
         self.speed = 4.0  # m/s
         self.triggerInt = 2  # secs
         self.interpRoute()
@@ -113,13 +115,13 @@ class Route(object):
 
         return camera
 
-    def plotInterp(self, ax):
+    def plotInterp(self, ax, color=(.5625, 0, 0, .6)):
         for x, y, v in zip(self.xinterp, self.yinterp, self.dirInterp):
             lat, lng = utm.to_latlon(x, y, *self.UTMZone)
             # plot the camera
             camera = np.array(self.pt2gBox([x, y], v))
             ax.fill(camera[:, 1], camera[:, 0],
-                    color=(.5625, 0, 0, .6))
+                    color=color)
             # plot the point
             # ax.scatter(lng, lat, c='c', s=2)
             # plt.draw()
@@ -146,35 +148,15 @@ class Route(object):
         self.plotInterp(ax)
 
 
-class Fence(object):
-    """Holds the gps cords of the boundary of the area"""
-
-    def __init__(self, file):
-        print(file)
-        # parse file
-        with open(file) as csvfile:
-            data = [(line[1], line[2])
-                    for line in csv.reader(csvfile, delimiter=',')]
-        # toss 1st line and convert to float
-        self.GPScords = [list(map(float, line)) for line in data[1:]]
-        # convert to utm
-        # assumes the file is in long, lat (x,y)
-        UTMData = [utm.from_latlon(cords[1], cords[0])
-                   for cords in self.GPScords]
-        self.UTMZone = UTMData[0][2:]
-        print(self.UTMZone)
-        self.flatCords = np.array([[data[0], data[1]] for data in UTMData])
-        self.GPScords = np.array(self.GPScords)
-
-    def plot(self, ax):
-        ax.plot(self.GPScords[:, 0], self.GPScords[:, 1],
-                c='g', linewidth=.5)
-
-
 def main(mission):
     # get geo fence
-    fenceFile = '../data/croz_geofence/croz_west.csv'
-    crozFence = Fence(fenceFile)
+    fenceFileCroz = '../data/croz_geofence/croz_west_3.csv'
+    crozFence = Fence(fenceFileCroz)
+    fenceFileRook = '../data/croz_east/croz_rook_3.csv'
+    rookFence = Fence(fenceFileRook)
+    # get areas
+    file = "../data/croz_geofence/areas.kml"
+    crozAreas = Areas(file)
 
     # get route files
     kmlPath = os.path.join(mission, "*.kml")
@@ -195,22 +177,27 @@ def main(mission):
             print("kml file does not exist: {:s}".format(routeName))
 
     # plot stuff
-    fig = plt.figure(figsize=(8, 8))
+    fig = plt.figure(figsize=(16, 9))
     # ax = fig.add_subplot(1, 1, 1, projection='3d')
     ax = fig.add_subplot(111)
     crozFence.plot(ax)
+    rookFence.plot(ax)
+    crozAreas.plot(ax)
 
     # build route sequence
-    routeSeq = [(float(r.split('-')[0].strip('r')), r)
+    routeSeq = [(int(r.split('-')[0].strip('r')), r)
                 for r in list(routes.keys())]
     routeSeq.sort()
     print(routeSeq)
+    cm = plt.cm.get_cmap('jet', len(routeSeq))
+    alpha = .6
     for rnum, key in routeSeq:
         plt.title(key)
-        routes[key].plot(ax)
+        color = cm(rnum-1)
+        color = (*color[0:3], alpha)
+        routes[key].plotInterp(ax, color=color)
         plt.draw()
         plt.pause(.0000001)
-
     plt.show()
 
 

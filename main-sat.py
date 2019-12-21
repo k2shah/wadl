@@ -143,16 +143,16 @@ def main(outDir):
     agentParameters = {}
     agentParameters["base"] = 0
     agentParameters["maxTime"] = 60
-    agentParameters["initPos"] = [0, 18]
+    agentParameters["initPos"] = [0]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 40
-    ver = 3
+    ver = 4
     # input files
 
     # croz west
-    zone = 4
+    zone = 5
     config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
     outDir += "croz" + '_z' + str(zone)
 
