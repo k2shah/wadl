@@ -160,7 +160,7 @@ if __name__ == '__main__':
     agentParameters["maxTime"] = 35
     agentParameters["initPos"] = [0, 9]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=0)
+    config = CrozConfig(agentParameters=agentParameters, step=step, zone=2)
     # config = RookConfig(agentParameters=agentParameters, step=step)
     # config = RoydsConfig(agentParameters=agentParameters, step=step
     # metagraph = Metagraph(config.stateSpace,
