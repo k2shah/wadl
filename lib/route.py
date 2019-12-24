@@ -130,9 +130,9 @@ class Route(object):
     def plotRoute(self, ax):
         # plots the route
         for i, action in enumerate(self.actions):
-            if i < 1 or i > (len(self.actions)-2):
-                # skip the 1st and last fe
-                continue
+            # if i < 1 or i > (len(self.actions)-2):
+            #     # skip the 1st and last fe
+            #     continue
             if action:
                 col = "r"
             else:
@@ -140,7 +140,7 @@ class Route(object):
 
             ax.plot(self.cords[i:i+2, 0],
                     self.cords[i:i+2, 1],
-                    c=col, s=2)
+                    c=col)
 
     def plot(self, ax):
         # runs all the plot subruts
@@ -180,6 +180,9 @@ def main(mission):
     fig = plt.figure(figsize=(16, 9))
     # ax = fig.add_subplot(1, 1, 1, projection='3d')
     ax = fig.add_subplot(111)
+    ax.set_xlim(169.18, 169.3)
+    ax.set_ylim(-77.4660, -77.446)
+
     crozFence.plot(ax)
     rookFence.plot(ax)
     crozAreas.plot(ax)
@@ -189,13 +192,15 @@ def main(mission):
                 for r in list(routes.keys())]
     routeSeq.sort()
     print(routeSeq)
-    cm = plt.cm.get_cmap('jet', len(routeSeq))
+    nColors = 9
+    cm = plt.cm.get_cmap('Set1', nColors)
     alpha = .6
     for rnum, key in routeSeq:
         plt.title(key)
-        color = cm(rnum-1)
+        color = cm((rnum-1) % nColors)
         color = (*color[0:3], alpha)
         routes[key].plotInterp(ax, color=color)
+        # routes[key].plotRoute(ax)
         plt.draw()
         plt.pause(.0000001)
     plt.show()
