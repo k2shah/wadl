@@ -1,0 +1,1060 @@
+16:01:08.069 I/DjiSharedApp : Phone information: manufacturer(samsung), model(SM-T510), version(28), release(9), totalMemory(1970008064)
+16:01:08.071 I/ApplicationMainServiceBase : ---> onCreate (DjiAppMainServiceImpl), creationTimeStamp=1577242868070
+16:01:08.073 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onCreate
+16:01:08.234 I/MediaStreamerContainerImpl : initializing mstreamer... 
+16:01:08.266 I/WithAppMainServiceActivity : (DjiUsbAccessoryAttachedActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+16:01:08.298 I/DjiSharedUsbAccessoryAttachedActivity : onServiceConnectionChanged : CONNECTED to 1577242868070
+16:01:08.299 I/DroneBridgeImpl : onUsbAccessoryAttached
+16:01:08.304 I/UsbAccessoryManagerImplV2 : There are 1 attached UsbAccessory
+16:01:08.307 I/UsbAccessoryManagerImplV2 : permission(true) - UsbAccessory[mManufacturer=DJI, mModel=T600, mDescription=DJI Inspire 1, mVersion=v2.35.0.0, mUri=www.dji.com, mSerial=000000000000000]
+16:01:08.446 I/WithAppMainServiceActivity : (DjiSelectDroneTypeActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+16:01:08.496 I/DjiSharedSelectDroneTypeActivity : permissions granted.
+16:01:08.501 I/DroneBridgeImpl : DJISDKManager -> registerApp...
+16:01:08.502 I/DroneBridgeImpl : DJISDKManager -> SDK VERSION = 4.9
+16:01:10.053 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+16:01:10.055 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+16:01:10.055 I/DjiSharedSelectDroneTypeActivity : DJI SDK Registration SUCCESS
+16:01:10.079 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+16:01:10.326 I/BaseActivityVsm : setUpKeyListeners for: isLandingConfirmationNeeded
+16:01:10.327 W/BaseActivityVsm : isLandingConfirmationNeeded ERROR : Not Support
+16:01:10.332 I/DjiSharedMainActivity : setUpKeyListeners... (IS_OPTICAL_ZOOM_SUPPORTED)
+16:01:10.333 W/DjiSharedMainActivity : opticalZoomSupportedKey ERROR : Not Support
+16:01:10.338 I/MainIndicatorsFragment : setUpKeyListeners for: SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold
+16:01:10.339 W/MainIndicatorsFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+16:01:10.339 W/MainIndicatorsFragment : LowBatteryWarningThreshold ERROR : Not Support
+16:01:10.341 I/RemainingFlightTimeFragment : setUpKeyListeners for: Connection, ChargeRemainingInPercent, CurrentLandImmediatelyBattery, BatteryPercentageNeededToGoHome, SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold, RemainingFlightTime
+16:01:10.342 W/RemainingFlightTimeFragment : ChargeRemainingInPercent ERROR : Not Support
+16:01:10.343 W/RemainingFlightTimeFragment : CurrentLandImmediatelyBattery ERROR : Not Support
+16:01:10.344 W/RemainingFlightTimeFragment : BatteryPercentageNeededToGoHome ERROR : Not Support
+16:01:10.345 W/RemainingFlightTimeFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+16:01:10.345 W/RemainingFlightTimeFragment : LowBatteryWarningThreshold ERROR : Not Support
+16:01:10.346 W/RemainingFlightTimeFragment : RemainingFlightTime ERROR : Not Support
+16:01:10.941 I/ObstacleAvoidanceFragment : setUpKeyListeners for: VisionDetectionState
+16:01:10.942 W/ObstacleAvoidanceFragment : VisionDetectionState ERROR : Not Support
+16:01:10.954 I/WithAppMainServiceActivity : (DjiMainActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+16:01:11.071 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+16:01:11.101 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for DjiFpvMiniFragment.
+16:01:11.102 I/DjiVideoFeedProvider : InternalFeedConsumer is SET.
+16:01:11.103 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+16:01:11.127 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+16:01:11.128 I/DjiVideoFeedProvider : PhysicalSource of a PrimaryVideoFeed is NULL
+16:01:11.130 I/DjiVideoFeedProvider : PhysicalSource of a SecondaryVideoFeed is NULL
+16:01:11.153 I/DjiVideoFeedProvider : PhysicalSource of a TranscodedVideoFeed is NULL
+16:01:11.211 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=0
+trans.=NULL(UNUSED)
+16:01:11.212 W/DjiFpvFragment : No need to re-init codecManager!
+16:01:11.214 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=1
+trans.=NULL(UNUSED)
+16:01:11.216 I/DjiFpvFragment : Starting CodecManager, w=461 h=326 src=Camera
+16:01:11.264 I/VsmToUcsConnectorBase : UCS connector started on 54322
+16:01:11.266 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+16:01:11.269 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+16:01:12.212 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+16:01:12.221 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+16:01:12.222 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+16:01:12.225 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+16:01:12.231 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+16:01:12.232 W/DjiFpvFragment : No need to re-init codecManager!
+16:01:12.234 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+16:01:12.235 W/DjiFpvFragment : No need to re-init codecManager!
+16:01:12.528 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+16:01:13.038 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (CAMERA), but vm is NULL, so far ignore
+16:01:13.051 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (GIMBAL), but vm is NULL, so far ignore
+16:01:13.071 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (FLIGHT_CONTROLLER), but vm is NULL, so far ignore
+16:01:13.074 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (BATTERY), but vm is NULL, so far ignore
+16:01:13.081 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (AIR_LINK), but vm is NULL, so far ignore
+16:01:13.093 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (REMOTE_CONTROLLER), but vm is NULL, so far ignore
+16:01:13.112 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+16:01:13.113 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+16:01:13.114 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+16:01:13.116 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+16:01:13.117 W/DjiFpvFragment : No need to re-init codecManager!
+16:01:13.118 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+16:01:13.119 W/DjiFpvFragment : No need to re-init codecManager!
+16:01:14.306 I/SsdpPortsMonitor : Service discovery: Network interface enabled: lo
+16:01:16.464 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30831
+16:01:16.464 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+16:01:18.466 I/DroneBridgeImpl : OK, starting drone init...
+16:01:18.479 I/DroneBridgeImpl : OK, connected DJI_M100 (041DF30831)
+16:01:18.481 I/MyBatteryUpdateCallback : initDroneUpdate - Battery - singleBatteryMode (1)
+16:01:18.487 I/MyBatteryUpdateCallback : setUpKeyListeners for: AggregationState, isInSingleBatteryMode, Overviews
+16:01:18.489 W/MyBatteryUpdateCallback : AggregationState ERROR : The feature is unsupported.
+16:01:18.491 I/MyBatteryUpdateCallback : singleBatteryModeKey = false
+16:01:18.493 W/MyBatteryUpdateCallback : Overviews ERROR : The feature is unsupported.
+16:01:18.499 I/MyBatteryUpdateCallback : setUpKeyListeners for [0]: ChargeRemainingInPercent, ChargeRemaining, Voltage, Current, Temperature, LifetimeRemaining, FullChargeCapacity, NumberOfDischarges, isSmartBattery, ConnectionState, FirmwareVersion, SerialNumber
+16:01:18.510 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=25843, currentCurrent=870, remainPowerPercent=98, smartBattery=false, temperature=0.0}.
+16:01:18.511 I/ExceptionLogger : Battery update ignored.
+16:01:18.516 I/MyBatteryUpdateCallback : Battery #1 has NORMAL ConnectionState
+16:01:18.523 I/FailsafeControllerDjiImpl : setUpKeyListeners for: GoHomeAltitude, MaxFlightHeight, SmartReturnToHomeEnabled, LowBatteryWarningThreshold, SeriousLowBatteryWarningThreshold
+16:01:18.537 I/MyFlightControllerUpdateCallback : setUpKeyListeners for: AircraftLocationLatitude, AircraftLocationLongitude, Altitude, GPSSignalLevel, SatelliteCount, AttitudePitch, AttitudeRoll, AttitudeYaw, VelocityX, VelocityY, VelocityZ, FlightMode, AreMotorsOn, IsFlying, HomeLocationLatitude, HomeLocationLongitude, AircraftName, FirmwarePackageVersion, FirmwareVersion
+16:01:18.594 I/DroneMainControllerDjiImpl : onFlightMode change: UNKNOWN -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 118)
+16:01:18.596 I/MyFlightControllerUpdateCallback : Home -77.4612086 / NULL
+16:01:18.598 I/MyFlightControllerUpdateCallback : Home NULL / 169.1858402
+16:01:18.599 I/MyFlightControllerUpdateCallback : AircraftName = waddle2
+16:01:18.600 I/MyFlightControllerUpdateCallback : FirmwareVersion = 1.3.1.82
+16:01:18.601 I/MyFlightControllerUpdateCallback : FlightControllerVersion = 03.01.06.108
+16:01:18.602 I/MyRtkUpdateCallback : setUpKeyListeners for: RTKEnabled, RTKState, RTKFusionHeading, RTKFusionLocation, IsRTKConnected, IsRTKFusionDataUsable
+16:01:18.603 W/MyRtkUpdateCallback : RTKEnabled ERROR : The feature is unsupported.
+16:01:18.604 W/MyRtkUpdateCallback : RTKState ERROR : The feature is unsupported.
+16:01:18.605 W/MyRtkUpdateCallback : RTKFusionHeading ERROR : The feature is unsupported.
+16:01:18.606 W/MyRtkUpdateCallback : RTKFusionLocation ERROR : The feature is unsupported.
+16:01:18.607 W/MyRtkUpdateCallback : IsRTKConnected ERROR : The feature is unsupported.
+16:01:18.609 W/MyRtkUpdateCallback : IsRTKFusionDataUsable ERROR : The feature is unsupported.
+16:01:18.610 I/MyGimbalUpdateCallback : setUpKeyListeners for: AttitudeInDegrees, AttitudeYaw, Capabilities, FirmwareVersion, SerialNumber
+16:01:18.611 I/MyGimbalUpdateCallback : gimbal.getCapabilities RESULT: pitch [-90..30], roll [-15..15], yaw [-180..180]
+16:01:18.614 W/MyGimbalUpdateCallback : SerialNumber ERROR : The feature is unsupported.
+16:01:18.615 I/MyRemoteControllerUpdateCallback : setUpKeyListeners for: ChargeRemaining, FirmwareVersion, SerialNumber
+16:01:18.616 I/MySdCardUpdateCallback : setUpKeyListeners for: SDCardRemainingSpaceInMB, SDCardTotalSpaceInMB, SDCardIsInserted
+16:01:18.618 I/MySignalQualityUpdateCallback : setUpKeyListeners... (uplinkKey, downlinkKey) for LB
+16:01:18.620 I/MySimulatorUpdateCallbackAndController : setUpKeyListeners for: IsSimulatorStarted
+16:01:18.621 I/DjiOnboardMessageSender : setUpKeyListeners... (IsOnBoardSDKAvailable)
+16:01:18.622 I/DjiOnboardMessageSender : IS_ON_BOARD_SDK_AVAILABLE = true
+16:01:18.623 I/DjiOnboardMessageSender : Set flight controller callback prev: (0) new: (181687025)
+16:01:18.623 I/DjiOnboardMessageSender : Bind to flight controller
+16:01:18.624 I/DjiMoveController : setUpKeyListeners for: VirtualStickControlModeEnabled, isVirtualStickControlModeAvailable
+16:01:18.626 I/CameraSettingsControllerDjiImpl : setUpKeyListeners for: FocusTarget
+16:01:18.628 I/CameraPhotoSettingsControllerImpl : setUpKeyListeners for: ShootPhotoModeRange, ShootPhotoMode, PhotoBurstCount, PhotoAEBCount, PhotoTimeIntervalSettings, PhotoAspectRatioRange, PhotoAspectRatio, PhotoFileFormatRange, PhotoFileFormat
+16:01:18.634 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_4_3
+16:01:18.634 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_16_9
+16:01:18.638 I/CameraVideoSettingsControllerImpl : setUpKeyListeners for: VideoResolutionFrameRateRange, ResolutionFrameRate, VideoFileFormat, VideoStandard
+16:01:18.646 I/CameraExposureSettingsControllerImpl : setUpKeyListeners for: IsMeteringModeSupported, MeteringMode, ExposureMode, ISO, ISORange, Aperture, ApertureRange, ShutterSpeed, ShutterSpeedRange, ExposureCompensation, ExposureCompensationRange
+16:01:18.647 W/CameraExposureSettingsControllerImpl : IsMeteringModeSupported ERROR : The feature is unsupported.
+16:01:18.650 I/CameraOtherSettingsControllerImpl : setUpKeyListeners for: AntiFlickerFrequency, WhiteBalance
+16:01:18.653 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR The feature is unsupported.
+16:01:18.658 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR Camera param get failed
+16:01:18.659 I/CameraZoomControllerDjiImpl : setUpKeyListeners for: isTapZoomSupported, TapZoomEnabled
+16:01:18.660 W/CameraZoomControllerDjiImpl : TapZoomEnabled ERROR : The feature is unsupported.
+16:01:18.661 I/CameraZoomControllerDjiImpl : IS_OPTICAL_ZOOM_SUPPORTED = false
+16:01:18.726 I/VsmToUcsConnectorBase : Sending registerDevice (1361540471)to ALL 
+16:01:18.752 I/VsmToUcsConnectorBase : Sending initial statuses (1361540471) to ALL
+16:01:18.753 I/MegaTask : MegaTask: DISARMED downlink/uplink
+16:01:18.755 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+16:01:18.756 I/HomeLocationTask : sending new home position = -77.4612086 169.1858402
+16:01:18.758 I/DroneStateController : setUpKeyListeners for: CompassHasError, FlightWindWarning, MaxFlightRadius, MaxFlightRadiusEnabled, HasReachedMaxFlightRadius
+16:01:18.764 I/DroneStateController : FLIGHT_WIND_WARNING state: LEVEL_0
+16:01:18.769 I/DroneStateController : HAS_REACHED_MAX_FLIGHT_RADIUS: false
+16:01:18.782 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+16:01:18.954 I/DroneStateController : MAX_FLIGHT_RADIUS: 480
+16:01:18.955 I/DroneStateController : MAX_FLIGHT_RADIUS_ENABLED: false
+16:01:20.598 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+16:01:20.604 I/HomeLocationTask : sending new home position = -77.4612086 169.1858402
+16:01:20.606 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+16:01:20.637 I/WithAppMainServiceActivity : Toast message: Drone initialized
+16:01:20.652 I/TakeOffPointTask : sending new takeOff position = -77.4612086 169.1858402
+16:01:43.975 I/AbstractDroneMainController : Command 1 locked.
+16:01:43.998 I/DroneMainControllerDjiImpl : 
+
+Mission 'r3-P.ugcs' (id=376312647)
+  Home source FIRST_WAYPOINT
+  GotoFirstWaypointMode DEFAULT
+  Return Alt 110.0, on RemoteController Lost RTH
+     1 | Spline Waypoint alt=90.00m lat=-77.4612660 lon=169.1858994 maxCR=0.0m
+     2 | Change Speed 12.0
+     3 | Spline Waypoint alt=55.49m lat=-77.4575420 lon=169.2068017 maxCR=0.0m
+     5 | Spline Waypoint alt=-31.57m lat=-77.4570403 lon=169.2190307 maxCR=0.0m
+     6 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+     8 | Spline Waypoint alt=-38.31m lat=-77.4569379 lon=169.2211449 maxCR=0.0m
+     9 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    10 | Change Speed 4.1
+    11 | Spline Waypoint alt=-46.96m lat=-77.4565815 lon=169.2216382 maxCR=0.0m
+    12 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    13 | Change Speed 3.9
+    14 | Spline Waypoint alt=-46.37m lat=-77.4566882 lon=169.2232712 maxCR=0.0m
+    15 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    16 | Change Speed 4.1
+    17 | Spline Waypoint alt=-57.89m lat=-77.4563318 lon=169.2237644 maxCR=0.0m
+    18 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    19 | Change Speed 4.0
+    20 | Spline Waypoint alt=-67.51m lat=-77.4559754 lon=169.2242576 maxCR=0.0m
+    21 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    22 | Change Speed 4.1
+    23 | Spline Waypoint alt=-77.71m lat=-77.4556190 lon=169.2247508 maxCR=0.0m
+    24 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    25 | Change Speed 4.0
+    26 | Spline Waypoint alt=-88.85m lat=-77.4552626 lon=169.2252439 maxCR=0.0m
+    27 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    28 | Change Speed 4.1
+    29 | Spline Waypoint alt=-99.45m lat=-77.4549062 lon=169.2257371 maxCR=0.0m
+    30 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    31 | Change Speed 4.0
+    32 | Spline Waypoint alt=-110.25m lat=-77.4545498 lon=169.2262302 maxCR=0.0m
+    33 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    34 | Change Speed 4.1
+    35 | Spline Waypoint alt=-119.75m lat=-77.4541934 lon=169.2267232 maxCR=0.0m
+    36 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    37 | Change Speed 4.0
+    38 | Spline Waypoint alt=-129.64m lat=-77.4538370 lon=169.2272163 maxCR=0.0m
+    39 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    40 | Change Speed 4.1
+    41 | Spline Waypoint alt=-136.77m lat=-77.4534806 lon=169.2277093 maxCR=0.0m
+    42 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    43 | Change Speed 4.0
+    44 | Spline Waypoint alt=-144.16m lat=-77.4531242 lon=169.2282023 maxCR=0.0m
+    45 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    46 | Change Speed 4.0
+    47 | Spline Waypoint alt=-137.80m lat=-77.4530176 lon=169.2265698 maxCR=0.0m
+    48 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    49 | Change Speed 3.9
+    50 | Spline Waypoint alt=-128.88m lat=-77.4529109 lon=169.2249373 maxCR=0.0m
+    51 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    52 | Change Speed 4.0
+    53 | Spline Waypoint alt=-122.82m lat=-77.4532673 lon=169.2244442 maxCR=0.0m
+    54 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    55 | Change Speed 4.0
+    56 | Spline Waypoint alt=-131.01m lat=-77.4533740 lon=169.2260767 maxCR=0.0m
+    57 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    58 | Change Speed 4.0
+    59 | Spline Waypoint alt=-122.01m lat=-77.4537304 lon=169.2255837 maxCR=0.0m
+    60 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    61 | Change Speed 3.9
+    62 | Spline Waypoint alt=-113.65m lat=-77.4540868 lon=169.2250906 maxCR=0.0m
+    63 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    64 | Change Speed 4.0
+    65 | Spline Waypoint alt=-104.00m lat=-77.4544432 lon=169.2245975 maxCR=0.0m
+    66 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    67 | Change Speed 3.9
+    68 | Spline Waypoint alt=-96.87m lat=-77.4543365 lon=169.2229648 maxCR=0.0m
+    69 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    70 | Change Speed 4.0
+    71 | Spline Waypoint alt=-87.82m lat=-77.4546929 lon=169.2224716 maxCR=0.0m
+    72 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    73 | Change Speed 4.0
+    74 | Spline Waypoint alt=-94.24m lat=-77.4547996 lon=169.2241043 maxCR=0.0m
+    75 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    76 | Change Speed 4.0
+    77 | Spline Waypoint alt=-84.23m lat=-77.4551560 lon=169.2236112 maxCR=0.0m
+    78 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    79 | Change Speed 3.9
+    80 | Spline Waypoint alt=-80.23m lat=-77.4550493 lon=169.2219784 maxCR=0.0m
+    81 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    82 | Change Speed 4.0
+    83 | Spline Waypoint alt=-70.06m lat=-77.4554057 lon=169.2214852 maxCR=0.0m
+    84 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    85 | Change Speed 4.0
+    86 | Spline Waypoint alt=-74.93m lat=-77.4555124 lon=169.2231180 maxCR=0.0m
+    87 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    88 | Change Speed 4.0
+    89 | Spline Waypoint alt=-64.73m lat=-77.4558687 lon=169.2226248 maxCR=0.0m
+    90 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    91 | Change Speed 3.9
+    92 | Spline Waypoint alt=-55.53m lat=-77.4562251 lon=169.2221315 maxCR=0.0m
+    93 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    94 | Change Speed 4.0
+    95 | Spline Waypoint alt=-51.04m lat=-77.4561185 lon=169.2204986 maxCR=0.0m
+    96 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    97 | Change Speed 4.0
+    98 | Spline Waypoint alt=-60.13m lat=-77.4557621 lon=169.2209919 maxCR=0.0m
+    99 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    100 | Change Speed 4.0
+    101 | Spline Waypoint alt=-53.96m lat=-77.4556554 lon=169.2193591 maxCR=0.0m
+    102 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    103 | Change Speed 3.9
+    104 | Spline Waypoint alt=-46.84m lat=-77.4555487 lon=169.2177264 maxCR=0.0m
+    105 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    106 | Change Speed 4.0
+    107 | Spline Waypoint alt=-37.47m lat=-77.4559051 lon=169.2172330 maxCR=0.0m
+    108 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    109 | Change Speed 4.0
+    110 | Spline Waypoint alt=-45.47m lat=-77.4560118 lon=169.2188658 maxCR=0.0m
+    111 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    112 | Change Speed 4.0
+    113 | Spline Waypoint alt=-38.82m lat=-77.4563682 lon=169.2183725 maxCR=0.0m
+    114 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    115 | Change Speed 4.0
+    116 | Spline Waypoint alt=-43.79m lat=-77.4564749 lon=169.2200053 maxCR=0.0m
+    117 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    118 | Change Speed 4.0
+    119 | Spline Waypoint alt=-37.91m lat=-77.4568312 lon=169.2195120 maxCR=0.0m
+    120 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    121 | Change Speed 4.0
+    122 | Spline Waypoint alt=-38.31m lat=-77.4569379 lon=169.2211449 maxCR=0.0m
+    123 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    124 | Change Speed 4.0
+    125 | Spline Waypoint alt=-34.50m lat=-77.4570446 lon=169.2227779 maxCR=0.0m
+    126 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    127 | Change Speed 3.9
+    128 | Spline Waypoint alt=-27.55m lat=-77.4574010 lon=169.2222846 maxCR=0.0m
+    129 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    130 | Change Speed 4.0
+    131 | Spline Waypoint alt=-26.77m lat=-77.4572943 lon=169.2206516 maxCR=0.0m
+    132 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    133 | Change Speed 3.9
+    134 | Spline Waypoint alt=-7.12m lat=-77.4572850 lon=169.2198738 maxCR=0.0m
+    135 | Change Speed 12.0
+    136 | Spline Waypoint alt=55.49m lat=-77.4575408 lon=169.2068249 maxCR=0.0m
+    138 | Spline Waypoint alt=96.77m lat=-77.4615962 lon=169.1857302 maxCR=0.0m
+    139 | Change Speed 5.0
+    140 | Spline Waypoint alt=26.21m lat=-77.4615737 lon=169.1854567 maxCR=0.0m
+    141 | Change Speed 3.0
+    142 | Land
+  minAlt=-144.16m maxAlt=96.77m
+16:01:44.031 I/DroneMainControllerDjiImpl : 
+  DJI_M100, simulator=OFF, FC=03.01.06.108 (OLD FC)
+  Generated DJIWaypointMission task contains 50 Waypoints
+  Fly CURVED with 12.00 m/s 
+  GotoFirstWaypointMode SAFELY
+  Heading AUTO and AUTO_LAND at the end
+    WP # 1 heading= 50 ( 50), alt=90.00m lat=-77.4612660 lon=169.1858994 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=654.44m 2d=653.53m vert=-34.51m
+    WP # 2 heading= 79 ( 79), alt=55.49m lat=-77.4575420 lon=169.2068017 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=313.21m 2d=300.87m vert=-87.06m
+    WP # 3 heading= 77 ( 77), alt=-31.57m lat=-77.4570403 lon=169.2190307 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=52.80m 2d=52.37m vert=-6.75m
+    WP # 4 heading= 16 ( 16), alt=-38.31m lat=-77.4569379 lon=169.2211449 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.32m 2d=41.43m vert=-8.65m
+    WP # 5 heading=106 (106), alt=-46.96m lat=-77.4565815 lon=169.2216382 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.23m 2d=41.23m vert=0.59m
+    WP # 6 heading= 16 ( 16), alt=-46.37m lat=-77.4566882 lon=169.2232712 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=43.00m 2d=41.43m vert=-11.52m
+    WP # 7 heading= 16 ( 16), alt=-57.89m lat=-77.4563318 lon=169.2237644 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.53m 2d=41.43m vert=-9.61m
+    WP # 8 heading= 16 ( 16), alt=-67.51m lat=-77.4559754 lon=169.2242576 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.67m 2d=41.43m vert=-10.21m
+    WP # 9 heading= 16 ( 16), alt=-77.71m lat=-77.4556190 lon=169.2247508 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.90m 2d=41.43m vert=-11.14m
+    WP #10 heading= 16 ( 16), alt=-88.85m lat=-77.4552626 lon=169.2252439 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.76m 2d=41.43m vert=-10.59m
+    WP #11 heading= 16 ( 16), alt=-99.45m lat=-77.4549062 lon=169.2257371 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.81m 2d=41.43m vert=-10.81m
+    WP #12 heading= 16 ( 16), alt=-110.25m lat=-77.4545498 lon=169.2262302 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.50m 2d=41.43m vert=-9.49m
+    WP #13 heading= 16 ( 16), alt=-119.75m lat=-77.4541934 lon=169.2267232 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.59m 2d=41.43m vert=-9.89m
+    WP #14 heading= 16 ( 16), alt=-129.64m lat=-77.4538370 lon=169.2272163 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.04m 2d=41.43m vert=-7.14m
+    WP #15 heading= 16 ( 16), alt=-136.77m lat=-77.4534806 lon=169.2277093 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.08m 2d=41.43m vert=-7.39m
+    WP #16 heading=-73 (-73), alt=-144.16m lat=-77.4531242 lon=169.2282023 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.71m 2d=41.23m vert=6.36m
+    WP #17 heading=-73 (-73), alt=-137.80m lat=-77.4530176 lon=169.2265698 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.18m 2d=41.23m vert=8.92m
+    WP #18 heading=-163 (-163), alt=-128.88m lat=-77.4529109 lon=169.2249373 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.87m 2d=41.43m vert=6.06m
+    WP #19 heading=106 (106), alt=-122.82m lat=-77.4532673 lon=169.2244442 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.03m 2d=41.23m vert=-8.19m
+    WP #20 heading=-163 (-163), alt=-131.01m lat=-77.4533740 lon=169.2260767 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.39m 2d=41.43m vert=9.00m
+    WP #21 heading=-163 (-163), alt=-122.01m lat=-77.4537304 lon=169.2255837 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.26m 2d=41.43m vert=8.36m
+    WP #22 heading=-163 (-163), alt=-113.65m lat=-77.4540868 lon=169.2250906 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.54m 2d=41.43m vert=9.65m
+    WP #23 heading=-73 (-73), alt=-104.00m lat=-77.4544432 lon=169.2245975 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.84m 2d=41.23m vert=7.13m
+    WP #24 heading=-163 (-163), alt=-96.87m lat=-77.4543365 lon=169.2229648 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.40m 2d=41.43m vert=9.05m
+    WP #25 heading=106 (106), alt=-87.82m lat=-77.4546929 lon=169.2224716 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.72m 2d=41.23m vert=-6.42m
+    WP #26 heading=-163 (-163), alt=-94.24m lat=-77.4547996 lon=169.2241043 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.62m 2d=41.43m vert=10.02m
+    WP #27 heading=-73 (-73), alt=-84.23m lat=-77.4551560 lon=169.2236112 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.42m 2d=41.23m vert=4.00m
+    WP #28 heading=-163 (-163), alt=-80.23m lat=-77.4550493 lon=169.2219784 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.66m 2d=41.43m vert=10.16m
+    WP #29 heading=106 (106), alt=-70.06m lat=-77.4554057 lon=169.2214852 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.51m 2d=41.23m vert=-4.86m
+    WP #30 heading=-163 (-163), alt=-74.93m lat=-77.4555124 lon=169.2231180 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.66m 2d=41.43m vert=10.19m
+    WP #31 heading=-163 (-163), alt=-64.73m lat=-77.4558687 lon=169.2226248 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.44m 2d=41.43m vert=9.20m
+    WP #32 heading=-73 (-73), alt=-55.53m lat=-77.4562251 lon=169.2221315 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.47m 2d=41.23m vert=4.49m
+    WP #33 heading= 16 ( 16), alt=-51.04m lat=-77.4561185 lon=169.2204986 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.41m 2d=41.43m vert=-9.09m
+    WP #34 heading=-73 (-73), alt=-60.13m lat=-77.4557621 lon=169.2209919 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.69m 2d=41.23m vert=6.18m
+    WP #35 heading=-73 (-73), alt=-53.96m lat=-77.4556554 lon=169.2193591 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.84m 2d=41.23m vert=7.12m
+    WP #36 heading=-163 (-163), alt=-46.84m lat=-77.4555487 lon=169.2177264 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.47m 2d=41.43m vert=9.37m
+    WP #37 heading=106 (106), alt=-37.47m lat=-77.4559051 lon=169.2172330 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.00m 2d=41.23m vert=-8.00m
+    WP #38 heading=-163 (-163), alt=-45.47m lat=-77.4560118 lon=169.2188658 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.96m 2d=41.43m vert=6.66m
+    WP #39 heading=106 (106), alt=-38.82m lat=-77.4563682 lon=169.2183725 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.52m 2d=41.23m vert=-4.97m
+    WP #40 heading=-163 (-163), alt=-43.79m lat=-77.4564749 lon=169.2200053 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.84m 2d=41.43m vert=5.88m
+    WP #41 heading=106 (106), alt=-37.91m lat=-77.4568312 lon=169.2195120 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.23m 2d=41.23m vert=-0.41m
+    WP #42 heading=106 (106), alt=-38.31m lat=-77.4569379 lon=169.2211449 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.40m 2d=41.23m vert=3.81m
+    WP #43 heading=-163 (-163), alt=-34.50m lat=-77.4570446 lon=169.2227779 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.01m 2d=41.43m vert=6.95m
+    WP #44 heading=-73 (-73), alt=-27.55m lat=-77.4574010 lon=169.2222846 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.23m 2d=41.23m vert=0.78m
+    WP #45 heading=-86 (-86), alt=-26.77m lat=-77.4572943 lon=169.2206516 corn=9.32 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=27.22m 2d=18.83m vert=19.66m
+    WP #46 heading=-95 (-95), alt=-7.12m lat=-77.4572850 lon=169.2198738 corn=9.32 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=322.86m 2d=316.74m vert=62.61m
+    WP #47 heading=-131 (-131), alt=55.49m lat=-77.4575408 lon=169.2068249 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=682.26m 2d=681.01m vert=41.28m
+    WP #48 heading=-69 (-69), alt=96.77m lat=-77.4615962 lon=169.1857302 corn=3.44 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=5.00
+        distToNext 3d=70.91m 2d=7.07m vert=-70.56m
+    WP #49 heading=-75 (-75), alt=26.21m lat=-77.4615737 lon=169.1854567 corn=1.40 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=3.00
+        distToNext 3d=3.02m 2d=3.01m vert=-0.25m
+    WP #50 heading=-75 (-75), alt=25.96m lat=-77.4615669 lon=169.1853362 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToFirst 3d=73.54m 2d=36.15m vert=-64.04m
+16:01:44.033 I/DroneMainControllerDjiImpl : Mission Upload - ReturnAltitude - set to 110.00m SKIPPED as GoHomeAltitude = 110.00m
+16:01:44.034 W/DroneMainControllerDjiImpl : Mission Upload - HomeLocation - set skipped, as drone landed
+16:01:44.034 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - check for cnt = 255, timeS = 2
+16:01:44.035 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - set skipped, as CameraSettings has same values
+16:01:44.036 I/DroneMainControllerDjiImpl : Mission Upload - ValidateReceivedMission...
+16:01:44.039 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - loadMission... (state = READY_TO_UPLOAD)
+16:01:44.043 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - uploadMission... (state = READY_TO_UPLOAD)
+16:01:45.404 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.000 (0/50)
+16:01:45.609 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.020 (1/50)
+16:01:45.814 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.040 (2/50)
+16:01:46.016 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.060 (3/50)
+16:01:46.240 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.080 (4/50)
+16:01:46.435 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.100 (5/50)
+16:01:46.648 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.120 (6/50)
+16:01:46.843 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.140 (7/50)
+16:01:47.052 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.160 (8/50)
+16:01:47.262 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.180 (9/50)
+16:01:47.465 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.200 (10/50)
+16:01:50.676 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.220 (11/50)
+16:01:50.879 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.240 (12/50)
+16:01:51.089 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.260 (13/50)
+16:01:51.296 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.280 (14/50)
+16:01:51.507 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.300 (15/50)
+16:01:51.711 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.320 (16/50)
+16:01:51.925 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.340 (17/50)
+16:01:52.130 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.360 (18/50)
+16:01:52.336 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.380 (19/50)
+16:01:52.543 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.400 (20/50)
+16:01:52.762 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.420 (21/50)
+16:01:52.969 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.440 (22/50)
+16:01:53.181 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.460 (23/50)
+16:01:53.381 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.480 (24/50)
+16:01:53.591 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.500 (25/50)
+16:01:53.798 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.520 (26/50)
+16:01:53.999 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.540 (27/50)
+16:01:54.215 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.560 (28/50)
+16:01:54.418 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.580 (29/50)
+16:01:54.627 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.600 (30/50)
+16:01:54.834 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.620 (31/50)
+16:01:55.045 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.640 (32/50)
+16:01:58.243 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.660 (33/50)
+16:01:58.455 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.680 (34/50)
+16:01:58.661 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.700 (35/50)
+16:01:58.866 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.720 (36/50)
+16:01:59.174 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.740 (37/50)
+16:01:59.394 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.760 (38/50)
+16:01:59.594 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.780 (39/50)
+16:01:59.805 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.800 (40/50)
+16:02:00.016 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.820 (41/50)
+16:02:03.222 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.840 (42/50)
+16:02:03.427 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.860 (43/50)
+16:02:03.634 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.880 (44/50)
+16:02:03.836 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.900 (45/50)
+16:02:04.042 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.920 (46/50)
+16:02:04.248 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.940 (47/50)
+16:02:04.454 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.960 (48/50)
+16:02:04.663 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.980 (49/50)
+16:02:04.868 I/MyMissionGlobalEventListener : (MyMissionGlobalEventListener) Mission Upload - OK - error is null
+16:02:04.869 I/DroneMainControllerDjiImpl : MissionUploadProgress = 1.000 (50/50)
+16:02:04.875 I/DroneMainControllerDjiImpl : Mission Upload - Result - SUCCESS
+16:02:52.131 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=25808, currentCurrent=832, remainPowerPercent=97, smartBattery=true, temperature=17.450012}.
+16:02:52.132 I/ExceptionLogger : Battery update ignored.
+16:03:18.240 I/AbstractDroneMainController : Command 3 locked.
+16:03:18.242 I/DroneMainControllerDjiImpl : WaypointMissionOperator().startMission requested... (state = READY_TO_EXECUTE ) (sinceEpoch = 119766)
+16:03:18.433 I/DroneMainControllerDjiImpl : onSwitchAutoModeResult = SUCCESS
+16:03:18.438 I/MyMissionGlobalEventListener : onExecutionStart
+16:03:18.440 I/DroneMainControllerDjiImpl : MyMissionGlobalEventListener.onMissionExecutionStart (sinceEpoch = 119964) (ignore)
+16:03:18.547 I/MyMissionGlobalEventListener : onExecutionUpdate tp=0 reached=FALSE state=INITIALIZING total=50 0/0ms
+16:03:19.158 I/MyFlightControllerUpdateCallback : Home -77.4612088 / NULL
+16:03:19.164 I/MyFlightControllerUpdateCallback : Home NULL / 169.1858665
+16:03:20.493 I/DroneMainControllerDjiImpl : onFlightMode change: GPS_ATTI -> AUTO_TAKEOFF (state = EXECUTING) (sinceEpoch = 122017)
+16:03:21.164 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+16:03:21.168 I/HomeLocationTask : sending new home position = -77.4612088 169.1858665
+16:03:21.170 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+16:03:21.191 I/TakeOffPointTask : sending new takeOff position = -77.4612088 169.1858665
+16:03:23.588 I/DroneMainControllerDjiImpl : onFlightMode change: AUTO_TAKEOFF -> GPS_WAYPOINT (state = EXECUTING) (sinceEpoch = 125112)
+16:03:23.590 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #1
+16:03:23.599 I/WithAppMainServiceActivity : Toast message: Route started
+16:03:33.684 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24038, currentCurrent=17926, remainPowerPercent=96, smartBattery=true, temperature=17.350006}.
+16:03:33.685 I/ExceptionLogger : Battery update ignored.
+16:03:44.686 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23806, currentCurrent=18629, remainPowerPercent=95, smartBattery=true, temperature=17.75}.
+16:03:44.687 I/ExceptionLogger : Battery update ignored.
+16:03:55.652 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23990, currentCurrent=14843, remainPowerPercent=94, smartBattery=true, temperature=18.350006}.
+16:03:55.653 I/ExceptionLogger : Battery update ignored.
+16:04:01.923 I/MyMissionGlobalEventListener : onExecutionUpdate tp=0 reached=TRUE state=BEGIN_ACTION total=50 43376/43376ms
+16:04:01.926 I/DroneMainControllerDjiImpl : onMissionWpReached: #1(continue series if running)
+16:04:01.928 I/DroneMainControllerDjiImpl : changing speed to 12.0 m/s
+16:04:02.027 I/MyMissionGlobalEventListener : onExecutionUpdate tp=1 reached=TRUE state=CURVE_MODE_MOVING total=50 103/43479ms
+16:04:02.029 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #2
+16:04:02.121 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 12.0m/s
+16:04:09.633 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23911, currentCurrent=15926, remainPowerPercent=93, smartBattery=true, temperature=19.050018}.
+16:04:09.634 I/ExceptionLogger : Battery update ignored.
+16:04:22.664 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23909, currentCurrent=15610, remainPowerPercent=92, smartBattery=true, temperature=19.850006}.
+16:04:22.665 I/ExceptionLogger : Battery update ignored.
+16:04:37.677 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24117, currentCurrent=13594, remainPowerPercent=91, smartBattery=true, temperature=20.350006}.
+16:04:37.681 I/ExceptionLogger : Battery update ignored.
+16:04:53.088 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24024, currentCurrent=14068, remainPowerPercent=90, smartBattery=true, temperature=20.649994}.
+16:04:53.090 I/ExceptionLogger : Battery update ignored.
+16:04:58.006 I/MyMissionGlobalEventListener : onExecutionUpdate tp=1 reached=TRUE state=CURVE_MODE_TURNING total=50 55980/99459ms
+16:04:58.008 I/DroneMainControllerDjiImpl : onMissionWpReached: #2 (stopSeries)
+16:05:01.287 I/MyMissionGlobalEventListener : onExecutionUpdate tp=2 reached=FALSE state=CURVE_MODE_MOVING total=50 3281/102740ms
+16:05:01.288 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #3
+16:05:07.669 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24259, currentCurrent=10012, remainPowerPercent=89, smartBattery=true, temperature=21.050018}.
+16:05:07.670 I/ExceptionLogger : Battery update ignored.
+16:05:26.675 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24235, currentCurrent=9927, remainPowerPercent=88, smartBattery=true, temperature=21.149994}.
+16:05:26.676 I/ExceptionLogger : Battery update ignored.
+16:05:26.764 I/MyMissionGlobalEventListener : onExecutionUpdate tp=2 reached=TRUE state=CURVE_MODE_TURNING total=50 25477/128217ms
+16:05:26.766 I/DroneMainControllerDjiImpl : onMissionWpReached: #3 (stopSeries)
+16:05:29.952 I/MyMissionGlobalEventListener : onExecutionUpdate tp=3 reached=FALSE state=CURVE_MODE_MOVING total=50 3188/131405ms
+16:05:29.953 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #4
+16:05:29.956 I/CameraControllerDjiImpl : startSeries - Step 1 - intervalParam CHECKED - captureCount = 255, timeIntervalInSeconds = 2
+16:05:29.958 I/CameraControllerDjiImpl : startSeries - Step 2 - cameraMode CHECKED - READY_FOR_PHOTO
+16:05:29.960 I/CameraControllerDjiImpl : startSeries(ShootPhotoMode) -> ShootPhotoMode.INTERVAL
+16:05:31.072 I/MyMissionGlobalEventListener : onExecutionUpdate tp=3 reached=TRUE state=CURVE_MODE_TURNING total=50 1120/132525ms
+16:05:31.074 I/DroneMainControllerDjiImpl : onMissionWpReached: #4(continue series if running)
+16:05:31.075 I/DroneMainControllerDjiImpl : changing speed to 4.1 m/s
+16:05:31.585 I/CameraControllerDjiImpl : startSeries - Step 1 - intervalParam CHECKED - captureCount = 255, timeIntervalInSeconds = 2
+16:05:31.586 I/CameraControllerDjiImpl : startSeries - Step 2 - cameraMode CHECKED - READY_FOR_PHOTO
+16:05:31.588 I/CameraControllerDjiImpl : startSeries - Step 3 - shootPhotoMode CHECKED - INTERVAL
+16:05:31.589 I/CameraControllerDjiImpl : startSeries(setCameraMode) CHECKED(done)
+16:05:32.206 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.1m/s
+16:05:33.466 I/WithAppMainServiceActivity : Toast message: Starting photos
+16:05:36.720 I/MyMissionGlobalEventListener : onExecutionUpdate tp=4 reached=FALSE state=CURVE_MODE_MOVING total=50 5648/138173ms
+16:05:36.722 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #5
+16:05:37.429 I/MyMissionGlobalEventListener : onExecutionUpdate tp=4 reached=TRUE state=CURVE_MODE_TURNING total=50 709/138882ms
+16:05:37.432 I/DroneMainControllerDjiImpl : onMissionWpReached: #5(continue series if running)
+16:05:37.434 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:05:37.633 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:05:43.606 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23771, currentCurrent=15416, remainPowerPercent=87, smartBattery=true, temperature=21.25}.
+16:05:43.607 I/ExceptionLogger : Battery update ignored.
+16:05:45.957 I/MyMissionGlobalEventListener : onExecutionUpdate tp=5 reached=FALSE state=CURVE_MODE_MOVING total=50 8528/147410ms
+16:05:45.958 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #6
+16:05:46.256 I/MyMissionGlobalEventListener : onExecutionUpdate tp=5 reached=TRUE state=CURVE_MODE_TURNING total=50 299/147709ms
+16:05:46.258 I/DroneMainControllerDjiImpl : onMissionWpReached: #6(continue series if running)
+16:05:46.259 I/DroneMainControllerDjiImpl : changing speed to 4.1 m/s
+16:05:46.370 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.1m/s
+16:05:54.358 I/MyMissionGlobalEventListener : onExecutionUpdate tp=6 reached=FALSE state=CURVE_MODE_MOVING total=50 8102/155811ms
+16:05:54.359 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #7
+16:05:55.177 I/MyMissionGlobalEventListener : onExecutionUpdate tp=6 reached=TRUE state=CURVE_MODE_TURNING total=50 819/156630ms
+16:05:55.179 I/DroneMainControllerDjiImpl : onMissionWpReached: #7(continue series if running)
+16:05:55.180 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:05:55.280 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:05:58.182 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23831, currentCurrent=13289, remainPowerPercent=86, smartBattery=true, temperature=21.450012}.
+16:05:58.183 I/ExceptionLogger : Battery update ignored.
+16:06:05.248 I/MyMissionGlobalEventListener : onExecutionUpdate tp=7 reached=FALSE state=CURVE_MODE_MOVING total=50 10071/166701ms
+16:06:05.250 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #8
+16:06:05.858 I/MyMissionGlobalEventListener : onExecutionUpdate tp=7 reached=TRUE state=CURVE_MODE_TURNING total=50 610/167311ms
+16:06:05.860 I/DroneMainControllerDjiImpl : onMissionWpReached: #8(continue series if running)
+16:06:05.866 I/DroneMainControllerDjiImpl : changing speed to 4.1 m/s
+16:06:06.062 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.1m/s
+16:06:14.625 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23989, currentCurrent=10229, remainPowerPercent=85, smartBattery=true, temperature=21.75}.
+16:06:14.626 I/ExceptionLogger : Battery update ignored.
+16:06:15.817 I/MyMissionGlobalEventListener : onExecutionUpdate tp=8 reached=FALSE state=CURVE_MODE_MOVING total=50 9959/177270ms
+16:06:15.818 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #9
+16:06:16.436 I/MyMissionGlobalEventListener : onExecutionUpdate tp=8 reached=TRUE state=CURVE_MODE_TURNING total=50 619/177889ms
+16:06:16.438 I/DroneMainControllerDjiImpl : onMissionWpReached: #9(continue series if running)
+16:06:16.439 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:06:16.533 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:06:26.501 I/MyMissionGlobalEventListener : onExecutionUpdate tp=9 reached=FALSE state=CURVE_MODE_MOVING total=50 10065/187954ms
+16:06:26.503 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #10
+16:06:27.328 I/MyMissionGlobalEventListener : onExecutionUpdate tp=9 reached=TRUE state=CURVE_MODE_TURNING total=50 827/188781ms
+16:06:27.330 I/DroneMainControllerDjiImpl : onMissionWpReached: #10(continue series if running)
+16:06:27.332 I/DroneMainControllerDjiImpl : changing speed to 4.1 m/s
+16:06:27.427 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.1m/s
+16:06:28.688 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23710, currentCurrent=14117, remainPowerPercent=84, smartBattery=true, temperature=21.950012}.
+16:06:28.689 I/ExceptionLogger : Battery update ignored.
+16:06:37.278 I/MyMissionGlobalEventListener : onExecutionUpdate tp=10 reached=FALSE state=CURVE_MODE_MOVING total=50 9950/198731ms
+16:06:37.279 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #11
+16:06:38.001 I/MyMissionGlobalEventListener : onExecutionUpdate tp=10 reached=TRUE state=CURVE_MODE_TURNING total=50 723/199454ms
+16:06:38.003 I/DroneMainControllerDjiImpl : onMissionWpReached: #11(continue series if running)
+16:06:38.005 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:06:39.137 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:06:44.184 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23742, currentCurrent=13055, remainPowerPercent=83, smartBattery=true, temperature=22.149994}.
+16:06:44.185 I/ExceptionLogger : Battery update ignored.
+16:06:48.066 I/MyMissionGlobalEventListener : onExecutionUpdate tp=11 reached=FALSE state=CURVE_MODE_MOVING total=50 10065/209519ms
+16:06:48.067 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #12
+16:06:48.774 I/MyMissionGlobalEventListener : onExecutionUpdate tp=11 reached=TRUE state=CURVE_MODE_TURNING total=50 709/210228ms
+16:06:48.776 I/DroneMainControllerDjiImpl : onMissionWpReached: #12(continue series if running)
+16:06:48.777 I/DroneMainControllerDjiImpl : changing speed to 4.1 m/s
+16:06:48.979 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.1m/s
+16:06:58.635 I/MyMissionGlobalEventListener : onExecutionUpdate tp=12 reached=FALSE state=CURVE_MODE_MOVING total=50 9860/220088ms
+16:06:58.636 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #13
+16:06:58.662 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23706, currentCurrent=12686, remainPowerPercent=82, smartBattery=true, temperature=22.450012}.
+16:06:58.663 I/ExceptionLogger : Battery update ignored.
+16:06:59.352 I/MyMissionGlobalEventListener : onExecutionUpdate tp=12 reached=TRUE state=CURVE_MODE_TURNING total=50 717/220805ms
+16:06:59.353 I/DroneMainControllerDjiImpl : onMissionWpReached: #13(continue series if running)
+16:06:59.354 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:06:59.559 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:07:09.613 I/MyMissionGlobalEventListener : onExecutionUpdate tp=13 reached=FALSE state=CURVE_MODE_MOVING total=50 10261/231066ms
+16:07:09.614 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #14
+16:07:10.229 I/MyMissionGlobalEventListener : onExecutionUpdate tp=13 reached=TRUE state=CURVE_MODE_TURNING total=50 616/231682ms
+16:07:10.231 I/DroneMainControllerDjiImpl : onMissionWpReached: #14(continue series if running)
+16:07:10.233 I/DroneMainControllerDjiImpl : changing speed to 4.1 m/s
+16:07:11.362 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.1m/s
+16:07:12.609 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23577, currentCurrent=13741, remainPowerPercent=81, smartBattery=true, temperature=22.75}.
+16:07:12.611 I/ExceptionLogger : Battery update ignored.
+16:07:18.651 I/DjiSharedMainActivity : onPause
+16:07:18.658 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for CameraControlFragment.
+16:07:18.663 I/DjiVideoFeedProvider : InternalFeedConsumer is NULL.
+16:07:18.663 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+16:07:18.664 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+16:07:18.665 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for DjiFpvMiniFragment.
+16:07:18.683 I/DjiSharedSettingsActivity : SettingsActivityVsm -> onCreate
+16:07:18.768 I/BaseActivityVsm : setUpKeyListeners for: isLandingConfirmationNeeded
+16:07:18.778 I/SettingsFragment : setUpKeyListeners for: FlightFailSafeOperation, MaxFlightHeight, MaxFlightRadiusEnabled, MaxFlightRadius, AircraftName, Mode
+16:07:18.875 I/WithAppMainServiceActivity : (DjiSettingsActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+16:07:19.915 I/BaseActivityVsm : setUpKeyListeners for: isLandingConfirmationNeeded
+16:07:19.919 I/DjiSharedMainActivity : setUpKeyListeners... (IS_OPTICAL_ZOOM_SUPPORTED)
+16:07:19.922 I/MainIndicatorsFragment : setUpKeyListeners for: SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold
+16:07:19.927 I/RemainingFlightTimeFragment : setUpKeyListeners for: Connection, ChargeRemainingInPercent, CurrentLandImmediatelyBattery, BatteryPercentageNeededToGoHome, SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold, RemainingFlightTime
+16:07:19.931 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+16:07:19.934 I/ObstacleAvoidanceFragment : setUpKeyListeners for: VisionDetectionState
+16:07:19.934 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for DjiFpvMiniFragment.
+16:07:19.935 W/ObstacleAvoidanceFragment : VisionDetectionState ERROR : The feature is unsupported.
+16:07:19.935 I/DjiVideoFeedProvider : InternalFeedConsumer is SET.
+16:07:19.936 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+16:07:19.937 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+16:07:20.072 I/MyMissionGlobalEventListener : onExecutionUpdate tp=14 reached=FALSE state=CURVE_MODE_MOVING total=50 9843/241525ms
+16:07:20.073 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #15
+16:07:20.178 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+16:07:20.178 I/DjiFpvFragment : Destroying CodecManager
+16:07:20.198 I/DjiFpvFragment : Starting CodecManager, w=461 h=326 src=Camera
+16:07:20.589 I/MyMissionGlobalEventListener : onExecutionUpdate tp=14 reached=TRUE state=CURVE_MODE_TURNING total=50 517/242042ms
+16:07:20.590 I/DroneMainControllerDjiImpl : onMissionWpReached: #15(continue series if running)
+16:07:20.591 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:07:21.729 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:07:27.233 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23524, currentCurrent=13991, remainPowerPercent=80, smartBattery=true, temperature=23.25}.
+16:07:27.235 I/ExceptionLogger : Battery update ignored.
+16:07:30.673 I/MyMissionGlobalEventListener : onExecutionUpdate tp=15 reached=FALSE state=CURVE_MODE_MOVING total=50 10084/252126ms
+16:07:30.674 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #16
+16:07:31.289 I/MyMissionGlobalEventListener : onExecutionUpdate tp=15 reached=TRUE state=CURVE_MODE_TURNING total=50 616/252742ms
+16:07:31.291 I/DroneMainControllerDjiImpl : onMissionWpReached: #16(continue series if running)
+16:07:31.293 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:07:31.492 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:07:39.195 I/MyMissionGlobalEventListener : onExecutionUpdate tp=16 reached=FALSE state=CURVE_MODE_MOVING total=50 7906/260648ms
+16:07:39.196 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #17
+16:07:39.703 I/MyMissionGlobalEventListener : onExecutionUpdate tp=16 reached=TRUE state=CURVE_MODE_TURNING total=50 508/261156ms
+16:07:39.705 I/DroneMainControllerDjiImpl : onMissionWpReached: #17(continue series if running)
+16:07:39.706 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:07:40.838 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:07:41.694 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23331, currentCurrent=15807, remainPowerPercent=79, smartBattery=true, temperature=23.550018}.
+16:07:41.695 I/ExceptionLogger : Battery update ignored.
+16:07:49.773 I/MyMissionGlobalEventListener : onExecutionUpdate tp=17 reached=FALSE state=CURVE_MODE_MOVING total=50 10070/271226ms
+16:07:49.774 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #18
+16:07:50.393 I/MyMissionGlobalEventListener : onExecutionUpdate tp=17 reached=TRUE state=CURVE_MODE_TURNING total=50 620/271846ms
+16:07:50.395 I/DroneMainControllerDjiImpl : onMissionWpReached: #18(continue series if running)
+16:07:50.397 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:07:50.499 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:07:53.610 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23224, currentCurrent=16391, remainPowerPercent=78, smartBattery=true, temperature=23.950012}.
+16:07:53.611 I/ExceptionLogger : Battery update ignored.
+16:07:58.305 I/MyMissionGlobalEventListener : onExecutionUpdate tp=18 reached=FALSE state=CURVE_MODE_MOVING total=50 7912/279758ms
+16:07:58.306 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #19
+16:07:58.818 I/MyMissionGlobalEventListener : onExecutionUpdate tp=18 reached=TRUE state=CURVE_MODE_TURNING total=50 514/280272ms
+16:07:58.820 I/DroneMainControllerDjiImpl : onMissionWpReached: #19(continue series if running)
+16:07:58.821 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:07:58.924 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:08:05.104 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23289, currentCurrent=14647, remainPowerPercent=77, smartBattery=true, temperature=24.25}.
+16:08:05.105 I/ExceptionLogger : Battery update ignored.
+16:08:07.026 I/MyMissionGlobalEventListener : onExecutionUpdate tp=19 reached=FALSE state=CURVE_MODE_MOVING total=50 8207/288479ms
+16:08:07.027 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #20
+16:08:07.538 I/MyMissionGlobalEventListener : onExecutionUpdate tp=19 reached=TRUE state=CURVE_MODE_TURNING total=50 512/288991ms
+16:08:07.539 I/DroneMainControllerDjiImpl : onMissionWpReached: #20(continue series if running)
+16:08:07.540 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:08:07.645 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:08:15.641 I/MyMissionGlobalEventListener : onExecutionUpdate tp=20 reached=FALSE state=CURVE_MODE_MOVING total=50 8104/297095ms
+16:08:15.643 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #21
+16:08:16.251 I/MyMissionGlobalEventListener : onExecutionUpdate tp=20 reached=TRUE state=CURVE_MODE_TURNING total=50 610/297705ms
+16:08:16.253 I/DroneMainControllerDjiImpl : onMissionWpReached: #21(continue series if running)
+16:08:16.255 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:08:16.452 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:08:19.161 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23191, currentCurrent=15699, remainPowerPercent=76, smartBattery=true, temperature=24.350006}.
+16:08:19.162 I/ExceptionLogger : Battery update ignored.
+16:08:26.322 I/MyMissionGlobalEventListener : onExecutionUpdate tp=21 reached=FALSE state=CURVE_MODE_MOVING total=50 10070/307775ms
+16:08:26.324 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #22
+16:08:26.939 I/MyMissionGlobalEventListener : onExecutionUpdate tp=21 reached=TRUE state=CURVE_MODE_TURNING total=50 617/308392ms
+16:08:26.942 I/DroneMainControllerDjiImpl : onMissionWpReached: #22(continue series if running)
+16:08:26.943 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:08:27.143 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:08:31.207 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23107, currentCurrent=16089, remainPowerPercent=75, smartBattery=true, temperature=24.850006}.
+16:08:31.208 I/ExceptionLogger : Battery update ignored.
+16:08:36.907 I/MyMissionGlobalEventListener : onExecutionUpdate tp=22 reached=FALSE state=CURVE_MODE_MOVING total=50 9968/318360ms
+16:08:36.909 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #23
+16:08:37.424 I/MyMissionGlobalEventListener : onExecutionUpdate tp=22 reached=TRUE state=CURVE_MODE_TURNING total=50 517/318877ms
+16:08:37.425 I/DroneMainControllerDjiImpl : onMissionWpReached: #23(continue series if running)
+16:08:37.426 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:08:37.624 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:08:45.152 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23048, currentCurrent=16308, remainPowerPercent=74, smartBattery=true, temperature=25.350006}.
+16:08:45.153 I/ExceptionLogger : Battery update ignored.
+16:08:45.837 I/MyMissionGlobalEventListener : onExecutionUpdate tp=23 reached=FALSE state=CURVE_MODE_MOVING total=50 8413/327290ms
+16:08:45.838 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #24
+16:08:46.250 I/MyMissionGlobalEventListener : onExecutionUpdate tp=23 reached=TRUE state=CURVE_MODE_TURNING total=50 413/327703ms
+16:08:46.252 I/DroneMainControllerDjiImpl : onMissionWpReached: #24(continue series if running)
+16:08:46.253 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:08:46.448 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:08:54.463 I/MyMissionGlobalEventListener : onExecutionUpdate tp=24 reached=FALSE state=CURVE_MODE_MOVING total=50 8213/335916ms
+16:08:54.464 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #25
+16:08:55.081 I/MyMissionGlobalEventListener : onExecutionUpdate tp=24 reached=TRUE state=CURVE_MODE_TURNING total=50 618/336534ms
+16:08:55.083 I/DroneMainControllerDjiImpl : onMissionWpReached: #25(continue series if running)
+16:08:55.084 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:08:55.288 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:08:56.147 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23031, currentCurrent=15953, remainPowerPercent=73, smartBattery=true, temperature=25.950012}.
+16:08:56.148 I/ExceptionLogger : Battery update ignored.
+16:09:03.190 I/MyMissionGlobalEventListener : onExecutionUpdate tp=25 reached=FALSE state=CURVE_MODE_MOVING total=50 8109/344643ms
+16:09:03.192 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #26
+16:09:03.705 I/MyMissionGlobalEventListener : onExecutionUpdate tp=25 reached=TRUE state=CURVE_MODE_TURNING total=50 515/345158ms
+16:09:03.706 I/DroneMainControllerDjiImpl : onMissionWpReached: #26(continue series if running)
+16:09:03.707 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:09:03.811 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:09:06.624 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23178, currentCurrent=12756, remainPowerPercent=72, smartBattery=true, temperature=26.149994}.
+16:09:06.625 I/ExceptionLogger : Battery update ignored.
+16:09:11.822 I/MyMissionGlobalEventListener : onExecutionUpdate tp=26 reached=FALSE state=CURVE_MODE_MOVING total=50 8116/353274ms
+16:09:11.823 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #27
+16:09:12.538 I/MyMissionGlobalEventListener : onExecutionUpdate tp=26 reached=TRUE state=CURVE_MODE_TURNING total=50 716/353990ms
+16:09:12.540 I/DroneMainControllerDjiImpl : onMissionWpReached: #27(continue series if running)
+16:09:12.541 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:09:12.739 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:09:20.625 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23109, currentCurrent=13178, remainPowerPercent=71, smartBattery=true, temperature=26.450012}.
+16:09:20.626 I/ExceptionLogger : Battery update ignored.
+16:09:20.678 I/MyMissionGlobalEventListener : onExecutionUpdate tp=27 reached=FALSE state=CURVE_MODE_MOVING total=50 8141/362131ms
+16:09:20.679 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #28
+16:09:21.089 I/MyMissionGlobalEventListener : onExecutionUpdate tp=27 reached=TRUE state=CURVE_MODE_TURNING total=50 410/362541ms
+16:09:21.091 I/DroneMainControllerDjiImpl : onMissionWpReached: #28(continue series if running)
+16:09:21.093 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:09:21.294 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:09:29.214 I/MyMissionGlobalEventListener : onExecutionUpdate tp=28 reached=FALSE state=CURVE_MODE_MOVING total=50 8126/370667ms
+16:09:29.215 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #29
+16:09:29.829 I/MyMissionGlobalEventListener : onExecutionUpdate tp=28 reached=TRUE state=CURVE_MODE_TURNING total=50 615/371282ms
+16:09:29.831 I/DroneMainControllerDjiImpl : onMissionWpReached: #29(continue series if running)
+16:09:29.832 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:09:30.028 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:09:33.651 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22887, currentCurrent=16308, remainPowerPercent=70, smartBattery=true, temperature=26.850006}.
+16:09:33.652 I/ExceptionLogger : Battery update ignored.
+16:09:38.140 I/MyMissionGlobalEventListener : onExecutionUpdate tp=29 reached=FALSE state=CURVE_MODE_MOVING total=50 8311/379593ms
+16:09:38.143 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #30
+16:09:38.441 I/MyMissionGlobalEventListener : onExecutionUpdate tp=29 reached=TRUE state=CURVE_MODE_TURNING total=50 301/379894ms
+16:09:38.443 I/DroneMainControllerDjiImpl : onMissionWpReached: #30(continue series if running)
+16:09:38.444 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:09:38.541 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:09:46.648 I/MyMissionGlobalEventListener : onExecutionUpdate tp=30 reached=FALSE state=CURVE_MODE_MOVING total=50 8207/388101ms
+16:09:46.649 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #31
+16:09:47.261 I/MyMissionGlobalEventListener : onExecutionUpdate tp=30 reached=TRUE state=CURVE_MODE_TURNING total=50 613/388714ms
+16:09:47.263 I/DroneMainControllerDjiImpl : onMissionWpReached: #31(continue series if running)
+16:09:47.264 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:09:47.466 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:09:48.132 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22873, currentCurrent=16149, remainPowerPercent=69, smartBattery=true, temperature=26.950012}.
+16:09:48.133 I/ExceptionLogger : Battery update ignored.
+16:09:57.321 I/MyMissionGlobalEventListener : onExecutionUpdate tp=31 reached=FALSE state=CURVE_MODE_MOVING total=50 10060/398774ms
+16:09:57.323 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #32
+16:09:57.936 I/MyMissionGlobalEventListener : onExecutionUpdate tp=31 reached=TRUE state=CURVE_MODE_TURNING total=50 615/399389ms
+16:09:57.937 I/DroneMainControllerDjiImpl : onMissionWpReached: #32(continue series if running)
+16:09:57.938 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:09:58.036 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:10:01.157 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22825, currentCurrent=15554, remainPowerPercent=68, smartBattery=true, temperature=27.649994}.
+16:10:06.049 I/MyMissionGlobalEventListener : onExecutionUpdate tp=32 reached=FALSE state=CURVE_MODE_MOVING total=50 8113/407502ms
+16:10:06.051 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #33
+16:10:06.565 I/MyMissionGlobalEventListener : onExecutionUpdate tp=32 reached=TRUE state=CURVE_MODE_TURNING total=50 516/408018ms
+16:10:06.567 I/DroneMainControllerDjiImpl : onMissionWpReached: #33(continue series if running)
+16:10:06.568 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:10:07.698 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:10:13.184 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22937, currentCurrent=10855, remainPowerPercent=67, smartBattery=true, temperature=28.149994}.
+16:10:14.883 I/MyMissionGlobalEventListener : onExecutionUpdate tp=33 reached=FALSE state=CURVE_MODE_MOVING total=50 8319/416337ms
+16:10:14.885 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #34
+16:10:15.498 I/MyMissionGlobalEventListener : onExecutionUpdate tp=33 reached=TRUE state=CURVE_MODE_TURNING total=50 614/416951ms
+16:10:15.500 I/DroneMainControllerDjiImpl : onMissionWpReached: #34(continue series if running)
+16:10:15.501 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:10:15.703 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:10:23.510 I/MyMissionGlobalEventListener : onExecutionUpdate tp=34 reached=FALSE state=CURVE_MODE_MOVING total=50 8013/424964ms
+16:10:23.512 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #35
+16:10:24.029 I/MyMissionGlobalEventListener : onExecutionUpdate tp=34 reached=TRUE state=CURVE_MODE_TURNING total=50 517/425481ms
+16:10:24.030 I/DroneMainControllerDjiImpl : onMissionWpReached: #35(continue series if running)
+16:10:24.032 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:10:25.254 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:10:34.185 I/MyMissionGlobalEventListener : onExecutionUpdate tp=35 reached=FALSE state=CURVE_MODE_MOVING total=50 10157/435638ms
+16:10:34.187 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #36
+16:10:34.597 I/MyMissionGlobalEventListener : onExecutionUpdate tp=35 reached=TRUE state=CURVE_MODE_TURNING total=50 413/436051ms
+16:10:34.599 I/DroneMainControllerDjiImpl : onMissionWpReached: #36(continue series if running)
+16:10:34.600 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:10:34.700 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:10:39.660 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22611, currentCurrent=16639, remainPowerPercent=65, smartBattery=true, temperature=28.649994}.
+16:10:42.813 I/MyMissionGlobalEventListener : onExecutionUpdate tp=36 reached=FALSE state=CURVE_MODE_MOVING total=50 8215/444266ms
+16:10:42.815 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #37
+16:10:43.328 I/MyMissionGlobalEventListener : onExecutionUpdate tp=36 reached=TRUE state=CURVE_MODE_TURNING total=50 515/444781ms
+16:10:43.329 I/DroneMainControllerDjiImpl : onMissionWpReached: #37(continue series if running)
+16:10:43.330 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:10:43.533 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:10:51.424 I/MyMissionGlobalEventListener : onExecutionUpdate tp=37 reached=FALSE state=CURVE_MODE_MOVING total=50 8096/452877ms
+16:10:51.426 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #38
+16:10:52.040 I/MyMissionGlobalEventListener : onExecutionUpdate tp=37 reached=TRUE state=CURVE_MODE_TURNING total=50 616/453493ms
+16:10:52.042 I/DroneMainControllerDjiImpl : onMissionWpReached: #38(continue series if running)
+16:10:52.044 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:10:52.242 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:11:00.155 I/MyMissionGlobalEventListener : onExecutionUpdate tp=38 reached=FALSE state=CURVE_MODE_MOVING total=50 8116/461609ms
+16:11:00.157 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #39
+16:11:00.663 I/MyMissionGlobalEventListener : onExecutionUpdate tp=38 reached=TRUE state=CURVE_MODE_TURNING total=50 508/462117ms
+16:11:00.665 I/DroneMainControllerDjiImpl : onMissionWpReached: #39(continue series if running)
+16:11:00.666 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:11:00.869 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:11:05.621 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22640, currentCurrent=15295, remainPowerPercent=63, smartBattery=true, temperature=28.450012}.
+16:11:08.881 I/MyMissionGlobalEventListener : onExecutionUpdate tp=39 reached=FALSE state=CURVE_MODE_MOVING total=50 8217/470334ms
+16:11:08.882 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #40
+16:11:09.288 I/MyMissionGlobalEventListener : onExecutionUpdate tp=39 reached=TRUE state=CURVE_MODE_TURNING total=50 407/470741ms
+16:11:09.290 I/DroneMainControllerDjiImpl : onMissionWpReached: #40(continue series if running)
+16:11:09.291 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:11:09.491 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:11:17.210 I/MyMissionGlobalEventListener : onExecutionUpdate tp=40 reached=FALSE state=CURVE_MODE_MOVING total=50 7922/478663ms
+16:11:17.212 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #41
+16:11:17.625 I/MyMissionGlobalEventListener : onExecutionUpdate tp=40 reached=TRUE state=CURVE_MODE_TURNING total=50 415/479078ms
+16:11:17.626 I/DroneMainControllerDjiImpl : onMissionWpReached: #41(continue series if running)
+16:11:17.627 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:11:17.725 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:11:19.118 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22533, currentCurrent=17504, remainPowerPercent=62, smartBattery=true, temperature=28.350006}.
+16:11:26.051 I/MyMissionGlobalEventListener : onExecutionUpdate tp=41 reached=FALSE state=CURVE_MODE_MOVING total=50 8427/487505ms
+16:11:26.053 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #42
+16:11:26.357 I/MyMissionGlobalEventListener : onExecutionUpdate tp=41 reached=TRUE state=CURVE_MODE_TURNING total=50 306/487811ms
+16:11:26.359 I/DroneMainControllerDjiImpl : onMissionWpReached: #42(continue series if running)
+16:11:26.360 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:11:26.561 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:11:36.307 I/MyMissionGlobalEventListener : onExecutionUpdate tp=42 reached=FALSE state=CURVE_MODE_MOVING total=50 9949/497760ms
+16:11:36.309 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #43
+16:11:36.517 I/MyMissionGlobalEventListener : onExecutionUpdate tp=42 reached=TRUE state=CURVE_MODE_TURNING total=50 210/497970ms
+16:11:36.519 I/DroneMainControllerDjiImpl : onMissionWpReached: #43(continue series if running)
+16:11:36.521 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:11:36.618 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:11:44.661 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22410, currentCurrent=16803, remainPowerPercent=60, smartBattery=true, temperature=28.450012}.
+16:11:44.938 I/MyMissionGlobalEventListener : onExecutionUpdate tp=43 reached=FALSE state=CURVE_MODE_MOVING total=50 8421/506391ms
+16:11:44.940 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #44
+16:11:45.353 I/MyMissionGlobalEventListener : onExecutionUpdate tp=43 reached=TRUE state=CURVE_MODE_TURNING total=50 415/506806ms
+16:11:45.355 I/DroneMainControllerDjiImpl : onMissionWpReached: #44(continue series if running)
+16:11:45.356 I/DroneMainControllerDjiImpl : changing speed to 4.0 m/s
+16:11:45.556 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 4.0m/s
+16:11:53.468 I/MyMissionGlobalEventListener : onExecutionUpdate tp=44 reached=FALSE state=CURVE_MODE_MOVING total=50 8115/514921ms
+16:11:53.470 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #45
+16:11:56.444 I/MyMissionGlobalEventListener : onExecutionUpdate tp=44 reached=TRUE state=CURVE_MODE_TURNING total=50 2976/517897ms
+16:11:56.446 I/DroneMainControllerDjiImpl : onMissionWpReached: #45(continue series if running)
+16:11:56.447 I/DroneMainControllerDjiImpl : changing speed to 3.9 m/s
+16:11:56.645 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.9m/s
+16:11:56.695 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22386, currentCurrent=15968, remainPowerPercent=59, smartBattery=true, temperature=28.75}.
+16:12:00.956 I/MyMissionGlobalEventListener : onExecutionUpdate tp=45 reached=FALSE state=CURVE_MODE_MOVING total=50 4512/522409ms
+16:12:00.957 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #46
+16:12:03.115 I/MyMissionGlobalEventListener : onExecutionUpdate tp=45 reached=TRUE state=CURVE_MODE_TURNING total=50 2160/524569ms
+16:12:03.117 I/CameraControllerDjiImpl : stopShootPhoto...
+16:12:03.124 I/DroneMainControllerDjiImpl : onMissionWpReached: #46 (stopSeries)
+16:12:03.126 I/DroneMainControllerDjiImpl : changing speed to 12.0 m/s
+16:12:03.216 I/CameraControllerDjiImpl : stopShootPhoto SUCCESS
+16:12:04.234 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 12.0m/s
+16:12:06.595 I/MyMissionGlobalEventListener : onExecutionUpdate tp=46 reached=FALSE state=CURVE_MODE_MOVING total=50 3479/528048ms
+16:12:06.596 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #47
+16:12:07.647 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22240, currentCurrent=18366, remainPowerPercent=58, smartBattery=true, temperature=29.25}.
+16:12:16.184 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22260, currentCurrent=16550, remainPowerPercent=57, smartBattery=true, temperature=29.550018}.
+16:12:30.118 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22140, currentCurrent=19022, remainPowerPercent=56, smartBattery=true, temperature=29.950012}.
+16:12:31.315 I/MyMissionGlobalEventListener : onExecutionUpdate tp=46 reached=TRUE state=CURVE_MODE_TURNING total=50 24720/552768ms
+16:12:31.316 I/DroneMainControllerDjiImpl : onMissionWpReached: #47 (stopSeries)
+16:12:34.602 I/MyMissionGlobalEventListener : onExecutionUpdate tp=47 reached=FALSE state=CURVE_MODE_MOVING total=50 3287/556055ms
+16:12:34.603 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #48
+16:12:40.647 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22389, currentCurrent=14873, remainPowerPercent=55, smartBattery=true, temperature=30.350006}.
+16:12:53.626 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22287, currentCurrent=15907, remainPowerPercent=54, smartBattery=true, temperature=30.550018}.
+16:13:09.159 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22106, currentCurrent=18534, remainPowerPercent=53, smartBattery=true, temperature=30.649994}.
+16:13:19.659 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22034, currentCurrent=18279, remainPowerPercent=52, smartBattery=true, temperature=30.950012}.
+16:13:30.553 I/MyMissionGlobalEventListener : onExecutionUpdate tp=47 reached=TRUE state=CURVE_MODE_TURNING total=50 55951/612006ms
+16:13:30.554 I/DroneMainControllerDjiImpl : onMissionWpReached: #48 (stopSeries)
+16:13:30.555 I/DroneMainControllerDjiImpl : changing speed to 5.0 m/s
+16:13:30.759 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 5.0m/s
+16:13:31.185 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22333, currentCurrent=11201, remainPowerPercent=51, smartBattery=true, temperature=31.350006}.
+16:13:32.406 I/MyMissionGlobalEventListener : onExecutionUpdate tp=48 reached=FALSE state=CURVE_MODE_MOVING total=50 1853/613859ms
+16:13:32.408 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #49
+16:13:41.644 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21843, currentCurrent=20591, remainPowerPercent=50, smartBattery=true, temperature=31.550018}.
+16:13:52.634 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21862, currentCurrent=18606, remainPowerPercent=49, smartBattery=true, temperature=32.149994}.
+16:13:54.364 I/MyMissionGlobalEventListener : onExecutionUpdate tp=48 reached=TRUE state=CURVE_MODE_TURNING total=50 21958/635817ms
+16:13:54.367 I/DroneMainControllerDjiImpl : onMissionWpReached: #49 (stopSeries)
+16:13:54.370 I/DroneMainControllerDjiImpl : changing speed to 3.0 m/s
+16:13:54.559 I/DroneMainControllerDjiImpl : AutoFlightSpeed changed to 3.0m/s
+16:13:55.487 I/MyMissionGlobalEventListener : onExecutionUpdate tp=49 reached=FALSE state=CURVE_MODE_MOVING total=50 1123/636940ms
+16:13:55.489 I/DroneMainControllerDjiImpl : onMissionWpMovingTo: #50
+16:13:56.513 I/MyMissionGlobalEventListener : onExecutionUpdate tp=49 reached=TRUE state=BEGIN_ACTION total=50 1026/637966ms
+16:13:56.515 I/DroneMainControllerDjiImpl : onMissionWpReached: #50 (stopSeries)
+16:13:56.617 I/MyMissionGlobalEventListener : onExecutionFinish (638070ms)
+16:13:56.618 I/DroneMainControllerDjiImpl : MyMissionGlobalEventListener.onMissionFinished (sinceEpoch = 758143) (ignore)
+16:13:56.717 I/DroneMainControllerDjiImpl : onFlightMode change: GPS_WAYPOINT -> AUTO_LANDING (state = READY_TO_UPLOAD) (sinceEpoch = 758242)
+16:13:56.719 I/DroneMainControllerDjiImpl : onMissionFinished, new controlMode = AUTO_LANDING (sinceEpoch = 758243)
+16:13:56.723 I/WithAppMainServiceActivity : Toast message: Route canceled
+16:13:56.749 I/WithAppMainServiceActivity : Toast message: Drone is returning home
+16:14:02.598 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21954, currentCurrent=17294, remainPowerPercent=48, smartBattery=true, temperature=32.450012}.
+16:14:16.147 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22149, currentCurrent=12755, remainPowerPercent=47, smartBattery=true, temperature=33.05002}.
+16:14:17.059 I/DroneMainControllerDjiImpl : onFlightMode change: AUTO_LANDING -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 778583)
+16:14:17.064 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as landed
+16:14:17.088 I/TakeOffPointTask : sending new takeOff position = -77.4615629 169.1853464
+16:14:36.371 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+16:14:36.372 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+16:14:36.379 W/DroneBridgeImpl : KeyManager -> onConnectionChanged = false
+16:14:36.380 I/DroneBridgeImpl : Tear Down All Key Listeners...
+16:14:36.410 I/DjiOnboardMessageSender : Unbind from flight controller (181687025) on tearDownKeyListeners
+16:14:36.421 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+16:14:36.925 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+16:14:36.927 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+16:14:36.930 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+16:14:36.935 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+16:14:36.937 W/DjiFpvFragment : No need to re-init codecManager!
+16:14:36.940 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+16:14:36.942 W/DjiFpvFragment : No need to re-init codecManager!
+16:14:42.090 I/DjiSharedMainActivity : onPause
+16:14:42.092 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for CameraControlFragment.
+16:14:42.095 I/DjiVideoFeedProvider : InternalFeedConsumer is NULL.
+16:14:42.095 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+16:14:42.096 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+16:14:42.097 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for DjiFpvMiniFragment.
+16:14:43.586 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onDestroy
+16:14:43.589 I/DroneBridgeImpl : tearDownKeyListeners... (ALL)
+16:14:43.794 I/VsmToUcsConnectorBase : UCS connector stopped.
+16:14:43.799 I/ApplicationMainServiceBase : ---> onDestroy (DjiAppMainServiceImpl), creationTimeStamp=1577242868070

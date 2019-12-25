@@ -1,8 +1,8 @@
 # Waddle Flight Stats
-### complied on 2019/12/18 0:10:56
+### complied on 2019/12/25 18:35:58
 
 # waddle1
-33 flights: 305.36 mins
+36 flights: 348.05 mins
 
 ## 2019/11/25
 1. route: hut-test
@@ -245,8 +245,31 @@
 	- maximum altitude (AGL):	80.00m
 	- maximum horizontal distance:	2664.10m
 
+## 2019/12/25
+1. route: r1-BN
+	- start: 15:41:37
+	- duration: 13:26 min
+	- battery start:	97%	17.15C
+	- battery end:	  35%	35.95C
+	- maximum altitude (AGL):	71.93m
+	- maximum horizontal distance:	1603.08m
+2. route: r5-MLP
+	- start: 16:20:35
+	- duration: 14:11 min
+	- battery start:	97%	15.95C
+	- battery end:	  23%	34.15C
+	- maximum altitude (AGL):	90.00m
+	- maximum horizontal distance:	1609.79m
+3. route: r7-TQRG
+	- start: 17:12:36
+	- duration: 15:04 min
+	- battery start:	95%	15.35C
+	- battery end:	  25%	34.65C
+	- maximum altitude (AGL):	73.59m
+	- maximum horizontal distance:	1498.99m
+
 # waddle2
-20 flights: 238.87 mins
+24 flights: 278.26 mins
 
 ## 2019/11/25
 1. route: hut-test
@@ -400,8 +423,38 @@
 	- maximum altitude (AGL):	73.53m
 	- maximum horizontal distance:	2691.11m
 
+## 2019/12/25
+1. route: r3-P
+	- start: 16:03:20
+	- duration: 10:57 min
+	- battery start:	96%	17.35C
+	- battery end:	  47%	33.05C
+	- maximum altitude (AGL):	96.77m
+	- maximum horizontal distance:	1370.17m
+2. route: r7-TQRG
+	- start: 16:43:53
+	- duration: 5:24 min
+	- battery start:	96%	16.05C
+	- battery end:	  70%	28.75C
+	- maximum altitude (AGL):	73.59m
+	- maximum horizontal distance:	1498.99m
+3. route: r8-G
+	- start: 16:54:23
+	- duration: 9:28 min
+	- battery start:	98%	17.85C
+	- battery end:	  55%	28.05C
+	- maximum altitude (AGL):	83.02m
+	- maximum horizontal distance:	1690.12m
+4. route: r10-STQR
+	- start: 17:34:05
+	- duration: 13:34 min
+	- battery start:	95%	12.35C
+	- battery end:	  35%	25.35C
+	- maximum altitude (AGL):	73.36m
+	- maximum horizontal distance:	1281.76m
+
 # waddle3
-15 flights: 180.89 mins
+19 flights: 236.07 mins
 
 ## 2019/11/21
 1. route: hut-test
@@ -516,8 +569,38 @@
 	- maximum altitude (AGL):	94.91m
 	- maximum horizontal distance:	1797.02m
 
+## 2019/12/25
+1. route: r2-BM
+	- start: 15:45:44
+	- duration: 14:17 min
+	- battery start:	97%	15.95C
+	- battery end:	  29%	35.65C
+	- maximum altitude (AGL):	85.39m
+	- maximum horizontal distance:	1693.91m
+2. route: r6-QRLHK
+	- start: 16:24:01
+	- duration: 14:29 min
+	- battery start:	96%	17.35C
+	- battery end:	  22%	40.95C
+	- maximum altitude (AGL):	95.08m
+	- maximum horizontal distance:	1622.40m
+3. route: r8-G
+	- start: 17:12:19
+	- duration: 13:04 min
+	- battery start:	96%	15.95C
+	- battery end:	  30%	40.45C
+	- maximum altitude (AGL):	83.02m
+	- maximum horizontal distance:	1690.12m
+4. route: r11-D
+	- start: 17:50:55
+	- duration: 13:21 min
+	- battery start:	95%	15.65C
+	- battery end:	  29%	34.15C
+	- maximum altitude (AGL):	84.40m
+	- maximum horizontal distance:	1196.34m
+
 # waddle4
-15 flights: 112.96 mins
+18 flights: 147.65 mins
 
 ## 2019/11/23
 1. route: hut-test
@@ -633,3 +716,26 @@
 	- battery end:	  31%	29.65C
 	- maximum altitude (AGL):	90.00m
 	- maximum horizontal distance:	1721.79m
+
+## 2019/12/25
+1. route: r4-C
+	- start: 16:04:41
+	- duration: 11:05 min
+	- battery start:	96%	18.25C
+	- battery end:	  47%	33.75C
+	- maximum altitude (AGL):	80.00m
+	- maximum horizontal distance:	1318.32m
+2. route: r7-TQRG
+	- start: 16:52:47
+	- duration: 10:48 min
+	- battery start:	94%	15.05C
+	- battery end:	  42%	33.55C
+	- maximum altitude (AGL):	73.59m
+	- maximum horizontal distance:	1498.99m
+3. route: r9-F
+	- start: 17:33:58
+	- duration: 12:48 min
+	- battery start:	96%	15.05C
+	- battery end:	  30%	35.65C
+	- maximum altitude (AGL):	95.44m
+	- maximum horizontal distance:	1775.43m
