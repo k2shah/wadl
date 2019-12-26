@@ -97,6 +97,8 @@ def writeStatsMD(flightStats):
             nowTime.tm_hour,
             nowTime.tm_min,
             nowTime.tm_sec,))
+        # list of (etime of flight, waddle_ID)
+        flightKeys = []
         # write data for each unit
         for waddle in waddleName:
             # aggregate data
@@ -104,60 +106,65 @@ def writeStatsMD(flightStats):
                 waddle,
                 flightStats[waddle].flightCount,
                 flightStats[waddle].flightTime/60))
-            # Track last date
-            lastDate = None
-            flightKeys = list(flightStats[waddle].flights.keys())
-            flightKeys.sort()
-            for i, flightKey in enumerate(flightKeys):
-                flight = flightStats[waddle].flights[flightKey]
-                # f.write("- {:d}".format(i))
+            # aggreate all times and id's
+            for key in flightStats[waddle].flights.keys():
+                flightKeys.append((key, waddle))
 
-                # date information
-                dateStr = "{:s}/{:s}/{:s}".format(
-                          *flight.flightDate)
-                if dateStr != lastDate:
-                    f.write("\n## " + dateStr + "\n")
-                    lastDate = dateStr
-                    flightCounter = 1
+        # Write the stats by date
+        flightKeys.sort()
+        # Track last date
+        lastDate = None
+        for i, (flightKey, waddle) in enumerate(flightKeys):
+            flight = flightStats[waddle].flights[flightKey]
+            # f.write("- {:d}".format(i))
 
-                if not flight.isManual:
-                    # route information
-                    f.write("{:d}. route: {:s}\n".format(
-                            flightCounter,
-                            flight.missionName))
-                    f.write("\t- start: {:2.0f}:{:02.0f}:{:02.0f}\n".format(
-                        *flight.startTime))
-                    durationMin = int(flight.duration / 60)
-                    durationSec = flight.duration % 60
-                    f.write("\t- duration: {:d}:{:02.0f} min\n".format(
-                            durationMin,
-                            durationSec))
-                    # battery information
-                    f.write("\t- battery start:\t{:02.0f}%\t{:2.2f}C\n".format(
-                             flight.batteryLog[0][1],
-                             flight.batteryLog[0][3]))
-                    f.write("\t- battery end:\t  {:02.0f}%\t{:2.2f}C\n".format(
-                             flight.batteryLog[-1][1],
-                             flight.batteryLog[-1][3]))
+            # date information
+            dateStr = "{:s}/{:s}/{:s}".format(
+                      *flight.flightDate)
+            if dateStr != lastDate:
+                f.write("\n## " + dateStr + "\n")
+                lastDate = dateStr
+                flightCounter = 1
 
-                    # distance information
-                    mission = np.array(flight.mission)
-                    # f.write("\t- average altitude (AGL):\t{:2.2f}m\n".format(
-                    #          np.mean(mission[:, 3])))
-                    f.write("\t- maximum altitude (AGL):\t{:2.2f}m\n".format(
-                             np.max(mission[:, 3])))
+            if not flight.isManual:
+                # route information
+                f.write("{:d}. {:s} route: {:s}\n".format(
+                        flightCounter,
+                        waddle,
+                        flight.missionName))
+                f.write("\t- start: {:2.0f}:{:02.0f}:{:02.0f}\n".format(
+                    *flight.startTime))
+                durationMin = int(flight.duration / 60)
+                durationSec = flight.duration % 60
+                f.write("\t- duration: {:d}:{:02.0f} min\n".format(
+                        durationMin,
+                        durationSec))
+                # battery information
+                f.write("\t- battery start:\t{:02.0f}%\t{:2.2f}C\n".format(
+                         flight.batteryLog[0][1],
+                         flight.batteryLog[0][3]))
+                f.write("\t- battery end:\t  {:02.0f}%\t{:2.2f}C\n".format(
+                         flight.batteryLog[-1][1],
+                         flight.batteryLog[-1][3]))
 
-                    # get 1st lat/lng pt
-                    startPt = (mission[0][1], mission[0][2])
-                    # calculate horizontal distance
-                    horzDistances = [calcDistFromLatLng(
-                                     startPt,
-                                     (pt[1], pt[2]))
-                                     for pt in mission]
-                    f.write("\t- maximum horizontal distance:\t{:2.2f}m\n".format(
-                             np.max(horzDistances)))
+                # distance information
+                mission = np.array(flight.mission)
+                # f.write("\t- average altitude (AGL):\t{:2.2f}m\n".format(
+                #          np.mean(mission[:, 3])))
+                f.write("\t- maximum altitude (AGL):\t{:2.2f}m\n".format(
+                         np.max(mission[:, 3])))
 
-                flightCounter += 1
+                # get 1st lat/lng pt
+                startPt = (mission[0][1], mission[0][2])
+                # calculate horizontal distance
+                horzDistances = [calcDistFromLatLng(
+                                 startPt,
+                                 (pt[1], pt[2]))
+                                 for pt in mission]
+                f.write("\t- maximum horizontal distance:\t{:2.2f}m\n".format(
+                         np.max(horzDistances)))
+
+            flightCounter += 1
     f.close()
 
 
