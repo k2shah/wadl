@@ -5,6 +5,7 @@ import csv
 import json
 import glob
 import time
+import warnings as warn
 # import sys
 # gis
 import utm
@@ -31,13 +32,12 @@ class Route(object):
         self.parseKML(KMLfile)
         self.readJSON(JSONdata)
         # check the lenght of the paths
-        if len(self.actions) != (self.cords.shape[0]-1):
+        if len(self.actions) != (self.cords.shape[0]-1) or True:
             print(KMLfile)
             print(len(self.actions))
             print(self.cords.shape)
-            # raise RuntimeError("path lengths do not mathch: {:s}".format(
-            #       KMLfile))
-        self.cameraSize = (55, 73)  # m
+            warn.warn("path lengths do not mathch: {:s}".format(KMLfile))
+        self.cameraSize = (54.5, 72.6)  # m
         l, w = self.cameraSize
         self.cameraBox = np.array([[l/2., w/2.],
                                    [l/2., -w/2.],
@@ -194,7 +194,7 @@ def main(mission):
     print(routeSeq)
     nColors = 9
     cm = plt.cm.get_cmap('Set1', nColors)
-    alpha = .6
+    alpha = 1
     for rnum, key in routeSeq:
         plt.title(key)
         color = cm((rnum-1) % nColors)

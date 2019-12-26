@@ -1,5 +1,5 @@
 # Waddle Flight Stats
-### complied on 2019/12/25 18:56:32
+### complied on 2019/12/26 22:7:33
 
 # waddle1
 36 flights: 348.05 mins
@@ -8,10 +8,10 @@
 24 flights: 278.26 mins
 
 # waddle3
-19 flights: 236.07 mins
+22 flights: 277.16 mins
 
 # waddle4
-18 flights: 147.65 mins
+24 flights: 183.10 mins
 
 ## 2019/11/21
 1. waddle3 route: hut-test
@@ -614,6 +614,50 @@
 	- maximum altitude (AGL):	73.53m
 	- maximum horizontal distance:	2691.11m
 
+## 2019/12/22
+1. waddle4 route: hut-test
+	- start: 17:14:43
+	- duration: 5:43 min
+	- battery start:	93%	18.45C
+	- battery end:	  67%	28.65C
+	- maximum altitude (AGL):	71.88m
+	- maximum horizontal distance:	1479.85m
+2. waddle4 route: hut-test
+	- start: 17:23:06
+	- duration: 6:25 min
+	- battery start:	61%	27.45C
+	- battery end:	  28%	38.05C
+	- maximum altitude (AGL):	71.88m
+	- maximum horizontal distance:	1479.85m
+3. waddle4 route: hut-test
+	- start: 17:33:54
+	- duration: 5:21 min
+	- battery start:	97%	17.55C
+	- battery end:	  72%	26.25C
+	- maximum altitude (AGL):	71.88m
+	- maximum horizontal distance:	1479.85m
+4. waddle4 route: hut-test
+	- start: 17:41:23
+	- duration: 3:27 min
+	- battery start:	66%	27.75C
+	- battery end:	  53%	29.55C
+	- maximum altitude (AGL):	65.40m
+	- maximum horizontal distance:	343.03m
+5. waddle4 route: hut-test-2
+	- start: 17:46:41
+	- duration: 4:35 min
+	- battery start:	50%	27.45C
+	- battery end:	  28%	33.15C
+	- maximum altitude (AGL):	65.40m
+	- maximum horizontal distance:	343.03m
+6. waddle4 route: hut-test-2
+	- start: 17:58:12
+	- duration: 9:56 min
+	- battery start:	97%	13.35C
+	- battery end:	  46%	23.45C
+	- maximum altitude (AGL):	65.40m
+	- maximum horizontal distance:	343.03m
+
 ## 2019/12/25
 1. waddle1 route: r1-BN
 	- start: 15:41:37
@@ -713,3 +757,26 @@
 	- battery end:	  29%	34.15C
 	- maximum altitude (AGL):	84.40m
 	- maximum horizontal distance:	1196.34m
+
+## 2019/12/26
+1. waddle3 route: r4-C-var
+	- start: 20:48:23
+	- duration: 12:14 min
+	- battery start:	96%	14.15C
+	- battery end:	  30%	30.85C
+	- maximum altitude (AGL):	96.14m
+	- maximum horizontal distance:	1355.44m
+2. waddle3 route: r4-C
+	- start: 21:05:26
+	- duration: 12:54 min
+	- battery start:	97%	17.45C
+	- battery end:	  34%	32.35C
+	- maximum altitude (AGL):	80.00m
+	- maximum horizontal distance:	1318.32m
+3. waddle3 route: r1-BN
+	- start: 21:22:50
+	- duration: 15:57 min
+	- battery start:	96%	18.35C
+	- battery end:	  19%	39.25C
+	- maximum altitude (AGL):	71.93m
+	- maximum horizontal distance:	1603.08m
