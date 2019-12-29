@@ -32,7 +32,7 @@ class Route(object):
         self.parseKML(KMLfile)
         self.readJSON(JSONdata)
         # check the lenght of the paths
-        if len(self.actions) != (self.cords.shape[0]-1) or True:
+        if len(self.actions) != (self.cords.shape[0]-1):
             print(KMLfile)
             print(len(self.actions))
             print(self.cords.shape)
@@ -107,9 +107,9 @@ class Route(object):
     def pt2gBox(self, p, v):
         # returns the ground ppints of the image corners
         alpha = np.arctan2(v[1], v[0])
-        R90 = rot2D(alpha)
+        R = rot2D(alpha)
 
-        cameraRot = np.dot(R90, self.cameraBox.T).T.tolist()
+        cameraRot = np.dot(R, self.cameraBox.T).T.tolist()
         camera = [utm.to_latlon(p[0] + z[0], p[1] + z[1], *self.UTMZone)
                   for z in cameraRot]
 
