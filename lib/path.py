@@ -44,7 +44,7 @@ class Path(object):
                 try:
                     routeEff = self.calcEff()
                     print(file, ": ", routeEff)
-                    # self.writeEff(file, routeEff)
+                    self.writeEff(file, routeEff)
                 except ZeroDivisionError as e:
                     print("invalid file: {:s}".format(file))
 
