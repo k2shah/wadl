@@ -1,17 +1,15 @@
 # Waddle Flight Stats
-### complied on 2019/12/26 22:7:33
+### complied on 2020/1/1 14:48:9
 
-# waddle1
-36 flights: 348.05 mins
+# Flights
 
-# waddle2
-24 flights: 278.26 mins
+waddle1: 36 flights. 348.05 mins
 
-# waddle3
-22 flights: 277.16 mins
+waddle2: 24 flights. 278.26 mins
 
-# waddle4
-24 flights: 183.10 mins
+waddle3: 22 flights. 277.16 mins
+
+waddle4: 24 flights. 183.10 mins
 
 ## 2019/11/21
 1. waddle3 route: hut-test
