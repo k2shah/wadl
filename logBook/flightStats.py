@@ -100,9 +100,10 @@ def writeStatsMD(flightStats):
         # list of (etime of flight, waddle_ID)
         flightKeys = []
         # write data for each unit
+        f.write("\n# Flights\n")
         for waddle in waddleName:
             # aggregate data
-            f.write("\n# {:s}\n{:d} flights: {:3.2f} mins\n".format(
+            f.write("\n{:s}: {:d} flights. {:3.2f} mins\n".format(
                 waddle,
                 flightStats[waddle].flightCount,
                 flightStats[waddle].flightTime/60))
