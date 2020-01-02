@@ -29,7 +29,7 @@ class Path(object):
         pathFiles = glob.glob(os.path.join(self.pathDir, "routes/*"))
         for file in pathFiles:
             self.cords = dict()
-            print(file)
+            # print(file)
             with open(file) as csvfile:
                 for line in csv.reader(csvfile, delimiter=','):
                     if line[2] != '50':
