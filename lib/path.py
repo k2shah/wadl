@@ -21,6 +21,8 @@ class Path(object):
     """docstring for Path"""
     def __init__(self, pathDir):
         self.pathDir = pathDir
+        self.keyPoints = [("-77.46154", "169.186"),
+                          ("-77.461479", "169.1849841")]
         self.parseFile()
 
     def parseFile(self):
@@ -30,13 +32,21 @@ class Path(object):
             print(file)
             with open(file) as csvfile:
                 for line in csv.reader(csvfile, delimiter=','):
+                    if line[2] != '50':
+                        continue
+                    cords = (line[0], line[1])
+                    if cords in self.keyPoints:
+                        continue
                     try:
-                        self.cords[(line[0], line[1])] += 1
+                        self.cords[cords] += 1
                     except KeyError as e:
-                        self.cords[(line[0], line[1])] = 1
-
-            routeEff = self.calcEff()
-            self.writeEff(file, routeEff)
+                        self.cords[cords] = 1
+                try:
+                    routeEff = self.calcEff()
+                    print(file, ": ", routeEff)
+                    # self.writeEff(file, routeEff)
+                except ZeroDivisionError as e:
+                    print("invalid file: {:s}".format(file))
 
     def calcEff(self):
         nPts = 0
