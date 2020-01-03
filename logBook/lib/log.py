@@ -95,7 +95,7 @@ class Log(object):
                             flight.setRouteStart(time)
                             # add the mission to the flight
                             flight.setMission(WPbuffer, missionName)
-                            missionName = None
+                            missionName = "manual"
                         elif autoFlightEndTag in ls[1] or autoFlightCancelTag in ls[1]:
                             time = ls[0].split(" ")[0]
                             flight.setRouteEnd(time)
@@ -155,10 +155,10 @@ class Flight(object):
         self.routeStart = 0  # start of auto route
         self.routeEnd = 0  # end of auto route
         self.batteryLog = []  # history of the battery
-        self.missionName = None
+        self.missionName = 'manual'
         self.mission = []  # planned mission uploaded
         self.trajectory = []  # flown trajectory
-        self.isManual = False  # manual flight
+        self.isManual = True  # manual flight
 
     def __repr__(self):
         # prints the information for the mission
@@ -169,7 +169,6 @@ class Flight(object):
         printStr += "flight duration: {:2.3f}m\n".format(self.duration/60.)
         if len(self.mission) == 0:
             printStr += "no mission for this flight\n\n"
-            self.isManual = True
         else:
             # mission time
             printStr += "====Mission===="
@@ -195,6 +194,7 @@ class Flight(object):
         # sets the mission
         self.mission = mission
         self.missionName = missionName
+        self.isManual = False
 
     def addBatteryLog(self, time, percent, voltage, temperature):
         time = self.getRelativeTime(time)
