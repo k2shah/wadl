@@ -65,7 +65,12 @@ class Route(object):
                                for line in data])
 
     def readJSON(self, JSONdata):
-        self.actions = [wp["actions"] != [] for wp in JSONdata["segments"]]
+        actionType = "CameraSeriesByTime"
+        # this is some next level list comp hacking
+        # stupid empty lists
+        self.actions = [wp["actions"] != [] and
+                        wp["actions"][0]["type"] == actionType
+                        for wp in JSONdata["segments"]]
 
     def interpRoute(self):
         self.xpath = []
@@ -209,6 +214,6 @@ def main(mission):
 if __name__ == '__main__':
     missionDir = "../missions"
     # missionName = "croz2-fine"
-    missionName = "croz3-full"
+    missionName = "croz4-full"
     missionPath = os.path.join(missionDir, missionName)
     main(missionPath)
