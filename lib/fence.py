@@ -29,7 +29,7 @@ class Fence(object):
         self.flatCords = np.array([[data[0], data[1]] for data in UTMData])
         self.GPScords = np.array(self.GPScords)
 
-    def plot(self, ax, color='g'):
+    def plot(self, ax, color='m'):
         ax.plot(self.GPScords[:, 0], self.GPScords[:, 1],
                 c=color)
 
