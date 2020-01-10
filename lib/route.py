@@ -68,15 +68,15 @@ class Route(object):
         actionType = "CameraSeriesByTime"
         # this is some next level list comp hacking
         # stupid empty lists
-        self.actions = [wp["actions"] != [] and
-                        wp["actions"][0]["type"] == actionType
+        self.actions = [wp["actions"][0]["type"]
+                        if wp["actions"] != [] else False
                         for wp in JSONdata["segments"]]
 
     def interpRoute(self):
         self.xpath = []
         self.ypath = []
         for i, action in enumerate(self.actions):
-            if action:
+            if action == "CameraSeriesByTime":
                 # 1st cords cuz fwd path progress
                 if len(self.xpath) == 0:
                     cords = utm.from_latlon(self.cords[i, 1], self.cords[i, 0])
@@ -121,6 +121,7 @@ class Route(object):
         return camera
 
     def plotInterp(self, ax, color=(.5625, 0, 0, .6)):
+        # plots the interpolated route
         for x, y, v in zip(self.xinterp, self.yinterp, self.dirInterp):
             lat, lng = utm.to_latlon(x, y, *self.UTMZone)
             # plot the camera
@@ -138,11 +139,12 @@ class Route(object):
             # if i < 1 or i > (len(self.actions)-2):
             #     # skip the 1st and last fe
             #     continue
-            if action:
-                col = "r"
-            else:
+            if action == "CameraSeriesByTime":
                 col = "b"
-
+            elif action == "CameraControl":
+                col = "g"
+            else:
+                col = "r"
             ax.plot(self.cords[i:i+2, 0],
                     self.cords[i:i+2, 1],
                     c=col)
@@ -190,7 +192,7 @@ def main(mission):
 
     crozFence.plot(ax)
     rookFence.plot(ax)
-    crozAreas.plot(ax)
+    # crozAreas.plot(ax)
 
     # build route sequence
     routeSeq = [(int(r.split('-')[0].strip('r')), r)
@@ -204,8 +206,8 @@ def main(mission):
         plt.title(key)
         color = cm((rnum-1) % nColors)
         color = (*color[0:3], alpha)
-        routes[key].plotInterp(ax, color=color)
-        # routes[key].plotRoute(ax)
+        # routes[key].plotInterp(ax, color=color)
+        routes[key].plotRoute(ax)
         plt.draw()
         plt.pause(.0000001)
     plt.show()
