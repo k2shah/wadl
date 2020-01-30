@@ -154,15 +154,15 @@ class RoydsConfig(ShapeConfig):
 
 
 if __name__ == '__main__':
-    step = 40
+    step = 18
     agentParameters = {}
     agentParameters["base"] = 7
     agentParameters["maxTime"] = 35
-    agentParameters["initPos"] = [0, 9]
+    agentParameters["initPos"] = [45]
 
-    config = CrozConfig(agentParameters=agentParameters, step=step, zone=0)
+    # config = CrozConfig(agentParameters=agentParameters, step=step, zone=0)
     # config = RookConfig(agentParameters=agentParameters, step=step)
-    # config = RoydsConfig(agentParameters=agentParameters, step=step
+    config = RoydsConfig(agentParameters=agentParameters, step=step)
     # metagraph = Metagraph(config.stateSpace,
     #                       config.con,
     #                       config.worldSize)

@@ -95,7 +95,7 @@ class Log(object):
                             flight.setRouteStart(time)
                             # add the mission to the flight
                             flight.setMission(WPbuffer, missionName)
-                            missionName = "manual"
+                            # missionName = "manual"
                         elif autoFlightEndTag in ls[1] or autoFlightCancelTag in ls[1]:
                             time = ls[0].split(" ")[0]
                             flight.setRouteEnd(time)
@@ -155,7 +155,7 @@ class Flight(object):
         self.routeStart = 0  # start of auto route
         self.routeEnd = 0  # end of auto route
         self.batteryLog = []  # history of the battery
-        self.missionName = 'manual'
+        self.missionName = None
         self.mission = []  # planned mission uploaded
         self.trajectory = []  # flown trajectory
         self.isManual = True  # manual flight
