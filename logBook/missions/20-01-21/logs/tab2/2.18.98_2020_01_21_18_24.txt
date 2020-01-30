@@ -1,0 +1,1259 @@
+18:24:52.616 I/DjiSharedApp : Phone information: manufacturer(samsung), model(SM-T510), version(28), release(9), totalMemory(1970008064)
+18:24:52.618 I/ApplicationMainServiceBase : ---> onCreate (DjiAppMainServiceImpl), creationTimeStamp=1579584292617
+18:24:52.619 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onCreate
+18:24:52.798 I/MediaStreamerContainerImpl : initializing mstreamer... 
+18:24:52.835 I/WithAppMainServiceActivity : (DjiUsbAccessoryAttachedActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+18:24:52.875 I/DjiSharedUsbAccessoryAttachedActivity : onServiceConnectionChanged : CONNECTED to 1579584292617
+18:24:52.876 I/DroneBridgeImpl : onUsbAccessoryAttached
+18:24:52.882 I/UsbAccessoryManagerImplV2 : There are 1 attached UsbAccessory
+18:24:52.888 I/UsbAccessoryManagerImplV2 : permission(true) - UsbAccessory[mManufacturer=DJI, mModel=T600, mDescription=DJI Inspire 1, mVersion=v2.35.0.0, mUri=www.dji.com, mSerial=000000000000000]
+18:24:53.029 I/WithAppMainServiceActivity : (DjiSelectDroneTypeActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+18:24:53.086 I/DjiSharedSelectDroneTypeActivity : permissions granted.
+18:24:53.095 I/DroneBridgeImpl : DJISDKManager -> registerApp...
+18:24:53.096 I/DroneBridgeImpl : DJISDKManager -> SDK VERSION = 4.9
+18:24:54.785 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+18:24:54.786 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+18:24:54.786 I/DjiSharedSelectDroneTypeActivity : DJI SDK Registration SUCCESS
+18:24:54.806 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+18:24:54.807 I/DjiSharedSelectDroneTypeActivity : DJI SDK Registration SUCCESS
+18:24:54.807 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+18:24:55.052 I/BaseActivityVsm : setUpKeyListeners for: isLandingConfirmationNeeded
+18:24:55.053 W/BaseActivityVsm : isLandingConfirmationNeeded ERROR : Not Support
+18:24:55.058 I/DjiSharedMainActivity : setUpKeyListeners... (IS_OPTICAL_ZOOM_SUPPORTED)
+18:24:55.059 W/DjiSharedMainActivity : opticalZoomSupportedKey ERROR : Not Support
+18:24:55.064 I/MainIndicatorsFragment : setUpKeyListeners for: SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold
+18:24:55.064 W/MainIndicatorsFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+18:24:55.065 W/MainIndicatorsFragment : LowBatteryWarningThreshold ERROR : Not Support
+18:24:55.068 I/RemainingFlightTimeFragment : setUpKeyListeners for: Connection, ChargeRemainingInPercent, CurrentLandImmediatelyBattery, BatteryPercentageNeededToGoHome, SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold, RemainingFlightTime
+18:24:55.070 W/RemainingFlightTimeFragment : ChargeRemainingInPercent ERROR : Not Support
+18:24:55.071 W/RemainingFlightTimeFragment : CurrentLandImmediatelyBattery ERROR : Not Support
+18:24:55.072 W/RemainingFlightTimeFragment : BatteryPercentageNeededToGoHome ERROR : Not Support
+18:24:55.073 W/RemainingFlightTimeFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+18:24:55.075 W/RemainingFlightTimeFragment : LowBatteryWarningThreshold ERROR : Not Support
+18:24:55.076 W/RemainingFlightTimeFragment : RemainingFlightTime ERROR : Not Support
+18:24:55.726 I/ObstacleAvoidanceFragment : setUpKeyListeners for: VisionDetectionState
+18:24:55.728 W/ObstacleAvoidanceFragment : VisionDetectionState ERROR : Not Support
+18:24:55.746 I/WithAppMainServiceActivity : (DjiMainActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+18:24:55.823 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+18:24:55.840 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for DjiFpvMiniFragment.
+18:24:55.841 I/DjiVideoFeedProvider : InternalFeedConsumer is SET.
+18:24:55.842 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+18:24:55.854 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+18:24:55.854 I/DjiVideoFeedProvider : PhysicalSource of a PrimaryVideoFeed is NULL
+18:24:55.855 I/DjiVideoFeedProvider : PhysicalSource of a SecondaryVideoFeed is NULL
+18:24:55.864 I/DjiVideoFeedProvider : PhysicalSource of a TranscodedVideoFeed is NULL
+18:24:55.916 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=0
+trans.=NULL(UNUSED)
+18:24:55.917 W/DjiFpvFragment : No need to re-init codecManager!
+18:24:55.918 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=1
+trans.=NULL(UNUSED)
+18:24:55.918 I/DjiFpvFragment : Starting CodecManager, w=461 h=326 src=Camera
+18:24:55.959 I/VsmToUcsConnectorBase : UCS connector started on 54322
+18:24:55.968 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+18:24:55.969 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+18:24:56.060 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+18:24:56.728 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+18:24:56.729 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+18:24:56.734 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+18:24:56.735 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+18:24:56.736 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+18:24:56.745 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+18:24:56.746 W/DjiFpvFragment : No need to re-init codecManager!
+18:24:56.748 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+18:24:56.749 W/DjiFpvFragment : No need to re-init codecManager!
+18:24:57.557 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (CAMERA), but vm is NULL, so far ignore
+18:24:57.569 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (GIMBAL), but vm is NULL, so far ignore
+18:24:57.589 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (FLIGHT_CONTROLLER), but vm is NULL, so far ignore
+18:24:57.595 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (BATTERY), but vm is NULL, so far ignore
+18:24:57.603 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (AIR_LINK), but vm is NULL, so far ignore
+18:24:57.615 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (REMOTE_CONTROLLER), but vm is NULL, so far ignore
+18:24:57.647 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+18:24:57.649 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+18:24:57.649 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+18:24:57.659 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+18:24:57.660 W/DjiFpvFragment : No need to re-init codecManager!
+18:24:57.661 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+18:24:57.662 W/DjiFpvFragment : No need to re-init codecManager!
+18:24:58.020 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+18:24:58.939 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+18:24:58.941 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30831
+18:24:58.943 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30831
+18:24:58.975 I/SsdpPortsMonitor : Service discovery: Network interface enabled: wlan0
+18:24:58.980 I/SsdpPortsMonitor : Service discovery: Network interface enabled: lo
+18:25:00.944 I/DroneBridgeImpl : OK, starting drone init...
+18:25:00.953 I/DroneBridgeImpl : OK, connected DJI_M100 (041DF30831)
+18:25:00.954 I/MyBatteryUpdateCallback : initDroneUpdate - Battery - singleBatteryMode (1)
+18:25:00.961 I/MyBatteryUpdateCallback : setUpKeyListeners for: AggregationState, isInSingleBatteryMode, Overviews
+18:25:00.964 W/MyBatteryUpdateCallback : AggregationState ERROR : The feature is unsupported.
+18:25:00.966 I/MyBatteryUpdateCallback : singleBatteryModeKey = false
+18:25:00.969 W/MyBatteryUpdateCallback : Overviews ERROR : The feature is unsupported.
+18:25:00.974 I/MyBatteryUpdateCallback : setUpKeyListeners for [0]: ChargeRemainingInPercent, ChargeRemaining, Voltage, Current, Temperature, LifetimeRemaining, FullChargeCapacity, NumberOfDischarges, isSmartBattery, ConnectionState, FirmwareVersion, SerialNumber
+18:25:00.995 I/MyBatteryUpdateCallback : Battery #1 has NORMAL ConnectionState
+18:25:01.004 I/FailsafeControllerDjiImpl : setUpKeyListeners for: GoHomeAltitude, MaxFlightHeight, SmartReturnToHomeEnabled, LowBatteryWarningThreshold, SeriousLowBatteryWarningThreshold
+18:25:01.011 I/MyFlightControllerUpdateCallback : setUpKeyListeners for: AircraftLocationLatitude, AircraftLocationLongitude, Altitude, GPSSignalLevel, SatelliteCount, AttitudePitch, AttitudeRoll, AttitudeYaw, VelocityX, VelocityY, VelocityZ, FlightMode, AreMotorsOn, IsFlying, HomeLocationLatitude, HomeLocationLongitude, AircraftName, FirmwarePackageVersion, FirmwareVersion
+18:25:01.067 I/DroneMainControllerDjiImpl : onFlightMode change: UNKNOWN -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 118)
+18:25:01.070 I/MyFlightControllerUpdateCallback : Home -77.4612483 / NULL
+18:25:01.071 I/MyFlightControllerUpdateCallback : Home NULL / 169.1857556
+18:25:01.072 I/MyFlightControllerUpdateCallback : AircraftName = waddle2
+18:25:01.073 I/MyFlightControllerUpdateCallback : FirmwareVersion = 1.3.1.82
+18:25:01.074 I/MyFlightControllerUpdateCallback : FlightControllerVersion = 03.01.06.108
+18:25:01.075 I/MyRtkUpdateCallback : setUpKeyListeners for: RTKEnabled, RTKState, RTKFusionHeading, RTKFusionLocation, IsRTKConnected, IsRTKFusionDataUsable
+18:25:01.076 W/MyRtkUpdateCallback : RTKEnabled ERROR : The feature is unsupported.
+18:25:01.076 W/MyRtkUpdateCallback : RTKState ERROR : The feature is unsupported.
+18:25:01.078 W/MyRtkUpdateCallback : RTKFusionHeading ERROR : The feature is unsupported.
+18:25:01.078 W/MyRtkUpdateCallback : RTKFusionLocation ERROR : The feature is unsupported.
+18:25:01.079 W/MyRtkUpdateCallback : IsRTKConnected ERROR : The feature is unsupported.
+18:25:01.081 W/MyRtkUpdateCallback : IsRTKFusionDataUsable ERROR : The feature is unsupported.
+18:25:01.082 I/MyGimbalUpdateCallback : setUpKeyListeners for: AttitudeInDegrees, AttitudeYaw, Capabilities, FirmwareVersion, SerialNumber
+18:25:01.083 I/MyGimbalUpdateCallback : gimbal.getCapabilities RESULT: pitch [-90..30], roll [-15..15], yaw [-180..180]
+18:25:01.085 W/MyGimbalUpdateCallback : SerialNumber ERROR : The feature is unsupported.
+18:25:01.086 I/MyRemoteControllerUpdateCallback : setUpKeyListeners for: ChargeRemaining, FirmwareVersion, SerialNumber
+18:25:01.087 I/MySdCardUpdateCallback : setUpKeyListeners for: SDCardRemainingSpaceInMB, SDCardTotalSpaceInMB, SDCardIsInserted
+18:25:01.096 I/MySignalQualityUpdateCallback : setUpKeyListeners... (uplinkKey, downlinkKey) for LB
+18:25:01.100 I/MySimulatorUpdateCallbackAndController : setUpKeyListeners for: IsSimulatorStarted
+18:25:01.101 I/DjiOnboardMessageSender : setUpKeyListeners... (IsOnBoardSDKAvailable)
+18:25:01.102 I/DjiOnboardMessageSender : IS_ON_BOARD_SDK_AVAILABLE = true
+18:25:01.105 I/DjiOnboardMessageSender : Set flight controller callback prev: (0) new: (111538154)
+18:25:01.108 I/DjiOnboardMessageSender : Bind to flight controller
+18:25:01.109 I/DjiMoveController : setUpKeyListeners for: VirtualStickControlModeEnabled, isVirtualStickControlModeAvailable
+18:25:01.114 I/CameraSettingsControllerDjiImpl : setUpKeyListeners for: FocusTarget
+18:25:01.119 I/CameraPhotoSettingsControllerImpl : setUpKeyListeners for: ShootPhotoModeRange, ShootPhotoMode, PhotoBurstCount, PhotoAEBCount, PhotoTimeIntervalSettings, PhotoAspectRatioRange, PhotoAspectRatio, PhotoFileFormatRange, PhotoFileFormat
+18:25:01.131 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_4_3
+18:25:01.132 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_16_9
+18:25:01.134 I/CameraVideoSettingsControllerImpl : setUpKeyListeners for: VideoResolutionFrameRateRange, ResolutionFrameRate, VideoFileFormat, VideoStandard
+18:25:01.146 I/CameraExposureSettingsControllerImpl : setUpKeyListeners for: IsMeteringModeSupported, MeteringMode, ExposureMode, ISO, ISORange, Aperture, ApertureRange, ShutterSpeed, ShutterSpeedRange, ExposureCompensation, ExposureCompensationRange
+18:25:01.147 W/CameraExposureSettingsControllerImpl : IsMeteringModeSupported ERROR : The feature is unsupported.
+18:25:01.151 I/CameraOtherSettingsControllerImpl : setUpKeyListeners for: AntiFlickerFrequency, WhiteBalance
+18:25:01.154 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR The feature is unsupported.
+18:25:01.158 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR Camera param get failed
+18:25:01.160 I/CameraZoomControllerDjiImpl : setUpKeyListeners for: isTapZoomSupported, TapZoomEnabled
+18:25:01.161 W/CameraZoomControllerDjiImpl : TapZoomEnabled ERROR : The feature is unsupported.
+18:25:01.163 I/CameraZoomControllerDjiImpl : IS_OPTICAL_ZOOM_SUPPORTED = false
+18:25:01.176 I/VsmToUcsConnectorBase : Sending registerDevice (1425722329)to ALL 
+18:25:01.190 I/VsmToUcsConnectorBase : Sending initial statuses (1425722329) to ALL
+18:25:01.191 I/MegaTask : MegaTask: DISARMED downlink/uplink
+18:25:01.192 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+18:25:01.193 I/HomeLocationTask : sending new home position = -77.4612483 169.1857556
+18:25:01.210 I/DroneStateController : setUpKeyListeners for: CompassHasError, FlightWindWarning, MaxFlightRadius, MaxFlightRadiusEnabled, HasReachedMaxFlightRadius
+18:25:01.210 I/DroneStateController : New diagnostics messages:
+18:25:01.211 I/DroneStateController : Code #8012: Reason: "Low battery temperature, warm or replace the battery" Solution: ""
+18:25:01.212 I/DroneStateController : FLIGHT_WIND_WARNING state: LEVEL_0
+18:25:01.215 I/DroneStateController : HAS_REACHED_MAX_FLIGHT_RADIUS: false
+18:25:01.222 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+18:25:02.123 I/DroneStateController : MAX_FLIGHT_RADIUS: 480
+18:25:02.225 I/DroneStateController : MAX_FLIGHT_RADIUS_ENABLED: false
+18:25:03.071 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+18:25:03.086 I/HomeLocationTask : sending new home position = -77.4612483 169.1857556
+18:25:03.087 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+18:25:03.120 I/WithAppMainServiceActivity : Toast message: Drone initialized
+18:25:03.137 I/TakeOffPointTask : sending new takeOff position = -77.4612483 169.1857556
+18:25:06.060 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+18:25:16.062 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+18:25:17.191 I/VsmToUcsConnectorBase : UgCS 3.3.490 @ 10.10.10.104:52942 (ucsId = 1930400709)
+18:25:17.193 I/VsmToUcsConnectorBase : Sending registerDevice (1425722329)to ONE 
+18:25:17.199 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22867, currentCurrent=930, remainPowerPercent=55, smartBattery=true, temperature=11.350006}.
+18:25:17.200 I/ExceptionLogger : Battery update ignored.
+18:25:17.220 I/VsmToUcsConnectorBase : Sending initial statuses (1425722329) to ONE
+18:25:17.222 I/MegaTask : MegaTask: DISARMED downlink/uplink
+18:25:17.227 I/TakeOffPointTask : sending new takeOff position = -77.4612483 169.1857556
+18:25:17.232 I/HomeLocationTask : sending new home position = -77.4612483 169.1857556
+18:25:33.498 I/ExceptionLogger : Battery update ignored.
+18:25:35.443 I/CommandHandler : Got Mission Upload cmd
+18:25:35.484 I/AbstractDroneMainController : Command 0 locked.
+18:25:35.538 I/DroneMainControllerDjiImpl : 
+
+Mission 'r8-QRS.ugcs' (id=1783391993)
+  Home source FIRST_WAYPOINT
+  GotoFirstWaypointMode DEFAULT
+  Return Alt 110.0, on RemoteController Lost RTH
+     1 | Spline Waypoint alt=80.00m lat=-77.4612451 lon=169.1860754 maxCR=0.0m
+     2 | Change Speed 12.0
+     3 | Spline Waypoint alt=45.62m lat=-77.4616842 lon=169.2124851 maxCR=0.0m
+     5 | Waypoint alt=-48.41m lat=-77.4586342 lon=169.2223591
+     6 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+     7 | Change Speed 4.0
+     8 | Waypoint alt=-49.16m lat=-77.4582204 lon=169.2229311
+     9 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    10 | Change Speed 4.1
+    11 | Waypoint alt=-60.46m lat=-77.4583271 lon=169.2245642
+    12 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    13 | Change Speed 3.9
+    14 | Waypoint alt=-58.02m lat=-77.4579707 lon=169.2250575
+    15 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    16 | Change Speed 4.0
+    17 | Waypoint alt=-44.84m lat=-77.4578640 lon=169.2234244
+    18 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    19 | Change Speed 4.0
+    20 | Waypoint alt=-79.96m lat=-77.4557257 lon=169.2263836
+    21 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    23 | Waypoint alt=-82.85m lat=-77.4558323 lon=169.2280165
+    24 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    25 | Change Speed 4.0
+    26 | Waypoint alt=-71.43m lat=-77.4561887 lon=169.2275234
+    27 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    28 | Change Speed 4.0
+    29 | Waypoint alt=-80.58m lat=-77.4562953 lon=169.2291563
+    30 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    31 | Change Speed 4.1
+    32 | Waypoint alt=-90.56m lat=-77.4559389 lon=169.2296494
+    33 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    34 | Change Speed 4.0
+    35 | Waypoint alt=-104.22m lat=-77.4562588 lon=169.2345482
+    36 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    37 | Change Speed 4.0
+    38 | Waypoint alt=-95.85m lat=-77.4566152 lon=169.2340553
+    39 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    40 | Change Speed 4.0
+    41 | Waypoint alt=-101.59m lat=-77.4567218 lon=169.2356883
+    42 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    43 | Change Speed 4.1
+    44 | Waypoint alt=-110.53m lat=-77.4563653 lon=169.2361812
+    45 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    46 | Change Speed 4.0
+    47 | Waypoint alt=-126.99m lat=-77.4565785 lon=169.2394473
+    48 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    50 | Waypoint alt=-126.56m lat=-77.4569349 lon=169.2389545
+    51 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    52 | Change Speed 4.0
+    53 | Waypoint alt=-113.78m lat=-77.4568283 lon=169.2373214
+    54 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    55 | Change Speed 3.9
+    56 | Waypoint alt=-111.95m lat=-77.4571848 lon=169.2368285
+    57 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    58 | Change Speed 4.0
+    59 | Waypoint alt=-99.20m lat=-77.4570782 lon=169.2351954
+    60 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    61 | Change Speed 3.9
+    62 | Waypoint alt=-98.25m lat=-77.4574346 lon=169.2347025
+    63 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    64 | Change Speed 4.0
+    65 | Waypoint alt=-87.11m lat=-77.4573280 lon=169.2330693
+    66 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    67 | Change Speed 4.0
+    68 | Waypoint alt=-89.29m lat=-77.4569716 lon=169.2335623
+    69 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    70 | Change Speed 4.0
+    71 | Waypoint alt=-84.44m lat=-77.4568650 lon=169.2319293
+    72 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    73 | Change Speed 4.0
+    74 | Waypoint alt=-92.41m lat=-77.4565086 lon=169.2324223
+    75 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    76 | Change Speed 4.0
+    77 | Waypoint alt=-88.02m lat=-77.4564020 lon=169.2307893
+    78 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    79 | Change Speed 3.9
+    80 | Waypoint alt=-79.67m lat=-77.4567584 lon=169.2302962
+    81 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    82 | Change Speed 4.0
+    83 | Waypoint alt=-65.43m lat=-77.4565451 lon=169.2270303
+    84 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    86 | Waypoint alt=-60.05m lat=-77.4569015 lon=169.2265371
+    87 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    88 | Change Speed 4.0
+    89 | Waypoint alt=-68.37m lat=-77.4570081 lon=169.2281701
+    90 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    91 | Change Speed 4.0
+    92 | Waypoint alt=-63.96m lat=-77.4573645 lon=169.2276770
+    93 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    94 | Change Speed 3.9
+    95 | Waypoint alt=-55.77m lat=-77.4572579 lon=169.2260439
+    96 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    97 | Change Speed 4.0
+    98 | Waypoint alt=-55.16m lat=-77.4576143 lon=169.2255507
+    99 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    100 | Change Speed 4.0
+    101 | Waypoint alt=-66.93m lat=-77.4577210 lon=169.2271838
+    102 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    103 | Change Speed 4.1
+    104 | Waypoint alt=-69.39m lat=-77.4580774 lon=169.2266906
+    105 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    106 | Change Speed 4.0
+    107 | Waypoint alt=-88.28m lat=-77.4582906 lon=169.2299570
+    108 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    110 | Waypoint alt=-88.17m lat=-77.4590034 lon=169.2289707
+    111 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    113 | Waypoint alt=-80.06m lat=-77.4588968 lon=169.2273374
+    114 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    115 | Change Speed 4.1
+    116 | Waypoint alt=-80.77m lat=-77.4585404 lon=169.2278306
+    117 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    118 | Change Speed 3.9
+    119 | Waypoint alt=-70.32m lat=-77.4584338 lon=169.2261974
+    120 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    121 | Change Speed 4.1
+    122 | Waypoint alt=-70.47m lat=-77.4587902 lon=169.2257042
+    123 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    124 | Change Speed 3.9
+    125 | Waypoint alt=-48.85m lat=-77.4585768 lon=169.2224378
+    126 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    128 | Spline Waypoint alt=-15.34m lat=-77.4587375 lon=169.2218528 maxCR=0.0m
+    129 | Change Speed 12.0
+    130 | Spline Waypoint alt=45.80m lat=-77.4618870 lon=169.2127032 maxCR=0.0m
+    132 | Spline Waypoint alt=53.61m lat=-77.4614374 lon=169.1855287 maxCR=0.0m
+    133 | Change Speed 5.0
+    134 | Spline Waypoint alt=23.63m lat=-77.4614355 lon=169.1852711 maxCR=0.0m
+    135 | Change Speed 3.0
+    136 | Land
+  minAlt=-126.99m maxAlt=80.00m
+18:25:35.591 I/DroneMainControllerDjiImpl : 
+  DJI_M100, simulator=OFF, FC=03.01.06.108 (OLD FC)
+  Generated DJIWaypointMission task contains 48 Waypoints
+  Fly CURVED with 12.00 m/s 
+  GotoFirstWaypointMode SAFELY
+  Heading AUTO and AUTO_LAND at the end
+    WP # 1 heading= 94 ( 94), alt=80.00m lat=-77.4612451 lon=169.1860754 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=641.04m 2d=640.11m vert=-34.38m
+    WP # 2 heading= 35 ( 35), alt=45.62m lat=-77.4616842 lon=169.2124851 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=425.53m 2d=415.01m vert=-94.03m
+    WP # 3 heading= 16 ( 16), alt=-48.41m lat=-77.4586342 lon=169.2223591 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.00
+        distToNext 3d=48.10m 2d=48.09m vert=-0.75m
+    WP # 4 heading=106 (106), alt=-49.16m lat=-77.4582204 lon=169.2229311 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.74m 2d=41.23m vert=-11.29m
+    WP # 5 heading= 16 ( 16), alt=-60.46m lat=-77.4583271 lon=169.2245642 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.50m 2d=41.43m vert=2.43m
+    WP # 6 heading=-73 (-73), alt=-58.02m lat=-77.4579707 lon=169.2250575 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=43.28m 2d=41.23m vert=13.18m
+    WP # 7 heading= 16 ( 16), alt=-44.84m lat=-77.4578640 lon=169.2234244 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=251.03m 2d=248.56m vert=-35.12m
+    WP # 8 heading=106 (106), alt=-79.96m lat=-77.4557257 lon=169.2263836 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=41.33m 2d=41.23m vert=-2.88m
+    WP # 9 heading=-163 (-163), alt=-82.85m lat=-77.4558323 lon=169.2280165 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.97m 2d=41.43m vert=11.42m
+    WP #10 heading=106 (106), alt=-71.43m lat=-77.4561887 lon=169.2275234 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.23m 2d=41.23m vert=-9.15m
+    WP #11 heading= 16 ( 16), alt=-80.58m lat=-77.4562953 lon=169.2291563 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.61m 2d=41.43m vert=-9.99m
+    WP #12 heading=106 (106), alt=-90.56m lat=-77.4559389 lon=169.2296494 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=124.43m 2d=123.68m vert=-13.66m
+    WP #13 heading=-163 (-163), alt=-104.22m lat=-77.4562588 lon=169.2345482 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.27m 2d=41.43m vert=8.38m
+    WP #14 heading=106 (106), alt=-95.85m lat=-77.4566152 lon=169.2340553 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.62m 2d=41.23m vert=-5.75m
+    WP #15 heading= 16 ( 16), alt=-101.59m lat=-77.4567218 lon=169.2356883 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.38m 2d=41.43m vert=-8.94m
+    WP #16 heading=106 (106), alt=-110.53m lat=-77.4563653 lon=169.2361812 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=84.08m 2d=82.45m vert=-16.45m
+    WP #17 heading=-163 (-163), alt=-126.99m lat=-77.4565785 lon=169.2394473 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=41.43m 2d=41.43m vert=0.43m
+    WP #18 heading=-73 (-73), alt=-126.56m lat=-77.4569349 lon=169.2389545 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=43.16m 2d=41.23m vert=12.78m
+    WP #19 heading=-163 (-163), alt=-113.78m lat=-77.4568283 lon=169.2373214 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.47m 2d=41.43m vert=1.82m
+    WP #20 heading=-73 (-73), alt=-111.95m lat=-77.4571848 lon=169.2368285 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=43.15m 2d=41.23m vert=12.75m
+    WP #21 heading=-163 (-163), alt=-99.20m lat=-77.4570782 lon=169.2351954 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.44m 2d=41.43m vert=0.95m
+    WP #22 heading=-73 (-73), alt=-98.25m lat=-77.4574346 lon=169.2347025 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.70m 2d=41.23m vert=11.14m
+    WP #23 heading= 16 ( 16), alt=-87.11m lat=-77.4573280 lon=169.2330693 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.48m 2d=41.43m vert=-2.18m
+    WP #24 heading=-73 (-73), alt=-89.29m lat=-77.4569716 lon=169.2335623 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.51m 2d=41.23m vert=4.85m
+    WP #25 heading= 16 ( 16), alt=-84.44m lat=-77.4568650 lon=169.2319293 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.19m 2d=41.43m vert=-7.97m
+    WP #26 heading=-73 (-73), alt=-92.41m lat=-77.4565086 lon=169.2324223 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.46m 2d=41.23m vert=4.39m
+    WP #27 heading=-163 (-163), alt=-88.02m lat=-77.4564020 lon=169.2307893 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.26m 2d=41.43m vert=8.35m
+    WP #28 heading=-73 (-73), alt=-79.67m lat=-77.4567584 lon=169.2302962 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=83.67m 2d=82.45m vert=14.24m
+    WP #29 heading=-163 (-163), alt=-65.43m lat=-77.4565451 lon=169.2270303 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=41.77m 2d=41.43m vert=5.38m
+    WP #30 heading=106 (106), alt=-60.05m lat=-77.4569015 lon=169.2265371 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.06m 2d=41.23m vert=-8.32m
+    WP #31 heading=-163 (-163), alt=-68.37m lat=-77.4570081 lon=169.2281701 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.66m 2d=41.43m vert=4.42m
+    WP #32 heading=-73 (-73), alt=-63.96m lat=-77.4573645 lon=169.2276770 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.03m 2d=41.23m vert=8.19m
+    WP #33 heading=-163 (-163), alt=-55.77m lat=-77.4572579 lon=169.2260439 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.43m 2d=41.43m vert=0.60m
+    WP #34 heading=106 (106), alt=-55.16m lat=-77.4576143 lon=169.2255507 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.87m 2d=41.23m vert=-11.77m
+    WP #35 heading=-163 (-163), alt=-66.93m lat=-77.4577210 lon=169.2271838 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.50m 2d=41.43m vert=-2.46m
+    WP #36 heading=106 (106), alt=-69.39m lat=-77.4580774 lon=169.2266906 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=84.59m 2d=82.45m vert=-18.89m
+    WP #37 heading=-163 (-163), alt=-88.28m lat=-77.4582906 lon=169.2299570 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=82.85m 2d=82.85m vert=0.10m
+    WP #38 heading=-73 (-73), alt=-88.17m lat=-77.4590034 lon=169.2289707 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=42.02m 2d=41.23m vert=8.11m
+    WP #39 heading= 16 ( 16), alt=-80.06m lat=-77.4588968 lon=169.2273374 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.43m 2d=41.43m vert=-0.71m
+    WP #40 heading=-73 (-73), alt=-80.77m lat=-77.4585404 lon=169.2278306 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.53m 2d=41.23m vert=10.44m
+    WP #41 heading=-163 (-163), alt=-70.32m lat=-77.4584338 lon=169.2261974 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.43m 2d=41.43m vert=-0.14m
+    WP #42 heading=-73 (-73), alt=-70.47m lat=-77.4587902 lon=169.2257042 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=85.24m 2d=82.45m vert=21.62m
+    WP #43 heading=-141 (-141), alt=-48.85m lat=-77.4585768 lon=169.2224378 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=40.53m 2d=22.80m vert=33.51m
+    WP #44 heading=-147 (-147), alt=-15.34m lat=-77.4587375 lon=169.2218528 corn=11.30 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=419.00m 2d=414.52m vert=61.14m
+    WP #45 heading=-85 (-85), alt=45.80m lat=-77.4618870 lon=169.2127032 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=658.67m 2d=658.62m vert=7.81m
+    WP #46 heading=-88 (-88), alt=53.61m lat=-77.4614374 lon=169.1855287 corn=3.01 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=5.00
+        distToNext 3d=30.62m 2d=6.23m vert=-29.98m
+    WP #47 heading=-127 (-127), alt=23.63m lat=-77.4614355 lon=169.1852711 corn=1.62 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=3.00
+        distToNext 3d=3.46m 2d=3.45m vert=0.29m
+    WP #48 heading=-127 (-127), alt=23.92m lat=-77.4614542 lon=169.1851573 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToFirst 3d=64.64m 2d=32.15m vert=-56.08m
+18:25:35.592 I/DroneMainControllerDjiImpl : Mission Upload - ReturnAltitude - set to 110.00m SKIPPED as GoHomeAltitude = 110.00m
+18:25:35.593 W/DroneMainControllerDjiImpl : Mission Upload - HomeLocation - set skipped, as drone landed
+18:25:35.594 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - check for cnt = 255, timeS = 2
+18:25:35.594 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - set skipped, as CameraSettings has same values
+18:25:35.595 I/DroneMainControllerDjiImpl : Mission Upload - ValidateReceivedMission...
+18:25:35.598 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - loadMission... (state = READY_TO_UPLOAD)
+18:25:35.603 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - uploadMission... (state = READY_TO_UPLOAD)
+18:25:35.836 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.000 (0/48)
+18:25:36.045 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.021 (1/48)
+18:25:39.235 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.042 (2/48)
+18:25:39.438 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.063 (3/48)
+18:25:39.639 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.083 (4/48)
+18:25:39.843 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.104 (5/48)
+18:25:43.036 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.125 (6/48)
+18:25:43.243 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.146 (7/48)
+18:25:46.426 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.167 (8/48)
+18:25:46.626 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.188 (9/48)
+18:25:46.832 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.208 (10/48)
+18:25:47.043 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.229 (11/48)
+18:25:47.242 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.250 (12/48)
+18:25:47.451 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.271 (13/48)
+18:25:47.652 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.292 (14/48)
+18:25:47.863 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.313 (15/48)
+18:25:48.070 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.333 (16/48)
+18:25:48.271 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.354 (17/48)
+18:25:48.494 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.375 (18/48)
+18:25:48.694 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.396 (19/48)
+18:25:48.890 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.417 (20/48)
+18:25:52.078 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.438 (21/48)
+18:25:52.280 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.458 (22/48)
+18:25:52.491 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.479 (23/48)
+18:25:52.705 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.500 (24/48)
+18:25:52.891 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.521 (25/48)
+18:25:53.099 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.542 (26/48)
+18:25:53.308 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.563 (27/48)
+18:25:53.510 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.583 (28/48)
+18:25:53.717 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.604 (29/48)
+18:25:53.921 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.625 (30/48)
+18:25:54.123 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.646 (31/48)
+18:25:54.336 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.667 (32/48)
+18:25:54.547 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.688 (33/48)
+18:25:54.743 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.708 (34/48)
+18:25:54.952 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.729 (35/48)
+18:25:55.163 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.750 (36/48)
+18:25:55.364 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.771 (37/48)
+18:25:55.574 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.792 (38/48)
+18:25:55.774 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.813 (39/48)
+18:25:55.985 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.833 (40/48)
+18:25:56.190 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.854 (41/48)
+18:25:56.398 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.875 (42/48)
+18:25:56.603 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.896 (43/48)
+18:25:56.805 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.917 (44/48)
+18:25:57.019 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.938 (45/48)
+18:26:00.201 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.958 (46/48)
+18:26:00.407 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.979 (47/48)
+18:26:00.610 I/DroneMainControllerDjiImpl : Mission Upload - Result - SUCCESS
+18:26:00.614 I/MyMissionGlobalEventListener : (MyMissionGlobalEventListener) Mission Upload - OK - error is null
+18:26:13.079 I/CommandHandler : Got Mission Upload cmd
+18:26:13.100 I/AbstractDroneMainController : Command 1 locked.
+18:26:13.114 I/DroneMainControllerDjiImpl : 
+
+Mission 'r11-D.ugcs' (id=1486881176)
+  Home source FIRST_WAYPOINT
+  GotoFirstWaypointMode DEFAULT
+  Return Alt 110.0, on RemoteController Lost RTH
+     1 | Spline Waypoint alt=70.00m lat=-77.4612926 lon=169.1861410 maxCR=0.0m
+     2 | Change Speed 12.0
+     3 | Spline Waypoint alt=-18.43m lat=-77.4626220 lon=169.2218073 maxCR=0.0m
+     4 | Change Speed 4.0
+     5 | Waypoint alt=-24.22m lat=-77.4626141 lon=169.2225731
+     6 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+     7 | Change Speed 4.1
+     8 | Waypoint alt=-32.42m lat=-77.4626741 lon=169.2256712
+     9 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    10 | Change Speed 4.0
+    11 | Waypoint alt=-38.20m lat=-77.4623177 lon=169.2261646
+    12 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    13 | Change Speed 4.1
+    14 | Waypoint alt=-77.67m lat=-77.4601793 lon=169.2291245
+    15 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    17 | Waypoint alt=-80.86m lat=-77.4602859 lon=169.2307579
+    18 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    19 | Change Speed 4.0
+    20 | Waypoint alt=-94.89m lat=-77.4595731 lon=169.2317442
+    21 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    23 | Waypoint alt=-100.41m lat=-77.4597863 lon=169.2350111
+    24 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    26 | Waypoint alt=-89.38m lat=-77.4601427 lon=169.2345180
+    27 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    28 | Change Speed 4.1
+    29 | Waypoint alt=-90.85m lat=-77.4600361 lon=169.2328845
+    30 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    31 | Change Speed 3.9
+    32 | Waypoint alt=-76.90m lat=-77.4607489 lon=169.2318983
+    33 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    35 | Waypoint alt=-73.20m lat=-77.4606423 lon=169.2302647
+    36 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    37 | Change Speed 4.0
+    38 | Waypoint alt=-65.77m lat=-77.4609987 lon=169.2297715
+    39 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    40 | Change Speed 4.0
+    41 | Waypoint alt=-67.01m lat=-77.4611053 lon=169.2314051
+    42 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    43 | Change Speed 4.0
+    44 | Waypoint alt=-53.22m lat=-77.4614617 lon=169.2309119
+    45 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    46 | Change Speed 4.0
+    47 | Waypoint alt=-58.08m lat=-77.4613551 lon=169.2292783
+    48 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    49 | Change Speed 4.0
+    50 | Waypoint alt=-35.22m lat=-77.4624243 lon=169.2277984
+    51 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    52 | Change Speed 4.0
+    53 | Waypoint alt=-38.20m lat=-77.4623177 lon=169.2261646
+    54 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    55 | Change Speed 4.1
+    56 | Waypoint alt=-39.93m lat=-77.4622110 lon=169.2245310
+    57 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    58 | Change Speed 4.0
+    59 | Waypoint alt=-80.42m lat=-77.4597162 lon=169.2279843
+    60 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    61 | Change Speed 4.1
+    62 | Waypoint alt=-85.04m lat=-77.4598229 lon=169.2296177
+    63 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    64 | Change Speed 4.0
+    65 | Waypoint alt=-91.07m lat=-77.4594572 lon=169.2301080
+    66 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    68 | Waypoint alt=-60.67m lat=-77.4590399 lon=169.2235776
+    69 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    70 | Change Speed 4.0
+    71 | Waypoint alt=-54.50m lat=-77.4593963 lon=169.2230843
+    72 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    73 | Change Speed 4.0
+    74 | Waypoint alt=-72.32m lat=-77.4596096 lon=169.2263509
+    75 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    77 | Waypoint alt=-66.23m lat=-77.4599660 lon=169.2258576
+    78 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    79 | Change Speed 4.0
+    80 | Waypoint alt=-52.39m lat=-77.4597527 lon=169.2225909
+    81 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    83 | Waypoint alt=-59.25m lat=-77.4598593 lon=169.2242243
+    84 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    85 | Change Speed 3.9
+    86 | Waypoint alt=-55.02m lat=-77.4602157 lon=169.2237309
+    87 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    88 | Change Speed 4.1
+    89 | Waypoint alt=-61.98m lat=-77.4603224 lon=169.2253643
+    90 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    91 | Change Speed 3.9
+    92 | Waypoint alt=-57.28m lat=-77.4606788 lon=169.2248710
+    93 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    94 | Change Speed 4.0
+    95 | Waypoint alt=-50.06m lat=-77.4605721 lon=169.2232375
+    96 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    97 | Change Speed 3.9
+    98 | Waypoint alt=-45.29m lat=-77.4609285 lon=169.2227441
+    99 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    100 | Change Speed 4.1
+    101 | Waypoint alt=-52.27m lat=-77.4610352 lon=169.2243776
+    102 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    103 | Change Speed 4.0
+    104 | Waypoint alt=-28.52m lat=-77.4624608 lon=169.2224038
+    106 | Spline Waypoint alt=19.56m lat=-77.4627511 lon=169.2212546 maxCR=0.0m
+    107 | Change Speed 12.0
+    108 | Spline Waypoint alt=84.40m lat=-77.4615339 lon=169.1853670 maxCR=0.0m
+    109 | Change Speed 5.0
+    110 | Spline Waypoint alt=24.22m lat=-77.4615249 lon=169.1852974 maxCR=0.0m
+    111 | Change Speed 3.0
+    112 | Land
+  minAlt=-100.41m maxAlt=84.40m
+18:26:13.172 I/DroneMainControllerDjiImpl : 
+  DJI_M100, simulator=OFF, FC=03.01.06.108 (OLD FC)
+  Generated DJIWaypointMission task contains 40 Waypoints
+  Fly CURVED with 12.00 m/s 
+  GotoFirstWaypointMode SAFELY
+  Heading AUTO and AUTO_LAND at the end
+    WP # 1 heading= 99 ( 99), alt=70.00m lat=-77.4612926 lon=169.1861410 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=878.99m 2d=874.53m vert=-88.43m
+    WP # 2 heading= 87 ( 87), alt=-18.43m lat=-77.4626220 lon=169.2218073 corn=9.16 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=4.00
+        distToNext 3d=19.41m 2d=18.53m vert=-5.79m
+    WP # 3 heading= 95 ( 95), alt=-24.22m lat=-77.4626141 lon=169.2225731 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=75.61m 2d=75.16m vert=-8.20m
+    WP # 4 heading= 16 ( 16), alt=-32.42m lat=-77.4626741 lon=169.2256712 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.83m 2d=41.43m vert=-5.78m
+    WP # 5 heading= 16 ( 16), alt=-38.20m lat=-77.4623177 lon=169.2261646 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=251.68m 2d=248.56m vert=-39.47m
+    WP # 6 heading=106 (106), alt=-77.67m lat=-77.4601793 lon=169.2291245 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=41.35m 2d=41.23m vert=-3.19m
+    WP # 7 heading= 16 ( 16), alt=-80.86m lat=-77.4602859 lon=169.2307579 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=84.03m 2d=82.85m vert=-14.03m
+    WP # 8 heading=106 (106), alt=-94.89m lat=-77.4595731 lon=169.2317442 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=82.63m 2d=82.45m vert=-5.51m
+    WP # 9 heading=-163 (-163), alt=-100.41m lat=-77.4597863 lon=169.2350111 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=42.87m 2d=41.43m vert=11.03m
+    WP #10 heading=-73 (-73), alt=-89.38m lat=-77.4601427 lon=169.2345180 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.25m 2d=41.23m vert=-1.47m
+    WP #11 heading=-163 (-163), alt=-90.85m lat=-77.4600361 lon=169.2328845 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=84.02m 2d=82.85m vert=13.96m
+    WP #12 heading=-73 (-73), alt=-76.90m lat=-77.4607489 lon=169.2318983 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=41.39m 2d=41.23m vert=3.70m
+    WP #13 heading=-163 (-163), alt=-73.20m lat=-77.4606423 lon=169.2302647 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.09m 2d=41.43m vert=7.43m
+    WP #14 heading=106 (106), alt=-65.77m lat=-77.4609987 lon=169.2297715 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.24m 2d=41.23m vert=-1.25m
+    WP #15 heading=-163 (-163), alt=-67.01m lat=-77.4611053 lon=169.2314051 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=43.66m 2d=41.43m vert=13.80m
+    WP #16 heading=-73 (-73), alt=-53.22m lat=-77.4614617 lon=169.2309119 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.51m 2d=41.23m vert=-4.86m
+    WP #17 heading=-163 (-163), alt=-58.08m lat=-77.4613551 lon=169.2292783 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=126.37m 2d=124.28m vert=22.86m
+    WP #18 heading=-73 (-73), alt=-35.22m lat=-77.4624243 lon=169.2277984 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.33m 2d=41.23m vert=-2.98m
+    WP #19 heading=-73 (-73), alt=-38.20m lat=-77.4623177 lon=169.2261646 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.26m 2d=41.23m vert=-1.73m
+    WP #20 heading= 16 ( 16), alt=-39.93m lat=-77.4622110 lon=169.2245310 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=292.80m 2d=289.99m vert=-40.49m
+    WP #21 heading=106 (106), alt=-80.42m lat=-77.4597162 lon=169.2279843 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.48m 2d=41.23m vert=-4.62m
+    WP #22 heading= 16 ( 16), alt=-85.04m lat=-77.4598229 lon=169.2296177 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.82m 2d=42.39m vert=-6.03m
+    WP #23 heading=-73 (-73), alt=-91.07m lat=-77.4594572 lon=169.2301080 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=167.33m 2d=164.54m vert=30.41m
+    WP #24 heading=-163 (-163), alt=-60.67m lat=-77.4590399 lon=169.2235776 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.88m 2d=41.43m vert=6.17m
+    WP #25 heading=106 (106), alt=-54.50m lat=-77.4593963 lon=169.2230843 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=84.36m 2d=82.45m vert=-17.82m
+    WP #26 heading=-163 (-163), alt=-72.32m lat=-77.4596096 lon=169.2263509 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=41.87m 2d=41.43m vert=6.09m
+    WP #27 heading=-73 (-73), alt=-66.23m lat=-77.4599660 lon=169.2258576 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=83.60m 2d=82.45m vert=13.84m
+    WP #28 heading=106 (106), alt=-52.39m lat=-77.4597527 lon=169.2225909 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=41.79m 2d=41.23m vert=-6.87m
+    WP #29 heading=-163 (-163), alt=-59.25m lat=-77.4598593 lon=169.2242243 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.64m 2d=41.43m vert=4.23m
+    WP #30 heading=106 (106), alt=-55.02m lat=-77.4602157 lon=169.2237309 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.81m 2d=41.23m vert=-6.96m
+    WP #31 heading=-163 (-163), alt=-61.98m lat=-77.4603224 lon=169.2253643 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.69m 2d=41.43m vert=4.70m
+    WP #32 heading=-73 (-73), alt=-57.28m lat=-77.4606788 lon=169.2248710 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.85m 2d=41.23m vert=7.22m
+    WP #33 heading=-163 (-163), alt=-50.06m lat=-77.4605721 lon=169.2232375 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.70m 2d=41.43m vert=4.77m
+    WP #34 heading=106 (106), alt=-45.29m lat=-77.4609285 lon=169.2227441 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.81m 2d=41.23m vert=-6.99m
+    WP #35 heading=-163 (-163), alt=-52.27m lat=-77.4610352 lon=169.2243776 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.96
+        distToNext 3d=167.40m 2d=165.71m vert=23.75m
+    WP #36 heading=-139 (-139), alt=-28.52m lat=-77.4624608 lon=169.2224038 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=64.25m 2d=42.61m vert=48.08m
+    WP #37 heading=-81 (-81), alt=19.56m lat=-77.4627511 lon=169.2212546 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=12.00
+        distToNext 3d=880.17m 2d=877.77m vert=64.84m
+    WP #38 heading=-59 (-59), alt=84.40m lat=-77.4615339 lon=169.1853670 corn=0.88 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=5.00
+        distToNext 3d=60.21m 2d=1.96m vert=-60.18m
+    WP #39 heading=-55 (-55), alt=24.22m lat=-77.4615249 lon=169.1852974 corn=0.88 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=3.00
+        distToNext 3d=2.05m 2d=2.03m vert=-0.25m
+    WP #40 heading=-55 (-55), alt=23.97m lat=-77.4615146 lon=169.1852280 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToFirst 3d=56.71m 2d=33.13m vert=-46.03m
+18:26:13.174 I/DroneMainControllerDjiImpl : Mission Upload - ReturnAltitude - set to 110.00m SKIPPED as GoHomeAltitude = 110.00m
+18:26:13.175 W/DroneMainControllerDjiImpl : Mission Upload - HomeLocation - set skipped, as drone landed
+18:26:13.175 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - check for cnt = 255, timeS = 2
+18:26:13.176 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - set skipped, as CameraSettings has same values
+18:26:13.176 I/DroneMainControllerDjiImpl : Mission Upload - ValidateReceivedMission...
+18:26:13.179 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - loadMission... (state = READY_TO_EXECUTE)
+18:26:13.182 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - uploadMission... (state = READY_TO_UPLOAD)
+18:26:13.329 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.000 (0/40)
+18:26:13.537 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.025 (1/40)
+18:26:13.739 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.050 (2/40)
+18:26:13.950 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.075 (3/40)
+18:26:14.150 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.100 (4/40)
+18:26:14.357 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.125 (5/40)
+18:26:14.567 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.150 (6/40)
+18:26:14.768 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.175 (7/40)
+18:26:14.977 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.200 (8/40)
+18:26:15.179 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.225 (9/40)
+18:26:15.387 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.250 (10/40)
+18:26:15.592 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.275 (11/40)
+18:26:15.797 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.300 (12/40)
+18:26:16.009 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.325 (13/40)
+18:26:16.210 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.350 (14/40)
+18:26:16.419 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.375 (15/40)
+18:26:16.621 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.400 (16/40)
+18:26:16.827 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.425 (17/40)
+18:26:17.038 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.450 (18/40)
+18:26:20.226 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.475 (19/40)
+18:26:20.431 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.500 (20/40)
+18:26:20.638 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.525 (21/40)
+18:26:20.841 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.550 (22/40)
+18:26:21.046 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.575 (23/40)
+18:26:21.250 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.600 (24/40)
+18:26:21.461 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.625 (25/40)
+18:26:21.662 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.650 (26/40)
+18:26:21.868 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.675 (27/40)
+18:26:22.075 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.700 (28/40)
+18:26:22.279 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.725 (29/40)
+18:26:22.503 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.750 (30/40)
+18:26:22.702 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.775 (31/40)
+18:26:25.875 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.800 (32/40)
+18:26:26.082 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.825 (33/40)
+18:26:26.286 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.850 (34/40)
+18:26:26.494 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.875 (35/40)
+18:26:26.701 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.900 (36/40)
+18:26:26.901 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.925 (37/40)
+18:26:27.105 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.950 (38/40)
+18:26:27.314 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.975 (39/40)
+18:26:27.516 I/DroneMainControllerDjiImpl : Mission Upload - Result - SUCCESS
+18:26:27.518 I/MyMissionGlobalEventListener : (MyMissionGlobalEventListener) Mission Upload - OK - error is null
+18:26:43.628 I/CommandHandler : Got Mission Upload cmd
+18:26:43.653 I/AbstractDroneMainController : Command 2 locked.
+18:26:43.663 I/DroneMainControllerDjiImpl : 
+
+Mission 'r13-EROOK.ugcs' (id=254435166)
+  Home source FIRST_WAYPOINT
+  GotoFirstWaypointMode DEFAULT
+  Return Alt 110.0, on RemoteController Lost RTH
+     1 | Spline Waypoint alt=70.00m lat=-77.4612577 lon=169.1858147 maxCR=0.0m
+     2 | Change Speed 15.0
+     3 | Spline Waypoint alt=54.88m lat=-77.4637864 lon=169.2329437 maxCR=0.0m
+     5 | Spline Waypoint alt=-55.59m lat=-77.4620145 lon=169.2607130 maxCR=0.0m
+     7 | Waypoint alt=-149.47m lat=-77.4617933 lon=169.2768407
+     8 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+     9 | Change Speed 4.0
+    10 | Waypoint alt=-153.12m lat=-77.4618543 lon=169.2781669
+    11 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    12 | Change Speed 3.9
+    13 | Waypoint alt=-152.75m lat=-77.4621741 lon=169.2830815
+    14 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    15 | Change Speed 4.1
+    16 | Waypoint alt=-155.24m lat=-77.4618068 lon=169.2835881
+    17 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    18 | Change Speed 4.0
+    19 | Waypoint alt=-159.09m lat=-77.4619134 lon=169.2852264
+    20 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    21 | Change Speed 4.0
+    22 | Waypoint alt=-157.34m lat=-77.4630152 lon=169.2837065
+    23 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    24 | Change Speed 3.9
+    25 | Waypoint alt=-149.03m lat=-77.4628020 lon=169.2804299
+    26 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    28 | Waypoint alt=-147.52m lat=-77.4631693 lon=169.2799231
+    29 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    30 | Change Speed 4.1
+    31 | Waypoint alt=-150.15m lat=-77.4632759 lon=169.2815615
+    32 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    33 | Change Speed 3.9
+    34 | Waypoint alt=-147.33m lat=-77.4636431 lon=169.2810548
+    35 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    36 | Change Speed 4.1
+    37 | Waypoint alt=-152.25m lat=-77.4637497 lon=169.2826932
+    38 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    39 | Change Speed 4.0
+    40 | Waypoint alt=-155.17m lat=-77.4633824 lon=169.2831999
+    41 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    42 | Change Speed 4.1
+    43 | Waypoint alt=-157.42m lat=-77.4634890 lon=169.2848383
+    44 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    45 | Change Speed 4.0
+    46 | Waypoint alt=-159.90m lat=-77.4631217 lon=169.2853449
+    47 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    48 | Change Speed 4.1
+    49 | Waypoint alt=-160.69m lat=-77.4632283 lon=169.2869833
+    50 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    51 | Change Speed 3.9
+    52 | Waypoint alt=-150.66m lat=-77.4639628 lon=169.2859701
+    53 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    55 | Waypoint alt=-151.89m lat=-77.4638563 lon=169.2843317
+    56 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    57 | Change Speed 4.0
+    58 | Waypoint alt=-148.44m lat=-77.4642235 lon=169.2838250
+    59 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    60 | Change Speed 3.9
+    61 | Waypoint alt=-146.20m lat=-77.4644366 lon=169.2871021
+    62 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    64 | Waypoint alt=-151.04m lat=-77.4640694 lon=169.2876087
+    65 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    66 | Change Speed 4.1
+    67 | Waypoint alt=-158.67m lat=-77.4644954 lon=169.2941630
+    68 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    70 | Waypoint alt=-161.89m lat=-77.4641282 lon=169.2946694
+    71 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    72 | Change Speed 3.9
+    73 | Waypoint alt=-154.88m lat=-77.4637021 lon=169.2881152
+    74 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    76 | Waypoint alt=-161.79m lat=-77.4633348 lon=169.2886218
+    77 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    78 | Change Speed 4.1
+    79 | Waypoint alt=-161.84m lat=-77.4634413 lon=169.2902602
+    80 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    81 | Change Speed 4.0
+    82 | Waypoint alt=-167.66m lat=-77.4630741 lon=169.2907667
+    83 | Camera Series By Time intrvl=2.0s qty=0 d=0ms
+    84 | Change Speed 4.0
+    85 | Spline Waypoint alt=-149.31m lat=-77.4622216 lon=169.2776601 maxCR=0.0m
+    86 | Change Speed 15.0
+    87 | Spline Waypoint alt=-55.30m lat=-77.4619981 lon=169.2605058 maxCR=0.0m
+    89 | Spline Waypoint alt=54.91m lat=-77.4637661 lon=169.2328284 maxCR=0.0m
+    91 | Spline Waypoint alt=85.89m lat=-77.4615502 lon=169.1855308 maxCR=0.0m
+    92 | Change Speed 5.0
+    93 | Waypoint alt=25.02m lat=-77.4615196 lon=169.1853713
+    94 | Change Speed 3.0
+    95 | Land
+  minAlt=-167.66m maxAlt=85.89m
+18:26:43.730 I/DroneMainControllerDjiImpl : 
+  DJI_M100, simulator=OFF, FC=03.01.06.108 (OLD FC)
+  Generated DJIWaypointMission task contains 35 Waypoints
+  Fly CURVED with 15.00 m/s 
+  GotoFirstWaypointMode SAFELY
+  Heading AUTO and AUTO_LAND at the end
+    WP # 1 heading=103 (103), alt=70.00m lat=-77.4612577 lon=169.1858147 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=15.00
+        distToNext 3d=1173.24m 2d=1173.14m vert=-15.12m
+    WP # 2 heading= 73 ( 73), alt=54.88m lat=-77.4637864 lon=169.2329437 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=708.09m 2d=699.42m vert=-110.47m
+    WP # 3 heading= 86 ( 86), alt=-55.59m lat=-77.4620145 lon=169.2607130 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=401.65m 2d=390.52m vert=-93.88m
+    WP # 4 heading=101 (101), alt=-149.47m lat=-77.4617933 lon=169.2768407 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.00
+        distToNext 3d=32.96m 2d=32.76m vert=-3.65m
+    WP # 5 heading=106 (106), alt=-153.12m lat=-77.4618543 lon=169.2781669 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=123.99m 2d=123.99m vert=0.37m
+    WP # 6 heading= 16 ( 16), alt=-152.75m lat=-77.4621741 lon=169.2830815 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.75m 2d=42.68m vert=-2.49m
+    WP # 7 heading=106 (106), alt=-155.24m lat=-77.4618068 lon=169.2835881 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=41.51m 2d=41.33m vert=-3.85m
+    WP # 8 heading=-163 (-163), alt=-159.09m lat=-77.4619134 lon=169.2852264 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=128.04m 2d=128.03m vert=1.75m
+    WP # 9 heading=-73 (-73), alt=-157.34m lat=-77.4630152 lon=169.2837065 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=83.07m 2d=82.66m vert=8.31m
+    WP #10 heading=-163 (-163), alt=-149.03m lat=-77.4628020 lon=169.2804299 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=42.70m 2d=42.68m vert=1.51m
+    WP #11 heading=106 (106), alt=-147.52m lat=-77.4631693 lon=169.2799231 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.41m 2d=41.33m vert=-2.63m
+    WP #12 heading=-163 (-163), alt=-150.15m lat=-77.4632759 lon=169.2815615 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.77m 2d=42.68m vert=2.82m
+    WP #13 heading=106 (106), alt=-147.33m lat=-77.4636431 lon=169.2810548 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.62m 2d=41.33m vert=-4.92m
+    WP #14 heading= 16 ( 16), alt=-152.25m lat=-77.4637497 lon=169.2826932 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.78m 2d=42.68m vert=-2.91m
+    WP #15 heading=106 (106), alt=-155.17m lat=-77.4633824 lon=169.2831999 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.39m 2d=41.33m vert=-2.25m
+    WP #16 heading= 16 ( 16), alt=-157.42m lat=-77.4634890 lon=169.2848383 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=42.75m 2d=42.68m vert=-2.48m
+    WP #17 heading=106 (106), alt=-159.90m lat=-77.4631217 lon=169.2853449 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.34m 2d=41.33m vert=-0.79m
+    WP #18 heading=-163 (-163), alt=-160.69m lat=-77.4632283 lon=169.2869833 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=85.94m 2d=85.35m vert=10.03m
+    WP #19 heading=-73 (-73), alt=-150.66m lat=-77.4639628 lon=169.2859701 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=41.35m 2d=41.33m vert=-1.23m
+    WP #20 heading=-163 (-163), alt=-151.89m lat=-77.4638563 lon=169.2843317 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=42.82m 2d=42.68m vert=3.45m
+    WP #21 heading=106 (106), alt=-148.44m lat=-77.4642235 lon=169.2838250 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=82.69m 2d=82.66m vert=2.24m
+    WP #22 heading= 16 ( 16), alt=-146.20m lat=-77.4644366 lon=169.2871021 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=42.95m 2d=42.68m vert=-4.84m
+    WP #23 heading=106 (106), alt=-151.04m lat=-77.4640694 lon=169.2876087 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=165.49m 2d=165.31m vert=-7.63m
+    WP #24 heading= 16 ( 16), alt=-158.67m lat=-77.4644954 lon=169.2941630 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=42.80m 2d=42.68m vert=-3.22m
+    WP #25 heading=-73 (-73), alt=-161.89m lat=-77.4641282 lon=169.2946694 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=165.46m 2d=165.31m vert=7.01m
+    WP #26 heading= 16 ( 16), alt=-154.88m lat=-77.4637021 lon=169.2881152 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        distToNext 3d=43.23m 2d=42.68m vert=-6.91m
+    WP #27 heading=106 (106), alt=-161.79m lat=-77.4633348 lon=169.2886218 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=41.33m 2d=41.33m vert=-0.06m
+    WP #28 heading= 16 ( 16), alt=-161.84m lat=-77.4634413 lon=169.2902602 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=3.95
+        distToNext 3d=43.07m 2d=42.68m vert=-5.82m
+    WP #29 heading=-73 (-73), alt=-167.66m lat=-77.4630741 lon=169.2907667 corn=0.20 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CAMERA_SERIES_TIME intrvl=2s qty=0 delay=0ms
+        extra CHANGE_SPEED spd=4.05
+        distToNext 3d=331.14m 2d=330.63m vert=18.36m
+    WP #30 heading=-86 (-86), alt=-149.31m lat=-77.4622216 lon=169.2776601 corn=20.00 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=15.00
+        distToNext 3d=425.80m 2d=415.29m vert=94.01m
+    WP #31 heading=-106 (-106), alt=-55.30m lat=-77.4619981 lon=169.2605058 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=705.82m 2d=697.16m vert=110.20m
+    WP #32 heading=-77 (-77), alt=54.91m lat=-77.4637661 lon=169.2328284 corn=20.00 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToNext 3d=1169.66m 2d=1169.25m vert=30.98m
+    WP #33 heading=-48 (-48), alt=85.89m lat=-77.4615502 lon=169.1855308 corn=2.47 COUNTER_CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=5.00
+        distToNext 3d=61.08m 2d=5.14m vert=-60.87m
+    WP #34 heading=-97 (-97), alt=25.02m lat=-77.4615196 lon=169.1853713 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        extra CHANGE_SPEED spd=3.00
+        distToNext 3d=4.38m 2d=4.38m vert=-0.02m
+    WP #35 heading=-97 (-97), alt=25.00m lat=-77.4615245 lon=169.1851917 corn=0.20 CLOCKWISE
+        speedToNext* 0.0m/s, photoTimeInt* 0.0s, photoDistInt* 0.0m
+        distToFirst 3d=55.98m 2d=33.30m vert=-45.00m
+18:26:43.731 I/DroneMainControllerDjiImpl : Mission Upload - ReturnAltitude - set to 110.00m SKIPPED as GoHomeAltitude = 110.00m
+18:26:43.732 W/DroneMainControllerDjiImpl : Mission Upload - HomeLocation - set skipped, as drone landed
+18:26:43.732 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - check for cnt = 255, timeS = 2
+18:26:43.733 I/DroneMainControllerDjiImpl : Mission Upload - FastestCameraSeriesTime - set skipped, as CameraSettings has same values
+18:26:43.733 I/DroneMainControllerDjiImpl : Mission Upload - ValidateReceivedMission...
+18:26:43.735 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - loadMission... (state = READY_TO_EXECUTE)
+18:26:43.739 I/DroneMainControllerDjiImpl : Mission Upload - WaypointMissionOperator - uploadMission... (state = READY_TO_UPLOAD)
+18:26:43.949 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.000 (0/35)
+18:26:44.158 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.029 (1/35)
+18:26:44.364 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.057 (2/35)
+18:26:44.571 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.086 (3/35)
+18:26:44.774 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.114 (4/35)
+18:26:44.983 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.143 (5/35)
+18:26:45.190 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.171 (6/35)
+18:26:45.390 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.200 (7/35)
+18:26:45.597 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.229 (8/35)
+18:26:45.800 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.257 (9/35)
+18:26:46.010 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.286 (10/35)
+18:26:46.211 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.314 (11/35)
+18:26:46.418 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.343 (12/35)
+18:26:46.631 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.371 (13/35)
+18:26:46.830 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.400 (14/35)
+18:26:47.043 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.429 (15/35)
+18:26:47.243 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.457 (16/35)
+18:26:47.449 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.486 (17/35)
+18:26:47.662 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.514 (18/35)
+18:26:47.863 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.543 (19/35)
+18:26:48.069 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.571 (20/35)
+18:26:48.274 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.600 (21/35)
+18:26:48.491 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.629 (22/35)
+18:26:48.697 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.657 (23/35)
+18:26:48.891 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.686 (24/35)
+18:26:52.074 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.714 (25/35)
+18:26:52.278 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.743 (26/35)
+18:26:52.488 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.771 (27/35)
+18:26:52.700 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.800 (28/35)
+18:26:52.895 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.829 (29/35)
+18:26:53.100 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.857 (30/35)
+18:26:53.306 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.886 (31/35)
+18:26:53.510 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.914 (32/35)
+18:26:53.722 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.943 (33/35)
+18:26:53.931 I/DroneMainControllerDjiImpl : MissionUploadProgress = 0.971 (34/35)
+18:26:54.129 I/DroneMainControllerDjiImpl : Mission Upload - Result - SUCCESS
+18:26:54.131 I/MyMissionGlobalEventListener : (MyMissionGlobalEventListener) Mission Upload - OK - error is null
+18:26:58.258 I/DjiSharedMainActivity : onPause
+18:26:58.266 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for CameraControlFragment.
+18:26:58.274 I/DjiVideoFeedProvider : InternalFeedConsumer is NULL.
+18:26:58.275 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+18:26:58.276 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+18:26:58.277 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for DjiFpvMiniFragment.
+18:26:59.516 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onDestroy
+18:26:59.518 I/DroneBridgeImpl : tearDownKeyListeners... (ALL)
+18:26:59.570 I/DjiOnboardMessageSender : Unbind from flight controller (111538154) on tearDownKeyListeners
+18:26:59.876 I/VsmToUcsConnectorBase : UCS connector stopped.
+18:26:59.879 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+18:26:59.881 I/ApplicationMainServiceBase : ---> onDestroy (DjiAppMainServiceImpl), creationTimeStamp=1579584292617

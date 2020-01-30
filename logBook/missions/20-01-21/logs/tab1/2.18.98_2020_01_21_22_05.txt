@@ -1,0 +1,470 @@
+22:05:17.310 I/DjiSharedApp : Phone information: manufacturer(samsung), model(SM-T510), version(28), release(9), totalMemory(1970008064)
+22:05:17.312 I/ApplicationMainServiceBase : ---> onCreate (DjiAppMainServiceImpl), creationTimeStamp=1579597517311
+22:05:17.314 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onCreate
+22:05:17.497 I/MediaStreamerContainerImpl : initializing mstreamer... 
+22:05:17.527 I/WithAppMainServiceActivity : (DjiUsbAccessoryAttachedActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+22:05:17.560 I/DjiSharedUsbAccessoryAttachedActivity : onServiceConnectionChanged : CONNECTED to 1579597517311
+22:05:17.562 I/DroneBridgeImpl : onUsbAccessoryAttached
+22:05:17.567 I/UsbAccessoryManagerImplV2 : There are 1 attached UsbAccessory
+22:05:17.569 I/UsbAccessoryManagerImplV2 : permission(true) - UsbAccessory[mManufacturer=DJI, mModel=T600, mDescription=DJI Inspire 1, mVersion=v2.35.0.0, mUri=www.dji.com, mSerial=000000000000000]
+22:05:17.701 I/WithAppMainServiceActivity : (DjiSelectDroneTypeActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+22:05:17.760 I/DjiSharedSelectDroneTypeActivity : permissions granted.
+22:05:17.770 I/DroneBridgeImpl : DJISDKManager -> registerApp...
+22:05:17.770 I/DroneBridgeImpl : DJISDKManager -> SDK VERSION = 4.9
+22:05:19.420 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+22:05:19.421 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+22:05:19.421 I/DjiSharedSelectDroneTypeActivity : DJI SDK Registration SUCCESS
+22:05:19.428 I/DroneBridgeImpl : DJISDKManager -> onRegister OK
+22:05:19.429 I/DroneBridgeImpl : DJISDKManager -> startConnectionToProduct...
+22:05:19.439 I/DjiSharedSelectDroneTypeActivity : DJI SDK Registration SUCCESS
+22:05:19.691 I/BaseActivityVsm : setUpKeyListeners for: isLandingConfirmationNeeded
+22:05:19.693 W/BaseActivityVsm : isLandingConfirmationNeeded ERROR : Not Support
+22:05:19.698 I/DjiSharedMainActivity : setUpKeyListeners... (IS_OPTICAL_ZOOM_SUPPORTED)
+22:05:19.699 W/DjiSharedMainActivity : opticalZoomSupportedKey ERROR : Not Support
+22:05:19.704 I/MainIndicatorsFragment : setUpKeyListeners for: SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold
+22:05:19.705 W/MainIndicatorsFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+22:05:19.705 W/MainIndicatorsFragment : LowBatteryWarningThreshold ERROR : Not Support
+22:05:19.708 I/RemainingFlightTimeFragment : setUpKeyListeners for: Connection, ChargeRemainingInPercent, CurrentLandImmediatelyBattery, BatteryPercentageNeededToGoHome, SeriousLowBatteryWarningThreshold, LowBatteryWarningThreshold, RemainingFlightTime
+22:05:19.709 W/RemainingFlightTimeFragment : ChargeRemainingInPercent ERROR : Not Support
+22:05:19.710 W/RemainingFlightTimeFragment : CurrentLandImmediatelyBattery ERROR : Not Support
+22:05:19.711 W/RemainingFlightTimeFragment : BatteryPercentageNeededToGoHome ERROR : Not Support
+22:05:19.711 W/RemainingFlightTimeFragment : SeriousLowBatteryWarningThreshold ERROR : Not Support
+22:05:19.712 W/RemainingFlightTimeFragment : LowBatteryWarningThreshold ERROR : Not Support
+22:05:19.713 W/RemainingFlightTimeFragment : RemainingFlightTime ERROR : Not Support
+22:05:20.250 I/ObstacleAvoidanceFragment : setUpKeyListeners for: VisionDetectionState
+22:05:20.252 W/ObstacleAvoidanceFragment : VisionDetectionState ERROR : Not Support
+22:05:20.264 I/WithAppMainServiceActivity : (DjiMainActivity) onServiceConnected, name = .service.DjiAppMainServiceImpl
+22:05:20.402 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+22:05:20.435 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for DjiFpvMiniFragment.
+22:05:20.435 I/DjiVideoFeedProvider : InternalFeedConsumer is SET.
+22:05:20.436 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+22:05:20.463 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+22:05:20.464 I/DjiVideoFeedProvider : PhysicalSource of a PrimaryVideoFeed is NULL
+22:05:20.465 I/DjiVideoFeedProvider : PhysicalSource of a SecondaryVideoFeed is NULL
+22:05:20.474 I/DjiVideoFeedProvider : PhysicalSource of a TranscodedVideoFeed is NULL
+22:05:20.536 I/VsmToUcsConnectorBase : UCS connector started on 54322
+22:05:20.549 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+22:05:20.554 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
+22:05:20.565 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=0
+trans.=NULL(UNUSED)
+22:05:20.566 W/DjiFpvFragment : No need to re-init codecManager!
+22:05:20.569 I/DjiFpvFragment : prim.=NULL(true), sec.=NULL
+chId=1
+trans.=NULL(UNUSED)
+22:05:20.570 I/DjiFpvFragment : Starting CodecManager, w=461 h=326 src=Camera
+22:05:20.576 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:05:21.511 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+22:05:21.512 I/DroneBridgeImpl : KeyManager -> onConnectionChanged = true
+22:05:21.517 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+22:05:21.517 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+22:05:21.518 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+22:05:21.524 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+22:05:21.525 W/DjiFpvFragment : No need to re-init codecManager!
+22:05:21.527 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+22:05:21.528 W/DjiFpvFragment : No need to re-init codecManager!
+22:05:21.766 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+22:05:22.369 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (CAMERA), but vm is NULL, so far ignore
+22:05:22.379 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (GIMBAL), but vm is NULL, so far ignore
+22:05:22.402 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (FLIGHT_CONTROLLER), but vm is NULL, so far ignore
+22:05:22.408 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (BATTERY), but vm is NULL, so far ignore
+22:05:22.412 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (AIR_LINK), but vm is NULL, so far ignore
+22:05:22.424 I/DroneBridgeImpl : DJISDKManager -> onComponentChange (REMOTE_CONTROLLER), but vm is NULL, so far ignore
+22:05:22.441 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=TranscodedVideoFeed, physicalSource=MAIN_CAM
+22:05:22.442 I/DjiVideoFeedProvider : isLensDistortionCalibrationNeeded = false
+22:05:22.443 I/DjiVideoFeedProvider : onPhysicalSrcChange: videoFeed=PrimaryVideoFeed, physicalSource=MAIN_CAM
+22:05:22.445 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+22:05:22.446 W/DjiFpvFragment : No need to re-init codecManager!
+22:05:22.447 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+22:05:22.447 W/DjiFpvFragment : No need to re-init codecManager!
+22:05:23.554 I/SsdpPortsMonitor : Service discovery: Network interface enabled: wlan0
+22:05:23.559 I/SsdpPortsMonitor : Service discovery: Network interface enabled: lo
+22:05:25.534 I/DjiVideoFeedProvider : InternalFeedConsumer is NULL.
+22:05:25.534 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+22:05:25.535 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+22:05:25.536 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for DjiFpvMiniFragment.
+22:05:25.668 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for DjiFpvFullscreenFragment.
+22:05:25.669 I/DjiVideoFeedProvider : InternalFeedConsumer is SET.
+22:05:25.669 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+22:05:25.670 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+22:05:25.694 I/DjiFpvFragment : prim.=Cam(true), sec.=NULL
+chId=1
+trans.=Cam(UNUSED)
+22:05:25.694 I/DjiFpvFragment : Starting CodecManager, w=1920 h=1035 src=Camera
+22:05:25.983 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:05:26.798 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30831
+22:05:26.798 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+22:05:26.809 I/DroneBridgeImpl : KeyManager -> onSerialNumberChanged = 041DF30831
+22:05:28.811 I/DroneBridgeImpl : OK, starting drone init...
+22:05:28.830 I/DroneBridgeImpl : OK, connected DJI_M100 (041DF30831)
+22:05:28.831 I/MyBatteryUpdateCallback : initDroneUpdate - Battery - singleBatteryMode (1)
+22:05:28.842 I/MyBatteryUpdateCallback : setUpKeyListeners for: AggregationState, isInSingleBatteryMode, Overviews
+22:05:28.844 W/MyBatteryUpdateCallback : AggregationState ERROR : The feature is unsupported.
+22:05:28.850 I/MyBatteryUpdateCallback : singleBatteryModeKey = false
+22:05:28.852 W/MyBatteryUpdateCallback : Overviews ERROR : The feature is unsupported.
+22:05:28.858 I/MyBatteryUpdateCallback : setUpKeyListeners for [0]: ChargeRemainingInPercent, ChargeRemaining, Voltage, Current, Temperature, LifetimeRemaining, FullChargeCapacity, NumberOfDischarges, isSmartBattery, ConnectionState, FirmwareVersion, SerialNumber
+22:05:28.875 I/MyBatteryUpdateCallback : Battery #1 has NORMAL ConnectionState
+22:05:28.882 I/FailsafeControllerDjiImpl : setUpKeyListeners for: GoHomeAltitude, MaxFlightHeight, SmartReturnToHomeEnabled, LowBatteryWarningThreshold, SeriousLowBatteryWarningThreshold
+22:05:28.898 I/MyFlightControllerUpdateCallback : setUpKeyListeners for: AircraftLocationLatitude, AircraftLocationLongitude, Altitude, GPSSignalLevel, SatelliteCount, AttitudePitch, AttitudeRoll, AttitudeYaw, VelocityX, VelocityY, VelocityZ, FlightMode, AreMotorsOn, IsFlying, HomeLocationLatitude, HomeLocationLongitude, AircraftName, FirmwarePackageVersion, FirmwareVersion
+22:05:28.940 I/DroneMainControllerDjiImpl : onFlightMode change: UNKNOWN -> ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 113)
+22:05:28.943 I/MyFlightControllerUpdateCallback : Home None / NULL
+22:05:28.944 I/MyFlightControllerUpdateCallback : Home NULL / None
+22:05:28.945 I/MyFlightControllerUpdateCallback : AircraftName = waddle2
+22:05:28.946 I/MyFlightControllerUpdateCallback : FirmwareVersion = 1.3.1.82
+22:05:28.947 I/MyFlightControllerUpdateCallback : FlightControllerVersion = 03.01.06.108
+22:05:28.948 I/MyRtkUpdateCallback : setUpKeyListeners for: RTKEnabled, RTKState, RTKFusionHeading, RTKFusionLocation, IsRTKConnected, IsRTKFusionDataUsable
+22:05:28.949 W/MyRtkUpdateCallback : RTKEnabled ERROR : The feature is unsupported.
+22:05:28.950 W/MyRtkUpdateCallback : RTKState ERROR : The feature is unsupported.
+22:05:28.951 W/MyRtkUpdateCallback : RTKFusionHeading ERROR : The feature is unsupported.
+22:05:28.952 W/MyRtkUpdateCallback : RTKFusionLocation ERROR : The feature is unsupported.
+22:05:28.953 W/MyRtkUpdateCallback : IsRTKConnected ERROR : The feature is unsupported.
+22:05:28.954 W/MyRtkUpdateCallback : IsRTKFusionDataUsable ERROR : The feature is unsupported.
+22:05:28.955 I/MyGimbalUpdateCallback : setUpKeyListeners for: AttitudeInDegrees, AttitudeYaw, Capabilities, FirmwareVersion, SerialNumber
+22:05:28.957 I/MyGimbalUpdateCallback : gimbal.getCapabilities RESULT: pitch [-90..30], roll [-15..15], yaw [-180..180]
+22:05:28.958 W/MyGimbalUpdateCallback : SerialNumber ERROR : The feature is unsupported.
+22:05:28.960 I/MyRemoteControllerUpdateCallback : setUpKeyListeners for: ChargeRemaining, FirmwareVersion, SerialNumber
+22:05:28.961 I/MySdCardUpdateCallback : setUpKeyListeners for: SDCardRemainingSpaceInMB, SDCardTotalSpaceInMB, SDCardIsInserted
+22:05:28.964 I/MySignalQualityUpdateCallback : setUpKeyListeners... (uplinkKey, downlinkKey) for LB
+22:05:28.966 I/MySimulatorUpdateCallbackAndController : setUpKeyListeners for: IsSimulatorStarted
+22:05:28.967 I/DjiOnboardMessageSender : setUpKeyListeners... (IsOnBoardSDKAvailable)
+22:05:28.967 I/DjiOnboardMessageSender : IS_ON_BOARD_SDK_AVAILABLE = true
+22:05:28.968 I/DjiOnboardMessageSender : Set flight controller callback prev: (0) new: (247273082)
+22:05:28.969 I/DjiOnboardMessageSender : Bind to flight controller
+22:05:28.969 I/DjiMoveController : setUpKeyListeners for: VirtualStickControlModeEnabled, isVirtualStickControlModeAvailable
+22:05:28.971 I/CameraSettingsControllerDjiImpl : setUpKeyListeners for: FocusTarget
+22:05:28.974 I/CameraPhotoSettingsControllerImpl : setUpKeyListeners for: ShootPhotoModeRange, ShootPhotoMode, PhotoBurstCount, PhotoAEBCount, PhotoTimeIntervalSettings, PhotoAspectRatioRange, PhotoAspectRatio, PhotoFileFormatRange, PhotoFileFormat
+22:05:28.978 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_4_3
+22:05:28.979 W/CameraPhotoSettingsControllerImpl : Supported PhotoAspectRatio RATIO_16_9
+22:05:28.980 I/CameraVideoSettingsControllerImpl : setUpKeyListeners for: VideoResolutionFrameRateRange, ResolutionFrameRate, VideoFileFormat, VideoStandard
+22:05:28.985 I/CameraExposureSettingsControllerImpl : setUpKeyListeners for: IsMeteringModeSupported, MeteringMode, ExposureMode, ISO, ISORange, Aperture, ApertureRange, ShutterSpeed, ShutterSpeedRange, ExposureCompensation, ExposureCompensationRange
+22:05:28.986 W/CameraExposureSettingsControllerImpl : IsMeteringModeSupported ERROR : The feature is unsupported.
+22:05:28.989 I/CameraOtherSettingsControllerImpl : setUpKeyListeners for: AntiFlickerFrequency, WhiteBalance
+22:05:28.991 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR The feature is unsupported.
+22:05:28.995 W/CameraSettingsControllerDjiImpl : getOpticalZoomFocalLength ERROR Camera param get failed
+22:05:28.996 I/CameraZoomControllerDjiImpl : setUpKeyListeners for: isTapZoomSupported, TapZoomEnabled
+22:05:28.997 W/CameraZoomControllerDjiImpl : TapZoomEnabled ERROR : The feature is unsupported.
+22:05:28.998 I/CameraZoomControllerDjiImpl : IS_OPTICAL_ZOOM_SUPPORTED = false
+22:05:29.031 I/VsmToUcsConnectorBase : Sending registerDevice (571887871)to ALL 
+22:05:29.036 I/VsmToUcsConnectorBase : Sending initial statuses (571887871) to ALL
+22:05:29.037 I/MegaTask : MegaTask: DISARMED downlink/uplink
+22:05:29.038 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+22:05:29.038 W/HomeLocationTask : home position INVALID, sending NAN
+22:05:29.050 I/DroneStateController : setUpKeyListeners for: CompassHasError, FlightWindWarning, MaxFlightRadius, MaxFlightRadiusEnabled, HasReachedMaxFlightRadius
+22:05:29.050 I/DroneStateController : New diagnostics messages:
+22:05:29.051 I/DroneStateController : Code #8012: Reason: "IMU is initializing. Do not move the aircraft until initialization is complete" Solution: ""
+22:05:29.052 I/DroneStateController : FLIGHT_WIND_WARNING state: LEVEL_0
+22:05:29.055 I/DroneStateController : HAS_REACHED_MAX_FLIGHT_RADIUS: false
+22:05:29.064 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+22:05:29.163 I/DroneStateController : MAX_FLIGHT_RADIUS: 480
+22:05:29.273 I/DroneStateController : MAX_FLIGHT_RADIUS_ENABLED: false
+22:05:30.945 W/HomeLocationTask : home position INVALID, sending NAN
+22:05:30.946 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+22:05:35.984 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:05:38.931 I/VsmToUcsConnectorBase : UgCS 3.3.490 @ 11.10.10.5:55472 (ucsId = 1930400709)
+22:05:38.933 I/VsmToUcsConnectorBase : Sending registerDevice (571887871)to ONE 
+22:05:38.936 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=26029, currentCurrent=755, remainPowerPercent=100, smartBattery=true, temperature=24.550018}.
+22:05:38.938 I/ExceptionLogger : Battery update ignored.
+22:05:41.051 I/VsmToUcsConnectorBase : Sending initial statuses (571887871) to ONE
+22:05:41.053 I/MegaTask : MegaTask: DISARMED downlink/uplink
+22:05:41.059 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+22:05:41.061 W/HomeLocationTask : home position INVALID, sending NAN
+22:05:45.573 I/PingHandler : Sending a PONG message
+22:05:50.580 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=26023, currentCurrent=757, remainPowerPercent=100, smartBattery=true, temperature=24.149994}.
+22:05:50.582 I/ExceptionLogger : Battery update ignored.
+22:05:52.553 I/VsmToUcsConnectorBase : UgCS 3.3.490 @ 11.10.10.5:55510 (ucsId = 1930400709)
+22:05:52.555 I/VsmToUcsConnectorBase : Sending registerDevice (571887871)to ONE 
+22:05:52.557 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=26023, currentCurrent=759, remainPowerPercent=100, smartBattery=true, temperature=24.050018}.
+22:05:52.559 I/ExceptionLogger : Battery update ignored.
+22:05:52.589 I/VsmToUcsConnectorBase : Sending initial statuses (571887871) to ONE
+22:05:52.594 I/MegaTask : MegaTask: DISARMED downlink/uplink
+22:05:52.601 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+22:05:52.604 W/HomeLocationTask : home position INVALID, sending NAN
+22:06:28.560 I/PingHandler : Session timed out 11.10.10.5 Last ping: 1579597586552 Last pong: 1579597583252
+22:06:28.565 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=26008, currentCurrent=772, remainPowerPercent=100, smartBattery=true, temperature=23.25}.
+22:06:28.567 I/ExceptionLogger : Battery update ignored.
+22:06:45.995 I/GeoserverInteractionService : performNetworkRequestForOverlaySources failed: timeout
+22:06:45.997 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:06:55.997 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:06:57.682 I/VsmToUcsConnectorBase : UgCS 3.3.490 @ 11.10.10.5:55672 (ucsId = 1930400709)
+22:06:57.683 I/VsmToUcsConnectorBase : Sending registerDevice (571887871)to ONE 
+22:06:57.704 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=26000, currentCurrent=770, remainPowerPercent=100, smartBattery=true, temperature=22.649994}.
+22:06:57.705 I/ExceptionLogger : Battery update ignored.
+22:06:57.711 I/VsmToUcsConnectorBase : Sending initial statuses (571887871) to ONE
+22:06:57.713 I/MegaTask : MegaTask: DISARMED downlink/uplink
+22:06:57.720 W/TakeOffPointTask : takeOff position INVALID, sending NAN
+22:06:57.723 W/HomeLocationTask : home position INVALID, sending NAN
+22:07:03.241 I/DroneMainControllerDjiImpl : onFlightMode change: ATTI -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 94414)
+22:07:05.613 I/DroneStateController : Removed diagnostics messages:
+22:07:05.614 I/DroneStateController : Code #8012: Reason: "IMU is initializing. Do not move the aircraft until initialization is complete" Solution: ""
+22:07:06.746 I/MyFlightControllerUpdateCallback : Home -77.4612788 / NULL
+22:07:06.749 I/MyFlightControllerUpdateCallback : Home NULL / 169.1857336
+22:07:08.749 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+22:07:08.749 I/HomeLocationTask : sending new home position = -77.4612788 169.1857336
+22:07:08.751 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+22:07:08.780 I/WithAppMainServiceActivity : Toast message: Drone initialized
+22:07:08.798 I/TakeOffPointTask : sending new takeOff position = -77.4612788 169.1857336
+22:07:28.582 I/PingHandler : Session timed out 11.10.10.5 Last ping: 1579597646577 Last pong: 1579597642654
+22:07:28.585 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=25988, currentCurrent=789, remainPowerPercent=100, smartBattery=true, temperature=22.050018}.
+22:07:28.586 I/ExceptionLogger : Battery update ignored.
+22:07:28.733 I/MyFlightControllerUpdateCallback : Home -77.4612789 / NULL
+22:07:28.734 I/MyFlightControllerUpdateCallback : Home NULL / 169.1857345
+22:07:30.365 I/DroneMainControllerDjiImpl : onFlightMode change: GPS_ATTI -> ASSISTED_TAKEOFF (state = READY_TO_UPLOAD) (sinceEpoch = 121538)
+22:07:30.735 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+22:07:30.735 I/HomeLocationTask : sending new home position = -77.4612789 169.1857345
+22:07:30.737 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+22:07:30.760 I/TakeOffPointTask : sending new takeOff position = -77.4612789 169.1857345
+22:07:33.561 I/DroneMainControllerDjiImpl : onFlightMode change: ASSISTED_TAKEOFF -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 124734)
+22:07:33.563 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as landed
+22:07:33.570 I/TakeOffPointTask : sending new takeOff position = -77.4612789 169.1857350
+22:07:46.006 I/GeoserverInteractionService : performNetworkRequestForOverlaySources failed: timeout
+22:07:46.007 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:07:48.717 I/MyFlightControllerUpdateCallback : Home -77.4612789 / NULL
+22:07:48.721 I/MyFlightControllerUpdateCallback : Home NULL / 169.1857371
+22:07:49.952 I/DroneMainControllerDjiImpl : onFlightMode change: GPS_ATTI -> ASSISTED_TAKEOFF (state = READY_TO_UPLOAD) (sinceEpoch = 141125)
+22:07:50.721 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+22:07:50.729 I/HomeLocationTask : sending new home position = -77.4612789 169.1857371
+22:07:50.730 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+22:07:50.756 I/TakeOffPointTask : sending new takeOff position = -77.4612789 169.1857371
+22:07:56.007 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:08:01.241 I/DroneMainControllerDjiImpl : onFlightMode change: ASSISTED_TAKEOFF -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 152415)
+22:08:04.228 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24687, currentCurrent=18693, remainPowerPercent=98, smartBattery=true, temperature=21.550018}.
+22:08:04.229 I/ExceptionLogger : Battery update ignored.
+22:08:06.007 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:08:15.161 I/ExceptionLogger : Battery update ignored.
+22:08:16.008 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:08:26.009 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:08:28.265 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23902, currentCurrent=24869, remainPowerPercent=96, smartBattery=true, temperature=21.950012}.
+22:08:28.266 I/ExceptionLogger : Battery update ignored.
+22:08:36.009 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:08:36.151 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23998, currentCurrent=21131, remainPowerPercent=95, smartBattery=true, temperature=22.25}.
+22:08:36.153 I/ExceptionLogger : Battery update ignored.
+22:08:46.009 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:08:47.170 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24370, currentCurrent=15452, remainPowerPercent=94, smartBattery=true, temperature=23.050018}.
+22:08:47.171 I/ExceptionLogger : Battery update ignored.
+22:08:56.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:09:00.149 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24426, currentCurrent=14987, remainPowerPercent=93, smartBattery=true, temperature=23.75}.
+22:09:00.150 I/ExceptionLogger : Battery update ignored.
+22:09:06.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:09:15.694 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24497, currentCurrent=12838, remainPowerPercent=92, smartBattery=true, temperature=24.149994}.
+22:09:15.696 I/ExceptionLogger : Battery update ignored.
+22:09:16.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:09:26.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:09:29.210 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24338, currentCurrent=14335, remainPowerPercent=91, smartBattery=true, temperature=24.350006}.
+22:09:29.212 I/ExceptionLogger : Battery update ignored.
+22:09:36.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:09:42.174 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=24216, currentCurrent=14477, remainPowerPercent=90, smartBattery=true, temperature=24.75}.
+22:09:42.175 I/ExceptionLogger : Battery update ignored.
+22:09:46.009 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:09:55.221 I/ExceptionLogger : Battery update ignored.
+22:09:56.009 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:10:06.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:10:10.651 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23957, currentCurrent=17651, remainPowerPercent=88, smartBattery=true, temperature=25.050018}.
+22:10:10.653 I/ExceptionLogger : Battery update ignored.
+22:10:16.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:10:24.217 I/ExceptionLogger : Battery update ignored.
+22:10:26.009 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:10:35.650 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23919, currentCurrent=15442, remainPowerPercent=86, smartBattery=true, temperature=25.25}.
+22:10:35.651 I/ExceptionLogger : Battery update ignored.
+22:10:36.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:10:46.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:10:49.233 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23962, currentCurrent=13954, remainPowerPercent=85, smartBattery=true, temperature=25.550018}.
+22:10:49.235 I/ExceptionLogger : Battery update ignored.
+22:10:56.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:11:03.164 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23861, currentCurrent=15537, remainPowerPercent=84, smartBattery=true, temperature=25.75}.
+22:11:03.165 I/ExceptionLogger : Battery update ignored.
+22:11:06.011 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:11:15.227 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23789, currentCurrent=15412, remainPowerPercent=83, smartBattery=true, temperature=25.850006}.
+22:11:15.228 I/ExceptionLogger : Battery update ignored.
+22:11:16.010 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:11:26.011 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:11:28.740 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23827, currentCurrent=13374, remainPowerPercent=82, smartBattery=true, temperature=25.950012}.
+22:11:28.742 I/ExceptionLogger : Battery update ignored.
+22:11:36.011 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:11:42.153 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23637, currentCurrent=15770, remainPowerPercent=81, smartBattery=true, temperature=26.350006}.
+22:11:42.154 I/ExceptionLogger : Battery update ignored.
+22:11:46.011 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:11:55.208 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23664, currentCurrent=14591, remainPowerPercent=80, smartBattery=true, temperature=26.75}.
+22:11:55.209 I/ExceptionLogger : Battery update ignored.
+22:11:56.012 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:12:06.013 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:12:07.185 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23510, currentCurrent=15270, remainPowerPercent=79, smartBattery=true, temperature=27.050018}.
+22:12:07.186 I/ExceptionLogger : Battery update ignored.
+22:12:16.013 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:12:20.184 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23484, currentCurrent=16068, remainPowerPercent=78, smartBattery=true, temperature=27.350006}.
+22:12:20.185 I/ExceptionLogger : Battery update ignored.
+22:12:26.013 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:12:33.652 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23481, currentCurrent=14111, remainPowerPercent=77, smartBattery=true, temperature=27.649994}.
+22:12:33.653 I/ExceptionLogger : Battery update ignored.
+22:12:36.014 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:12:45.702 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23474, currentCurrent=14030, remainPowerPercent=76, smartBattery=true, temperature=27.75}.
+22:12:45.703 I/ExceptionLogger : Battery update ignored.
+22:12:46.014 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:12:56.015 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:13:00.165 I/ExceptionLogger : Battery update ignored.
+22:13:06.015 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:13:14.156 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23235, currentCurrent=16807, remainPowerPercent=74, smartBattery=true, temperature=27.850006}.
+22:13:16.016 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:13:26.017 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:13:26.195 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=23040, currentCurrent=18722, remainPowerPercent=73, smartBattery=true, temperature=28.25}.
+22:13:35.234 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22809, currentCurrent=21527, remainPowerPercent=72, smartBattery=true, temperature=28.550018}.
+22:13:36.017 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:13:44.698 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22739, currentCurrent=21192, remainPowerPercent=71, smartBattery=true, temperature=28.950012}.
+22:13:46.017 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:13:54.776 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22937, currentCurrent=16593, remainPowerPercent=69, smartBattery=true, temperature=29.550018}.
+22:13:56.017 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:14:06.018 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:14:07.256 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22932, currentCurrent=16475, remainPowerPercent=68, smartBattery=true, temperature=29.950012}.
+22:14:16.018 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:14:19.227 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22930, currentCurrent=15689, remainPowerPercent=67, smartBattery=true, temperature=30.149994}.
+22:14:26.018 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:14:31.185 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22834, currentCurrent=16458, remainPowerPercent=66, smartBattery=true, temperature=30.350006}.
+22:14:36.018 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:14:43.256 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22857, currentCurrent=15300, remainPowerPercent=65, smartBattery=true, temperature=30.550018}.
+22:14:46.018 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:14:56.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:14:57.188 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22775, currentCurrent=15941, remainPowerPercent=64, smartBattery=true, temperature=30.75}.
+22:15:06.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:15:08.769 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22689, currentCurrent=16993, remainPowerPercent=63, smartBattery=true, temperature=30.850006}.
+22:15:16.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:15:19.700 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22647, currentCurrent=16525, remainPowerPercent=62, smartBattery=true, temperature=30.950012}.
+22:15:26.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:15:30.750 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22591, currentCurrent=16729, remainPowerPercent=61, smartBattery=true, temperature=31.149994}.
+22:15:36.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:15:42.735 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22551, currentCurrent=16595, remainPowerPercent=60, smartBattery=true, temperature=31.350006}.
+22:15:46.018 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:15:54.736 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22499, currentCurrent=16646, remainPowerPercent=59, smartBattery=true, temperature=31.550018}.
+22:15:56.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:16:06.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:16:06.718 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22450, currentCurrent=16741, remainPowerPercent=58, smartBattery=true, temperature=31.850006}.
+22:16:16.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:16:16.718 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22395, currentCurrent=17114, remainPowerPercent=57, smartBattery=true, temperature=32.149994}.
+22:16:26.019 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:16:28.701 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22346, currentCurrent=17105, remainPowerPercent=56, smartBattery=true, temperature=32.450012}.
+22:16:36.020 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:16:41.696 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22297, currentCurrent=17023, remainPowerPercent=55, smartBattery=true, temperature=32.75}.
+22:16:46.020 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:16:52.739 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22275, currentCurrent=16818, remainPowerPercent=54, smartBattery=true, temperature=33.05002}.
+22:16:56.020 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:17:04.703 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22292, currentCurrent=15711, remainPowerPercent=53, smartBattery=true, temperature=33.450012}.
+22:17:06.021 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:17:16.021 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:17:18.200 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22224, currentCurrent=16181, remainPowerPercent=52, smartBattery=true, temperature=33.649994}.
+22:17:26.021 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:17:27.704 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22254, currentCurrent=15711, remainPowerPercent=51, smartBattery=true, temperature=33.75}.
+22:17:36.021 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:17:42.253 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22156, currentCurrent=16750, remainPowerPercent=50, smartBattery=true, temperature=33.649994}.
+22:17:46.020 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:17:53.728 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22197, currentCurrent=15067, remainPowerPercent=49, smartBattery=true, temperature=33.850006}.
+22:17:56.021 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:18:06.021 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:18:07.746 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22246, currentCurrent=13444, remainPowerPercent=48, smartBattery=true, temperature=33.950012}.
+22:18:16.020 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:18:24.756 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22302, currentCurrent=12024, remainPowerPercent=47, smartBattery=true, temperature=33.850006}.
+22:18:26.021 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:18:36.021 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:18:46.022 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:18:49.741 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=22057, currentCurrent=15484, remainPowerPercent=45, smartBattery=true, temperature=33.950012}.
+22:18:56.023 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:19:04.233 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21998, currentCurrent=16149, remainPowerPercent=44, smartBattery=true, temperature=34.350006}.
+22:19:06.024 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:19:14.770 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21856, currentCurrent=18034, remainPowerPercent=43, smartBattery=true, temperature=34.649994}.
+22:19:16.024 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:19:26.024 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:19:27.236 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21863, currentCurrent=16909, remainPowerPercent=42, smartBattery=true, temperature=34.850006}.
+22:19:36.023 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:19:38.187 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21816, currentCurrent=17444, remainPowerPercent=41, smartBattery=true, temperature=34.950012}.
+22:19:46.024 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:19:51.183 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21825, currentCurrent=16329, remainPowerPercent=39, smartBattery=true, temperature=35.149994}.
+22:19:56.024 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:20:03.185 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21774, currentCurrent=16932, remainPowerPercent=38, smartBattery=true, temperature=35.350006}.
+22:20:06.023 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:20:15.750 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21875, currentCurrent=14779, remainPowerPercent=37, smartBattery=true, temperature=35.950012}.
+22:20:16.024 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:20:26.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:20:28.753 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21776, currentCurrent=16453, remainPowerPercent=36, smartBattery=true, temperature=36.25}.
+22:20:36.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:20:39.683 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21774, currentCurrent=15402, remainPowerPercent=35, smartBattery=true, temperature=36.350006}.
+22:20:46.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:20:51.738 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21741, currentCurrent=15457, remainPowerPercent=34, smartBattery=true, temperature=36.450012}.
+22:20:56.024 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:21:06.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:21:07.245 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21736, currentCurrent=15442, remainPowerPercent=33, smartBattery=true, temperature=36.649994}.
+22:21:16.024 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:21:19.227 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21709, currentCurrent=14887, remainPowerPercent=32, smartBattery=true, temperature=37.05002}.
+22:21:26.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:21:32.227 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21697, currentCurrent=14618, remainPowerPercent=31, smartBattery=true, temperature=37.25}.
+22:21:36.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:21:43.698 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21675, currentCurrent=15084, remainPowerPercent=30, smartBattery=true, temperature=37.450012}.
+22:21:46.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:21:56.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:22:06.026 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:22:08.173 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21503, currentCurrent=17419, remainPowerPercent=28, smartBattery=true, temperature=37.55002}.
+22:22:16.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:22:18.699 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21467, currentCurrent=17245, remainPowerPercent=27, smartBattery=true, temperature=37.850006}.
+22:22:26.026 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:22:29.745 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21554, currentCurrent=13804, remainPowerPercent=26, smartBattery=true, temperature=37.950012}.
+22:22:36.025 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:22:40.682 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21454, currentCurrent=16928, remainPowerPercent=25, smartBattery=true, temperature=38.450012}.
+22:22:46.026 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:22:51.728 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21491, currentCurrent=15173, remainPowerPercent=24, smartBattery=true, temperature=38.950012}.
+22:22:56.026 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:23:03.696 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21425, currentCurrent=16489, remainPowerPercent=23, smartBattery=true, temperature=39.450012}.
+22:23:06.027 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:23:14.695 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21537, currentCurrent=17086, remainPowerPercent=22, smartBattery=true, temperature=39.75}.
+22:23:16.026 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:23:26.027 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:23:27.214 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21439, currentCurrent=16161, remainPowerPercent=21, smartBattery=true, temperature=40.149994}.
+22:23:36.027 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:23:38.213 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21340, currentCurrent=17402, remainPowerPercent=20, smartBattery=true, temperature=40.55002}.
+22:23:46.027 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:23:49.264 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21309, currentCurrent=18083, remainPowerPercent=19, smartBattery=true, temperature=41.05002}.
+22:23:56.027 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:23:58.750 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21351, currentCurrent=16699, remainPowerPercent=18, smartBattery=true, temperature=41.450012}.
+22:24:06.027 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:24:11.216 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21334, currentCurrent=16786, remainPowerPercent=17, smartBattery=true, temperature=41.950012}.
+22:24:16.026 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:24:22.235 I/ExceptionLogger : Battery updated: Battery{exists=true, currentVoltage=21291, currentCurrent=17241, remainPowerPercent=16, smartBattery=true, temperature=42.350006}.
+22:24:26.027 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:24:29.769 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as landed
+22:24:29.771 I/TakeOffPointTask : sending new takeOff position = -77.4611977 169.1851208
+22:24:30.695 I/MyFlightControllerUpdateCallback : Home -77.4611976 / NULL
+22:24:30.697 I/MyFlightControllerUpdateCallback : Home NULL / 169.1851206
+22:24:31.923 I/DroneMainControllerDjiImpl : onFlightMode change: GPS_ATTI -> ASSISTED_TAKEOFF (state = READY_TO_UPLOAD) (sinceEpoch = 1143096)
+22:24:32.697 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as homeUpdated
+22:24:32.698 I/HomeLocationTask : sending new home position = -77.4611976 169.1851206
+22:24:32.699 I/WithAppMainServiceActivity : Toast message: Home Position Updated
+22:24:32.723 I/TakeOffPointTask : sending new takeOff position = -77.4611976 169.1851206
+22:24:36.027 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:24:37.088 I/DroneMainControllerDjiImpl : onFlightMode change: ASSISTED_TAKEOFF -> GPS_ATTI (state = READY_TO_UPLOAD) (sinceEpoch = 1148261)
+22:24:37.089 I/MyFlightControllerUpdateCallback : TAKEOFF_POSITION_UPDATED as landed
+22:24:37.095 I/TakeOffPointTask : sending new takeOff position = -77.4611960 169.1851129
+22:24:46.026 I/GeoserverInteractionService : requestAvailableOverlaySources host is null
+22:24:51.298 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+22:24:51.301 I/Authentication : AircraftBindingStateListener.onUpdate UNKNOWN
+22:24:51.307 W/DroneBridgeImpl : KeyManager -> onConnectionChanged = false
+22:24:51.308 I/DroneBridgeImpl : Tear Down All Key Listeners...
+22:24:51.351 I/DjiOnboardMessageSender : Unbind from flight controller (247273082) on tearDownKeyListeners
+22:24:51.354 W/DroneBridgeImpl : KeyManager -> onConnectionChanged = false
+22:24:51.356 I/DroneBridgeImpl : Tear Down All Key Listeners...
+22:24:51.364 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+22:24:51.374 I/DjiVideoFeedProvider : addVideoSrcAvailabilityListener for CameraControlFragment.
+22:24:51.655 I/VsmToUcsConnectorBase : UgCS 3.3.490 @ 11.10.10.5:56220 (ucsId = 1930400709)
+22:24:54.709 I/PingHandler : Sending a PONG message
+22:25:10.571 I/DjiSharedMainActivity : onPause
+22:25:10.576 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for CameraControlFragment.
+22:25:10.579 I/DjiVideoFeedProvider : InternalFeedConsumer is NULL.
+22:25:10.579 I/DjiVideoFeedProvider : Setting up VideoFeeder...
+22:25:10.579 I/DjiVideoFeedProvider : Setting up VideoFeeder - No need, skip.
+22:25:10.580 I/DjiVideoFeedProvider : removeVideoSrcAvailabilityListener for DjiFpvFullscreenFragment.
+22:25:12.099 I/DjiSharedVsmAppMainServiceImpl : DjiVsmAppMainServiceImpl->onDestroy
+22:25:12.102 I/DroneBridgeImpl : tearDownKeyListeners... (ALL)
+22:25:12.290 I/VsmToUcsConnectorBase : UCS connector stopped.
+22:25:12.294 I/RetryConnector : stopDirect - network connector is NULL - nothing to stop.
