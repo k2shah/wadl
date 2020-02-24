@@ -187,11 +187,11 @@ def main(mission):
     fig = plt.figure(figsize=(16, 9))
     # ax = fig.add_subplot(1, 1, 1, projection='3d')
     ax = fig.add_subplot(111)
-    ax.set_xlim(169.18, 169.3)
-    ax.set_ylim(-77.4660, -77.446)
+    # ax.set_xlim(169.18, 169.3)
+    # ax.set_ylim(-77.4660, -77.446)
 
-    crozFence.plot(ax)
-    rookFence.plot(ax)
+    crozFence.plot(ax, color='r')
+    rookFence.plot(ax, color='r')
     # crozAreas.plot(ax)
 
     # build route sequence
@@ -199,8 +199,8 @@ def main(mission):
                 for r in list(routes.keys())]
     routeSeq.sort()
     print(routeSeq)
-    nColors = 9
-    cm = plt.cm.get_cmap('Set1', nColors)
+    nColors = 10
+    cm = plt.cm.get_cmap('tab10', nColors)
     alpha = 1
     for rnum, key in routeSeq:
         plt.title(key)
@@ -210,6 +210,9 @@ def main(mission):
         # routes[key].plotRoute(ax)
         plt.draw()
         plt.pause(.0000001)
+    plt.title("Photo Coverage")
+    plt.axis('off')
+    fig.savefig("photo.png", bbox_inches='tight', dpi=200)
     plt.show()
 
 
@@ -219,3 +222,4 @@ if __name__ == '__main__':
     missionName = "croz4-full"
     missionPath = os.path.join(missionDir, missionName)
     main(missionPath)
+
