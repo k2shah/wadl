@@ -87,6 +87,7 @@ def writeStatsMD(flightStats):
     waddleName = list(flightStats.keys())
     waddleName.sort()
     fileName = "stats/stats.md"
+    batteryRate = []
     with open(fileName, "w+") as f:
         f.write("# Waddle Flight Stats\n")
         nowTime = time.localtime()
@@ -147,6 +148,8 @@ def writeStatsMD(flightStats):
                 f.write("\t- battery end:\t  {:02.0f}%\t{:2.2f}C\n".format(
                          flight.batteryLog[-1][1],
                          flight.batteryLog[-1][3]))
+                batteryRate.append(
+                    (flight.batteryLog[0][1]-flight.batteryLog[-1][1])/flight.duration)
 
                 # distance information
                 mission = np.array(flight.mission)
@@ -167,6 +170,10 @@ def writeStatsMD(flightStats):
 
             flightCounter += 1
     f.close()
+    print(batteryRate)
+    print("average battery rate {:2.2f}+- {:2.2f} %/sec".format(
+        np.mean(batteryRate),
+        np.std(batteryRate)))
 
 
 def writeStatsCSV(flightStats):
