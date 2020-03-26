@@ -159,6 +159,7 @@ class Flight(object):
         self.mission = []  # planned mission uploaded
         self.trajectory = []  # flown trajectory
         self.isManual = True  # manual flight
+        self.batteryTate = 0  # percent  battery per sec
 
     def __repr__(self):
         # prints the information for the mission

@@ -40,3 +40,9 @@ def normalize(v):
         warn.warn("vector has near zero magnatiude")
         return 0*v
     return v/norm
+
+def calcDistFromLatLng(gps0, gps1):
+    # calculates the distnce in meters of 2 lat/lng points
+    e0, n0, _, _ = utm.from_latlon(*gps0)
+    e1, n1, _, _ = utm.from_latlon(*gps1)
+    return np.linalg.norm([e0-e1, n0-n1])

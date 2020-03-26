@@ -15,6 +15,8 @@ from lib.capeConfig import CrozConfig, RookConfig, RoydsConfig
 from lib.utils import *
 # solver
 import z3
+z3.set_param('parallel.enable', True)
+z3.set_param('verbose', 1)
 
 
 class SAT(object):
@@ -24,7 +26,10 @@ class SAT(object):
         self.config = config
         self.satVars = []
         self.makeVars()
+        print("number of sat vars {:d}".format(self.nVar))
         self.findBlackList()
+        print("number of ff sat vars {:d}".format(len(self.blackList)))
+        print(self.nVar-len(self.blackList))
         self.setConts()
 
     def makeVars(self):
@@ -34,9 +39,10 @@ class SAT(object):
             self.satVars.append([[z3.Bool("x%s_t%s_s%s" % (i, t, s))
                                 for s in range(len(self.config.stateSpace))]
                                 for t in range(self.config.maxTime)])
-        print("number of sat vars {:d}".format(self.config.nAgent
-                                               * len(self.config.stateSpace)
-                                               * self.config.maxTime))
+        self.nVar = \
+            self.config.nAgent * \
+            len(self.config.stateSpace) * \
+            self.config.maxTime
 
     def findBlackList(self):
         self.blackList = []
@@ -57,7 +63,6 @@ class SAT(object):
                     self.blackList.append(self.satVars[i][t][si])
                     # backward reachable from end
                     self.blackList.append(self.satVars[i][-1-t][si])
-        print("number of ff sat vars {:d}".format(len(self.blackList)))
 
         for boolVar in self.blackList:
             self.problem.add(z3.Not(boolVar))
@@ -97,8 +102,6 @@ class SAT(object):
 
     def solve(self):
         # solve the problem
-        z3.set_param('parallel.enable', True)
-        z3.set_param('verbose', 1)
         startTime = time.time()
         if self.problem.check() == z3.sat:
             solTime = (time.time()-startTime)/60.
@@ -143,26 +146,26 @@ def main(outDir):
     agentParameters = {}
     agentParameters["base"] = 0
     agentParameters["maxTime"] = 54
-    agentParameters["initPos"] = [45]
+    agentParameters["initPos"] = [0, 83]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
-    step = 18
-    ver = 3
+    step = 37
+    ver = "x"
     # input files
 
     # croz west
-    # zone = 0
+    # zone = 4
     # config = CrozConfig(agentParameters, step=step, zone=zone, prefix=True)
     # outDir += "croz" + '_z' + str(zone)
 
     # croz east
-    # config = RookConfig(agentParameters, step=step, prefix=True)
-    # outDir += "rook"
+    config = RookConfig(agentParameters, step=step, prefix=True)
+    outDir += "rook"
 
     # royds
-    config = RoydsConfig(agentParameters, step=step, prefix=True)
-    outDir += "royds"
+    # config = RoydsConfig(agentParameters, step=step, prefix=True)
+    # outDir += "royds"
 
     outDir += '_sat_' + str(step) + '_n' + str(nAgent) + '_v' + str(ver)
     print(outDir)
@@ -173,6 +176,7 @@ def main(outDir):
 
     sat = SAT(config)
     # # SOLVE THE PROBLEM
+    return 0
     print("Solving Problem")
     sat.solve()
     agents = sat.readSolution()
