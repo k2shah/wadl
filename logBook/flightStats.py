@@ -171,7 +171,7 @@ def writeStatsMD(flightStats):
             flightCounter += 1
     f.close()
     print(batteryRate)
-    print("average battery rate {:2.2f}+- {:2.2f} %/sec".format(
+    print("average battery rate {:2.2f}+-{:2.2f} %/sec".format(
         np.mean(batteryRate),
         np.std(batteryRate)))
 
