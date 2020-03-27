@@ -31,6 +31,7 @@ class Log(object):
         parseMission = False
         missionName = None
         parseFlight = False
+        disConRecovery = False
         # tags
         # headers
         nameTag = 'AircraftName = '
@@ -108,18 +109,27 @@ class Log(object):
                         elif flightEndTag in ls[1]:
                             # print("end")
                             parseFlight = False
+                            disConRecovery = False
                             time = ls[0].split(" ")[0]
                             flight.setDuration(time)
                             self.flights.append(flight)
 
                         elif progressTag in ls[1]:
                             if "disconnected" in ls[1]:
+                                disConRecovery = True
                                 continue
                             else:
                                 time = ls[0].split(" ")[0]
                                 wp = ls[1].split("#")[1]
                                 wp = int(wp.split("(")[0])
                                 flight.missionUpdate(time, wp)
+                        elif disConRecovery:
+                            if "reached=TRUE" in ls[1]:
+                                time = ls[0].split(" ")[0]
+                                wp = ls[1].split("tp=")[1]
+                                wp = int(wp.split(" ")[0])
+                                flight.missionUpdate(time, wp)
+
 
                     # FIND THE start of a flight
                     elif flightStartTag_auto in ls[1] or flightStartTag_asit in ls[1]:
