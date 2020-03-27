@@ -23,9 +23,8 @@ def calcDistFromLatLng(gps0, gps1):
 def distanceVBattery(bat, prog, mission, startIdx):
     bat = np.array(bat)
     prog = np.array(prog)
-    print(startIdx)
     basePt = mission[startIdx][1:3]
-    print(basePt)
+    # print(basePt)
     times = prog[:, 0]
     batInterp = np.interp(times, bat[:, 0], bat[:, 1])
     distances = [calcDistFromLatLng(basePt, mission[int(pt-1)][1:3])
@@ -55,6 +54,9 @@ def main():
     routeNums.sort()
     print(routeNums)
 
+    plt.style.use('fivethirtyeight')
+    plt.rc('axes', titlesize=20)
+    plt.rc('axes', labelsize=18)
     fig, ax = plt.subplots(figsize=(16, 9))
     plt.title('No Return Distance')
     ax.set_xlim(95, 30)
@@ -63,27 +65,38 @@ def main():
     ax.set_ylabel("Distance From Start (m)")
     speed = 4  # speed m/s
     dRate = .11  # battery drain rate %/sec
-    ax.plot([95, 30], [(95-30)/dRate*speed, 0], 'k:')
-    starts = [2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 2]
-    ends = [42, 41, 32, 42, 37, 35, 43, 36, 32, 40, 40]
+    ax.plot([80, 30], [(80-30)/dRate*speed, 0], 'k:')
+    starts = [2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 2, 3]
+    ends = [42, 41, 32, 42, 37, 35, 43, 36, 32, 40, 23]
     # for flightName, idx in routeNums:
     #     print(idx)
     #     flight = flights[idx]
     #     start = starts[idx]
     #     end = ends[idx]
-    for flight, start, end in zip(flights, starts, ends):
+    leggy = ['no return']
+    for route, idx in routeNums:
+        flight = flights[idx]
+        start = starts[idx]
+        end = ends[idx]
+    # for flight, start, end in zip(flights, starts, ends):
         print(flight.missionName)
+        leggy.append(flight.missionName.split("-")[0])
         bat, dists = distanceVBattery(flight.batteryLog,
                                       flight.missionProgress,
                                       flight.mission,
                                       start)
         # print(bat[start:end])
-        print(flight.missionProgress)
-        print(dists[start:end])
-        ax.plot(bat[start:end], dists[start:end])
-        ax.set_xlim(95, 30)
+        # print(flight.missionProgress)
+        # print(dists[start:end])
+        if route > 6:
+            style = "--"
+        else:
+            style = "-"
+        ax.plot(bat[start:end], dists[start:end],
+                linestyle=style)
 
-    plt.legend(['no return'])
+    plt.legend(leggy)
+    plt.savefig("safe.png", dpi=200)
     plt.show()
 
 
