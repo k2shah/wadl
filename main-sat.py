@@ -46,6 +46,7 @@ class SAT(object):
 
     def findBlackList(self):
         self.blackList = []
+        maxT = self.config.maxTime
         # force to false a subset of the variables.
         for i in range(self.config.nAgent):
             agentInit = self.config.initAgent[i]
@@ -55,14 +56,32 @@ class SAT(object):
             # print(worldBase)
             for si, s in enumerate(self.config.stateSpace):
                 worldLoc = ind2sub(s, self.config.worldSize)
+                # reachable prune
                 worldDist = l1(worldBase, worldLoc)
                 for t in range(worldDist):
                     if t < 2:
                         continue
-                    # forward reachable from  start
+                    # not forward reachable from  start
                     self.blackList.append(self.satVars[i][t][si])
-                    # backward reachable from end
+                    # not backward reachable from end
                     self.blackList.append(self.satVars[i][-1-t][si])
+                # distance prune
+                # turns out this was redundant
+                # worldDistL2 = l2(worldBase, worldLoc)
+                # startPercent = 8.
+                # endPercent = 30
+                # pRate = .11  # percent per second
+                # scale = 40  # 40m per unit
+                # speed = 4.  # m/s
+                # # endPercent = startPercent-self.config.maxTime*scale/speed*pRate
+                # # calculate the percent need to get to the base point
+                # p2b = worldDistL2 * scale/speed * pRate
+                # # cacluate extreme step t*
+                # tStar = int((startPercent-endPercent-p2b)/pRate*speed/scale)
+                # print(worldDist, tStar, maxT-worldDist)
+
+
+
 
         for boolVar in self.blackList:
             self.problem.add(z3.Not(boolVar))
@@ -145,13 +164,13 @@ def main(outDir):
     # agent parameters
     agentParameters = {}
     agentParameters["base"] = 0
-    agentParameters["maxTime"] = 54
+    agentParameters["maxTime"] = 47
     agentParameters["initPos"] = [0, 83]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 37
-    ver = "x"
+    ver = "safe_1"
     # input files
 
     # croz west

@@ -28,7 +28,7 @@ class FlightStat(object):
 
     def addFights(self, log):
         for flight in log.flights:
-            # check if flight actually as a duration
+            # check if flight actually has a duration
             if flight.duration:
                 flightTime = time.struct_time((flight.flightDate[0],
                                                flight.flightDate[1],
@@ -170,7 +170,6 @@ def writeStatsMD(flightStats):
 
             flightCounter += 1
     f.close()
-    print(batteryRate)
     print("average battery rate {:2.2f}+-{:2.2f} %/sec".format(
         np.mean(batteryRate),
         np.std(batteryRate)))

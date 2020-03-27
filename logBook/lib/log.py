@@ -48,6 +48,7 @@ class Log(object):
         flightStartTag_auto = 'onFlightMode change: GPS_ATTI -> AUTO_TAKEOFF'
         autoFlightStartTag = 'Toast message: Route started'
         batteryTag = 'Battery updated:'
+        progressTag = 'onMissionWpReached'
         autoFlightEndTag = 'Toast message: Route ended'
         autoFlightCancelTag = 'Toast message: Route canceled'
         flightEndTag = 'TAKEOFF_POSITION_UPDATED as landed'
@@ -61,6 +62,7 @@ class Log(object):
                         missionName = line.split()[1]
                         missionName = missionName.split(".")[0]
                         missionName = missionName.strip("'")
+                        # print(missionName)
                     if misisonStartTag in line:
                         WPbuffer = []  # holds waypoints until they are flown
                         # buffer is overwritten when new route is uploaded
@@ -87,24 +89,37 @@ class Log(object):
                         if batteryTag in ls[1]:
                             percent, volt, temperature = self.getBattery(ls[1])
                             time = ls[0].split(" ")[0]
+                            # print(percent)
                             flight.addBatteryLog(
                                 time, percent, volt, temperature)
 
                         elif autoFlightStartTag in ls[1]:
+                            # print("auto start flight")
                             time = ls[0].split(" ")[0]
                             flight.setRouteStart(time)
                             # add the mission to the flight
                             flight.setMission(WPbuffer, missionName)
                             # missionName = "manual"
                         elif autoFlightEndTag in ls[1] or autoFlightCancelTag in ls[1]:
+                            # print("auto end")
                             time = ls[0].split(" ")[0]
                             flight.setRouteEnd(time)
 
                         elif flightEndTag in ls[1]:
+                            # print("end")
                             parseFlight = False
                             time = ls[0].split(" ")[0]
                             flight.setDuration(time)
                             self.flights.append(flight)
+
+                        elif progressTag in ls[1]:
+                            if "disconnected" in ls[1]:
+                                continue
+                            else:
+                                time = ls[0].split(" ")[0]
+                                wp = ls[1].split("#")[1]
+                                wp = int(wp.split("(")[0])
+                                flight.missionUpdate(time, wp)
 
                     # FIND THE start of a flight
                     elif flightStartTag_auto in ls[1] or flightStartTag_asit in ls[1]:
@@ -159,7 +174,7 @@ class Flight(object):
         self.mission = []  # planned mission uploaded
         self.trajectory = []  # flown trajectory
         self.isManual = True  # manual flight
-        self.batteryTate = 0  # percent  battery per sec
+        self.batteryRate = 0  # percent  battery per sec
 
     def __repr__(self):
         # prints the information for the mission
@@ -195,7 +210,11 @@ class Flight(object):
         # sets the mission
         self.mission = mission
         self.missionName = missionName
+        self.missionProgress = []
         self.isManual = False
+
+    def missionUpdate(self, time, wp):
+        self.missionProgress.append([self.getRelativeTime(time), wp])
 
     def addBatteryLog(self, time, percent, voltage, temperature):
         time = self.getRelativeTime(time)
