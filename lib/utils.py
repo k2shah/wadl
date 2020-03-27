@@ -9,6 +9,11 @@ def l1(a, b):
     return sum(abs((np.array(a) - np.array(b))))
 
 
+def l2(a, b):
+    # returns the L2 norm of two vectors that are tuples
+    return la.norm(np.array(a) - np.array(b))
+
+
 def rot2D(theta):
     # theta is in rads
     c = np.cos(theta)
