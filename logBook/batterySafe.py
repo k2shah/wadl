@@ -98,7 +98,8 @@ def main():
                 linestyle=style)
 
     plt.legend(leggy)
-    plt.savefig("safe.png", dpi=200, bbox='tight')
+    plt.savefig("safe.png", dpi=200, bbox='tight',
+                facecolor=fig.get_facecolor(), edgecolor='w')
     plt.show()
 
 
