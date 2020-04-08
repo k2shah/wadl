@@ -98,7 +98,7 @@ def main():
                 linestyle=style)
 
     plt.legend(leggy)
-    plt.savefig("safe.png", dpi=200)
+    plt.savefig("safe.png", dpi=200, bbox='tight')
     plt.show()
 
 
