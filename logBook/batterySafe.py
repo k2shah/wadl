@@ -59,6 +59,8 @@ def main():
     plt.rc('axes', labelsize=18)
     fig, ax = plt.subplots(figsize=(16, 9))
     plt.title('No Return Distance')
+    fig.patch.set_facecolor('w')
+    ax.set_facecolor('w')
     ax.set_xlim(95, 30)
     ax.set_xlabel("Battery Percent (%)")
     ax.set_ylim(0, 700)
