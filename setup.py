@@ -5,7 +5,7 @@
 
 from setuptools import setup, find_packages
 
-requirements = ['utm', ]
+requirements = ['numpy', 'matplotlib', 'utm', 'shapely']
 
 setup_requirements = ['pytest-runner', ]
 

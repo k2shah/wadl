@@ -11,10 +11,7 @@ import numpy.random as rand
 # plot
 import matplotlib.pyplot as plt
 # lib
-try:
-    from .utils import *
-except (SystemError, ImportError):
-    from utils import *
+
 
 
 class Trajectory(object):
