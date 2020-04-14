@@ -3,6 +3,8 @@ import os
 import csv
 # math
 import numpy as np
+#
+import matplotlib.pyplot as plt
 # gis
 import utm
 from shapely.geometry import Point, Polygon
@@ -13,27 +15,32 @@ class Fence(object):
     """Holds the gps cords of the boundary of the area"""
 
     def __init__(self, file, lngLat=False):
-    	""" on init parse the cvs cords file
-    	    parser assumes "lat,  lng"
-    	    can parse "lng, lat" if kwarg lngLat = True
-    	"""
+        """ on init parse the cvs cords file
+            parser assumes "lat,  lng"
+            can parse "lng, lat" if kwarg lngLat = True
+        """
+        self.dataPath = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'geofences')
         self.parseFile(file, lngLat)
-        self.border = self.makePolygon()
+        self.poly = Polygon(self.UTMCords)
+        minx, miny, maxx, maxy = self.poly.bounds
+        print('boundary extends in meters', (maxx - minx), (maxy - miny))
 
-    def parseFile(self, file):
+    def parseFile(self, file, lngLat):
         # parse file as CSV
-        with open(file, 'r') as csvfile:
+        # stores the gps cords, utm cords, and utm zones
+        CSVfile = os.path.join(self.dataPath, file+".csv")
+        with open(CSVfile, 'r') as csvfile:
             data = [(line[1], line[2])
                     for line in csv.reader(csvfile, delimiter=',')]
         # toss 1st line and convert to float
-        GPSdata= [list(map(float, line)) for line in data[1:]]
+        GPSData = [list(map(float, line)) for line in data[1:]]
         # convert to utm
-        if longLat:
+        if lngLat:
             # assumes the file is in long, lat
-            UTMData = [utm.from_latlon(cords[1], cords[0]) for cords in self.GPSData]
+            UTMData = [utm.from_latlon(cords[1], cords[0]) for cords in GPSData]
         else:
             # assumes the file is in lat, long
-            UTMData = [utm.from_latlon(cords[0], cords[1]) for cords in self.GPSData]
+            UTMData = [utm.from_latlon(cords[0], cords[1]) for cords in GPSData]
         # store coridinate information
         self.UTMZone = UTMData[0][2:]
         # print(self.UTMZone)
@@ -41,12 +48,12 @@ class Fence(object):
         self.GPScords = np.array(GPSData)
 
     def plot(self, ax, color='m'):
-        ax.plot(self.GPScords[:, 0], self.GPScords[:, 1],
-                c=color)
+        # plots are always in utm
+        ax.plot(*self.poly.exterior.xy, color=color)
 
 
 class Areas(object):
-    """holds the areas from a KML file"""
+    """holds the data from a KML file"""
     def __init__(self, file):
         self.areas = dict()
         print(file)
@@ -85,4 +92,10 @@ class Areas(object):
 
 if __name__ == '__main__':
     # move this test code later
-    fence = 
+    fence = Fence("croz_rook")
+    fig, ax = plt.subplots()
+    print(fig)
+    fence.plot(ax)
+    print(sum(fence.UTMCords))
+    print(hash(fig))
+    plt.show()
