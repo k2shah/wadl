@@ -7,7 +7,7 @@ import time
 import numpy as np
 import numpy.linalg as la
 import numpy.random as rand
-import cvxpy as cvx
+# import cvxpy as cvx
 # plot
 import matplotlib.pyplot as plt
 # lib
