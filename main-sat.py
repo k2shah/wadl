@@ -16,7 +16,7 @@ from lib.utils import *
 # solver
 import z3
 z3.set_param('parallel.enable', True)
-z3.set_param('verbose', 1)
+# z3.set_param('verbose', 1)
 
 
 class SAT(object):
@@ -73,15 +73,12 @@ class SAT(object):
                 # pRate = .11  # percent per second
                 # scale = 40  # 40m per unit
                 # speed = 4.  # m/s
-                # # endPercent = startPercent-self.config.maxTime*scale/speed*pRate
-                # # calculate the percent need to get to the base point
+                # endPercent = startPercent-self.config.maxTime*scale/speed*pRate
+                # calculate the percent need to get to the base point
                 # p2b = worldDistL2 * scale/speed * pRate
                 # # cacluate extreme step t*
                 # tStar = int((startPercent-endPercent-p2b)/pRate*speed/scale)
                 # print(worldDist, tStar, maxT-worldDist)
-
-
-
 
         for boolVar in self.blackList:
             self.problem.add(z3.Not(boolVar))
@@ -164,13 +161,13 @@ def main(outDir):
     # agent parameters
     agentParameters = {}
     agentParameters["base"] = 0
-    agentParameters["maxTime"] = 47
+    agentParameters["maxTime"] = 48
     agentParameters["initPos"] = [0, 83]
     nAgent = len(agentParameters["initPos"])
 
     # gen parameters
     step = 37
-    ver = "safe_1"
+    ver = "0"
     # input files
 
     # croz west
@@ -195,9 +192,9 @@ def main(outDir):
 
     sat = SAT(config)
     # # SOLVE THE PROBLEM
-    return 0
     print("Solving Problem")
     sat.solve()
+    return 0
     agents = sat.readSolution()
     try:
         config.writeInfo(outDir)
