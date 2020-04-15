@@ -7,25 +7,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 # gis
 import utm
-from shapely.geometry import Point, Polygon
-from shapely.wkb import loads
+from shapely.geometry import Polygon
 
 
 class Fence(object):
     """Holds the gps cords of the boundary of the area"""
 
-    def __init__(self, file, lngLat=False):
+    def __init__(self, file):
         """ on init parse the cvs cords file
             parser assumes "lat,  lng"
-            can parse "lng, lat" if kwarg lngLat = True
         """
         self.dataPath = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'geofences')
-        self.parseFile(file, lngLat)
+        self.parseFile(file)
         self.poly = Polygon(self.UTMCords)
         minx, miny, maxx, maxy = self.poly.bounds
         print('boundary extends in meters', (maxx - minx), (maxy - miny))
 
-    def parseFile(self, file, lngLat):
+    def parseFile(self, file):
         # parse file as CSV
         # stores the gps cords, utm cords, and utm zones
         CSVfile = os.path.join(self.dataPath, file+".csv")
@@ -35,12 +33,7 @@ class Fence(object):
         # toss 1st line and convert to float
         GPSData = [list(map(float, line)) for line in data[1:]]
         # convert to utm
-        if lngLat:
-            # assumes the file is in long, lat
-            UTMData = [utm.from_latlon(cords[1], cords[0]) for cords in GPSData]
-        else:
-            # assumes the file is in lat, long
-            UTMData = [utm.from_latlon(cords[0], cords[1]) for cords in GPSData]
+        UTMData = [utm.from_latlon(cords[0], cords[1]) for cords in GPSData]
         # store coridinate information
         self.UTMZone = UTMData[0][2:]
         # print(self.UTMZone)

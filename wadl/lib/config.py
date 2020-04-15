@@ -2,85 +2,80 @@ import numpy as np
 import numpy.random as rand
 import numpy.linalg as la
 import os as os
+# math
+import numpy as np 
+#graph 
+import networkx as nx
 # plot
 import matplotlib.pyplot as plt
+# gis
+import utm
+from shapely.geometry import Point
 # lib
-try:
-    from .utils import *
-except (SystemError, ImportError):
-    from utils import *
+from utils import *
+from fence import Fence
+from agent import Agents
 
 
-class Config(object):
-    def __init__(self, typ=None, size=(6, 6)):
+class Config(Fence):
+    def __init__(self, file, agents, step):
+        super(Config, self).__init__(file)
         self.dim = 2
-        self.solTime = 0
-        if typ == 'small':
-            self.maxTime = 20
-            # world init
-            self.worldSize = size
-            self.xGrid = np.linspace(0, 100, self.worldSize[0])
-            self.yGrid = np.linspace(0, 100, self.worldSize[1])
-            self.nX = len(self.xGrid)
-            self.nY = len(self.yGrid)
-            # number of states
-            self.nStates = int(np.prod(self.worldSize))
-            self.stateSpace = range(self.nStates)
-            self.buildWorld()
+        self.solTime = None
+        # store configuations
+        self.agents = agents
+        self.step = step
 
-            # robot init
-            self.base = (0, 0)
-
-            self.initAgent = [(0, 0),
-                              (3, 0),
-                              (6, 0),
-                              (7, 0)]
-            self.nAgent = len(self.initAgent)
-            self.nStates = int(np.prod(self.worldSize))
-
+        # build grid graph
+        self.buildLatice(self)
+        self.buildGraph(self)
         # build helper objects
-        self.buildTransition()
-        self.buildCostmap()
+        # self.buildTransition()
+        # self.buildCostmap()
 
-    def buildTransition(self):
-        # make transition matrix
-        self.Ts = np.eye(self.nStates, dtype=int)
-        # graph node to list of connected nodes
-        self.con = dict()
-        for s in range(self.nStates):
-            adj = []
-            i, j = ind2sub(s, self.worldSize)
-            if i - 1 >= 0:
-                adj.append(sub2ind((i-1, j), self.worldSize))  # left
-            if i + 1 < self.nX:
-                adj.append(sub2ind((i+1, j), self.worldSize))  # right
-            if j - 1 >= 0:
-                adj.append(sub2ind((i, j-1), self.worldSize))  # bottom
-            if j + 1 < self.nY:
-                adj.append(sub2ind((i, j+1), self.worldSize))  # top
+    def buildGrid(self, R=0):
+        # get bounds
+        minx, miny, maxx, maxy = poly.bounds
+        self.xWorld = np.linspace(minx, maxx, int((maxx - minx) / self.step))
+        self.yWorld = np.linspace(miny, maxy, int((maxy - miny) / self.step))
+        
+        self.nX = len(self.xWorld)
+        self.nY = len(self.yWorld)
+        # build graph
+        self.graph = nx.grid_graph(dim=[self.nY, self.nX])
+        # make worldMap{(node) -> (utm)}
+        self.world = dict()
+        # prune points outside polygon
+        for i, x in enumerate(self.xWorld):
+            for j, y in enumerate(self.yWorld):
+                if self.poly.contains(Point(x,y)):
+                    self.world[(i,j)] = (x, y)
+                else:
+                    self.graph.remove_node((i,j))
 
-            self.Ts[s, adj] = len(adj)*[1]
-            self.con[s] = adj
 
-    def buildWorld(self):
-        self.world = np.zeros((2, self.nStates))
-        for s in range(self.nStates):
-            xIdx, yIdx = ind2sub(s, self.worldSize)
-            self.world[:, s] = [self.xGrid[xIdx],
-                                self.yGrid[yIdx]]
 
-    def buildCostmap(self):
-        self.costmap = np.array([l1(self.base, ind2sub(s, self.worldSize))
-                                 for s in self.stateSpace])
+    def polyPrune(self, point):
+        # prune for containment
+        pt = Point(point)
+        return 
 
     def plot(self, ax):
-        for i, node in enumerate(self.stateSpace):
-            ax.scatter(*self.world[:, node], color='k', s=.1)
-            for j, adj in enumerate(self.con[node]):
-                if adj in self.stateSpace:
-                    ax.plot([self.world[0, node], self.world[0, adj]],
-                            [self.world[1, node], self.world[1, adj]],
-                            color='k')
+        # plot the geofence with grid overlay
+        # plot fence
+        super(Config, self).plot(ax, color='k')
+        # plot grid
+        # plot nods
+        for node in self.graph.nodes:
+            ax.scatter(*self.world[node],
+                       color='k', s=.1)
+    #     for i, node in enumerate(self.stateSpace):
+    #         ax.scatter(*self.world[:, node], color='k', s=.1)
+    #         for j, adj in enumerate(self.con[node]):
+    #             if adj in self.stateSpace:
+    #                 ax.plot([self.world[0, node], self.world[0, adj]],
+    #                         [self.world[1, node], self.world[1, adj]],
+    #                         color='k')
 
     def setSolTime(self, solTime):
         # store the solution time of the solve
@@ -111,7 +106,13 @@ class Config(object):
 
 
 if __name__ == '__main__':
-    config = Config('small')
+    starts = [0, 1]
+    maxPath = 40
+    step = 40
+    agents = Agents(starts, maxPath)
+
+    config = Config('croz_west', agents, step)
     fig, ax = plt.subplots()
     config.plot(ax)
+
     plt.show()
