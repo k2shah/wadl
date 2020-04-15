@@ -12,20 +12,17 @@ import numpy.random as rand
 import matplotlib.pyplot as plt
 # lib
 
-
-
 class Trajectory(object):
 
-    def __init__(self, color='k'):
+    def __init__(self):
         # makes the trajectory object
         # pt is the initial point of the trajectory
         self.pts = []
-        self.color = color
-
-        self.keyPoints = {"hut": [-77.4610948, 169.1860094],
-                          "hut-tz": [-77.461540, 169.18600],
-                          "hut-lz": [-77.4614790, 169.1849841]}
-        self.transferSpeed = 12.0
+        self.keyPoints = {"start": [-77.4610948, 169.1860094],
+                          "end":   [-77.4614790, 169.1849841]}
+        self.transferSpeed = 12.0 # speed in m/s
+        self.speed = 4.0  # speed in m/s
+        self.alt = 50  # altitude in m of the quad
 
     def __repr__(self):
         pass
@@ -81,44 +78,54 @@ class Trajectory(object):
                         color=color)
 
 
-class Agent(object):
-    def __init__(self, ID, config, color='b'):
-        self.id = ID
-        self.config = config
-        self.color = color
-        self.alt = 50  # altitude in m of the quad
-        self.speed = 4.0  # speed in m/s
+class Agents(object):
+    def __init__(self, startPts, pathLen):
+        """ holds the trajectory information of the agents before and after solution
+        inital positions and max length are set here"""
+        self.len=len(startPts)
+        self.startPts = startPts
+        self.pathLen = pathLen
         # init trajectory
-        self.trajectory = Trajectory(color=self.color)
+        self.statePaths = [[]*self.len]
+        self.colors = plt.cm.get_cmap('Set1', self.len)
+        # self.trajectory = Trajectory(color=self.color)
 
-    def makeTrajectory(self, statePath):
-        # takes the state path and return the tranformed path in UMT
-        config = self.config
-        # get start point
-        path = [config.stateSpace[statePath[0]]]
-        # makes trajectory
-        for state in statePath[1:]:
-            # convert to world index
-            worldIdx = config.stateSpace[state]
-            # convert to world point
-            pt = config.world[:, worldIdx]
-            if worldIdx != path[-1]:  # remove no motion
-                path.append(worldIdx)
-                self.trajectory.append(pt)
-        pathLen = len(path)*config.step
-        # print("Path Length (km): {:2.4f}. Flight Time (min): {:2.4f}".format(
-        #        pathLen, pathLen/self.speed/60))
+    def __len__(self):
+        return self.len
 
-    def writeTrajTxt(self, outpath):
-        if not os.path.exists(outpath):
-            os.makedirs(outpath)
-        # write the trajectory
-        filename = outpath + str(self.id) + ".csv"
-        self.trajectory.writeTxt(filename, self.config.UTM2LatLong,
-                                 self.alt, self.speed)
+    def __repr__(self):
+        for i, path in enumerate(self.statePaths):
+            print("agent {:d}", i)
+            print(path)
+            
+    # def makeTrajectory(self, statePath):
+    #     # takes the state path and return the tranformed path in UMT
+    #     config = self.config
+    #     # get start point
+    #     path = [config.stateSpace[statePath[0]]]
+    #     # makes trajectory
+    #     for state in statePath[1:]:
+    #         # convert to world index
+    #         worldIdx = config.stateSpace[state]
+    #         # convert to world point
+    #         pt = config.world[:, worldIdx]
+    #         if worldIdx != path[-1]:  # remove no motion
+    #             path.append(worldIdx)
+    #             self.trajectory.append(pt)
+    #     pathLen = len(path)*config.step
+    #     # print("Path Length (km): {:2.4f}. Flight Time (min): {:2.4f}".format(
+    #     #        pathLen, pathLen/self.speed/60))
 
-    def plot(self, ax):
-        self.trajectory.plot(ax, colorize=False)
+    # def writeTrajTxt(self, outpath):
+    #     if not os.path.exists(outpath):
+    #         os.makedirs(outpath)
+    #     # write the trajectory
+    #     filename = outpath + str(self.id) + ".csv"
+    #     self.trajectory.writeTxt(filename, self.config.UTM2LatLong,
+    #                              self.alt, self.speed)
+
+    # def plot(self, ax):
+    #     self.trajectory.plot(ax, colorize=False)
 
 
 if __name__ == '__main__':
