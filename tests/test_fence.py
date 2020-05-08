@@ -14,7 +14,7 @@ def croz():
     # cros test fixture
     return Fence("croz_west")
 
-def test_fense(croz):
+def test_fence(croz):
     # save figure to disk
     fig, ax = plt.subplots()
     croz.plot(ax)
