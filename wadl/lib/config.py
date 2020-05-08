@@ -10,11 +10,11 @@ import networkx as nx
 import matplotlib.pyplot as plt
 # gis
 import utm
-from shapely.geometry import Point
+from shapely.geometry import Polygon, Point
 # lib
-from utils import *
-from fence import Fence
-from agent import Agents
+from wadl.lib.utils import *
+from wadl.lib.fence import Fence
+from wadl.lib.agent import Agents
 
 
 class Config(Fence):
@@ -22,20 +22,27 @@ class Config(Fence):
         super(Config, self).__init__(file)
         self.dim = 2
         self.solTime = None
+        # change when extended
+        self.theta = 15
         # store configuations
         self.agents = agents
         self.step = step
 
-        # build grid graph
-        self.buildLatice(self)
-        self.buildGraph(self)
         # build helper objects
-        # self.buildTransition()
-        # self.buildCostmap()
+        # build grid graph
+        self.buildGrid()
 
-    def buildGrid(self, R=0):
+    def rotateGrid(self):
+        self.R = rot2D(np.radians(self.theta))
+        cordsRotated = (self.R @ self.UTMCords.T).T
+        return Polygon(cordsRotated)
+        # self.R = np.eye(2)
+
+    def buildGrid(self):
+        # rotate cords
+        rotatedPoly = self.rotateGrid()
         # get bounds
-        minx, miny, maxx, maxy = poly.bounds
+        minx, miny, maxx, maxy = rotatedPoly.bounds
         self.xWorld = np.linspace(minx, maxx, int((maxx - minx) / self.step))
         self.yWorld = np.linspace(miny, maxy, int((maxy - miny) / self.step))
         
@@ -48,8 +55,8 @@ class Config(Fence):
         # prune points outside polygon
         for i, x in enumerate(self.xWorld):
             for j, y in enumerate(self.yWorld):
-                if self.poly.contains(Point(x,y)):
-                    self.world[(i,j)] = (x, y)
+                if rotatedPoly.contains(Point(x,y)):
+                    self.world[(i,j)] = self.R.T @ np.array([x, y])
                 else:
                     self.graph.remove_node((i,j))
 
@@ -63,12 +70,18 @@ class Config(Fence):
     def plot(self, ax):
         # plot the geofence with grid overlay
         # plot fence
-        super(Config, self).plot(ax, color='k')
+        super(Config, self).plot(ax, color='r')
         # plot grid
-        # plot nods
+        # plot nodes
         for node in self.graph.nodes:
             ax.scatter(*self.world[node],
                        color='k', s=.1)
+        # plot edges
+        for e1, e2 in self.graph.edges:
+            line = np.array([self.world[e1], self.world[e2]])
+            ax.plot(line[:, 0], line[:, 1],
+                    color='k')
+
     #     for i, node in enumerate(self.stateSpace):
     #         ax.scatter(*self.world[:, node], color='k', s=.1)
     #         for j, adj in enumerate(self.con[node]):
@@ -112,7 +125,9 @@ if __name__ == '__main__':
     agents = Agents(starts, maxPath)
 
     config = Config('croz_west', agents, step)
+    print(len(config.graph.nodes))
+    print(len(config.graph.edges))
+
     fig, ax = plt.subplots()
     config.plot(ax)
-
     plt.show()
