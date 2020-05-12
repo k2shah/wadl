@@ -10,14 +10,11 @@ import matplotlib.pyplot as plt
 def croz():
     """test Fence class """
     # build fixture
-    from wadl.lib.agent import Agents
     from wadl.lib.config import Config
     # cros test fixture
-    starts = [0, 1]
-    maxPath = 40
-    step = 40
-    agents = Agents(starts, maxPath)
-    return Config('croz_west', agents, step)
+    starts = [(0,0),
+              (1,1)]
+    return Config('croz_west', starts)
 
 def test_config(croz):
     # save figure to disk
