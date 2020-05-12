@@ -18,19 +18,23 @@ from wadl.lib.agent import Agents
 
 
 class Config(Fence):
-    def __init__(self, file, agents, step):
+    def __init__(self, file, starts,
+                 step=40, maxPath=40):
         super(Config, self).__init__(file)
         self.dim = 2
         self.solTime = None
         # change when extended
         self.theta = 15
         # store configuations
-        self.agents = agents
+        self.starts = starts
+        # store defaults
         self.step = step
+        self.maxPath = maxPath
 
         # build helper objects
         # build grid graph
         self.buildGrid()
+        self.findGlobalStart()
 
     def rotateGrid(self):
         self.R = rot2D(np.radians(self.theta))
@@ -60,27 +64,64 @@ class Config(Fence):
                 else:
                     self.graph.remove_node((i,j))
 
+        self.findOffsets()
 
+    def findOffsets(self):
+        # finds cord offsets so bottom left corner is (0,0)
+        self.offset = sorted(self.graph.nodes,
+                              key=lambda x:(x[1],x[0]))[0]
+    
+    def findGlobalStart(self):
+        # finds the global start of the agents using the relative start init
+        # because adding tuples is silly
+        self.globalStarts = [tuple(map(sum, zip(s, self.offset)))
+                             for s in self.starts]
+        print(self.globalStarts)
+        for start in self.globalStarts:
+            if start not in self.graph.nodes:
+                raise KeyError('point not on graph', start)
+
+        # check if points are in the graph
 
     def polyPrune(self, point):
         # prune for containment
         pt = Point(point)
         return 
 
-    def plot(self, ax):
-        # plot the geofence with grid overlay
-        # plot fence
-        super(Config, self).plot(ax, color='r')
-        # plot grid
+    def plotNodes(self, ax):
         # plot nodes
         for node in self.graph.nodes:
             ax.scatter(*self.world[node],
-                       color='k', s=.1)
+                       color='k', s=5)
+
+    def plotEdges(self, ax):
         # plot edges
         for e1, e2 in self.graph.edges:
             line = np.array([self.world[e1], self.world[e2]])
             ax.plot(line[:, 0], line[:, 1],
-                    color='k')
+                    color='k', linewidth=1)
+
+    def plotStarts(self, ax):
+        # plot start locations
+        for start in self.globalStarts:
+            ax.scatter(*self.world[start],
+                    color='b', s=10)
+
+
+    def plot(self, ax):
+        # plot the geofence with grid overlay
+        # plot fence
+        super(Config, self).plot(ax, color='r')
+
+        # plot configuration
+        # self.plotNodes(ax)
+        self.plotEdges(ax)
+        self.plotStarts(ax)
+
+
+
+
+
 
     #     for i, node in enumerate(self.stateSpace):
     #         ax.scatter(*self.world[:, node], color='k', s=.1)
@@ -119,14 +160,10 @@ class Config(Fence):
 
 
 if __name__ == '__main__':
-    starts = [0, 1]
-    maxPath = 40
-    step = 40
-    agents = Agents(starts, maxPath)
+    starts = [(0,0),
+              (1,1)]
 
-    config = Config('croz_west', agents, step)
-    print(len(config.graph.nodes))
-    print(len(config.graph.edges))
+    config = Config('croz_west', starts)
 
     fig, ax = plt.subplots()
     config.plot(ax)
