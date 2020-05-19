@@ -13,7 +13,7 @@ from shapely.geometry import Polygon
 class Fence(object):
     """Holds the gps cords of the boundary of the area"""
 
-    def __init__(self, file):
+    def __init__(self, file, absPath=False):
         """ on init parse the cvs cords file
             parser assumes "lat,  lng"
         """

@@ -14,7 +14,6 @@ from shapely.geometry import Polygon, Point
 # lib
 from wadl.lib.utils import *
 from wadl.lib.fence import Fence
-from wadl.lib.agent import Agents
 
 
 class Config(Fence):
@@ -24,7 +23,7 @@ class Config(Fence):
         self.dim = 2
         self.solTime = None
         # change when extended
-        self.theta = 15
+        self.theta = 0
         # store configuations
         self.starts = starts
         # store defaults
@@ -69,14 +68,13 @@ class Config(Fence):
     def findOffsets(self):
         # finds cord offsets so bottom left corner is (0,0)
         self.offset = sorted(self.graph.nodes,
-                              key=lambda x:(x[1],x[0]))[0]
+                             key=lambda x:(x[1],x[0]))[0]
     
     def findGlobalStart(self):
         # finds the global start of the agents using the relative start init
         # because adding tuples is silly
         self.globalStarts = [tuple(map(sum, zip(s, self.offset)))
                              for s in self.starts]
-        print(self.globalStarts)
         for start in self.globalStarts:
             if start not in self.graph.nodes:
                 raise KeyError('point not on graph', start)
@@ -114,22 +112,9 @@ class Config(Fence):
         super(Config, self).plot(ax, color='r')
 
         # plot configuration
-        # self.plotNodes(ax)
+        #self.plotNodes(ax)
         self.plotEdges(ax)
         self.plotStarts(ax)
-
-
-
-
-
-
-    #     for i, node in enumerate(self.stateSpace):
-    #         ax.scatter(*self.world[:, node], color='k', s=.1)
-    #         for j, adj in enumerate(self.con[node]):
-    #             if adj in self.stateSpace:
-    #                 ax.plot([self.world[0, node], self.world[0, adj]],
-    #                         [self.world[1, node], self.world[1, adj]],
-    #                         color='k')
 
     def setSolTime(self, solTime):
         # store the solution time of the solve
