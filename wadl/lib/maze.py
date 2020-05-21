@@ -14,26 +14,41 @@ from shapely.geometry import Polygon, Point
 # lib
 from wadl.lib.utils import *
 from wadl.lib.fence import Fence
+from wadl.lib.path import Path
 
-
-class Config(Fence):
-    def __init__(self, file, starts,
-                 step=40, maxPath=40):
-        super(Config, self).__init__(file)
+class Maze(Fence):
+    def __init__(self, file, 
+                 starts=[(0,0)],
+                 step=40, limit=None,
+                 rotation=0):         
+        super(Maze, self).__init__(file)
+        # set parameters
         self.dim = 2
         self.solTime = None
-        # change when extended
-        self.theta = 0
-        # store configuations
-        self.starts = starts
-        # store defaults
+        self.solved = False
+        # grid parameters
+        self.theta = rotation
         self.step = step
-        self.maxPath = maxPath
-
-        # build helper objects
         # build grid graph
         self.buildGrid()
+
+        # uav parameters
+        self.starts = starts
+        self.nAgent = len(starts)
+        self.paths = [None] * self.nAgent
+        self.nNode = len(self.graph)# store size of nodes
+        self.limit = limit if limit is not None else self.nNode + 2 # default: buffer lenght by 6 
+      
+        # find global start location from local start passed in
         self.findGlobalStart()
+       
+        # create full name of maze
+        self.taskName = self.name + f'_s{step}_n{self.nAgent}_t{self.limit}'
+        print(f"Generated maze graph with {self.nNode} nodes")
+
+    def __len__(self):
+        # number of nodes
+        return len(self.graph)
 
     def rotateGrid(self):
         self.R = rot2D(np.radians(self.theta))
@@ -63,6 +78,12 @@ class Config(Fence):
                 else:
                     self.graph.remove_node((i,j))
 
+
+        # save the index of each node
+        for i, node in enumerate(self.graph):
+            self.graph.nodes[node]['index'] = i
+
+        # calculate the offset from the lower left node 
         self.findOffsets()
 
     def findOffsets(self):
@@ -78,6 +99,8 @@ class Config(Fence):
         for start in self.globalStarts:
             if start not in self.graph.nodes:
                 raise KeyError('point not on graph', start)
+ 
+
 
         # check if points are in the graph
 
@@ -103,25 +126,47 @@ class Config(Fence):
         # plot start locations
         for start in self.globalStarts:
             ax.scatter(*self.world[start],
-                    color='b', s=10)
+                       color='b', s=10)
 
+    def plotPaths(self, ax):
+        if self.solved is False:
+            return
+        cols = iter(['b', 'g', 'r', 'm'])
+        for path in self.paths:
+                path.plot(ax, color = next(cols))
 
-    def plot(self, ax):
+    def plot(self, ax, showGrid=False):
         # plot the geofence with grid overlay
         # plot fence
-        super(Config, self).plot(ax, color='r')
+        super(Maze, self).plot(ax, color='r')
 
-        # plot configuration
-        #self.plotNodes(ax)
-        self.plotEdges(ax)
+        # plot maze
+        if showGrid:
+            self.plotNodes(ax)
+            self.plotEdges(ax)
         self.plotStarts(ax)
+        self.plotPaths(ax)
 
     def setSolTime(self, solTime):
         # store the solution time of the solve
         self.solTime = solTime
 
+    def solve(self, solver):
+        print(f"\nSolving maze {self.taskName}")
+        problem = solver(self)
+        # make Path objects from the soltion
+        self.sols = problem.solve()
+        paths = []
+        for sol in self.sols:
+            print(sol)
+            paths.append([self.world[pt] for pt in sol])
+        self.paths = [Path(path) for path in paths]
+        pathLenghts = [len(path) for path in self.paths]
+        print(f"Found {len(self.paths)} paths of lengths {pathLenghts}")
+        self.solved = True
+
     def writeInfo(self, filepath):
-        # writes the configuration information of the test
+        # writes the Mazeuration information of the test
         if not os.path.exists(filepath):
             os.makedirs(filepath)
         self.outfile = os.path.join(filepath, 'info.txt')
@@ -148,8 +193,13 @@ if __name__ == '__main__':
     starts = [(0,0),
               (1,1)]
 
-    config = Config('croz_west', starts)
+    path = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'geofences')
+    file = os.path.join(path, "croz_west")
+    
+    absfile = os.path.abspath(file)
+    maze = Maze(absfile, starts,
+                    rotation=15)
 
     fig, ax = plt.subplots()
-    config.plot(ax)
+    maze.plot(ax)
     plt.show()
