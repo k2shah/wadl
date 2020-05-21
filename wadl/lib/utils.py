@@ -42,7 +42,7 @@ def normalize(v):
     v = np.array(v)
     norm = la.norm(v)
     if norm < 10e-7:
-        warn.warn("vector has near zero magnatiude")
+        warn.warn("vector has near zero mag")
         return 0*v
     return v/norm
 

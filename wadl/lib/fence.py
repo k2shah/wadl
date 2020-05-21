@@ -13,20 +13,31 @@ from shapely.geometry import Polygon
 class Fence(object):
     """Holds the gps cords of the boundary of the area"""
 
-    def __init__(self, file, absPath=False):
+    def __init__(self, file):
         """ on init parse the cvs cords file
             parser assumes "lat,  lng"
+            file is abs path file
         """
-        self.dataPath = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'geofences')
+        self.file = file
+        # get name of area
+        name = file.split('\\')[-1]
+        self.name = name.split('.csv')[0]
+        # parse file
+        print("\nReading coordinate file {:s}".format(file))
         self.parseFile(file)
+        # build polygon
         self.poly = Polygon(self.UTMCords)
+        # find bounding box
         minx, miny, maxx, maxy = self.poly.bounds
-        print('boundary extends in meters', (maxx - minx), (maxy - miny))
+        print(f"{self.name}: extends in meters {maxx - minx} by {maxy - miny}")
 
     def parseFile(self, file):
         # parse file as CSV
         # stores the gps cords, utm cords, and utm zones
-        CSVfile = os.path.join(self.dataPath, file+".csv")
+        if ".csv" in file:
+            CSVfile = file
+        else:
+            CSVfile = file + ".csv"
         with open(CSVfile, 'r') as csvfile:
             data = [(line[1], line[2])
                     for line in csv.reader(csvfile, delimiter=',')]
@@ -38,11 +49,15 @@ class Fence(object):
         self.UTMZone = UTMData[0][2:]
         # print(self.UTMZone)
         self.UTMCords = np.array([[data[0], data[1]] for data in UTMData])
-        self.GPScords = np.array(GPSData)
+        self.GPSCords = np.array(GPSData)
 
     def plot(self, ax, color='m'):
         # plots are always in utm
         ax.plot(*self.poly.exterior.xy, color=color)
+        # place label somewhere
+        minx, miny, maxx, maxy = self.poly.bounds
+        placement = (maxx, miny)
+        ax.annotate(self.name, xy=placement)
 
 
 class Areas(object):
@@ -85,7 +100,11 @@ class Areas(object):
 
 if __name__ == '__main__':
     # move this test code later
-    fence = Fence("croz_rook")
+    path = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'geofences')
+    file = os.path.join(path, "croz_west")
+    
+    absfile = os.path.abspath(file)
+    fence = Fence(absfile)
     fig, ax = plt.subplots()
     print(fig)
     fence.plot(ax)
