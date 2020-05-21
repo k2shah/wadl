@@ -19,11 +19,27 @@ import mpl_toolkits.mplot3d.axes3d as axes3d
 
 class Path(object):
     """docstring for Path"""
-    def __init__(self, pathDir):
-        self.pathDir = pathDir
-        self.keyPoints = [("-77.46154", "169.186"),
-                          ("-77.461479", "169.1849841")]
-        self.parseFile()
+    def __init__(self, cords, keyPoints = None):
+        self.keyPoints = keyPoints
+        self.GPScords = [] # cords in GPS
+        self.UTMcords = [] # cord in UTM
+        self.setUTM(cords)
+
+    def setUTM(self, cords):
+        self.UTMcords = np.array(cords)
+
+    def setGPS(self, cords):
+        self.UTMcord = np.array(cords)
+
+    def setKeypoints(self, keyPoints):
+        self.keyPoints = keyPoints
+
+    def __len__(self):
+        return self.UTMcords.shape[0]
+
+    def __repr__(self):
+        return print(self.UTMcords)
+        
 
     def parseFile(self):
         pathFiles = glob.glob(os.path.join(self.pathDir, "routes/*"))
@@ -67,6 +83,10 @@ class Path(object):
             f.write("\n{:s}: {:2.4f}".format(
                     routeName,
                     routeEff))
+
+    def plot(self, ax, color='b'):
+        # path
+        ax.plot(self.UTMcords[:-1, 0], self.UTMcords[:-1, 1])
 
 
 

@@ -1,4 +1,6 @@
 import pytest
+# os
+import os
 # math
 import numpy as np
 import numpy.linalg as la
@@ -14,7 +16,11 @@ def croz():
     # cros test fixture
     starts = [(0,0),
               (1,1)]
-    return Config('croz_west', starts)
+    path = os.path.join(os.path.dirname( __file__ ), '..', 'wadl', 'data', 'geofences')
+    file = os.path.join(path, "croz_west")
+    absfile = os.path.abspath(file)
+    return Config(absfile, starts,
+                  step=40, rotation=15)
 
 def test_config(croz):
     # save figure to disk
