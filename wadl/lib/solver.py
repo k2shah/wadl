@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from wadl.lib.utils import *
 # solver
 import z3
-#z3.set_param('parallel.enable', True)
+z3.set_param('parallel.enable', True)
 # z3.set_param('verbose', 1)
 
 class Solver(object):
@@ -36,9 +36,9 @@ class SATSolver(Solver):
         self.problem = z3.Solver()
         self.satVars = []
         self.makeVars()
-        # self.findBlackList()
+        self.findBlackList()
 
-        print(f"Built problem with {self.nVar} vars, _ removed")
+        print(f"Built problem with {self.nVar-self.nRmv} vars, {self.nRmv} removed")
         self.setConts()
 
 
@@ -59,15 +59,12 @@ class SATSolver(Solver):
         self.blackList = []
         # force to false a subset of the variables.
         for i in range(self.maze.nAgent):
-            start = self.maze.starts[i]
+            start = self.maze.globalStarts[i]
             # convert base to world point
-            worldIdx = self.maze.stateSpace[start]
-            worldBase = ind2sub(worldIdx, self.maze.worldSize)
             # print(worldBase)
-            for si, s in enumerate(self.maze.stateSpace):
-                worldLoc = ind2sub(s, self.maze.worldSize)
+            for si, s in enumerate(self.maze.graph):
                 # reachable prune
-                worldDist = l1(worldBase, worldLoc)
+                worldDist = l1(start, s) # l1 distance between two pts
                 for t in range(worldDist):
                     if t < 2:
                         continue
@@ -75,23 +72,10 @@ class SATSolver(Solver):
                     self.blackList.append(self.satVars[i][t][si])
                     # not backward reachable from end
                     self.blackList.append(self.satVars[i][-1-t][si])
-                # distance prune
-                # turns out this was redundant
-                # worldDistL2 = l2(worldBase, worldLoc)
-                # startPercent = 8.
-                # endPercent = 30
-                # pRate = .11  # percent per second
-                # scale = 40  # 40m per unit
-                # speed = 4.  # m/s
-                # endPercent = startPercent-self.maze.maxTime*scale/speed*pRate
-                # calculate the percent need to get to the base point
-                # p2b = worldDistL2 * scale/speed * pRate
-                # # cacluate extreme step t*
-                # tStar = int((startPercent-endPercent-p2b)/pRate*speed/scale)
-                # print(worldDist, tStar, maxT-worldDist)
 
         for boolVar in self.blackList:
             self.problem.add(z3.Not(boolVar))
+        self.nRmv = len(self.blackList)
 
     def setConts(self):
         # sets the constraints for the problem
@@ -139,10 +123,10 @@ class SATSolver(Solver):
             solTime = (time.time()-startTime)/60.
             self.maze.setSolTime(solTime)
             print("Solution Found: {:2.5f} min".format(solTime))
+            return True, self.readSolution()
         else:
             raise RuntimeError("I will never be satisfiiiiied")
-
-        return self.readSolution()
+            return False, None
 
 
 
