@@ -50,6 +50,8 @@ class Maze(Fence):
         # number of nodes
         return len(self.graph)
 
+    # Grid setup
+
     def rotateGrid(self):
         self.R = rot2D(np.radians(self.theta))
         cordsRotated = (self.R @ self.UTMCords.T).T
@@ -109,6 +111,73 @@ class Maze(Fence):
         pt = Point(point)
         return 
 
+    # Solution 
+
+    def setSolTime(self, solTime):
+        # store the solution time of the solve
+        self.solTime = solTime
+
+    def solve(self, solver):
+        print(f"\nSolving maze {self.taskName}")
+        problem = solver(self)
+        # make Path objects from the soltion
+        self.solved, self.sols = problem.solve()
+        if not self.solved:
+            raise RuntimeError("problem failed")
+        paths = []
+        for sol in self.sols:
+            print(sol)
+            paths.append([self.world[pt] for pt in sol])
+        self.paths = [Path(path) for path in paths]
+        pathLenghts = [len(path) for path in self.paths]
+        print(f"Found {len(self.paths)} paths of lengths {pathLenghts}")
+
+
+    # write
+    def writeInfo(self, filePath):
+        # writes the Maze information of the test
+        outFile = os.path.join(filePath, "info.txt")
+        with open(outFile, 'w') as f:
+
+            f.write('\nGrid size\n')
+            f.write(str(self.nNode))
+
+            f.write('\nPath limit\n')
+            f.write(str(self.limit))
+
+            f.write('\nSolution time (min)\n')
+            f.write(str(self.solTime))
+
+            f.write('\nInitial agent positions\n')
+            for start in self.starts:
+                f.write(f"{start}\n")
+
+    def writePaths(self, pathDir):
+        for i, path in enumerate(self.paths):
+            pathFile = os.path.join(pathDir, str(i)+".csv")
+            path.UTM2GPS(self.UTMZone)
+            path.write(pathFile)
+
+    def write(self, filePath):
+        taskDir = os.path.join(filePath, self.taskName)
+        if not os.path.exists(taskDir): # make dir if not exists
+            os.makedirs(taskDir)
+        # write maze configuration information
+        self.writeInfo(taskDir)
+        # write paths as GPS csv files.
+        pathDir = os.path.join(taskDir, "paths")
+        if not os.path.exists(pathDir): # make dir if not exists
+            os.makedirs(pathDir)
+        self.writePaths(pathDir)
+        # save the figure
+        fig, ax = plt.subplots(figsize=(16, 9))
+        self.plot(ax)
+        plt.draw()
+        plt.pause(.001)
+        plotName = os.path.join(taskDir, "routes.png")
+        plt.savefig(plotName, bbox='tight', dpi=200)
+
+    # plot
     def plotNodes(self, ax):
         # plot nodes
         for node in self.graph.nodes:
@@ -142,52 +211,10 @@ class Maze(Fence):
 
         # plot maze
         if showGrid:
-            self.plotNodes(ax)
+            # self.plotNodes(ax)
             self.plotEdges(ax)
         self.plotStarts(ax)
         self.plotPaths(ax)
-
-    def setSolTime(self, solTime):
-        # store the solution time of the solve
-        self.solTime = solTime
-
-    def solve(self, solver):
-        print(f"\nSolving maze {self.taskName}")
-        problem = solver(self)
-        # make Path objects from the soltion
-        self.sols = problem.solve()
-        paths = []
-        for sol in self.sols:
-            print(sol)
-            paths.append([self.world[pt] for pt in sol])
-        self.paths = [Path(path) for path in paths]
-        pathLenghts = [len(path) for path in self.paths]
-        print(f"Found {len(self.paths)} paths of lengths {pathLenghts}")
-        self.solved = True
-
-    def writeInfo(self, filepath):
-        # writes the Mazeuration information of the test
-        if not os.path.exists(filepath):
-            os.makedirs(filepath)
-        self.outfile = os.path.join(filepath, 'info.txt')
-        with open(self.outfile, 'w') as f:
-
-            f.write('\nWorld Size\n')
-            f.write(str(self.worldSize))
-
-            f.write('\nbase pt\n')
-            f.write(str(self.base))
-
-            f.write('\nmax time\n')
-            f.write(str(self.maxTime))
-
-            f.write('\nsolution  time (min)\n')
-            f.write(str(self.solTime))
-
-            f.write('\ninitial agent positions\n')
-            f.write(np.array2string(self.initAgent, formatter={
-                                    'float_kind': lambda x: "%.2f" % x}))
-
 
 if __name__ == '__main__':
     starts = [(0,0),

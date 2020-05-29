@@ -22,9 +22,11 @@ class Survey(object):
     """docstring for Survey
     top level object for a survey
     this objects holds all the information of a single survey """
-    def __init__(self, name):
+    def __init__(self, name, outDir):
         # save the name of the survey
         self.name = name
+        # save the output directory
+        self.outDir = outDir
         # tasks is a dict that maps file name to survey parameters
         self.tasks = dict()
         # key points to display on the 
@@ -36,7 +38,7 @@ class Survey(object):
     def addTask(self, file, **kwargs):
         # add a task to the survey
         # expects a file name
-        # add key word arguments for the start locations, step size, and distance limit
+        # keyword arguments for the start locations, step size, and distance limit
         # start = [(0,0), (1,1)]
         # step = 40
         # limit = 20
@@ -63,6 +65,7 @@ class Survey(object):
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
 
+        # display 
         plt.show()
 
     def plan(self):
@@ -70,19 +73,21 @@ class Survey(object):
         self.plotKeyPoints(ax)
         plt.gca().set_aspect('equal', adjustable='box')
         plt.draw()
+        
         for task, maze in self.tasks.items():
-            if len(maze) < 70:
-                try:
-                    maze.solve(solver = SATSolver)
-                   
-                except RuntimeError as e:
-                    print(f"task {maze.name} failed")
+            try:
+                maze.solve(solver = SATSolver)
+                if maze.solved:
+                    print(f"generating paths for task {maze.name}")
+                    maze.write(self.outDir)
+               
+            except RuntimeError as e:
+                print(f"task {maze.name} failed")
 
             #plot task
             maze.plot(ax)
             plt.draw()
-        # figure formats
-        
+            plt.pause(.001)
         plt.show()
 
 
