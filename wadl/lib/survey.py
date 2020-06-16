@@ -76,7 +76,7 @@ class Survey(object):
         
         for task, maze in self.tasks.items():
             try:
-                maze.solve(solver = SATSolver)
+                maze.solve(Solver=SATSolver)
                 if maze.solved:
                     print(f"generating paths for task {maze.name}")
                     maze.write(self.outDir)
