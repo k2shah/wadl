@@ -37,7 +37,7 @@ class Maze(Fence):
         self.nAgent = len(starts)
         self.paths = [None] * self.nAgent
         self.nNode = len(self.graph)# store size of nodes
-        self.limit = limit if limit is not None else self.nNode + 2 # default: buffer lenght by 6 
+        self.limit = limit if limit is not None else self.nNode + 5 # default: buffer lenght by 6 
       
         # find global start location from local start passed in
         self.findGlobalStart()
@@ -63,14 +63,14 @@ class Maze(Fence):
         rotatedPoly = self.rotateGrid()
         # get bounds
         minx, miny, maxx, maxy = rotatedPoly.bounds
-        self.xWorld = np.linspace(minx, maxx, int((maxx - minx) / self.step))
-        self.yWorld = np.linspace(miny, maxy, int((maxy - miny) / self.step))
+        self.xWorld = np.arange(minx, maxx, self.step)
+        self.yWorld = np.arange(miny, maxy, self.step)
         
         self.nX = len(self.xWorld)
         self.nY = len(self.yWorld)
         # build graph
         self.graph = nx.grid_graph(dim=[self.nY, self.nX])
-        # make worldMap{(node) -> (utm)}
+        # make world {(node) -> (utm)}
         self.world = dict()
         # prune points outside polygon
         for i, x in enumerate(self.xWorld):
@@ -101,15 +101,7 @@ class Maze(Fence):
         for start in self.globalStarts:
             if start not in self.graph.nodes:
                 raise KeyError('point not on graph', start)
- 
 
-
-        # check if points are in the graph
-
-    def polyPrune(self, point):
-        # prune for containment
-        pt = Point(point)
-        return 
 
     # Solution 
 
@@ -117,11 +109,11 @@ class Maze(Fence):
         # store the solution time of the solve
         self.solTime = solTime
 
-    def solve(self, solver):
+    def solve(self, Solver):
         print(f"\nSolving maze {self.taskName}")
-        problem = solver(self)
+        solver = Solver(self)
         # make Path objects from the soltion
-        self.solved, self.sols = problem.solve()
+        self.solved, self.sols = solver.solve()
         if not self.solved:
             raise RuntimeError("problem failed")
         paths = []
@@ -157,6 +149,22 @@ class Maze(Fence):
             pathFile = os.path.join(pathDir, str(i)+".csv")
             path.UTM2GPS(self.UTMZone)
             path.write(pathFile)
+
+    def writeGrid(self, outFile, UTM=True):
+        # writes the grid to file 
+        if UTM:
+            with open(outFile, 'w') as f:
+                for node in self.graph:
+                    cords = self.world[node]
+                    gps = utm.to_latlon(*cords, *self.UTMZone)
+                    cordStr = str(cords[0])+ ", " + str(cords[1]) + "," +\
+                              str(gps[0]) + ", " + str(gps[1]) + "\n"
+                    f.write(cordStr)
+
+                
+
+        else:
+            raise NotImplementedError()
 
     def write(self, filePath):
         taskDir = os.path.join(filePath, self.taskName)
