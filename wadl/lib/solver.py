@@ -33,125 +33,137 @@ class SATSolver(Solver):
     """docstring for SATSolver"""
     def __init__(self, maze):
         super(SATSolver, self).__init__(maze)
+        self.setup()
+
+    def setup(self):
         self.problem = z3.Solver()
-        self.satVars = []
-        self.makeVars()
-        self.findBlackList()
+        self.satVars = self.makeVars(self.maze.nNode,
+                                self.maze.nAgent,
+                                self.maze.limit)
+
+
+        print(self.satVars.shape)
+        # create blist and for them to be false
+        bList = self.L1Prune(self.maze.graph, self.satVars, self.maze.globalStarts)
+        self.removeVars(self.problem, bList)
+
+        self.nVar = len(self.satVars)
+        self.nRmv = len(bList)
+        self.makeConts(self.problem, self.maze.graph, self.satVars, self.maze.globalStarts)
 
         print(f"Built problem with {self.nVar-self.nRmv} vars, {self.nRmv} removed")
-        self.setConts()
 
 
 
-    def makeVars(self):
+
+
+    def makeVars(self, nNode, nAgent, limit):
         # makes a bool var for each space, time, robot tuple
-        for i in range(self.maze.nAgent):
-            # for each agent
-            self.satVars.append([[z3.Bool("x%s_t%s_s%s" % (i, t, s))
-                                for s in range(self.maze.nNode)]
-                                for t in range(self.maze.limit)])
-        self.nVar = \
-            self.maze.nAgent * \
-            self.maze.nNode * \
-            self.maze.limit
+        satVars=([[[z3.Bool("x%s_t%s_s%s" % (i, t, s))
+                    for s in range(nNode)]
+                    for t in range(limit)]
+                    for i in range(nAgent)])
+        nVars = nNode * nAgent *limit
+        return np.array(satVars)
 
-    def findBlackList(self):
-        self.blackList = []
+    def L1Prune(self, graph, satVars, starts):
+        bList = []
         # force to false a subset of the variables.
-        for i in range(self.maze.nAgent):
-            start = self.maze.globalStarts[i]
+        for i, start in enumerate(starts):
             # convert base to world point
             # print(worldBase)
-            for si, s in enumerate(self.maze.graph):
+            for si, s in enumerate(graph):
                 # reachable prune
                 worldDist = l1(start, s) # l1 distance between two pts
                 for t in range(worldDist):
                     if t < 2:
                         continue
                     # not forward reachable from  start
-                    self.blackList.append(self.satVars[i][t][si])
+                    bList.append(satVars[i][t][si])
                     # not backward reachable from end
-                    self.blackList.append(self.satVars[i][-1-t][si])
+                    bList.append(satVars[i][-1-t][si])
 
-        for boolVar in self.blackList:
-            self.problem.add(z3.Not(boolVar))
-        self.nRmv = len(self.blackList)
+        return bList
 
-    def setConts(self):
+    def removeVars(self, problem, bList):
+        for boolVar in bList:
+            problem.add(z3.Not(boolVar))
+    
+
+    def makeConts(self, problem, graph, satVars, starts):
         # sets the constraints for the problem
         # running constraints
-        T = nx.adjacency_matrix(self.maze.graph)
+        T = nx.adjacency_matrix(graph)
+        nAgent = len(satVars)
+        limit = len(satVars[0])
+
         for i in range(self.maze.nAgent):
             # for each agent
-            for t in range(self.maze.limit):
+            for t in range(limit):
                 # one spot per time
-                self.exactlyOne(self.satVars[i][t])
+                self.exactlyOne(problem, satVars[i][t])
                 # movement
-                if t+1 == self.maze.limit:
+                if t+1 == limit:
                     # ignore the last bit for the end
                     break
-                for si, s in enumerate(self.maze.graph):
-                    nextMoves = [self.satVars[i][t+1][ssi]
-                                 for ssi, ss in enumerate(self.maze.graph)
+                for si, s in enumerate(graph):
+                    nextMoves = [satVars[i][t+1][ssi]
+                                 for ssi, ss in enumerate(graph)
                                  if T[si, ssi] == 1 ]
                     # add self loop if it's the start or end node
-                    if s == self.maze.globalStarts[i]:
-                        nextMoves.append(self.satVars[i][t+1][si])
+                    if s == starts[i]:
+                        nextMoves.append(satVars[i][t+1][si])
                     # add constraint 
-                    self.problem.add(z3.Or(z3.Not(self.satVars[i][t][si]),
-                                           *nextMoves))
+                    problem.add(z3.Or(z3.Not(satVars[i][t][si]), *nextMoves))
         # for all agent and times each space must be true at least once
-        for si, s in enumerate(self.maze.graph):
+        for si, s in enumerate(graph):
             tempList = []
-            for i in range(self.maze.nAgent):
-                tempList.extend([self.satVars[i][t][si]
-                                for t in range(self.maze.limit)])
+            for i in range(nAgent):
+                tempList.extend([satVars[i][t][si] for t in range(limit)])
 
-            self.atLeastOne(tempList)
+            self.atLeastOne(problem, tempList)
         # boundary constants
-        for i in range(self.maze.nAgent):
-            start = self.maze.globalStarts[i]
+        for i, start  in enumerate(starts):
             startIdx = self.maze.graph.nodes[start]['index']
-            self.problem.add(z3.And(
-                             self.satVars[i][0][startIdx],
-                             self.satVars[i][-1][startIdx]))
+            problem.add(z3.And(satVars[i][0][startIdx],
+                               satVars[i][-1][startIdx]))
 
     def solve(self):
         # solve the problem
         startTime = time.time()
+        solTime = None
         if self.problem.check() == z3.sat:
             solTime = (time.time()-startTime)/60.
             self.maze.setSolTime(solTime)
             print("Solution Found: {:2.5f} min".format(solTime))
-            return True, self.readSolution()
+            return True, self.output()
         else:
             raise RuntimeError("I will never be satisfiiiiied")
             return False, None
 
 
 
-    def atMostOne(self, varList):
+    def atMostOne(self, problem, varList):
         # constrains at most one of the vars in the list to be true
-        self.problem.add(z3.PbLe([(v, 1) for v in varList], 1))
+        problem.add(z3.PbLe([(v, 1) for v in varList], 1))
 
-    def atLeastOne(self, varList):
+    def atLeastOne(self, problem, varList):
         # constrains at least one of the vars in the list to be true
-        self.problem.add(z3.PbGe([(v, 1) for v in varList], 1))
+        problem.add(z3.PbGe([(v, 1) for v in varList], 1))
 
-    def exactlyOne(self, varList):
+    def exactlyOne(self, problem, varList):
         # constrains at exactly one of the vars in the list to be true
-        self.problem.add(z3.PbEq([(v, 1) for v in varList], 1))
+        problem.add(z3.PbEq([(v, 1) for v in varList], 1))
 
 
-    def readSolution(self):
+    def output(self):
         m = self.problem.model()
         # colors = ['b', 'g', 'r', 'm']
-        # agents = [Agent(ID, self.maze, color=color)
-        #           for ID, color in zip(range(self.maze.nAgent), colors)]
+        nAgent, limit, nNode = self.satVars.shape
         paths = []
-        for i in range(self.maze.nAgent):
+        for i in range(nAgent):
             path = []
-            for t in range(self.maze.limit):
+            for t in range(limit):
                 for si, s in enumerate(self.maze.graph.nodes):
                     # print(i, t, s)
                     # print(m.evaluate(self.satVars[i][t][s]))
