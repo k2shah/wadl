@@ -25,4 +25,4 @@ def test_plan(island):
     file = os.path.join(path, "Little Norway")
     absfile = os.path.abspath(file)
     island.addTask(file, step=35, limit=41)
-    island.plan()
+    island.plan(plot=False)

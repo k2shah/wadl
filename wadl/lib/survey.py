@@ -68,7 +68,7 @@ class Survey(object):
         # display 
         plt.show()
 
-    def plan(self):
+    def plan(self, plot=True):
         fig, ax = plt.subplots(figsize=(16, 9))
         self.plotKeyPoints(ax)
         plt.gca().set_aspect('equal', adjustable='box')
@@ -88,7 +88,8 @@ class Survey(object):
             maze.plot(ax)
             plt.draw()
             plt.pause(.001)
-        plt.show()
+        if plot:
+            plt.show()
 
 
 
