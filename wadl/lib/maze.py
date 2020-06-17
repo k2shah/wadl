@@ -236,5 +236,5 @@ if __name__ == '__main__':
                     rotation=15)
 
     fig, ax = plt.subplots()
-    maze.plot(ax)
+    maze.plot(ax, showGrid=True)
     plt.show()
