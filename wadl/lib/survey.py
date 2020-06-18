@@ -16,7 +16,8 @@ import utm
 from shapely.geometry import Polygon, Point
 # lib
 from wadl.lib.maze import Maze
-from wadl.lib.solver import SATSolver
+from wadl.solver.solver import SATSolver
+from wadl.solver.linkSolver import LinkSolver
 
 class Survey(object):
     """docstring for Survey
@@ -68,7 +69,10 @@ class Survey(object):
         # display 
         plt.show()
 
-    def plan(self, plot=True):
+    def plan(self, plot=True, Solver="SAT"):
+        # get solver
+        solver = self.getSolver(Solver)
+
         fig, ax = plt.subplots(figsize=(16, 9))
         self.plotKeyPoints(ax)
         plt.gca().set_aspect('equal', adjustable='box')
@@ -76,7 +80,7 @@ class Survey(object):
         
         for task, maze in self.tasks.items():
             try:
-                maze.solve(Solver=SATSolver)
+                maze.solve(Solver=solver)
                 if maze.solved:
                     print(f"generating paths for task {maze.name}")
                     maze.write(self.outDir)
@@ -92,4 +96,8 @@ class Survey(object):
             plt.show()
 
 
-
+    def getSolver(self, SolverName):
+        if SolverName=="SAT":
+            return SATSolver
+        elif SolverName=="Link":
+            return LinkSolver
