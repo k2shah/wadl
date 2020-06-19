@@ -1,19 +1,7 @@
-#!/usr/bin/python3
-import warnings as warn
-import os
-import sys
-import time
-# math
-import numpy as np
-import numpy.linalg as la
-import numpy.random as rand
 #graph 
 import networkx as nx
-# plot
-import matplotlib.pyplot as plt
 # lib
-from wadl.lib.utils import *
-from wadl.solvers.SATproblem import SATproblem
+from wadl.solver.SATproblem import SATproblem
 
 class BaseSolver(object):
     """docstring for Solver"""
@@ -22,15 +10,25 @@ class BaseSolver(object):
         self.setup()
 
     def setup(self):
-        raise NotImplementedError
+        self.problem=SATproblem(self.maze.graph,
+                                self.maze.limit,
+                                self.maze.globalStarts)
 
     def solve(self):
-        '''
-        if solution is found return 
-        return True, self.output() 
-        else
-        return False, None
-        '''
+        #solve the problem
+        return self.problem.solve()
+
+
+
+class LinkSolver(BaseSolver):
+    """docstring for LinkSolver"""
+
+    def __init__(self, maze):
+        super(LinkSolver, self).__init__(maze)
+
+    def setup(self):
+        self.mGraph = MultiGraph(self.maze.graph)
+
+
+    def solve(self):
         raise NotImplementedError
-
-

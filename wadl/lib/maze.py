@@ -113,7 +113,7 @@ class Maze(Fence):
         print(f"\nSolving maze {self.taskName}")
         solver = Solver(self)
         # make Path objects from the soltion
-        self.solved, self.sols = solver.solve()
+        self.solved, self.sols, self.solTime= solver.solve()
         if not self.solved:
             raise RuntimeError("problem failed")
         paths = []
