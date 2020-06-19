@@ -89,11 +89,11 @@ class Survey(object):
                 print(f"task {maze.name} failed")
 
             #plot task
-            maze.plot(ax)
-            plt.draw()
-            plt.pause(.001)
-        if plot:
-            plt.show()
+        #     maze.plot(ax)
+        #     plt.draw()
+        #     plt.pause(.001)
+        # if plot:
+        #     plt.show()
 
 
     def getSolver(self, SolverName):

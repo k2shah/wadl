@@ -186,11 +186,14 @@ class Maze(Fence):
         plt.savefig(plotName, bbox='tight', dpi=200)
 
     # plot
-    def plotNodes(self, ax):
+    def plotNodes(self, ax, color='k', nodes=None):
         # plot nodes
-        for node in self.graph.nodes:
+        if nodes is None:
+            nodes = self.graph.nodes
+
+        for node in nodes:
             ax.scatter(*self.world[node],
-                       color='k', s=5)
+                       color=color, s=5)
 
     def plotEdges(self, ax):
         # plot edges
