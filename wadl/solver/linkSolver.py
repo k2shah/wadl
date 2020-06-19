@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 # lib
 from wadl.lib.utils import *
 from wadl.solver.solver import SATSolver
+from wadl.graph.multiGraph import MultiGraph
 # solver
 import z3
 z3.set_param('parallel.enable', True)
@@ -26,7 +27,7 @@ class LinkSolver(SATSolver):
         super(LinkSolver, self).__init__(maze)
 
     def setup(self):
-        print(self.maze.graph)
+        self.mGraph = MultiGraph(self.maze.graph)
 
 
     def solve(self):
