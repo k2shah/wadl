@@ -22,10 +22,10 @@ class SATproblem(object):
         self.nNode = len(self.graph)
         self.nPath = len(self.starts)
         # form problem instance
-        self.z3 = z3.Solver()
         self.make()
 
     def make(self):
+        self.z3 = z3.Solver()
         self.satVars = self.makeVars(self.nNode, self.nPath, self.limit)
 
         # create blist and for them to be false
@@ -51,7 +51,6 @@ class SATproblem(object):
         bList = []
         # force to false a subset of the variables.
         for i, start in enumerate(starts):
-            print(start)
             # convert base to world point
             # print(worldBase)
             for si, s in enumerate(graph):
