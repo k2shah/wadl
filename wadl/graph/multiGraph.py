@@ -14,21 +14,33 @@ import matplotlib.pyplot as plt
 from wadl.lib.utils import *
 from wadl.lib.maze import Maze
 
-
 class MultiGraph(object):
     """docstring for MultiGraph"""
     def __init__(self, graph):
         self.baseGraph = graph
         self.subGraphs = self.splitGraph()
+        # reindex all the nodes and store their subgraph
+        self.nodeIndex = dict()
+        for gIdx, graph in enumerate(self.subGraphs):
+            for i, node in enumerate(graph.nodes):
+                graph.nodes[node]['index'] = i
+                self.baseGraph.nodes[node]['subgraph'] = gIdx
 
 
+    def getExtends(self, graph):
+        xSort = sorted(graph.nodes, key= lambda x :x[0])
+        ySort = sorted(graph.nodes, key= lambda x :x[1])
+
+        xBound = (xSort[0][0], xSort[-1][0])
+        yBound = (ySort[0][1], ySort[-1][1])
+
+        return xBound, yBound
 
     def splitGraph(self, size=40):
         """splits a graph into sub segments
         size: aprox number of nodes in each sub graph
         """
         self.subGraphs = []
-        self.metaGraph = nx.Graph () # metaGraph of the subGraphs
 
         # get bounding box extends on graph
         xBound, yBound = self.getExtends(self.baseGraph)
@@ -84,45 +96,35 @@ class MultiGraph(object):
 
         return subGraphs
 
-
     def mergeSubgraphs(self, subNodes, node2sub, mergeSize = 10, maxSize = 60):
-            # merge into the subgraph with the most conections, if tie pick the smallest suubgraph  
-            mergedNodes = deepcopy(subNodes)
-            for i, nodes in subNodes.items():
-                if len(nodes) < mergeSize:
-                    # keep running score of best merge candidant
-                    mergeScore = defaultdict(int)
-                    for node in nodes:
-                        for adj in self.baseGraph.neighbors(node):
-                            adjIdx = node2sub[adj]
-                            if adjIdx != i:
+        # merge into the subgraph with the most conections, if tie pick the smallest suubgraph  
+        mergedNodes = deepcopy(subNodes)
+        for i, nodes in subNodes.items():
+            if len(nodes) < mergeSize:
+                # keep running score of best merge candidant
+                mergeScore = defaultdict(int)
+                for node in nodes:
+                    for adj in self.baseGraph.neighbors(node):
+                        adjIdx = node2sub[adj]
+                        if adjIdx != i:
                                 mergeScore[adjIdx] += 1
-                    # sort candiates and merge into the best one
-                    print(i, nodes, mergeScore)
-                    for k in sorted(mergeScore, key=mergeScore.get, reverse=True):
-                        if len(mergedNodes[k]) + len(nodes) < maxSize:
-                            # merge the ith subgraph into the kth subgraph
-                            print(f"Merging subgraph {i} with {len(nodes)} nodes into subgraph {k}")
-                            mergedNodes[k] += nodes
-                            mergedNodes.pop(i)
-                            break
-
-
-
-            return mergedNodes
+                # sort candiates and merge into the best one
+                # print(i, nodes, mergeScore)
+                for k in sorted(mergeScore, key=mergeScore.get, reverse=True):
+                    if len(mergedNodes[k]) + len(nodes) < maxSize:
+                        # merge the ith subgraph into the kth subgraph
+                        print(f"Merging subgraph {i} with {len(nodes)} nodes into subgraph {k}")
+                        mergedNodes[k] += nodes
+                        mergedNodes.pop(i)
+                        break
+        return mergedNodes
             
 
+    def __iter__(self):
+        return iter(self.subGraphs)  
 
-
-
-    def getExtends(self, graph):
-        xSort = sorted(graph.nodes, key= lambda x :x[0])
-        ySort = sorted(graph.nodes, key= lambda x :x[1])
-
-        xBound = (xSort[0][0], xSort[-1][0])
-        yBound = (ySort[0][1], ySort[-1][1])
-
-        return xBound, yBound
+    def __len__(self):
+        return len(self.subGraphs)
 
 if __name__ == '__main__':
     starts = [(0,0),
@@ -138,7 +140,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     colors = ('r', 'g', 'b', 'm', 'c', 'y', 'k')
 
-    for i, graph in enumerate(mGraph.subGraphs):
+    for i, graph in enumerate(mGraph):
             # print(graph.nodes)
             colIdx = i % len(colors) 
             # print(colors[colIdx])
