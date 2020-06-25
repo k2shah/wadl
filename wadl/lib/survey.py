@@ -22,7 +22,9 @@ class Survey(object):
     """docstring for Survey
     top level object for a survey
     this objects holds all the information of a single survey """
-    def __init__(self, name, outDir):
+    def __init__(self, name, outDir, solver="Base"):
+        # get solver
+        self.solverType = self.getSolver(solver)
         # save the name of the survey
         self.name = name
         # save the output directory
@@ -42,8 +44,7 @@ class Survey(object):
         # start = [(0,0), (1,1)]
         # step = 40
         # limit = 20
-
-        self.tasks[file] = Maze(file, **kwargs)
+        self.tasks[file] = Maze(file, **kwargs) 
 
     def setKeyPoints(self, points):
         # set the keyPoints in the survey
@@ -59,8 +60,9 @@ class Survey(object):
     def view(self):
         fig, ax = plt.subplots()
         self.plotKeyPoints(ax)
-        for task, maze in self.tasks.items():
-            maze.plot(ax, showGrid=True)
+        for file, maze in self.tasks.items():
+            solver = self.solverType(maze)
+            solver.plot(ax)
 
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
@@ -68,9 +70,7 @@ class Survey(object):
         # display 
         plt.show()
 
-    def plan(self, plot=True, Solver="Base"):
-        # get solver
-        solver = self.getSolver(Solver)
+    def plan(self, plot=True):
 
         fig, ax = plt.subplots(figsize=(16, 9))
         self.plotKeyPoints(ax)
@@ -79,7 +79,7 @@ class Survey(object):
         
         for task, maze in self.tasks.items():
             try:
-                maze.solve(Solver=solver)
+                maze.solve(Solver=self.solverType)
                 if maze.solved:
                     print(f"generating paths for task {maze.name}")
                     maze.write(self.outDir)
@@ -100,3 +100,6 @@ class Survey(object):
             return BaseSolver
         elif SolverName=="Link":
             return LinkSolver
+
+        else:
+            raise RuntimeError('No Solver selected')

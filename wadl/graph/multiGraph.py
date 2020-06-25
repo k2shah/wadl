@@ -119,6 +119,9 @@ class MultiGraph(object):
                         break
         return mergedNodes
             
+    def getCols(self):
+        return iter(plt.cm.rainbow(np.linspace(0,1,len(self))))
+
 
     def __iter__(self):
         return iter(self.subGraphs)  
