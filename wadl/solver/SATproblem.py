@@ -116,10 +116,12 @@ class SATproblem(object):
         if self.z3.check() == z3.sat:
             solTime = (time.time()-startTime)/60.
             print("Solution Found: {:2.5f} min".format(solTime))
-            return True, self.output(), solTime
+            self.solved = True
+            return self.solved, self.output(), solTime
         else:
             raise RuntimeError("I will never be satisfiiiiied")
-            return False, None, solTime
+            self.solved = False
+            return self.solved, None, solTime
 
 
 
@@ -140,7 +142,7 @@ class SATproblem(object):
         m = self.z3.model()
         # colors = ['b', 'g', 'r', 'm']
         nPath, limit, nNode = self.satVars.shape
-        paths = []
+        self.paths = []
         for i in range(nPath):
             path = []
             for t in range(limit):
@@ -151,7 +153,7 @@ class SATproblem(object):
                         path.append(s)
 
             # store the path
-            paths.append(path)
-        return paths
+            self.paths.append(path)
+        return self.paths
 
 
