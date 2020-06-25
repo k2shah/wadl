@@ -52,18 +52,16 @@ class LinkSolver(object):
                 col = next(cols)
                 # print(colors[colIdx])
                 self.maze.plotNodes(ax, nodes=graph.nodes, color=col)
-                plt.draw()
 
-    def preSolve(self):
-        self.paths = []
+    def presolve(self):
+        paths = []
         for i, prob in enumerate(self.problems):
             counter = 0
             solved = False
             while not solved:
                 try:
                     solved, path, time = prob.solve()
-                    self.paths.append(path[0])
-                    solTime += time
+                    paths.append(path[0])
                 except RuntimeError as e:
                     print(f"problem {i} failed, inc path limit")
                     prob.limit += 1 
@@ -77,16 +75,16 @@ class LinkSolver(object):
         return paths
 
     def solve(self):
-        time=Time.time()
+        startTime = time.time()
         # presolve for the paths
         paths = self.presolve()
         # build the meta graph
-        self.metGraph = nx.Graph()
-        self.metGraph.add_node('s') # add start node
+        self.metaGraph = nx.Graph()
+        self.metaGraph.add_node('s') # add start node
                 
 
 
 
-
+        solTime = time.time()-startTime
 
         return True, paths, solTime

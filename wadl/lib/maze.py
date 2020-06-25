@@ -106,10 +106,10 @@ class Maze(Fence):
     # Solution 
     def solve(self, Solver):
         print(f"\nSolving maze {self.taskName}")
-        solver = Solver(self)
+        self.solver = Solver(self)
 
         # make Path objects from the soltion
-        self.solved, self.sols, self.solTime = solver.solve()
+        self.solved, self.sols, self.solTime = self.solver.solve()
         if not self.solved:
             raise RuntimeError("problem failed")
         paths = []
@@ -205,12 +205,11 @@ class Maze(Fence):
                        color='b', s=10)
 
     def plotPaths(self, ax):
-        if self.solved is False:
-            return
-        nPaths = len(self.paths)
-        cols = iter(plt.cm.rainbow(np.linspace(0,1,nPaths)))
-        for path in self.paths:
-            path.plot(ax, color = next(cols))
+        if self.solved is True:
+            nPaths = len(self.paths)
+            cols = iter(plt.cm.rainbow(np.linspace(0,1,nPaths)))
+            for path in self.paths:
+                path.plot(ax, color = next(cols))
 
     def plot(self, ax, showGrid=False):
         # plot the geofence with grid overlay

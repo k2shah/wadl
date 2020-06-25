@@ -72,10 +72,11 @@ class Survey(object):
 
     def plan(self, plot=True):
 
+        # plt.gca().set_aspect('equal', adjustable='box')
+        # plt.draw()
+        # plt.pause(.001)
+        # print('plannnning')
         fig, ax = plt.subplots(figsize=(16, 9))
-        self.plotKeyPoints(ax)
-        plt.gca().set_aspect('equal', adjustable='box')
-        plt.draw()
         
         for task, maze in self.tasks.items():
             try:
@@ -88,9 +89,9 @@ class Survey(object):
                 print(f"task {maze.name} failed")
 
             #plot task
+            self.plotKeyPoints(ax)
             maze.plot(ax)
             plt.draw()
-            plt.pause(.001)
         if plot:
             plt.show()
 
