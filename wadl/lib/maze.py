@@ -108,25 +108,13 @@ class Maze(Fence):
         print(f"\nSolving maze {self.taskName}")
         solver = Solver(self)
 
-        fig, ax = plt.subplots()
-        nGraph = len(solver.mGraph)
-        cols = iter(plt.cm.rainbow(np.linspace(0,1,nGraph)))
-        mGraph = solver.mGraph
-        for i, graph in enumerate(mGraph):
-                # print(graph.nodes)
-                col = next(cols)
-                # print(colors[colIdx])
-                self.plotNodes(ax, nodes=graph.nodes, color=col)
-        plt.draw()
-
-
         # make Path objects from the soltion
         self.solved, self.sols, self.solTime = solver.solve()
         if not self.solved:
             raise RuntimeError("problem failed")
         paths = []
         for sol in self.sols:
-            print(sol)
+            # print(sol)
             paths.append([self.world[pt] for pt in sol])
         self.paths = [Path(path) for path in paths]
         pathLenghts = [len(path) for path in self.paths]
