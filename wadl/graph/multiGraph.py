@@ -12,7 +12,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 # lib
 from wadl.lib.utils import *
-from wadl.lib.maze import Maze
 
 class MultiGraph(object):
     """docstring for MultiGraph"""
