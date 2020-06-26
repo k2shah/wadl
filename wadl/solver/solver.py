@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 # lib
 from wadl.solver.SATproblem import SATproblem
 from wadl.graph.multiGraph import MultiGraph
+from wadl.graph.pathGraph import PathGraph
 
 class BaseSolver(object):
     """docstring for Solver"""
@@ -79,8 +80,7 @@ class LinkSolver(object):
         # presolve for the paths
         paths = self.presolve()
         # build the meta graph
-        self.metaGraph = nx.Graph()
-        self.metaGraph.add_node('s') # add start node
+        self.pGraph = PathGraph(paths, self.mGraph.baseGraph)
                 
 
 
