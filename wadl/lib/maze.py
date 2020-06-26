@@ -189,7 +189,7 @@ class Maze(Fence):
 
         for node in nodes:
             ax.scatter(*self.world[node],
-                       color=color, s=5)
+                       color=color)
 
     def plotEdges(self, ax):
         # plot edges
