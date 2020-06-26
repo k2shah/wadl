@@ -34,7 +34,7 @@ class PathGraph(object):
                     
                     if self.pathGraph.has_edge(grp, grpAdj):
                             #if we have this edge in the metagraph go to next path
-                            break           
+                            continue           
                     
                     elif isShared_nxt and grpAdj_nxt == grpAdj:
                         # check for path adjajency
