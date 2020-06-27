@@ -1,11 +1,9 @@
+# gen
+from collections import defaultdict 
 # math
 import numpy as np
 #graph 
 import networkx as nx
-# plot
-import matplotlib.pyplot as plt
-# lib
-from wadl.lib.utils import *
 
 class PathGraph(object):
     """ the class creats a path graph where each node represents a path.
@@ -19,6 +17,12 @@ class PathGraph(object):
         self.buildGraph()
 
     def buildGraph(self):
+        # build the pathGraph
+        # initialize the path graph
+        for i, path in enumerate(self.paths):
+            self.pathGraph.add_edge('s', i, weight=len(path))
+
+        #unpack
         baseGraph = self.baseGraph
         for grp, path in enumerate(self.paths):
             for i, node in enumerate(path[:-1]):
@@ -74,3 +78,42 @@ class PathGraph(object):
                     return True, False
                 
         return False, False
+
+    def mergePaths(self, limit):
+        self.limit = limit
+        # finds paths of the pathGraph such that len(path) < limit
+        nodeQueue = dict()
+        for i, path in enumerate(self.paths):
+            nodeQueue[i] = len(path) 
+        metaPaths = []
+        # greedy fill of paths
+        while len(nodeQueue) > 0:
+            path = ['s']
+            n = None
+            pathLen = 0
+            while pathLen < limit:
+                n = path[-1]
+                adj = list(filter(lambda x: x in nodeQueue.keys(),
+                                  self.pathGraph[n]))
+                adj.sort(key= lambda x: nodeQueue[x])
+                newNode = False
+                for nxt in adj:
+                    cost = nodeQueue[nxt]
+                    if pathLen + cost < limit:
+                    # add to the path
+                        path.append(nxt)
+                        pathLen += cost
+                        del nodeQueue[nxt]
+                        newNode = True
+                        break
+                if len(nodeQueue) == 0 or not newNode:
+                    metaPaths.append(path)
+                    break
+
+        return metaPaths
+
+
+
+
+
+
