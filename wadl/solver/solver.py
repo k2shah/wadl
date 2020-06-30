@@ -42,7 +42,7 @@ class LinkSolver(object):
         self.mGraph = MultiGraph(self.maze.graph)
         self.problems = []
         for graph in self.mGraph:
-            limit = len(graph) + 4 #lets try this?
+            limit = len(graph) + 2 #lets try this?
             self.problems.append(SATproblem(graph, limit))
 
     def plot(self, ax):
@@ -81,6 +81,7 @@ class LinkSolver(object):
         paths = self.presolve()
         # build the meta graph
         self.pGraph = PathGraph(paths, self.mGraph.baseGraph)
+        paths = self.pGraph.link(self.maze.limit)
                 
 
 
