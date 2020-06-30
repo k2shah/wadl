@@ -90,7 +90,10 @@ class PathGraph(object):
         # finds paths of the pathGraph such that len(path) < limit
         nodeQueue = dict()
         for i, path in enumerate(self.subPaths):
-            nodeQueue[i] = len(path) 
+            pathLen = len(path)
+            nodeQueue[i] = pathLen
+            if limit < pathLen:
+                raise RuntimeError("distance limit too short") 
         metaPaths = []
         # greedy fill of paths
         while len(nodeQueue) > 0:
