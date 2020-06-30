@@ -119,12 +119,10 @@ class PathGraph(object):
 
         return metaPaths
 
-
     def stitch(self, metaPaths):
         subPaths = self.subPaths
         paths = []
         for mPath in metaPaths:
-            print(mPath)
             path = []
             path += subPaths[mPath[1]] # set path to 1st in the metaPath shallow copy
             for edge in zip(mPath[1:], mPath[2:]):
