@@ -97,7 +97,11 @@ class Survey(object):
             plt.draw()
         if plot:
             plt.show()
-        print(f"fin")
+        print(f"All tasks completed")
+
+        annie = ["annie", "Annie", "schmidt"]
+        if any(isAnnie for a in annie if a in self.outDir):
+            print("ANNIE GO PET SCOUT!") 
 
 
     def getSolver(self, SolverName):
@@ -105,6 +109,5 @@ class Survey(object):
             return BaseSolver
         elif SolverName=="Link":
             return LinkSolver
-
         else:
             raise RuntimeError('No Solver selected')
