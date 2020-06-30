@@ -64,7 +64,7 @@ class LinkSolver(object):
                     solved, path, time = prob.solve()
                     paths.append(path[0])
                 except RuntimeError as e:
-                    print(f"problem {i} failed, inc path limit")
+                    print(f"\tproblem {i} failed, inc path limit")
                     prob.limit += 1 
                     prob.make()
                     counter += 1
@@ -82,10 +82,7 @@ class LinkSolver(object):
         # build the meta graph
         self.pGraph = PathGraph(paths, self.mGraph.baseGraph)
         paths = self.pGraph.link(self.maze.limit)
-                
-
-
-
+        # print time
         solTime = time.time()-startTime
-
+        print("solution time: {:2.5f} sec".format(solTime))
         return True, paths, solTime

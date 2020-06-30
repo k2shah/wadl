@@ -1,9 +1,10 @@
-import numpy as np
-import numpy.random as rand
-import numpy.linalg as la
+# gen 
 import os as os
+import time as time
 # math
 import numpy as np 
+import numpy.random as rand
+import numpy.linalg as la
 #graph 
 import networkx as nx
 # plot
@@ -105,10 +106,11 @@ class Maze(Fence):
 
     # Solution 
     def solve(self, Solver):
-        print(f"\nSolving maze {self.taskName}")
+        print(f"\nsolving maze {self.taskName}")
+        startTime = time.time()
         self.solver = Solver(self)
-
-        # make Path objects from the soltion
+        # solve the problems
+        print(f"solving subproblems")
         self.solved, self.sols, self.solTime = self.solver.solve()
         if not self.solved:
             raise RuntimeError("problem failed")
@@ -116,10 +118,14 @@ class Maze(Fence):
         for sol in self.sols:
             # print(sol)
             paths.append([self.world[pt] for pt in sol])
+        # make Path objects from the soltion
         self.paths = [Path(path) for path in paths]
         pathLenghts = [len(path) for path in self.paths]
-        print(f"Found {len(self.paths)} paths of lengths {pathLenghts}")
+        print(f"found {len(self.paths)} paths of lengths {pathLenghts}")
 
+        #time the job
+        mazeTime = time.time() - startTime
+        print("total time: {:2.5f} sec".format(mazeTime))
 
     # write
     def writeInfo(self, filePath):

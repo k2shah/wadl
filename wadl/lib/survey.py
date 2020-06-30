@@ -82,7 +82,7 @@ class Survey(object):
             try:
                 maze.solve(Solver=self.solverType)
                 if maze.solved:
-                    print(f"Generating paths for task {maze.name}")
+                    print(f"writing paths")
                     maze.write(self.outDir)
 
                
@@ -97,7 +97,7 @@ class Survey(object):
             plt.draw()
         if plot:
             plt.show()
-        print(f"All tasks completed")
+        print(f"done")
 
         annie = ["annie", "Annie", "schmidt"]
         if any(isAnnie for a in annie if a in self.outDir):
