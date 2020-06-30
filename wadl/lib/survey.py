@@ -16,13 +16,15 @@ import utm
 from shapely.geometry import Polygon, Point
 # lib
 from wadl.lib.maze import Maze
-from wadl.lib.solver import SATSolver
+from wadl.solver.solver import BaseSolver, LinkSolver
 
 class Survey(object):
     """docstring for Survey
     top level object for a survey
     this objects holds all the information of a single survey """
-    def __init__(self, name, outDir):
+    def __init__(self, name, outDir, solver="Base"):
+        # get solver
+        self.solverType = self.getSolver(solver)
         # save the name of the survey
         self.name = name
         # save the output directory
@@ -42,8 +44,7 @@ class Survey(object):
         # start = [(0,0), (1,1)]
         # step = 40
         # limit = 20
-
-        self.tasks[file] = Maze(file, **kwargs)
+        self.tasks[file] = Maze(file, **kwargs) 
 
     def setKeyPoints(self, points):
         # set the keyPoints in the survey
@@ -59,8 +60,9 @@ class Survey(object):
     def view(self):
         fig, ax = plt.subplots()
         self.plotKeyPoints(ax)
-        for task, maze in self.tasks.items():
-            maze.plot(ax, showGrid=True)
+        for file, maze in self.tasks.items():
+            solver = self.solverType(maze)
+            solver.plot(ax)
 
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
@@ -68,15 +70,17 @@ class Survey(object):
         # display 
         plt.show()
 
-    def plan(self, plot=True):
+    def plan(self, plot=False):
+
+        # plt.gca().set_aspect('equal', adjustable='box')
+        # plt.draw()
+        # plt.pause(.001)
+        # print('plannnning')
         fig, ax = plt.subplots(figsize=(16, 9))
-        self.plotKeyPoints(ax)
-        plt.gca().set_aspect('equal', adjustable='box')
-        plt.draw()
         
         for task, maze in self.tasks.items():
             try:
-                maze.solve(Solver=SATSolver)
+                maze.solve(Solver=self.solverType)
                 if maze.solved:
                     print(f"generating paths for task {maze.name}")
                     maze.write(self.outDir)
@@ -85,11 +89,18 @@ class Survey(object):
                 print(f"task {maze.name} failed")
 
             #plot task
+            self.plotKeyPoints(ax)
             maze.plot(ax)
             plt.draw()
-            plt.pause(.001)
         if plot:
             plt.show()
 
 
+    def getSolver(self, SolverName):
+        if SolverName=="Base":
+            return BaseSolver
+        elif SolverName=="Link":
+            return LinkSolver
 
+        else:
+            raise RuntimeError('No Solver selected')

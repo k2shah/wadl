@@ -104,21 +104,17 @@ class Maze(Fence):
 
 
     # Solution 
-
-    def setSolTime(self, solTime):
-        # store the solution time of the solve
-        self.solTime = solTime
-
     def solve(self, Solver):
         print(f"\nSolving maze {self.taskName}")
-        solver = Solver(self)
+        self.solver = Solver(self)
+
         # make Path objects from the soltion
-        self.solved, self.sols = solver.solve()
+        self.solved, self.sols, self.solTime = self.solver.solve()
         if not self.solved:
             raise RuntimeError("problem failed")
         paths = []
         for sol in self.sols:
-            print(sol)
+            # print(sol)
             paths.append([self.world[pt] for pt in sol])
         self.paths = [Path(path) for path in paths]
         pathLenghts = [len(path) for path in self.paths]
@@ -186,11 +182,14 @@ class Maze(Fence):
         plt.savefig(plotName, bbox='tight', dpi=200)
 
     # plot
-    def plotNodes(self, ax):
+    def plotNodes(self, ax, color='k', nodes=None):
         # plot nodes
-        for node in self.graph.nodes:
+        if nodes is None:
+            nodes = self.graph.nodes
+
+        for node in nodes:
             ax.scatter(*self.world[node],
-                       color='k', s=5)
+                       color=color)
 
     def plotEdges(self, ax):
         # plot edges
@@ -206,10 +205,10 @@ class Maze(Fence):
                        color='b', s=10)
 
     def plotPaths(self, ax):
-        if self.solved is False:
-            return
-        cols = iter(['b', 'g', 'r', 'm'])
-        for path in self.paths:
+        if self.solved is True:
+            nPaths = len(self.paths)
+            cols = iter(plt.cm.rainbow(np.linspace(0,1,nPaths)))
+            for path in self.paths:
                 path.plot(ax, color = next(cols))
 
     def plot(self, ax, showGrid=False):

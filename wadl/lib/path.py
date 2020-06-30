@@ -102,7 +102,11 @@ class Path(object):
     def plot(self, ax, color='b'):
         # path
         cords = np.array(self.UTMcords)
-        ax.plot(cords[:-1, 0], cords[:-1, 1])
+        ax.plot(cords[:, 0], cords[:, 1], color=color)
+        # start and end
+        ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
+        ax.scatter(cords[-1, 0], cords[-1, 1], color=color, marker='s')
+
 
     def write(self, filename, alt=50, spd=5):
         # writes the trajectory as a txt file
