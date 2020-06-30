@@ -76,17 +76,20 @@ class Survey(object):
         # plt.draw()
         # plt.pause(.001)
         # print('plannnning')
-        fig, ax = plt.subplots(figsize=(16, 9))
+        fig, ax = plt.subplots(figsize=(16, 16))
         
         for task, maze in self.tasks.items():
             try:
                 maze.solve(Solver=self.solverType)
                 if maze.solved:
-                    print(f"generating paths for task {maze.name}")
+                    print(f"Generating paths for task {maze.name}")
                     maze.write(self.outDir)
+
                
             except RuntimeError as e:
-                print(f"task {maze.name} failed")
+                print(f"failure in task: {maze.name}")
+
+            print(f"task {maze.name} finished")
 
             #plot task
             self.plotKeyPoints(ax)
@@ -94,6 +97,7 @@ class Survey(object):
             plt.draw()
         if plot:
             plt.show()
+        print(f"fin")
 
 
     def getSolver(self, SolverName):
