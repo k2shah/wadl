@@ -128,20 +128,17 @@ class PathGraph(object):
             path = []
             path += subPaths[mPath[1]] # set path to 1st in the metaPath shallow copy
             for edge in zip(mPath[1:], mPath[2:]):
-                print(edge)
                 # get the data from the pathGraph edge
                 edgePair = self.pathGraph.edges[edge]['edgePair']
                 edgePairIdx = self.pathGraph.edges[edge]['edgePairIdx']
                 fwd = self.pathGraph.edges[edge]['fwd']
 
-                print(edgePair, fwd)
                 # get the idx of the points to merge
                 idx_in = path.index(edgePair[0]) 
                 idx_in_nxt = path.index(edgePair[1])
                 idx_out = edgePairIdx[2]
                 idx_out_nxt = edgePairIdx[3]
 
-                print(idx_out, idx_out_nxt)
                 #get directions
                 diff_in = idx_in_nxt-idx_in
                 diff_out = idx_out_nxt-idx_out
@@ -151,7 +148,6 @@ class PathGraph(object):
                 # get output side splice idx, based on the idx_in's
                 spliceIdx = idx_out if diff_in > 0 else idx_out_nxt
                 # orient and slice the path to be merged 
-                print(subPaths[edge[1]])
                 if diff_out == diff_in:
                     #reverse path and splice
                     mergePath = subPaths[edge[1]][spliceIdx:0:-1] + \
@@ -160,15 +156,8 @@ class PathGraph(object):
                     mergePath = subPaths[edge[1]][spliceIdx:-1] + \
                                 subPaths[edge[1]][0:spliceIdx]
 
-                  
-                print('splice')
-                print(mergePath)
-
                 # merge at mergeIdx
                 path[mergeIdx+1:mergeIdx+1] = mergePath
-                print('join')
-                print(path)
-
 
             # save the merged path
             paths.append(path)
