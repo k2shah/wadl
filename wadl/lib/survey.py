@@ -70,7 +70,7 @@ class Survey(object):
         # display 
         plt.show()
 
-    def plan(self, plot=True):
+    def plan(self, plot=False):
 
         # plt.gca().set_aspect('equal', adjustable='box')
         # plt.draw()

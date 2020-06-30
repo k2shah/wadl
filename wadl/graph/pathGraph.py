@@ -43,18 +43,21 @@ class PathGraph(object):
                     elif isShared_nxt and grpAdj_nxt == grpAdj:
                         # check for path adjajency
                         adj_path = self.subPaths[grpAdj]
-                        isPathAdj, dirFwd = self.pathAdj(adj, adj_nxt, adj_path)
+                        isPathAdj, dirFwd, adjIdx = self.pathAdj(adj, adj_nxt, adj_path)
                         if isPathAdj:
                             # done!
                             # add to metagraph
+                            adjStep = 1 if dirFwd else -1
                             self.pathGraph.add_edge(grp, grpAdj,
                                                weight=len(self.subPaths[grpAdj]),                                       
                                                fwd=dirFwd,
-                                               edgePair= (node, nxt, adj, adj_nxt))  
+                                               edgePair= (node, nxt, adj, adj_nxt),
+                                               edgePairIdx = (i, i+1, adjIdx, adjIdx+adjStep))  
                             self.pathGraph.add_edge(grpAdj, grp,
                                                weight=len(self.subPaths[grp]),                                       
                                                fwd=dirFwd,
-                                               edgePair= (adj, adj_nxt, node, nxt))
+                                               edgePair= (adj, adj_nxt, node, nxt),
+                                               edgePairIdx = (adjIdx, adjIdx+adjStep, i, i+1)) 
 
     def sharedNode(self, n, baseGraph): 
         # checks if the node n has a adj node not in the same subGraph 
@@ -71,12 +74,12 @@ class PathGraph(object):
             if p == adj: 
                 # check forward along adj path
                 if j+1 <len(adj_path) and adj_path[j+1]==adj_nxt:
-                    return True, True
+                    return True, True, j 
                 # check reverse along path
                 elif j-1 > 0 and adj_path[j-1]==adj_nxt:
-                    return True, False
+                    return True, False, j
                 
-        return False, False
+        return False, False, None
 
     def link(self, limit):
         metaPaths = self.merge(limit)
@@ -98,7 +101,7 @@ class PathGraph(object):
                 n = path[-1]
                 adj = list(filter(lambda x: x in nodeQueue.keys(),
                                   self.pathGraph[n]))
-                adj.sort(key= lambda x: nodeQueue[x])
+                adj.sort(key= lambda x: nodeQueue[x], reverse=True)
                 newNode = False
                 for nxt in adj:
                     cost = nodeQueue[nxt]
@@ -110,7 +113,7 @@ class PathGraph(object):
                         newNode = True
                         break
                 if len(nodeQueue) == 0 or not newNode:
-                    print(f"paths mereged: {pathLen}")
+                    print(f"merged {path} lenght: {pathLen}")
                     metaPaths.append(path)
                     break
 
@@ -121,27 +124,52 @@ class PathGraph(object):
         subPaths = self.subPaths
         paths = []
         for mPath in metaPaths:
+            print(mPath)
             path = []
             path += subPaths[mPath[1]] # set path to 1st in the metaPath shallow copy
             for edge in zip(mPath[1:], mPath[2:]):
+                print(edge)
                 # get the data from the pathGraph edge
                 edgePair = self.pathGraph.edges[edge]['edgePair']
+                edgePairIdx = self.pathGraph.edges[edge]['edgePairIdx']
                 fwd = self.pathGraph.edges[edge]['fwd']
-                mergePath = subPaths[edge[1]] # get the next path to merge
+
                 print(edgePair, fwd)
+                # get the idx of the points to merge
+                idx_in = path.index(edgePair[0]) 
+                idx_in_nxt = path.index(edgePair[1])
+                idx_out = edgePairIdx[2]
+                idx_out_nxt = edgePairIdx[3]
+
+                print(idx_out, idx_out_nxt)
+                #get directions
+                diff_in = idx_in_nxt-idx_in
+                diff_out = idx_out_nxt-idx_out
                 
-                # check merge direction 
-                if fwd: 
-                    # if fwd then the toop loops are || and the second loop needs to be flipped
-                    mergePath = list(reversed(mergePath))
-                # find merge location 
-                mergeIndex_In = path.index(edgePair[0]) 
-                mergeIndex_Out = mergePath.index(edgePair[2]) 
-               
-                # splice and rejoin
-                mergePath = mergePath[mergeIndex_Out:-1] + mergePath[0:mergeIndex_Out]
-                # merge at index_in
-                path[mergeIndex_In+1:mergeIndex_In+1] = mergePath
+                # get input side merge idx, the lower of the two idx_in's
+                mergeIdx = idx_in if diff_in > 0 else idx_in_nxt
+                # get output side splice idx, based on the idx_in's
+                spliceIdx = idx_out if diff_in > 0 else idx_out_nxt
+                # orient and slice the path to be merged 
+                print(subPaths[edge[1]])
+                if diff_out == diff_in:
+                    #reverse path and splice
+                    mergePath = subPaths[edge[1]][spliceIdx:0:-1] + \
+                                subPaths[edge[1]][-1:spliceIdx:-1]
+                else:
+                    mergePath = subPaths[edge[1]][spliceIdx:-1] + \
+                                subPaths[edge[1]][0:spliceIdx]
+
+                  
+                print('splice')
+                print(mergePath)
+
+                # merge at mergeIdx
+                path[mergeIdx+1:mergeIdx+1] = mergePath
+                print('join')
+                print(path)
+
+
             # save the merged path
             paths.append(path)
         return paths
