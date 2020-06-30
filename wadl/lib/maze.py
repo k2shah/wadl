@@ -174,12 +174,10 @@ class Maze(Fence):
             os.makedirs(pathDir)
         self.writePaths(pathDir)
         # save the figure
-        fig, ax = plt.subplots(figsize=(16, 9))
+        fig, ax = plt.subplots(figsize=(16, 16))
         self.plot(ax)
-        plt.draw()
-        plt.pause(.001)
         plotName = os.path.join(taskDir, "routes.png")
-        plt.savefig(plotName, bbox='tight', dpi=200)
+        plt.savefig(plotName, bbox='tight', dpi=50)
 
     # plot
     def plotNodes(self, ax, color='k', nodes=None):
