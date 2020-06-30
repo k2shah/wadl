@@ -36,7 +36,7 @@ class SATproblem(object):
         self.nRmv = len(bList)
         self.makeConts(self.graph, self.satVars, self.starts)
 
-        print(f"Built problem with {self.nVar-self.nRmv} vars, {self.nRmv} removed")
+        # print(f"Built problem with {self.nVar-self.nRmv} vars, {self.nRmv} removed")
 
     def makeVars(self, nNode, nPath, limit):
         # makes a bool var for each space, time, robot tuple
@@ -115,7 +115,7 @@ class SATproblem(object):
         solTime = None
         if self.z3.check() == z3.sat:
             solTime = (time.time()-startTime)/60.
-            print("Solution Found: {:2.5f} min".format(solTime))
+            # print("Solution Found: {:2.5f} min".format(solTime))
             self.solved = True
             return self.solved, self.output(), solTime
         else:

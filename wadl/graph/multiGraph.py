@@ -91,7 +91,7 @@ class MultiGraph(object):
         minNodes = len(min(subNodes.values(), key= lambda x: len(x)))
 
         subGraphs = [self.baseGraph.subgraph(nodes) for  nodes in subNodes.values()]
-        print(f"Found {len(subGraphs)} subgraphs with {minNodes} to {maxNodes} nodes")
+        print(f"found {len(subGraphs)} subgraphs with {minNodes} to {maxNodes} nodes")
 
         return subGraphs
 
@@ -112,7 +112,7 @@ class MultiGraph(object):
                 for k in sorted(mergeScore, key=mergeScore.get, reverse=True):
                     if len(mergedNodes[k]) + len(nodes) < maxSize:
                         # merge the ith subgraph into the kth subgraph
-                        print(f"Merging subgraph {i} with {len(nodes)} nodes into subgraph {k}")
+                        # print(f"Merging subgraph {i} with {len(nodes)} nodes into subgraph {k}")
                         mergedNodes[k] += nodes
                         mergedNodes.pop(i)
                         break

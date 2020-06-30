@@ -113,7 +113,7 @@ class PathGraph(object):
                         newNode = True
                         break
                 if len(nodeQueue) == 0 or not newNode:
-                    print(f"merged {path} lenght: {pathLen}")
+                    # print(f"merged {path} lenght: {pathLen}")
                     metaPaths.append(path)
                     break
 
