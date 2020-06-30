@@ -42,8 +42,11 @@ class Survey(object):
         # expects a file name
         # keyword arguments for the start locations, step size, and distance limit
         # start = [(0,0), (1,1)]
-        # step = 40
-        # limit = 20
+        # step : grid size
+        # limit : flight lenght in meters
+        # alt : flying alt (agl) in meters
+        # spd : flying speed in meters/sec
+        
         self.tasks[file] = Maze(file, **kwargs) 
 
     def setKeyPoints(self, points):
