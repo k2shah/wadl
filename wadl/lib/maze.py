@@ -118,9 +118,11 @@ class Maze(Fence):
             raise RuntimeError("problem failed")
         paths = []
         for sol in self.sols:
+            # streamline the paths
+            path = self.streamlinePath(sol)
             # print(sol)
-            paths.append([self.world[pt] for pt in sol])
-        # make Path objects from the soltion
+            paths.append([self.world[pt] for pt in path])
+        # make Path objects from the solution
         self.paths = [Path(path) for path in paths]
         pathLenghts = [len(path) for path in self.paths]
         self.nAgent = len(self.paths)
@@ -128,6 +130,30 @@ class Maze(Fence):
         #time the job
         mazeTime = time.time() - startTime
         print("total time: {:2.5f} sec".format(mazeTime))
+
+    def streamlinePath(self, path):
+        # removes points in seq that are straight line
+        # the code REALLY needs to move
+        # make a proper Path object plz
+        # this is really bad code
+        p = [path[0]]
+        # get init heading
+        h = (path[0][0]-path[0][0],
+             path[0][1]-path[0][1])
+        for c, n in zip(path[1:], path[2:]):
+            print(p)
+            # c current pt
+            # n next pt
+            # get next heading
+            nh = (n[0]-c[0], n[1]-c[1])
+            print(c, n, h, nh)
+            if nh != h:
+                # if the direction changes, add the pt
+                p.append(c)
+            h = nh # save heading
+        # add last point
+        p.append(path[-1])
+        return p
 
     # write
     def writeInfo(self, filePath):
@@ -228,18 +254,3 @@ class Maze(Fence):
             self.plotEdges(ax)
         self.plotStarts(ax)
         self.plotPaths(ax)
-
-if __name__ == '__main__':
-    starts = [(0,0),
-              (1,1)]
-
-    path = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'geofences')
-    file = os.path.join(path, "croz_west")
-    
-    absfile = os.path.abspath(file)
-    maze = Maze(absfile, starts,
-                    rotation=15)
-
-    fig, ax = plt.subplots()
-    maze.plot(ax, showGrid=True)
-    plt.show()
