@@ -42,13 +42,12 @@ class Maze(Fence):
         self.altitude = altitude
         self.nNode = len(self.graph)# store size of nodes
         self.limit = int(distance/self.step)
-        print(self.limit)
       
         # find global start location from local start passed in
         self.findGlobalStart()
        
         # create full name of maze
-        print(f"Generated maze graph with {self.nNode} nodes")
+        print(f"generated maze with {self.nNode} nodes")
 
     def __len__(self):
         # number of nodes
@@ -109,7 +108,7 @@ class Maze(Fence):
 
     # Solution 
     def solve(self, Solver):
-        print(f"\nsolving maze {self.name}")
+        print(f"solving maze {self.name}")
         startTime = time.time()
         self.solver = Solver(self)
         # solve the problems
@@ -171,7 +170,7 @@ class Maze(Fence):
             raise NotImplementedError()
 
     def write(self, filePath):
-        self.taskName = self.name+f'_s{self.step}_n{self.nAgent}_t{self.limit}'
+        self.taskName = self.name + f'_s{self.step}_n{self.nAgent}'
         taskDir = os.path.join(filePath, self.taskName)
         if not os.path.exists(taskDir): # make dir if not exists
             os.makedirs(taskDir)
