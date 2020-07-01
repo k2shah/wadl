@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 def island():
     """test solver class """
     # build survey test fixture
-    from wadl.lib.survey import Survey
+    from wadl.survey import Survey
 
     # make survey object
     path = os.path.join(os.path.dirname( __file__ ))
@@ -24,5 +24,5 @@ def test_plan(island):
     path = os.path.join(os.path.dirname( __file__ ), 'data')
     file = os.path.join(path, "Little Norway")
     absfile = os.path.abspath(file)
-    island.addTask(file, step=35, limit=41)
+    island.addTask(file, step=35, distance=1200)
     island.plan(plot=False)

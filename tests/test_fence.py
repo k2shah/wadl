@@ -19,7 +19,9 @@ def test_fence(croz):
     # save figure to disk
     fig, ax = plt.subplots()
     croz.plot(ax)
-    plt.savefig('tests/croz.png') 
+    rootDir = os.path.dirname(__file__)
+    fileName = os.path.join(rootDir, 'croz.png')
+    plt.savefig(fileName) 
     # sum of cords
     cordSum = [4.63967196e+08, 1.42278924e+09]
     assert all(abs(sum(croz.UTMCords)-cordSum)<1e4) , "file not parsed correctly"
