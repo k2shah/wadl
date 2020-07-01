@@ -70,7 +70,7 @@ class LinkSolver(object):
                     counter += 1
 
                 if counter > 5:
-                    print(f"problem {i} critical failure")
+                    print(f"problem {i} critical infeasible")
                     paths.append([])
                     break
         return paths
