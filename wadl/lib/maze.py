@@ -21,7 +21,7 @@ class Maze(Fence):
     def __init__(self, file, 
                  starts=[(0,0)],
                  step=40, 
-                 distance=None,
+                 distance=1000,
                  speed=5,
                  altitude=50, 
                  rotation=0):         
