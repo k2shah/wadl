@@ -41,11 +41,10 @@ class Survey(object):
         # add a task to the survey
         # expects a file name
         # keyword arguments for the start locations, step size, and distance limit
-        # start = [(0,0), (1,1)]
-        # step : grid size
-        # limit : flight lenght in meters
-        # alt : flying alt (agl) in meters
-        # spd : flying speed in meters/sec
+        # step [40]: grid size
+        # distance [1000]: flight lenght in meters
+        # altitude [50]: flying alt (agl) in meters
+        # speed [5]: flying speed in meters/sec
         
         self.tasks[file] = Maze(file, **kwargs) 
 
