@@ -19,7 +19,7 @@ import mpl_toolkits.mplot3d.axes3d as axes3d
 
 class Path(object):
     """docstring for Path"""
-    def __init__(self, cords, typ="UTM", keyPoints = None):
+    def __init__(self, cords, typ="UTM", keyPoints=None):
         self.keyPoints = keyPoints
         self.GPScords = [] # cords in GPS
         self.UTMcords = [] # cords in UTM
@@ -34,7 +34,7 @@ class Path(object):
         self.UTMcords = cords
 
     def setGPS(self, cords):
-        self.UTMcord = cords
+        self.GPScord = cords
 
     def UTM2GPS(self, zone):
         # converts all the UTM cords to GPS
@@ -55,7 +55,6 @@ class Path(object):
         #print the cords
         return print(self.UTMcords)
         
-
     def parseFile(self):
         pathFiles = glob.glob(os.path.join(self.pathDir, "routes/*"))
         for file in pathFiles:
@@ -107,25 +106,20 @@ class Path(object):
         ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
         ax.scatter(cords[-1, 0], cords[-1, 1], color=color, marker='s')
 
-
     def write(self, filename, alt=50, spd=5):
         # writes the trajectory as a txt file
         # Lat,Long,Alt,Speed,Picture,ElevationMap,WP,CameraTilt,UavYaw,DistanceFrom
         with open(filename, "w+") as f:
             # take off
-            # add hut-lz as takeoff point
-            # f.write("%s,%s,%s,%s,FALSE,,1\n" % (lat, lng, alt, spd))
-            # routes
+            # get higher above frist point
+            lat, lng = self.GPScords[0]
+            f.write(f"{lat} , {lng}, 70, {spd},FALSE,,1\n")
+            # write the route to file
             for lat, lng in self.GPScords:
                 f.write(f"{lat} , {lng}, {alt}, {spd},FALSE,,1\n")
-            # end route
             # get higher above last point
             lat, lng = self.GPScords[-1]
             f.write(f"{lat} , {lng}, 70, {spd},FALSE,,1\n")
-
-
-
-
 
 def main(pathDir):
     # get path files
