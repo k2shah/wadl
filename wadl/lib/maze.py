@@ -141,12 +141,10 @@ class Maze(Fence):
         h = (path[0][0]-path[0][0],
              path[0][1]-path[0][1])
         for c, n in zip(path[1:], path[2:]):
-            print(p)
             # c current pt
             # n next pt
             # get next heading
             nh = (n[0]-c[0], n[1]-c[1])
-            print(c, n, h, nh)
             if nh != h:
                 # if the direction changes, add the pt
                 p.append(c)
