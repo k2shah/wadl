@@ -82,6 +82,7 @@ class Survey(object):
       
             except RuntimeError as e:
                 print(f"failure in task: {maze.name}")
+                print(e)
             print(f"task {maze.name} finished")
             #plot task
             self.plotKeyPoints(ax)
