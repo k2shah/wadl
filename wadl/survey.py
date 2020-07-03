@@ -68,39 +68,32 @@ class Survey(object):
 
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
-
         # display 
         plt.show()
 
     def plan(self, plot=False):
-
-        # plt.gca().set_aspect('equal', adjustable='box')
-        # plt.draw()
-        # plt.pause(.001)
-        # print('plannnning')
-        fig, ax = plt.subplots(figsize=(16, 16))
-        
+        fig, ax = plt.subplots(figsize=(16, 16))     
         for task, maze in self.tasks.items():
             try:
                 maze.solve(Solver=self.solverType)
                 if maze.solved:
                     print(f"writing paths")
                     maze.write(self.outDir)
-
-               
+      
             except RuntimeError as e:
                 print(f"failure in task: {maze.name}")
-
             print(f"task {maze.name} finished")
-
             #plot task
             self.plotKeyPoints(ax)
             maze.plot(ax)
             plt.draw()
+            plt.axis('square')
         if plot:
+            plt.axis('square')
+            plt.gca().set_aspect('equal', adjustable='box')
             plt.show()
         print(f"done")
-
+        # troll annie a bit
         annie = ["annie", "Annie", "schmidt"]
         if any(isAnnie for a in annie if a in self.outDir):
             print("ANNIE GO PET SCOUT!") 
