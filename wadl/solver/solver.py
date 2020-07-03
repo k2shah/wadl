@@ -30,7 +30,6 @@ class BaseSolver(object):
         return self.problem.solve()
 
 
-
 class LinkSolver(object):
     """docstring for LinkSolver"""
 
@@ -64,15 +63,13 @@ class LinkSolver(object):
                     solved, path, time = prob.solve()
                     paths.append(path[0])
                 except RuntimeError as e:
-                    print(f"\tproblem {i} failed, inc path limit")
+                    print(f"\tproblem {i} infeasible, increasing limit")
                     prob.limit += 1 
                     prob.make()
                     counter += 1
 
-                if counter > 5:
-                    print(f"problem {i} critical infeasible")
-                    paths.append([])
-                    break
+                if counter > 6:
+                    raise RuntimeError(f"problem {i} critically infeasible. graph may be degenerate")
         return paths
 
     def solve(self):
