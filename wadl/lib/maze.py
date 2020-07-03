@@ -21,29 +21,32 @@ class Maze(Fence):
     def __init__(self, file, 
                  starts=[(0,0)],
                  step=40, 
+                 rotation=0,
                  distance=1000,
-                 speed=5,
-                 altitude=50, 
-                 rotation=0):         
+                 home=None,
+                 flightParams=None):         
         super(Maze, self).__init__(file)
         # set parameters
         self.dim = 2
         self.solTime = None
         self.solved = False
+        
         # grid parameters
         self.theta = rotation
         self.step = step
         # build grid graph
         self.buildGrid()
 
-        # uav parameters
-        self.starts = starts
-        self.speed = speed
-        self.altitude = altitude
+        # path parameters
+        self.homePt = home
         self.nNode = len(self.graph)# store size of nodes
         self.limit = int(distance/self.step)
-      
+
+        # uav parameters
+        self.flightParams = flightParams
+
         # find global start location from local start passed in
+        self.starts = starts
         self.findGlobalStart()
        
         # create full name of maze
@@ -120,7 +123,8 @@ class Maze(Fence):
         for sol in self.sols:
             # streamline the paths
             path = self.streamlinePath(sol)
-            # print(sol)
+            # remove duplicates
+            path = self.removeDups(path)
             paths.append([self.world[pt] for pt in path])
         # make Path objects from the solution
         self.paths = [Path(path) for path in paths]
@@ -152,6 +156,14 @@ class Maze(Fence):
         # add last point
         p.append(path[-1])
         return p
+    
+    def removeDups(self, path):
+        # removes sequentially duplicate points
+        p = [path[0]]
+        for n in path[1:]:
+            if n != p[-1]:
+                p.append(n)
+        return p
 
     # write
     def writeInfo(self, filePath):
@@ -176,9 +188,10 @@ class Maze(Fence):
         for i, path in enumerate(self.paths):
             pathFile = os.path.join(pathDir, str(i)+".csv")
             path.UTM2GPS(self.UTMZone)
-            path.write(pathFile,
-                       alt=self.altitude,
-                       spd=self.speed)
+            # reindex the start point of the path relative to the home
+            if self.homePt is not None:
+                path.setHome(self.homePt)
+            path.write(pathFile, **self.flightParams)
 
     def writeGrid(self, outFile, UTM=True):
         # writes the grid to file 
@@ -208,6 +221,7 @@ class Maze(Fence):
         # save the figure
         fig, ax = plt.subplots(figsize=(16, 16))
         self.plot(ax)
+        plt.axis('square')
         plotName = os.path.join(taskDir, "routes.png")
         plt.savefig(plotName, bbox='tight', dpi=50)
 
