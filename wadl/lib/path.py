@@ -15,13 +15,15 @@ import numpy.linalg as la
 # plot
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as axes3d
+# lib
+from wadl.lib.utils import *
 
 
 class Path(object):
     """docstring for Path"""
-    def __init__(self, cords, typ="UTM", keyPoints=None):
-        self.keyPoints = keyPoints
+    def __init__(self, cords, typ="UTM"):
         self.GPScords = [] # cords in GPS
+        self.homePt = None
         self.UTMcords = [] # cords in UTM
         if typ== "UTM":
             self.setUTM(cords)
@@ -42,10 +44,18 @@ class Path(object):
 
     def GPS2UTM(self):
         # converts all the GPS cords to UTM
-        self.UTMcords = [utm.from_latlon(*cord) for cord in self.GPScords]
+        self.UTMcords = [utm.from_latlon(*cord)[0:2] for cord in self.GPScords]
 
-    def setKeypoints(self, keyPoints):
-        self.keyPoints = keyPoints
+    def setHome(self, homePt):
+        # homePT: (lat, long)
+        # sets the route home at the home pt
+        self.homePt = np.array(homePt)
+        # finds the cloest pt on the route to the homePT
+        (pt, idx) = min([(l2(homePt, pt), i) for i, pt in enumerate(self.GPScords)])
+        # shift and wrap
+        self.GPScords = self.GPScords[idx:] + self.GPScords[1:idx+1]
+        # sync the utm 
+        self.GPS2UTM()
 
     def __len__(self):
         # number of waypoints in path
@@ -104,22 +114,46 @@ class Path(object):
         ax.plot(cords[:, 0], cords[:, 1], color=color)
         # start and end
         ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
-        ax.scatter(cords[-1, 0], cords[-1, 1], color=color, marker='s')
+        ax.scatter(cords[-2, 0], cords[-2, 1], color=color, marker='s')
+        if self.homePt is not None:
+            #plot the home point as a 'o'
+            HomeUTMx, HomeUTMy  = utm.from_latlon(*self.homePt)[0:2]
+            ax.scatter(HomeUTMx, HomeUTMy, color=color, marker='o')
+            ax.plot([HomeUTMx, cords[0, 0]], [HomeUTMy, cords[0, 1]],
+                     color=color, linestyle="--")
 
-    def write(self, filename, alt=50, spd=5):
+
+    def write(self, filename, **kwargs):
         # writes the trajectory as a txt file
         # Lat,Long,Alt,Speed,Picture,ElevationMap,WP,CameraTilt,UavYaw,DistanceFrom
+        # set flight parameters
+        spd =     kwargs["speed"]
+        alt =     kwargs["altitude"]
+        xferSpd = kwargs["xfer speed"]
+        xferAlt = kwargs["xfer altitude"]
+        xferAsc = kwargs["xfer ascend"]
+        xferDes = kwargs["xfer descend"]
+        landALt = kwargs["land altitude"]
+
         with open(filename, "w+") as f:
             # take off
-            # get higher above frist point
+            Hlat, Hlng = self.homePt
+            f.write(f"{Hlat}, {Hlng}, {xferAlt}, {xferSpd},FALSE,,\n")
+            # get higher above frist point, point camera down
             lat, lng = self.GPScords[0]
-            f.write(f"{lat} , {lng}, 70, {spd},FALSE,,1\n")
+            f.write(f"{lat}, {lng}, {xferAlt}, {xferDes},FALSE,,,,90\n")
             # write the route to file
-            for lat, lng in self.GPScords:
-                f.write(f"{lat} , {lng}, {alt}, {spd},FALSE,,1\n")
-            # get higher above last point
+            for lat, lng in self.GPScords[:-1]:
+                f.write(f"{lat}, {lng}, {alt}, {spd},FALSE,,\n")
             lat, lng = self.GPScords[-1]
-            f.write(f"{lat} , {lng}, 70, {spd},FALSE,,1\n")
+            # last point to ascend to transfer
+            f.write(f"{lat}, {lng}, {alt}, {xferAsc},FALSE,,\n")
+            # get higher above last point, point camera fwd
+            f.write(f"{lat}, {lng}, {xferAlt}, {xferSpd},FALSE,,,0\n")
+            # return home
+            f.write(f"{Hlat}, {Hlng}, {xferAlt}, {xferDes},FALSE,,1\n")
+            f.write(f"{Hlat}, {Hlng}, {landALt}, {xferDes},FALSE,,1\n")
+
 
 def main(pathDir):
     # get path files
