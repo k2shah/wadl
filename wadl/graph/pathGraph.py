@@ -1,14 +1,14 @@
 # gen
-from collections import defaultdict 
+from collections import defaultdict, deque
 # math
 import numpy as np
 #graph 
 import networkx as nx
 
 class PathGraph(object):
-    """ the class creats a path graph where each node represents a path.
-    The edges betweens nodes exsist if the paths are adjacent.
-    the weight of each edge is the lenght of the 
+    """ the class creates a path graph where each node represents a path.
+    The edges betweens nodes exist if the paths are adjacent.
+    the weight of each edge is the length of the 
     """
     def __init__(self,  subPaths, baseGraph):
         self.subPaths = subPaths
@@ -19,8 +19,19 @@ class PathGraph(object):
     def buildGraph(self):
         # build the pathGraph
         # initialize the path graph
+        # sorted the graph between interior and exterior subgraphs 
         for i, path in enumerate(self.subPaths):
+            # if any node as less than 4 connections the subgraph is exterior
+            if any([len(self.baseGraph[node]) < 4 for node in path]):
+                    print(f"e: {i}")
+                    self.pathGraph.add_edge('e', i, weight=len(path))
+            else:
+            # else, it is interior 
+                print(f"i: {i}")
+                self.pathGraph.add_edge('i', i, weight=len(path))
+
             self.pathGraph.add_edge('s', i, weight=len(path))
+
 
         #unpack
         baseGraph = self.baseGraph
@@ -37,16 +48,16 @@ class PathGraph(object):
                     grpAdj_nxt = baseGraph.nodes[adj]['subgraph']
                     
                     if self.pathGraph.has_edge(grp, grpAdj):
-                            #if we have this edge in the metagraph go to next path
+                            #if we have this edge in the meta graph go to next path
                             continue           
                     
                     elif isShared_nxt and grpAdj_nxt == grpAdj:
-                        # check for path adjajency
+                        # check for path adjacency
                         adj_path = self.subPaths[grpAdj]
                         isPathAdj, dirFwd, adjIdx = self.pathAdj(adj, adj_nxt, adj_path)
                         if isPathAdj:
                             # done!
-                            # add to metagraph
+                            # add to meta graph
                             adjStep = 1 if dirFwd else -1
                             self.pathGraph.add_edge(grp, grpAdj,
                                                weight=len(self.subPaths[grpAdj]),                                       
@@ -86,6 +97,7 @@ class PathGraph(object):
         paths = self.stitch(metaPaths)
         return paths
 
+
     def merge(self, limit):
         # finds paths of the pathGraph such that len(path) < limit
         nodeQueue = dict()
@@ -96,8 +108,8 @@ class PathGraph(object):
                 raise RuntimeError("distance limit too short") 
         metaPaths = []
         # greedy fill of paths
+        path = ['e']
         while len(nodeQueue) > 0:
-            path = ['s']
             n = None
             pathLen = 0
             while pathLen < limit:
@@ -105,6 +117,7 @@ class PathGraph(object):
                 adj = list(filter(lambda x: x in nodeQueue.keys(),
                                   self.pathGraph[n]))
                 adj.sort(key= lambda x: nodeQueue[x], reverse=True)
+                adj.sort(key= lambda x: x in self.pathGraph['e'])
                 newNode = False
                 for nxt in adj:
                     cost = nodeQueue[nxt]
@@ -116,8 +129,15 @@ class PathGraph(object):
                         newNode = True
                         break
                 if len(nodeQueue) == 0 or not newNode:
-                    # print(f"merged {path} lenght: {pathLen}")
+                    # print(f"merged {path} length: {pathLen}")
                     metaPaths.append(path)
+                    # change to interior nodes when external are exhausted 
+                    if any([n in nodeQueue.keys() for n in self.pathGraph['e']]):
+                        print('ext')
+                        path=['e']
+                    else:
+                        print('int')
+                        path=['i']
                     break
 
         return metaPaths

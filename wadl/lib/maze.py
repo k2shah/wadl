@@ -41,6 +41,7 @@ class Maze(Fence):
         self.homePt = home
         self.nNode = len(self.graph)# store size of nodes
         self.limit = int(distance/self.step)
+        print(f"limit set to: {self.limit}")
 
         # uav parameters
         self.flightParams = flightParams
