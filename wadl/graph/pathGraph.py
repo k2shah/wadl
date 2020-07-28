@@ -10,7 +10,7 @@ class PathGraph(object):
     The edges betweens nodes exist if the paths are adjacent.
     the weight of each edge is the length of the 
     """
-    def __init__(self,  subPaths, baseGraph):
+    def __init__(self, subPaths, baseGraph):
         self.subPaths = subPaths
         self.baseGraph = baseGraph
         self.pathGraph = nx.DiGraph()
@@ -116,8 +116,8 @@ class PathGraph(object):
                 n = path[-1]
                 adj = list(filter(lambda x: x in nodeQueue.keys(),
                                   self.pathGraph[n]))
-                adj.sort(key= lambda x: nodeQueue[x], reverse=True)
-                adj.sort(key= lambda x: x in self.pathGraph['e'])
+                adj.sort(key= lambda x: nodeQueue[x])
+                adj.sort(key= lambda x: x in self.pathGraph['e'], reverse=True)
                 newNode = False
                 for nxt in adj:
                     cost = nodeQueue[nxt]
