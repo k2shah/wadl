@@ -70,33 +70,37 @@ class PathGraph(object):
                                                edgePair= (adj, adj_nxt, node, nxt),
                                                edgePairIdx = (adjIdx, adjIdx+adjStep, i, i+1)) 
 
-    def sharedNode(self, n, baseGraph): 
-        # checks if the node n has a adj node not in the same subGraph 
+    def sharedNode(self, n, baseGraph):
+        # checks if the node n has a adj node not in the same subGraph
         grp = baseGraph.nodes[n]['subgraph']
-        for adj in baseGraph[n]: # look at all the neighbors
-            adjGrp = baseGraph.nodes[adj]['subgraph']
-            if adjGrp != grp:
-                # if if the subgraph groups are different return True
-                return True, adj
+        for adj in baseGraph[n]:  # look at all the neighbors
+            try:
+                adjGrp = baseGraph.nodes[adj]['subgraph']
+                if adjGrp != grp:
+                    # if the subgraph groups are different return True
+                    return True, adj
+            except KeyError as e:
+                print("no subgraph found for node: ", adj)
+                print(e)
+                continue
         return False, None
 
     def pathAdj(self, adj, adj_nxt, adj_path):
         for j, p in enumerate(adj_path):
-            if p == adj: 
+            if p == adj:
                 # check forward along adj path
-                if j+1 <len(adj_path) and adj_path[j+1]==adj_nxt:
-                    return True, True, j 
+                if j+1 < len(adj_path) and adj_path[j+1] == adj_nxt:
+                    return True, True, j
                 # check reverse along path
                 elif j-1 > 0 and adj_path[j-1]==adj_nxt:
                     return True, False, j
-                
+
         return False, False, None
 
     def link(self, limit):
         metaPaths = self.merge(limit)
         paths = self.stitch(metaPaths)
         return paths
-
 
     def merge(self, limit):
         # finds paths of the pathGraph such that len(path) < limit
