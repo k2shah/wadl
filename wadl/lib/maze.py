@@ -111,10 +111,10 @@ class Maze(Fence):
 
 
     # Solution 
-    def solve(self, Solver):
+    def solve(self, Solver, offset):
         print(f"\nsolving maze {self.name}")
         startTime = time.time()
-        self.solver = Solver(self)
+        self.solver = Solver(self, offset)
         # solve the problems
         print(f"solving subproblems")
         self.solved, self.sols, self.solTime = self.solver.solve()
