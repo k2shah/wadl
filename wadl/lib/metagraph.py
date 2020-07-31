@@ -20,9 +20,9 @@ except (SystemError, ImportError):
 class Metagraph(object):
     """docstring for Metagraph
     a graph like object that holds a pair of (n,v)
-    this graph resprents a space filling graph
+    this graph represents a space filling graph
     the purpose of this object is to condense n by n grids to a single node
-    to reduce the graph size while still retaining the conective properties"""
+    to reduce the graph size while still retaining the connective properties"""
     def __init__(self, nodes, con, worldSize):
         # graph objects
         self.nodes = []
