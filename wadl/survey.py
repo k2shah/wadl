@@ -59,7 +59,7 @@ class Survey(object):
             ax.scatter(*cord, color='k', s=1)
             ax.annotate(key, xy=cord, xycoords='data')
 
-    def view(self):
+    def view(self, offset=0):
         fig, ax = plt.subplots()
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
@@ -71,11 +71,11 @@ class Survey(object):
         # display 
         plt.show()
 
-    def plan(self, plot=False):
+    def plan(self, plot=False, offset=0):
         fig, ax = plt.subplots(figsize=(16, 16))     
         for task, maze in self.tasks.items():
             try:
-                maze.solve(Solver=self.solverType)
+                maze.solve(Solver=self.solverType, offset=offset)
                 if maze.solved:
                     print(f"writing paths")
                     maze.write(self.outDir)
