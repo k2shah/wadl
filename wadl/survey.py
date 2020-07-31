@@ -71,11 +71,11 @@ class Survey(object):
         # display 
         plt.show()
 
-    def plan(self, plot=False, offset=0):
+    def plan(self, plot=False, offset=0, mSize=40):
         fig, ax = plt.subplots(figsize=(16, 16))     
         for task, maze in self.tasks.items():
             try:
-                maze.solve(Solver=self.solverType, offset=offset)
+                maze.solve(Solver=self.solverType, offset=offset, mSize=mSize)
                 if maze.solved:
                     print(f"writing paths")
                     maze.write(self.outDir)

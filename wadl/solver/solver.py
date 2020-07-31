@@ -33,12 +33,12 @@ class BaseSolver(object):
 class LinkSolver(object):
     """docstring for LinkSolver"""
 
-    def __init__(self, maze, offset=0):
+    def __init__(self, maze, offset=0, mSize=40):
         self.maze = maze
-        self.setup(offset)
+        self.setup(offset, mSize)
 
-    def setup(self, offset):
-        self.mGraph = MultiGraph(self.maze.graph)
+    def setup(self, offset, mSize):
+        self.mGraph = MultiGraph(self.maze.graph, size=mSize)
         self.problems = []
         for graph in self.mGraph:
             limit = len(graph) + 2 + offset #lets try this?
