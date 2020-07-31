@@ -15,9 +15,9 @@ from wadl.lib.utils import *
 
 class MultiGraph(object):
     """docstring for MultiGraph"""
-    def __init__(self, graph):
+    def __init__(self, graph, size=40):
         self.baseGraph = graph
-        self.subGraphs = self.splitGraph()
+        self.subGraphs = self.splitGraph(size)
         # reindex all the nodes and store their subgraph
         self.nodeIndex = dict()
         for gIdx, graph in enumerate(self.subGraphs):
@@ -35,7 +35,7 @@ class MultiGraph(object):
 
         return xBound, yBound
 
-    def splitGraph(self, size=40):
+    def splitGraph(self, size):
         """splits a graph into sub segments
         size: aprox number of nodes in each sub graph
         """
