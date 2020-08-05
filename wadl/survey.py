@@ -82,9 +82,10 @@ class Survey(object):
         for task, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             try:
-                self.solver.solve(routeSet=maze.routeSet)
+                solTime = self.solver.solve(routeSet=maze.routeSet)
+                maze.solTime = solTime
                 print("\twriting paths")
-                # maze.writePaths(self.outDir, paths)
+                maze.write(self.outDir)
 
             except RuntimeError as e:
                 print(f"\tfailure in task: {maze.name}")

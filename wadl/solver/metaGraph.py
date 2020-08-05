@@ -95,7 +95,7 @@ class MetaGraph(object):
 
         subGraphs = [self.baseGraph.subgraph(
             nodes) for nodes in subNodes.values()]
-        print(f"found {len(subGraphs)} subgraphs with "
+        print(f"\tfound {len(subGraphs)} subgraphs with "
               f"{minNodes} to {maxNodes} nodes")
 
         for gIdx, graph in enumerate(subGraphs):
