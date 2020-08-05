@@ -112,3 +112,4 @@ class Survey(object):
             plt.axis('square')
             plt.gca().set_aspect('equal', adjustable='box')
             plt.show()
+
