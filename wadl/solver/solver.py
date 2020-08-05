@@ -1,85 +1,67 @@
-#gen 
+# gen
 import time
-# math
-import numpy as np
-#graph 
-import networkx as nx
-#plot
-import matplotlib.pyplot as plt
 # lib
 from wadl.solver.SATproblem import SATproblem
-from wadl.graph.multiGraph import MultiGraph
-from wadl.graph.pathGraph import PathGraph
+from wadl.solver.metaGraph import MetaGraph
+
 
 class BaseSolver(object):
     """docstring for Solver"""
-    def __init__(self, maze):
-        self.maze = maze
-        self.setup()
 
-    def setup(self):
-        self.problem=SATproblem(self.maze.graph,
-                                self.maze.limit,
-                                self.maze.globalStarts)
+    def __init__(self, **kwargs):
+        self.parameters = kwargs
 
-    def plot(self, ax):
-        self.maze.plot(ax, showGrid=True)
+    def setup(self, graph):
+        self.graph = graph
 
     def solve(self):
-        #solve the problem
-        return self.problem.solve()
+        # solve the problem
+        bound = len(self.graph) + self.parameters["SATBound_offset"]
+        problem = SATproblem(self.graph, bound)
+        return problem.solve()
 
 
-class LinkSolver(object):
+class LinkSolver(BaseSolver):
     """docstring for LinkSolver"""
 
-    def __init__(self, maze, offset=0, mSize=40):
-        self.maze = maze
-        self.setup(offset, mSize)
+    def __init__(self, subGraph_size=40, SATBound_offset=2):
+        super(LinkSolver, self).__init__()
+        self.parameters["subGraph_size"] = subGraph_size
+        self.parameters["SATBound_offset"] = SATBound_offset
 
-    def setup(self, offset, mSize):
-        self.mGraph = MultiGraph(self.maze.graph, size=mSize)
-        self.problems = []
-        for graph in self.mGraph:
-            limit = len(graph) + 2 + offset #lets try this?
-            self.problems.append(SATproblem(graph, limit))
+    def setup(self, graph):
+        # setup is called by view is is meant for visulazation
+        self.metaGraph = MetaGraph(graph,
+                                   size=self.parameters["subGraph_size"])
 
-    def plot(self, ax):
-        nGraph = len(self.mGraph)
-        cols = self.mGraph.getCols()
-        for i, graph in enumerate(self.mGraph):
-                # print(graph.nodes)
-                col = next(cols)
-                # print(colors[colIdx])
-                self.maze.plotNodes(ax, nodes=graph.nodes, color=col)
-
-    def presolve(self):
-        paths = []
-        for i, prob in enumerate(self.problems):
+    def solve(self, routeSet):
+        subPaths = []
+        startTime = time.time()
+        for i, graph in enumerate(self.metaGraph.subGraphs):
+            bound = len(graph) + self.parameters["SATBound_offset"]
+            print(f"\tbuilding problem {i}")
+            problem = SATproblem(graph, bound)
             counter = 0
             solved = False
             while not solved:
                 try:
-                    solved, path, time = prob.solve()
-                    paths.append(path[0])
-                except RuntimeError as e:
-                    print(f"\tproblem {i} infeasible, increasing limit")
-                    prob.limit += 1 
-                    prob.make()
+                    solved, path, probTime = problem.solve()
+                    print(f"\t\tsolved in {probTime} sec")
+                    subPaths.append(path[0])
+                except RuntimeError:
+                    print(f"\t\tproblem {i} infeasible, increasing limit")
+                    problem.bound += 1
+                    problem.make()
                     counter += 1
 
                 if counter > 6:
-                    raise RuntimeError(f"problem {i} critically infeasible. graph may be degenerate")
-        return paths
+                    raise RuntimeError(f"problem {i} critically infeasible. "
+                                       "graph may be degenerate")
 
-    def solve(self):
-        startTime = time.time()
-        # presolve for the paths
-        paths = self.presolve()
         # build the meta graph
-        self.pGraph = PathGraph(paths, self.mGraph.baseGraph)
-        paths = self.pGraph.link(self.maze.limit)
+        self.metaGraph.buildPathGraph(subPaths)
+        self.metaGraph.link(routeSet)
         # print time
         solTime = time.time()-startTime
-        print("solution time: {:2.5f} sec".format(solTime))
-        return True, paths, solTime
+        print("\tsolution time: {:2.5f} sec".format(solTime))
+        return solTime
