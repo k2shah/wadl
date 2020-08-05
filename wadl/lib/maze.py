@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import utm
 from shapely.geometry import Polygon, Point
 # lib
-from wadl.lib.utils import rot2D
 from wadl.lib.fence import Fence
 from wadl.lib.route import RouteSet
 
@@ -41,9 +40,16 @@ class Maze(Fence):
         return len(self.graph)
 
     # Grid setup
+    @staticmethod
+    def rot2D(theta):
+        # theta is in rads
+        c = np.cos(theta)
+        s = np.sin(theta)
+        return np.array([[c, -s],
+                         [s, c]])
 
     def rotateGrid(self):
-        self.R = rot2D(np.radians(self.theta))
+        self.R = self.rot2D(np.radians(self.theta))
         cordsRotated = (self.R @ self.UTMCords.T).T
         return Polygon(cordsRotated)
         # self.R = np.eye(2)
@@ -137,7 +143,8 @@ class Maze(Fence):
 
         for node in nodes:
             ax.scatter(*self.graph.nodes[node]["UTM"],
-                       color=color)
+                       color=color,
+                       s=5)
 
     def plotEdges(self, ax):
         # plot edges
@@ -155,7 +162,7 @@ class Maze(Fence):
     def plot(self, ax, showGrid=False):
         # plot the geofence with grid overlay
         # plot fence
-        super(Maze, self).plot(ax, color='r')
+        super(Maze, self).plot(ax)
 
         # plot maze
         if showGrid:

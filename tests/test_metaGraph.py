@@ -1,0 +1,47 @@
+import pytest
+# os
+import os
+# plot
+import matplotlib.pyplot as plt
+
+
+@pytest.fixture
+def crozMetaGraph():
+    """test Maze class """
+    # build fixture
+    from wadl.solver.metaGraph import MetaGraph
+    from wadl.lib.maze import Maze
+    # cros test fixture
+    path = os.path.join(os.path.dirname(__file__), 'data')
+    file = os.path.join(path, "croz_west")
+    absfile = os.path.abspath(file)
+    crozMaze = Maze(absfile,
+                    step=40,
+                    rotation=15)
+    return MetaGraph(crozMaze.graph), crozMaze
+
+
+def test_metaGraph(crozMetaGraph):
+    crozMetaGraph, crozMaze = crozMetaGraph
+    subgraphSizes = [13, 18, 20, 29, 36, 41, 44, 36, 36, 10, 21,
+                     11, 16, 26, 36, 36, 27, 32, 38, 25, 13]
+
+    for graph, size in zip(crozMetaGraph.subGraphs, subgraphSizes):
+        assert (len(graph) == size)
+
+    # save figure to disk
+    rootDir = os.path.dirname(__file__)
+    pathDir = os.path.join(rootDir, "out")
+
+    fig, ax = plt.subplots()
+    colors = crozMetaGraph.getCols()
+    crozMaze.plot(ax, showGrid=False)
+    if not os.path.exists(pathDir):  # make dir if not exists
+        os.makedirs(pathDir)
+    for i, graph in enumerate(crozMetaGraph.subGraphs):
+        # print(graph.nodes)
+        col = next(colors)
+        # print(colors[colIdx])
+        crozMaze.plotNodes(ax, nodes=graph.nodes, color=col)
+    fileName = os.path.join(pathDir, 'croz-metaGraph.png')
+    plt.savefig(fileName)

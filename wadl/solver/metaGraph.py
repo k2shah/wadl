@@ -11,7 +11,6 @@ import networkx as nx
 # plot
 import matplotlib.pyplot as plt
 # lib
-from wadl.lib.utils import sub2ind
 from wadl.lib.maze import Maze
 
 
@@ -36,6 +35,11 @@ class MetaGraph(object):
         yBound = (ySort[0][1], ySort[-1][1])
 
         return xBound, yBound
+
+    @staticmethod
+    def sub2ind(cord, grid):
+        # returns the linear index on the square index
+        return cord[0] + grid[0]*cord[1]
 
     def findSubGraphs(self, size):
         """splits a graph into sub segments
@@ -82,7 +86,7 @@ class MetaGraph(object):
             group = (int(rNode[0]/xStep),  int(rNode[1]/yStep))
 
             # get the index of the subgraph
-            subGraphIdx = sub2ind(group, (xBlock, yBlock))
+            subGraphIdx = self.sub2ind(group, (xBlock, yBlock))
             # print(node, rNode, group, subGraphIdx)
             # add to the list
             subNodes[subGraphIdx].append(node)
@@ -168,7 +172,6 @@ class MetaGraph(object):
                     if self.pathGraph.has_edge(grp, grpAdj):
                         # if this edge is already stored go to next path
                         continue
-
                     elif isShared_nxt and grpAdj_nxt == grpAdj:
                         # check for path adjacency
                         adj_path = self.subPaths[grpAdj]
@@ -181,13 +184,11 @@ class MetaGraph(object):
                             self.pathGraph.add_edge(
                                 grp, grpAdj,
                                 weight=len(self.subPaths[grpAdj]),
-                                fwd=dirFwd,
                                 edgePair=(node, nxt, adj, adj_nxt),
                                 edgePairIdx=(i, i+1, adjIdx, adjIdx+adjStep))
                             self.pathGraph.add_edge(
                                 grpAdj, grp,
                                 weight=len(self.subPaths[grp]),
-                                fwd=dirFwd,
                                 edgePair=(adj, adj_nxt, node, nxt),
                                 edgePairIdx=(adjIdx, adjIdx+adjStep, i, i+1))
 
@@ -323,22 +324,3 @@ class MetaGraph(object):
 
     def getCols(self):
         return iter(plt.cm.rainbow(np.linspace(0, 1, len(self.subGraphs))))
-
-
-if __name__ == '__main__':
-    path = os.path.join(os.path.dirname(__file__), '..', '..', 'tests', 'data')
-    file = os.path.join(path, "croz_west")
-
-    absfile = os.path.abspath(file)
-    maze = Maze(absfile, rotation=15)
-    mGraph = MetaGraph(maze.graph)
-
-    fig, ax = plt.subplots()
-    colors = mGraph.getCols()
-
-    for i, graph in enumerate(mGraph.subGraphs):
-        # print(graph.nodes)
-        col = next(colors)
-        # print(colors[colIdx])
-        maze.plotNodes(ax, nodes=graph.nodes, color=col)
-    plt.show()
