@@ -43,7 +43,7 @@ class Metagraph(object):
             try:
                 self.metaNodes[n]
                 printStr += 'm-'
-            except KeyError as e:
+            except KeyError:
                 pass
             printStr += str(n) + ": " + str(self.con[n]) + "\n"
         return printStr
