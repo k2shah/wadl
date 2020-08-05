@@ -76,14 +76,15 @@ class Maze(Fence):
 
     # write
     def write(self, filePath):
-        self.taskName = self.name + f'_s{self.step}_n{self.nAgent}'
+        nRoute = len(self.routeSet)
+        self.taskName = self.name + f'_s{self.step}_r{nRoute}'
         taskDir = os.path.join(filePath, self.taskName)
         if not os.path.exists(taskDir):  # make dir if not exists
             os.makedirs(taskDir)
         # write maze configuration information
         self.writeInfo(taskDir)
         # write paths as GPS csv files.
-        pathDir = os.path.join(taskDir, "paths")
+        pathDir = os.path.join(taskDir, "routes")
         if not os.path.exists(pathDir):  # make dir if not exists
             os.makedirs(pathDir)
         self.writePaths(pathDir)
@@ -102,18 +103,18 @@ class Maze(Fence):
             f.write('\nGrid size\n')
             f.write(str(self.nNode))
 
-            f.write('\nPath limit\n')
-            f.write(str(self.limit))
+            # f.write('\nPath limit\n')
+            # f.write(str(self.limit))
 
-            f.write('\nSolution time (min)\n')
+            f.write('\nSolution time (sec)\n')
             f.write(str(self.solTime))
 
-            f.write('\nInitial agent positions\n')
-            for start in self.starts:
-                f.write(f"{start}\n")
+            # f.write('\nInitial agent positions\n')
+            # for start in self.starts:
+            #     f.write(f"{start}\n")
 
     def writePaths(self, pathDir):
-        pass
+        self.routeSet.write(pathDir)
 
     def writeGrid(self, outFile, UTM=True):
         # writes the grid to file

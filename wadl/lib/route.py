@@ -2,6 +2,7 @@
 # import warnings as warn
 import os
 import csv
+import os.path as osp
 # import sys
 # gis
 import utm
@@ -38,6 +39,11 @@ class RouteSet(object):
     def push(self, route):
         # push the route into the container
         self.routes.append(route)
+
+    def write(self, pathDir):
+        for i, route in enumerate(self.routes):
+            filename = osp.join(pathDir, f"{i}.csv")
+            route.write(filename)
 
 
 class Route(object):
@@ -202,7 +208,23 @@ class Route(object):
                     color=color, linestyle="--")
 
     def write(self, filename):
-        # writes the trajectory as a txt file
-        with open(filename, "w+") as f:
-            f
-            pass
+        # writes the waypoints as a txt file
+        with open(filename, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            # take off
+            row = self.waypoints[0] + ["FALSE", "", "", ""]
+            writer.writerow(row)
+            #  transfer in
+            row = self.waypoints[1] + ["FALSE", "", "", "90.0"]
+            writer.writerow(row)
+            for wp in self.waypoints[2:-3]:
+                row = wp + ["FALSE", "", "", ""]
+                writer.writerow(row)
+            # transfer out
+            row = self.waypoints[-3] + ["FALSE", "", "", "0.0"]
+            writer.writerow(row)
+            # land
+            row = self.waypoints[-2] + ["FALSE", "", "", ""]
+            writer.writerow(row)
+            row = self.waypoints[-1] + ["FALSE", "", "", ""]
+            writer.writerow(row)
