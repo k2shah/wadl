@@ -4,16 +4,18 @@ import os
 # plot
 import matplotlib.pyplot as plt
 
+
 @pytest.fixture
 def croz():
     """test Fence class """
     # build fixture
     from wadl.lib.fence import Fence
     # cros test fixture
-    path = os.path.join(os.path.dirname( __file__ ), 'data')
+    path = os.path.join(os.path.dirname(__file__), 'data')
     file = os.path.join(path, "croz_west")
     absfile = os.path.abspath(file)
     return Fence(absfile)
+
 
 def test_fence(croz):
     # save figure to disk
@@ -21,7 +23,8 @@ def test_fence(croz):
     croz.plot(ax)
     rootDir = os.path.dirname(__file__)
     fileName = os.path.join(rootDir, 'croz.png')
-    plt.savefig(fileName) 
+    plt.savefig(fileName)
     # sum of cords
     cordSum = [4.63967196e+08, 1.42278924e+09]
-    assert all(abs(sum(croz.UTMCords)-cordSum)<1e4) , "file not parsed correctly"
+    assert all(abs(sum(croz.UTMCords)-cordSum) <
+               1e4), "file not parsed correctly"

@@ -20,7 +20,7 @@ class Survey(object):
     this objects holds all the information of a single survey """
 
     def __init__(self, name, outDir,
-                 solverParam=None, solverType=LinkSolver):
+                 solverParam={}, solverType=LinkSolver):
         # get solver
         self.solver = solverType(**solverParam)
         # save the name of the survey
@@ -46,7 +46,7 @@ class Survey(object):
             homeKey = kwargs["home"]
             kwargs["home"] = self.keyPoints[homeKey]
         except KeyError:
-            print(f'{homeKey} not found')
+            print('home not found')
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)
@@ -78,7 +78,7 @@ class Survey(object):
         # display
         plt.show()
 
-    def plan(self):
+    def plan(self, plot=True):
         for task, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             try:
@@ -94,7 +94,8 @@ class Survey(object):
         print("done planning")
 
         # plot result
-        self.plot()
+        if plot:
+            self.plot()
 
         # troll annie a bit
         annie = ["annie", "Annie", "schmidt"]
