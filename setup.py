@@ -1,11 +1,11 @@
-  
-#!/usr/bin/env python
+#!usr/bin/env python
 
 """The setup script."""
 
 from setuptools import setup, find_packages
 
-requirements = ['numpy', 'matplotlib', 'utm', 'shapely', 'z3-solver', 'networkx', 'scipy']
+requirements = ['numpy', 'matplotlib', 'utm',
+                'shapely', 'z3-solver', 'networkx', 'scipy']
 
 setup_requirements = ['pytest-runner', ]
 
