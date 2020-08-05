@@ -1,6 +1,5 @@
 #!bin/bash/python3
 # import warnings as warn
-import os
 import csv
 import os.path as osp
 # import sys
@@ -54,15 +53,13 @@ class Route(object):
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
         if home is None:
             print('home not set')
+            self.home = None
         else:
             self.setHome(home)  # set home pt (in GPS)
         self.waypoints = []
 
         # path limits
         self.DJIWaypointLimit = 98
-
-    def __repr__(self):
-        pass
 
     @staticmethod
     def DistGPS(gps0, gps1, alt0=0, alt1=0):
@@ -124,9 +121,10 @@ class Route(object):
         landALt = flightParams["land_altitude"]
 
         # take off
-        Hlat, Hlng = self.home
-        self.waypoints.append([Hlat, Hlng, xferAlt, xferSpd])
-        # get higher above frist point, point camera down
+        if self.home is not None:
+            Hlat, Hlng = self.home
+            self.waypoints.append([Hlat, Hlng, xferAlt, xferSpd])
+            # get higher above frist point, point camera down
         lat, lng = self.GPScords[0]
         self.waypoints.append([lat, lng, xferAlt, xferDes])
         # push each waypoint
@@ -137,18 +135,15 @@ class Route(object):
         self.waypoints.append([lat, lng, alt, xferAsc])
         # get higher above last point, point camera fwd
         self.waypoints.append([lat, lng, xferAlt, xferSpd])
-        # return home
-        self.waypoints.append([Hlat, Hlng, xferAlt, xferDes])
-        # land
-        self.waypoints.append([Hlat, Hlng, landALt, xferDes])
+        if self.home is not None:
+            # return home
+            self.waypoints.append([Hlat, Hlng, xferAlt, xferDes])
+            # land
+            self.waypoints.append([Hlat, Hlng, landALt, xferDes])
 
     def __len__(self):
         # number of waypoints in path
         return len(self.UTMcords)
-
-    def __repr__(self):
-        # print the cords
-        return print(self.UTMcords)
 
     # def parseFile(self):
     #     pathFiles = glob.glob(os.path.join(self.pathDir, "routes/*"))

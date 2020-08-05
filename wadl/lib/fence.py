@@ -1,10 +1,7 @@
 #!/usr/bin/python3
-import os
 import csv
 # math
 import numpy as np
-#
-import matplotlib.pyplot as plt
 # gis
 import utm
 from shapely.geometry import Polygon
@@ -62,6 +59,7 @@ class Fence(object):
 
 class Areas(object):
     """holds the data from a KML file"""
+
     def __init__(self, file):
         self.areas = dict()
         print(file)
@@ -83,8 +81,8 @@ class Areas(object):
                     cords = cords.strip()
                     cords = cords.split(" ")
                     self.areas[name].append(
-                                    np.array([list(map(float, c.split((","))))
-                                              for c in cords]))
+                        np.array([list(map(float, c.split((","))))
+                                  for c in cords]))
                     # print(self.areas[name])
 
     def stripXML(self, string):
@@ -96,18 +94,3 @@ class Areas(object):
         for areaKey in self.areas:
             for ring in self.areas[areaKey]:
                 ax.plot(ring[:, 0], ring[:, 1], 'k')
-
-
-if __name__ == '__main__':
-    # move this test code later
-    path = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'geofences')
-    file = os.path.join(path, "croz_west")
-    
-    absfile = os.path.abspath(file)
-    fence = Fence(absfile)
-    fig, ax = plt.subplots()
-    print(fig)
-    fence.plot(ax)
-    print(sum(fence.UTMCords))
-    print(hash(fig))
-    plt.show()
