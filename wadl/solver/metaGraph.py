@@ -1,8 +1,5 @@
-# os
-import os
 # gen
 from collections import defaultdict
-from copy import deepcopy
 # math
 import numpy as np
 from math import ceil
@@ -10,8 +7,6 @@ from math import ceil
 import networkx as nx
 # plot
 import matplotlib.pyplot as plt
-# lib
-from wadl.lib.maze import Maze
 
 
 class MetaGraph(object):
