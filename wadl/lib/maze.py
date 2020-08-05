@@ -8,7 +8,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 # gis
 import utm
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon, Point, LineString
 # lib
 from wadl.lib.fence import Fence
 from wadl.lib.route import RouteSet
@@ -75,6 +75,15 @@ class Maze(Fence):
                     self.graph.nodes[(i, j)]['UTM'] = utmCord
                 else:
                     self.graph.remove_node((i, j))
+
+        # check edges
+        # remove edges that intersect the boundary
+        for n0, n1 in self.graph.edges:
+            line = LineString([self.graph.nodes[n0]['UTM'],
+                               self.graph.nodes[n1]['UTM']])
+
+            if self.poly.boundary.intersects(line):
+                self.graph.remove_edge(n0, n1)
 
         # save the index of each node
         for i, node in enumerate(self.graph):
@@ -143,16 +152,18 @@ class Maze(Fence):
 
         for node in nodes:
             ax.scatter(*self.graph.nodes[node]["UTM"],
-                       color=color,
-                       s=5)
+                       color=color, s=5)
 
-    def plotEdges(self, ax):
+    def plotEdges(self, ax, color='k', edges=None):
         # plot edges
-        for e1, e2 in self.graph.edges:
+        if edges is None:
+            edges = self.graph.edges
+
+        for e1, e2 in edges:
             line = np.array([self.graph.nodes[e1]["UTM"],
                              self.graph.nodes[e2]["UTM"]])
             ax.plot(line[:, 0], line[:, 1],
-                    color='k', linewidth=1)
+                    color=color, linewidth=1)
 
     def plotRoutes(self, ax):
         cols = iter(plt.cm.rainbow(np.linspace(0, 1, len(self.routeSet))))

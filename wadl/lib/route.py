@@ -52,7 +52,6 @@ class Route(object):
         self.UTMZone = zone
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
         if home is None:
-            print('home not set')
             self.home = None
         else:
             self.setHome(home)  # set home pt (in GPS)

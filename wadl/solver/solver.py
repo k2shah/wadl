@@ -59,7 +59,9 @@ class LinkSolver(BaseSolver):
                                        "graph may be degenerate")
 
         # build the meta graph
+        print("\tbullding pathGraph")
         self.metaGraph.buildPathGraph(subPaths)
+        print("\tlinking routes")
         self.metaGraph.link(routeSet)
         # print time
         solTime = time.time()-startTime
