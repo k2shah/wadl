@@ -22,7 +22,10 @@ def test_fence(croz):
     fig, ax = plt.subplots()
     croz.plot(ax)
     rootDir = os.path.dirname(__file__)
-    fileName = os.path.join(rootDir, 'out', 'croz.png')
+    pathDir = os.path.join(rootDir, "out")
+    if not os.path.exists(pathDir):  # make dir if not exists
+        os.makedirs(pathDir)
+    fileName = os.path.join(pathDir, 'croz.png')
     plt.savefig(fileName)
     # sum of cords
     cordSum = [4.63967196e+08, 1.42278924e+09]
