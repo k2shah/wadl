@@ -99,7 +99,7 @@ class Maze(Fence):
         self.plot(ax)
         plt.axis('square')
         plotName = os.path.join(taskDir, "routes.png")
-        plt.savefig(plotName, bbox_inches='tight', dpi=50)
+        plt.savefig(plotName, bbox_inches='tight', dpi=100)
 
     def writeInfo(self, filePath):
         # writes the Maze information of the test
