@@ -53,5 +53,5 @@ def test_croz(survey):
                     "xfer_descend":  4,  # m/s
                     "land_altitude": 30,  # m
                     }
-    survey.addTask(file, roation=15, step=35, flightParams=flightParams)
+    survey.addTask(file, rotation=15, step=35, flightParams=flightParams)
     survey.plan(plot=False)

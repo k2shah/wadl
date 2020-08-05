@@ -67,11 +67,13 @@ class Survey(object):
         for file, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             cols = self.solver.metaGraph.getCols()
-        for i, graph in enumerate(self.solver.metaGraph.subGraphs):
-            # print(graph.nodes)
-            col = next(cols)
-            # print(colors[colIdx])
-            maze.plotNodes(ax, nodes=graph.nodes, color=col)
+            maze.plot(ax)
+            for i, graph in enumerate(self.solver.metaGraph.subGraphs):
+                # print(graph.nodes)
+                col = next(cols)
+                # print(colors[colIdx])
+                maze.plotNodes(ax, nodes=graph.nodes, color=col)
+                maze.plotEdges(ax, edges=graph.edges, color=col)
 
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
