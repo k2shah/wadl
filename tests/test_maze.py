@@ -23,7 +23,7 @@ def test_config(croz):
     fig, ax = plt.subplots()
     croz.plot(ax, showGrid=True)
     rootDir = os.path.dirname(__file__)
-    fileName = os.path.join(rootDir, 'croz-grid.png')
+    fileName = os.path.join(rootDir, 'out', 'croz-grid.png')
     plt.savefig(fileName)
     # number of nodes and edges
     assert(len(croz.graph.nodes) == 564), "nodes mismatch"
