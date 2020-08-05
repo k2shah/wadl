@@ -21,7 +21,7 @@ class MetaGraph(object):
         # baseGraph
         self.baseGraph = graph
         # list of graphs who's union is the baseGraph
-        self.subGraphs = self.findSubGraphs(size)
+        self.subGraphs = self.split(size)
         # graph of the paths
         self.pathGraph = nx.DiGraph()
         # reindex all the nodes and store their subgraph
@@ -41,10 +41,14 @@ class MetaGraph(object):
         # returns the linear index on the square index
         return cord[0] + grid[0]*cord[1]
 
-    def findSubGraphs(self, size):
+    def split(self, size):
         """splits a graph into sub segments
         size: aprox number of nodes in each sub graph
         """
+        subNodes = self.findSubNodes(size)
+        return self.buildSubGraphs(subNodes)
+
+    def findSubNodes(self, size):
         self.subGraphs = []
 
         # get bounding box extends on graph
@@ -78,7 +82,6 @@ class MetaGraph(object):
         yStep = ceil(yDelta/yBlock)
 
         subNodes = defaultdict(list)
-        node2sub = dict()  # map from node to it's subgraph
         for node in self.baseGraph.nodes:
             rNode = (node[0] - xBound[0],
                      node[1] - yBound[0])  # get node reltative to bottom left
@@ -90,49 +93,86 @@ class MetaGraph(object):
             # print(node, rNode, group, subGraphIdx)
             # add to the list
             subNodes[subGraphIdx].append(node)
-            node2sub[node] = subGraphIdx
+        return subNodes
 
-        subNodes = self.mergeSubGraphs(subNodes, node2sub)
-        # there has to be a better way to do this
-        maxNodes = len(max(subNodes.values(), key=lambda x: len(x)))
-        minNodes = len(min(subNodes.values(), key=lambda x: len(x)))
+    def indexSubGraph(self, graph, gIdx):
+        # saves the subgraph index in the basegraph
+        for node in graph:
+            self.baseGraph.nodes[node]['subgraph'] = gIdx
 
-        subGraphs = [self.baseGraph.subgraph(
-            nodes) for nodes in subNodes.values()]
-        print(f"\tfound {len(subGraphs)} subgraphs with "
-              f"{minNodes} to {maxNodes} nodes")
+    def buildSubGraphs(self, subNodes):
+        # build connected subgraphs form each list of subnodes
+        subGraphs = []
+        gIdx = 0
+        for nodes in subNodes.values():
+            graph = self.baseGraph.subgraph(nodes)
+            if nx.is_connected(graph):
+                subGraphs.append(graph)
+                self.indexSubGraph(graph, gIdx)
+                gIdx += 1
+            else:
+                # find the connected compoents
+                for n in nx.connected_components(graph):
+                    # get the graph from nodes
+                    g = self.baseGraph.subgraph(n)
+                    subGraphs.append(g)
+                    self.indexSubGraph(g, gIdx)
+                    gIdx += 1
 
+        subGraphs = self.mergeSubGraphs(subGraphs)
+        # detect not connected subgraphs
+        for i, graph in enumerate(subGraphs):
+            print(i)
+            print(nx.is_connected(graph))
+
+        # print number of graphs and range of sizes
+        for g in subGraphs:
+            print(len(g))
+        maxGraph = max(subGraphs, key=lambda g: len(g))
+        minGraph = min(subGraphs, key=lambda g: len(g))
+        print(f"\tfound {len(subGraphs)} subGraphs with "
+              f"{len(minGraph)} to {len(maxGraph)} nodes")
+
+        # merge small subgraphs
+
+        # save local index in subgraph
         for gIdx, graph in enumerate(subGraphs):
+            self.indexSubGraph(graph, gIdx)
             for i, node in enumerate(graph.nodes):
                 graph.nodes[node]['index'] = i
-                self.baseGraph.nodes[node]['subgraph'] = gIdx
 
         return subGraphs
 
-    def mergeSubGraphs(self, subNodes, node2sub, mergeSize=10, maxSize=60):
-        # merge into the subgraph with the most conections
-        # if tie pick the smallest suubgraph
-        mergedNodes = deepcopy(subNodes)
-        for i, nodes in subNodes.items():
-            if len(nodes) < mergeSize:
+    def mergeSubGraphs(self, subGraphs, mergeSize=10, maxSize=60):
+        # merge small subGraphs into the most connected subGraph
+        # if tie pick the smallest subgraph
+
+        for graph in subGraphs[:]:
+            # check if the graph is small
+            if len(graph) < mergeSize:
                 # keep running score of best merge candidant
                 mergeScore = defaultdict(int)
-                for node in nodes:
+                for node in graph:
+                    # get the graph index
+                    gIdx = self.baseGraph.nodes[node]['subgraph']
                     for adj in self.baseGraph.neighbors(node):
-                        adjIdx = node2sub[adj]
-                        if adjIdx != i:
+                        adjIdx = self.baseGraph.nodes[adj]['subgraph']
+                        if adjIdx != gIdx:
                             mergeScore[adjIdx] += 1
                 # sort candiates and merge into the best one
                 # print(i, nodes, mergeScore)
-                for k in sorted(mergeScore, key=mergeScore.get, reverse=True):
-                    if len(mergedNodes[k]) + len(nodes) < maxSize:
+                for adjIdx in sorted(mergeScore, key=mergeScore.get,
+                                     reverse=True):
+                    if len(subGraphs[adjIdx]) + len(graph) < maxSize:
                         # merge the ith subgraph into the kth subgraph
                         # print(f"Merging subg {i}"
                         #       f" with {len(nodes)} nodes into subgraph {k}")
-                        mergedNodes[k] += nodes
-                        mergedNodes.pop(i)
+                        merged = list(subGraphs[adjIdx]) + list(graph.nodes)
+                        subGraphs[adjIdx] = self.baseGraph.subgraph(merged)
+                        self.indexSubGraph(subGraphs[adjIdx], adjIdx)
+                        subGraphs[gIdx] = None
                         break
-        return mergedNodes
+        return [g for g in subGraphs if g is not None]
 
     def buildPathGraph(self, subPaths):
         # build the pathGraph
