@@ -120,14 +120,8 @@ class MetaGraph(object):
                     gIdx += 1
 
         subGraphs = self.mergeSubGraphs(subGraphs)
-        # detect not connected subgraphs
-        for i, graph in enumerate(subGraphs):
-            print(i)
-            print(nx.is_connected(graph))
 
         # print number of graphs and range of sizes
-        for g in subGraphs:
-            print(len(g))
         maxGraph = max(subGraphs, key=lambda g: len(g))
         minGraph = min(subGraphs, key=lambda g: len(g))
         print(f"\tfound {len(subGraphs)} subGraphs with "
@@ -290,12 +284,13 @@ class MetaGraph(object):
             if len(nodeQueue) == 0 or not newNode:
                 try:
                     routeSet.push(lastRoute)
+                    del lastRoute
                 except UnboundLocalError:
                     raise RuntimeError("\t\tpath limit too short")
                 # change to interior nodes when external are exhausted
                 if any([n in nodeQueue.keys()
                         for n in self.pathGraph['e']]):
-                    # print('ext')44
+                    # print('ext')
                     metaPath = ['e']
                 else:
                     # print('int')
