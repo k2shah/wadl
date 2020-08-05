@@ -53,7 +53,7 @@ class Fence(object):
         ax.plot(*self.poly.exterior.xy, color=color)
         # place label somewhere
         minx, miny, maxx, maxy = self.poly.bounds
-        placement = (maxx, miny)
+        placement = ((minx+maxx)/2, maxy)
         ax.annotate(self.name, xy=placement)
 
 
