@@ -102,7 +102,7 @@ class Maze(Fence):
         pathDir = os.path.join(taskDir, "routes")
         if not os.path.exists(pathDir):  # make dir if not exists
             os.makedirs(pathDir)
-        self.writePaths(pathDir)
+        self.writeRoutes(pathDir)
         # save the figure
         fig, ax = plt.subplots(figsize=(16, 16))
         self.plot(ax)
@@ -128,7 +128,7 @@ class Maze(Fence):
             # for start in self.starts:
             #     f.write(f"{start}\n")
 
-    def writePaths(self, pathDir):
+    def writeRoutes(self, pathDir):
         self.routeSet.write(pathDir)
 
     def writeGrid(self, outFile, UTM=True):

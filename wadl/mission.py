@@ -30,7 +30,6 @@ class Mission(object):
         self.nBands = nBands
         self.bandStep = bandStep
         self.bands = np.linspace(0, (nBands-1)*bandStep, nBands)
-        print(self.bands)
 
         self.setVersion()
 
