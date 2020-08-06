@@ -208,7 +208,7 @@ class Route(object):
             # take off
             row = self.waypoints[0] + ["FALSE", "", "", ""]
             writer.writerow(row)
-            #  transfer in
+            # transfer in
             row = self.waypoints[1] + ["FALSE", "", "", "90.0"]
             writer.writerow(row)
             for wp in self.waypoints[2:-3]:
