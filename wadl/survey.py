@@ -99,11 +99,6 @@ class Survey(object):
         if plot:
             self.plot()
 
-        # troll annie a bit
-        annie = ["annie", "Annie", "schmidt"]
-        if any(a for a in annie if a in self.outDir):
-            print("ANNIE GO PET SCOUT!")
-
     def plot(self):
         # plot task
         fig, ax = plt.subplots(figsize=(16, 16))
