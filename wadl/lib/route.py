@@ -40,9 +40,12 @@ class RouteSet(object):
         self.routes.append(route)
 
     def write(self, pathDir):
+        print(f"\tgenerated {len(self.routes)} routes")
         for i, route in enumerate(self.routes):
             filename = osp.join(pathDir, f"{i}.csv")
             route.write(filename)
+            print(f"\t\troute {i}:\t"
+                  f"{route.length:2.2f} m \t{route.ToF:2.2f} sec ")
 
 
 class Route(object):
@@ -95,14 +98,14 @@ class Route(object):
         if len(self.waypoints) > self.DJIWaypointLimit:
             return False
         # check: under the time limit
-        ToF = 0  # time of flight
-        length = 0
+        self.ToF = 0  # time of flight
+        self.length = 0
         for wp, nxt in zip(self.waypoints, self.waypoints[1:]):
             dist = self.DistGPS(wp[0:2], nxt[0:2], wp[3], nxt[3])
-            length += dist
-            ToF += dist/wp[3]
+            self.length += dist
+            self.ToF += dist/wp[3]
 
-        if ToF > self.limit:
+        if self.ToF > self.limit:
             return False
         return True
 

@@ -86,7 +86,6 @@ class Survey(object):
             try:
                 solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
-                print("\twriting paths")
                 maze.write(self.outDir)
 
             except RuntimeError as e:
