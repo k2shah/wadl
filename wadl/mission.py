@@ -12,7 +12,10 @@ import numpy as np
 class Mission(object):
     """creates a UGCS mission from a survey or directory of routes"""
 
-    def __init__(self, autoLand=True):
+    def __init__(self,
+                 autoLand=True,
+                 nBands=1,
+                 bandStep=10):
         self.outDir = ""
         self.name = "mission"
         self.autoLand = autoLand
@@ -22,6 +25,13 @@ class Mission(object):
                      "mission": {},
                      "vehicles": []
                      }
+
+        # altitude bands for vertical seperation
+        self.nBands = nBands
+        self.bandStep = bandStep
+        self.bands = np.linspace(0, (nBands-1)*bandStep, nBands)
+        print(self.bands)
+
         self.setVersion()
 
     def write(self):
@@ -43,13 +53,13 @@ class Mission(object):
         # match the name and output directory
         self.name = survey.name
         self.outDir = survey.outDir
-        routes = {}
+        routes = []
         # get all the routes in the survey
         for task, maze in survey.tasks.items():
             print(maze.name)
             for i, route in enumerate(maze.routeSet.routes):
-                name = maze.name + "_" + str(i)
-                routes[name] = route.waypoints
+                # name = maze.name + "_" + str(i)
+                routes.append(route.waypoints)
         self.buildMission(routes)
 
     def fromDicr(self, srcDir):
@@ -58,14 +68,14 @@ class Mission(object):
         self.outDir = srcDir
         routeFiles = glob.glob(osp.join(srcDir, "routes", "*.csv"))
         print(routeFiles)
-        routes = {}
+        routes = []
         for i, file in enumerate(routeFiles):
             with open(file, 'r') as csvfile:
                 reader = csv.reader(csvfile, delimiter=',')
                 route = [list(map(float, row[:4])) for row in reader]
                 print(route)
-                name = self.name + "_" + str(i)
-                routes[name] = route
+                # name = self.name + "_" + str(i)
+                routes.append(route)
         self.buildMission(routes)
 
     def buildMission(self, routes):
@@ -74,16 +84,30 @@ class Mission(object):
                    "creationTime": int(time.time())}
 
         self.data["mission"] = mission
+        # sort the routes angluarly
+        routes.sort(key=self.headingAngle)
+
         self.data["mission"]["routes"] = self.buildRoutes(routes)
+
+    @staticmethod
+    def headingAngle(r):
+        # returns the inital heading angle of a route
+        angle = np.arctan2(r[1][1]-r[0][1],
+                           r[1][0]-r[0][0])
+        return (angle + 2 * np.pi) % (2 * np.pi)
 
     def buildRoutes(self, routes):
         routeList = []
-        for name, route in routes.items():
-            routeList.append(self.makeRoute(name, route))
+        RoutePerSector = int(len(routes)/self.nBands) + 1
+        for i, route in enumerate(routes):
+            name = self.name + "_" + str(i)
+            bandIdx = int(i/RoutePerSector)
+            transferAlt = self.bands[bandIdx]
+            routeList.append(self.makeRoute(name, route, transferAlt))
         return routeList
 
     # helper functions to build the waypoint lists
-    def makeRoute(self, name, r):
+    def makeRoute(self, name, r, bandAlt=0):
         failsafe = {"rcLost": "GO_HOME",
                     "gpsLost": None,
                     "lowBattery": None,
@@ -106,29 +130,33 @@ class Mission(object):
                  "takeoffHeight": None,
                  }
         # take off
-        wp = r[0]
-        pt = self.makePoint(*wp[:3])
-        route["segments"].append(self.makeWaypoint(pt, wp[3]))
+        lat, lng, alt, spd = r[0]
+        pt = self.makePoint(lat, lng, alt+bandAlt)
+        route["segments"].append(self.makeWaypoint(pt, spd))
         # transit in. point camera down
-        wp = r[1]
-        pt = self.makePoint(*wp[:3])
-        route["segments"].append(self.makeWaypoint(pt, wp[3], tilt=90))
+        lat, lng, alt, spd = r[1]
+        pt = self.makePoint(lat, lng, alt+bandAlt)
+        route["segments"].append(self.makeWaypoint(pt, spd, tilt=90))
         # take picture every 2 sec
-        for wp in r[2:-4]:
-            pt = self.makePoint(*wp[:3])
-            route["segments"].append(self.makeWaypoint(pt, wp[3], camera=2))
-        # ascend. turn off camera
-        wp = r[-4]
-        pt = self.makePoint(*wp[:3])
-        route["segments"].append(self.makeWaypoint(pt, wp[3]))
-        # transfer out. point camera forward
-        wp = r[-3]
-        pt = self.makePoint(*wp[:3])
-        route["segments"].append(self.makeWaypoint(pt, wp[3], tilt=0))
-        # decend to land location
-        for wp in r[-2:]:
-            pt = self.makePoint(*wp[:3])
-            route["segments"].append(self.makeWaypoint(pt, wp[3]))
+        for lat, lng, alt, spd in r[2:-4]:
+            pt = self.makePoint(lat, lng, alt)
+            route["segments"].append(self.makeWaypoint(pt, spd, camera=2))
+        # turn off camera
+        lat, lng, alt, spd = r[-4]
+        pt = self.makePoint(lat, lng, alt)
+        route["segments"].append(self.makeWaypoint(pt, spd))
+        # ascend camera forward
+        lat, lng, alt, spd = r[-3]
+        pt = self.makePoint(lat, lng, alt+bandAlt)
+        route["segments"].append(self.makeWaypoint(pt, spd, tilt=0))
+        # transfer out
+        lat, lng, alt, spd = r[-2]
+        pt = self.makePoint(lat, lng, alt+bandAlt)
+        route["segments"].append(self.makeWaypoint(pt, spd))
+        # pre land
+        lat, lng, alt, spd = r[-1]
+        pt = self.makePoint(lat, lng, alt)
+        route["segments"].append(self.makeWaypoint(pt, spd))
 
         # land if autoLand is True
         if self.autoLand:
