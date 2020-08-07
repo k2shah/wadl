@@ -15,6 +15,7 @@ class Mission(object):
     def __init__(self,
                  autoLand=True,
                  nBands=1,
+                 bandStart=50,
                  bandStep=10):
         self.outDir = ""
         self.name = "mission"
@@ -29,7 +30,7 @@ class Mission(object):
         # altitude bands for vertical seperation
         self.nBands = nBands
         self.bandStep = bandStep
-        self.bands = np.linspace(0, (nBands-1)*bandStep, nBands)
+        self.bands = bandStart + np.linspace(0, (nBands-1)*bandStep, nBands)
 
         self.setVersion()
 
@@ -61,7 +62,7 @@ class Mission(object):
                 routes.append(route.waypoints)
         self.buildMission(routes)
 
-    def fromDicr(self, srcDir):
+    def fromDirc(self, srcDir):
         name = srcDir.split('\\')[-1]
         self.name = name.split('.csv')[0]
         self.outDir = srcDir
@@ -99,9 +100,9 @@ class Mission(object):
         routeList = []
         RoutePerSector = int(len(routes)/self.nBands) + 1
         for i, route in enumerate(routes):
-            name = self.name + "_" + str(i)
             bandIdx = int(i/RoutePerSector)
             transferAlt = self.bands[bandIdx]
+            name = f"{bandIdx}_{int(transferAlt)}_{i}"
             routeList.append(self.makeRoute(name, route, transferAlt))
         return routeList
 
@@ -130,11 +131,11 @@ class Mission(object):
                  }
         # take off
         lat, lng, alt, spd = r[0]
-        pt = self.makePoint(lat, lng, alt+bandAlt)
+        pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd))
         # transit in. point camera down
         lat, lng, alt, spd = r[1]
-        pt = self.makePoint(lat, lng, alt+bandAlt)
+        pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd, tilt=90))
         # take picture every 2 sec
         for lat, lng, alt, spd in r[2:-4]:
@@ -146,11 +147,11 @@ class Mission(object):
         route["segments"].append(self.makeWaypoint(pt, spd))
         # ascend camera forward
         lat, lng, alt, spd = r[-3]
-        pt = self.makePoint(lat, lng, alt+bandAlt)
+        pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd, tilt=0))
         # transfer out
         lat, lng, alt, spd = r[-2]
-        pt = self.makePoint(lat, lng, alt+bandAlt)
+        pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd))
         # pre land
         lat, lng, alt, spd = r[-1]
