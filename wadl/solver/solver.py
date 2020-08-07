@@ -46,7 +46,8 @@ class LinkSolver(BaseSolver):
             solved = False
             sTime = time.time()
             while not solved:
-                if (solved := problem.solve(timeout=60)):
+                if problem.solve(timeout=60):
+                    solved = True
                     print(f"\t\tsolved in {time.time()-sTime} sec")
                     subPaths.append(problem.output()[0])
                 else:
@@ -54,6 +55,7 @@ class LinkSolver(BaseSolver):
                     problem.bound += 1
                     problem.make()
                     counter += 1
+                    solved = False
                 # check counter
                 if counter > 10:
                     raise RuntimeError(f"\tproblem {i} critically infeasible. "
