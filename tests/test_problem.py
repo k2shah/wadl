@@ -20,5 +20,5 @@ def test_problem(gridGraph):
     bound = len(gridGraph) + 1
     from wadl.solver.SATproblem import SATproblem
     problem = SATproblem(gridGraph, bound=bound)
-    solved, paths, solTime = problem.solve()
+    solved = problem.solve()
     assert(solved is True)
