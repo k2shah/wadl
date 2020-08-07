@@ -136,11 +136,12 @@ class Mission(object):
         # transit in. point camera down
         lat, lng, alt, spd = r[1]
         pt = self.makePoint(lat, lng, bandAlt)
-        route["segments"].append(self.makeWaypoint(pt, spd, tilt=90))
+        route["segments"].append(self.makeWaypoint(pt, spd,
+                                                   tilt=90, camera=2))
         # take picture every 2 sec
         for lat, lng, alt, spd in r[2:-4]:
             pt = self.makePoint(lat, lng, alt)
-            route["segments"].append(self.makeWaypoint(pt, spd, camera=2))
+            route["segments"].append(self.makeWaypoint(pt, spd))
         # turn off camera
         lat, lng, alt, spd = r[-4]
         pt = self.makePoint(lat, lng, alt)
