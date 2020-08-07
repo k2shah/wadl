@@ -120,6 +120,7 @@ class SATproblem(object):
             return True
         else:
             return False
+        return False
 
     @staticmethod
     def atMostOne(problem, varList):
