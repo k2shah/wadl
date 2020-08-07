@@ -141,7 +141,7 @@ class Mission(object):
         # take picture every 2 sec
         for lat, lng, alt, spd in r[2:-4]:
             pt = self.makePoint(lat, lng, alt)
-            route["segments"].append(self.makeWaypoint(pt, spd))
+            route["segments"].append(self.makeWaypoint(pt, spd,  camera=2))
         # turn off camera
         lat, lng, alt, spd = r[-4]
         pt = self.makePoint(lat, lng, alt)
