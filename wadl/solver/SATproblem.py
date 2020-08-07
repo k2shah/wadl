@@ -1,4 +1,3 @@
-import time
 # math
 import numpy as np
 # graph
@@ -24,6 +23,7 @@ class SATproblem(object):
         self.make()
 
     def make(self):
+        self.isSolved = False
         self.z3 = z3.Solver()
         self.satVars = self.makeVars(self.nNode, self.nPath, self.bound)
 
@@ -111,17 +111,15 @@ class SATproblem(object):
             self.z3.add(z3.And(satVars[i][0][startIdx],
                                satVars[i][-1][startIdx]))
 
-    def solve(self):
+    def solve(self, timeout=10):
         # solve the problem
-        startTime = time.time()
-        solTime = None
+        # set the timeout
+        self.z3.set("timeout", timeout*1000)
         if self.z3.check() == z3.sat:
-            solTime = (time.time()-startTime)/60.
             # print("Solution Found: {:2.5f} min".format(solTime))
-            return True, self.output(), solTime
+            return True
         else:
-            raise RuntimeError("I will never be satisfiiiiied")
-            return False, None, None
+            return False
 
     @staticmethod
     def atMostOne(problem, varList):

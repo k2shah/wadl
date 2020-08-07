@@ -3,6 +3,7 @@ import time
 # lib
 from wadl.solver.SATproblem import SATproblem
 from wadl.solver.metaGraph import MetaGraph
+from tqdm import tqdm
 
 
 class BaseSolver(object):
@@ -30,32 +31,32 @@ class LinkSolver(BaseSolver):
         self.parameters["SATBound_offset"] = SATBound_offset
 
     def setup(self, graph):
-        # setup is called by view is is meant for visulazation
+        # setup graph
         self.metaGraph = MetaGraph(graph,
                                    size=self.parameters["subGraph_size"])
 
     def solve(self, routeSet):
         subPaths = []
         startTime = time.time()
-        for i, graph in enumerate(self.metaGraph.subGraphs):
+        for i, graph in enumerate(tqdm(self.metaGraph.subGraphs, ascii=True)):
             bound = len(graph) + self.parameters["SATBound_offset"]
             print(f"\tbuilding problem {i}")
             problem = SATproblem(graph, bound)
             counter = 0
             solved = False
+            sTime = time.time()
             while not solved:
-                try:
-                    solved, path, probTime = problem.solve()
-                    print(f"\t\tsolved in {probTime} sec")
-                    subPaths.append(path[0])
-                except RuntimeError:
-                    print(f"\t\tproblem {i} infeasible, increasing limit")
+                if (solved := problem.solve(timeout=60)):
+                    print(f"\t\tsolved in {time.time()-sTime} sec")
+                    subPaths.append(problem.output()[0])
+                else:
+                    print(f"\t\tproblem {i} failed, increasing bound")
                     problem.bound += 1
                     problem.make()
                     counter += 1
-
-                if counter > 6:
-                    raise RuntimeError(f"problem {i} critically infeasible. "
+                # check counter
+                if counter > 10:
+                    raise RuntimeError(f"\tproblem {i} critically infeasible. "
                                        "graph may be degenerate")
 
         # build the meta graph
