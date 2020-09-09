@@ -32,4 +32,5 @@ def test_maze(crozMaze):
     if not os.path.exists(pathDir):  # make dir if not exists
         os.makedirs(pathDir)
     fileName = os.path.join(pathDir, 'croz-grid.png')
-    plt.savefig(fileName)
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.savefig(fileName, bbox_inches='tight', dpi=200)
