@@ -31,4 +31,5 @@ def test_fence(croz):
     if not os.path.exists(pathDir):  # make dir if not exists
         os.makedirs(pathDir)
     fileName = os.path.join(pathDir, 'croz.png')
-    plt.savefig(fileName)
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.savefig(fileName, bbox_inches='tight', dpi=200)

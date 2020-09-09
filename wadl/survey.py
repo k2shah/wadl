@@ -78,7 +78,7 @@ class Survey(object):
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
         # display
-        plt.show()
+        plt.draw()
 
     def plan(self, plot=True):
         for task, maze in self.tasks.items():
@@ -107,4 +107,4 @@ class Survey(object):
             plt.draw()
             plt.axis('square')
             plt.gca().set_aspect('equal', adjustable='box')
-            plt.show()
+            plt.draw()
