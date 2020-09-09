@@ -5,6 +5,8 @@ import json
 import csv
 import os.path as osp
 import glob
+# gis
+import utm
 # math
 import numpy as np
 
@@ -31,6 +33,7 @@ class Mission(object):
         self.nBands = nBands
         self.bandStep = bandStep
         self.bands = bandStart + np.linspace(0, (nBands-1)*bandStep, nBands)
+        self.bandOffset = 10  # lz offset is 10 m
 
         self.setVersion()
 
@@ -96,6 +99,27 @@ class Mission(object):
                            r[1][0]-r[0][0])
         return (angle + 2 * np.pi) % (2 * np.pi)
 
+    def offsetStart(self, route):
+        # returns a pt 10m from the 1st pt on the route along the 1st segment
+        pt0 = route[0]
+        pt1 = route[1]
+        pt0_utm = utm.from_latlon(*pt0[:2])
+        pt1_utm = utm.from_latlon(*pt1[:2])
+
+        zone_utm = pt0_utm[2:]
+        vec = np.array(pt1_utm[:2])-np.array(pt0_utm[:2])
+        print(route)
+        print(pt0, pt1)
+
+        # normalize and scale
+        vec = vec/np.linalg.norm(vec) * self.bandOffset
+        print(vec)
+        offsetPt = np.array(pt0_utm[:2]) + vec
+        print(offsetPt)
+        print(zone_utm)
+        lat, lng = utm.to_latlon(*offsetPt, *zone_utm)
+        return [lat, lng, *pt0[2:]]
+
     def buildRoutes(self, routes):
         routeList = []
         RoutePerSector = int(len(routes)/self.nBands) + 1
@@ -130,7 +154,10 @@ class Mission(object):
                  "takeoffHeight": None,
                  }
         # take off
-        lat, lng, alt, spd = r[0]
+
+        lat, lng, alt, spd = self.offsetStart(r)
+
+        # lat, lng, alt, spd = r[0]
         pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd))
         # transit in. point camera down
@@ -292,5 +319,5 @@ class Mission(object):
 if __name__ == '__main__':
     dirc = "C:\\Users\\kunal\\Documents\\surveys\\monoLake_20\\test\\Pancake_North_South_s20_r4"
     mission = Mission(autoLand=True)
-    mission.fromDicr(dirc)
+    mission.fromDirc(dirc)
     mission.write()
