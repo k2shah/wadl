@@ -108,15 +108,10 @@ class Mission(object):
 
         zone_utm = pt0_utm[2:]
         vec = np.array(pt1_utm[:2])-np.array(pt0_utm[:2])
-        print(route)
-        print(pt0, pt1)
 
         # normalize and scale
         vec = vec/np.linalg.norm(vec) * self.bandOffset
-        print(vec)
         offsetPt = np.array(pt0_utm[:2]) + vec
-        print(offsetPt)
-        print(zone_utm)
         lat, lng = utm.to_latlon(*offsetPt, *zone_utm)
         return [lat, lng, *pt0[2:]]
 
