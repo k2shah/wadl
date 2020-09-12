@@ -20,7 +20,7 @@ class Maze(Fence):
                  step=40,
                  rotation=0,
                  home=None,
-                 flightParams=None):
+                 routeParams=None):
         super(Maze, self).__init__(file)
         # set parameters
         # grid parameters
@@ -33,7 +33,7 @@ class Maze(Fence):
         # UAV path parameters
         self.home = home
         self.nNode = len(self.graph)  # store size of nodes
-        self.routeSet = RouteSet(self.home, self.UTMZone, flightParams)
+        self.routeSet = RouteSet(self.home, self.UTMZone, routeParams)
 
     def __len__(self):
         # number of nodes

@@ -8,15 +8,40 @@ import utm
 # math
 import numpy as np
 import numpy.linalg as la
+# lib
+from .parameters import Parameters
+
+
+class RouteParameters(Parameters):
+    """docstring for routeParameters"""
+
+    def __init__(self, default=True):
+        super(RouteParameters, self).__init__(default)
+
+    def setDefaults(self):
+        self["limit"] = 13*60  # s
+        self["speed"] = 4.0  # m/s
+        self["altitude"] = 35.0  # m
+        self["xfer_speed"] = 12.0  # m/s
+        self["xfer_altitude"] = 70.0  # m
+        self["xfer_ascend"] = 5.  # m/s
+        self["xfer_descend"] = 4.  # m/s
+        self["land_altitude"] = 30  # m
 
 
 class RouteSet(object):
     """docstring for RouteSet"""
-    def __init__(self, home, zone, flightParams):
+
+    def __init__(self, home, zone, routeParameters=None):
         self.home = home
         self.zone = zone  # store the UTM zone
-        self.flightParams = flightParams
         self.routes = []
+
+        # set the parameters
+        if routeParameters is None:
+            self.routeParameters = RouteParameters()
+        else:
+            self.routeParameters = routeParameters
 
     def __len__(self):
         return len(self.routes)
@@ -29,7 +54,7 @@ class RouteSet(object):
         # runs a series of checks to verify the route is viable
         # returns None if any check fails; the Path otherwise
         route = Route(cords, self.zone, self.home)
-        route.build(self.flightParams)
+        route.build(self.routeParameters)
         if route.check():
             return route
         else:
@@ -50,6 +75,7 @@ class RouteSet(object):
 
 class Route(object):
     """docstring for Route"""
+
     def __init__(self, cords, zone, home):
         self.UTMcords = cords  # cords in UTM
         self.UTMZone = zone
@@ -101,7 +127,7 @@ class Route(object):
         self.ToF = 0  # time of flight
         self.length = 0
         for wp, nxt in zip(self.waypoints, self.waypoints[1:]):
-            dist = self.DistGPS(wp[0:2], nxt[0:2], wp[3], nxt[3])
+            dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
             self.length += dist
             self.ToF += dist/wp[3]
 
@@ -109,18 +135,18 @@ class Route(object):
             return False
         return True
 
-    def build(self, flightParams):
+    def build(self, routeParameters):
         # build the path
 
         # unpack parameters
-        self.limit = flightParams["limit"]
-        spd = flightParams["speed"]
-        alt = flightParams["altitude"]
-        xferSpd = flightParams["xfer_speed"]
-        xferAlt = flightParams["xfer_altitude"]
-        xferAsc = flightParams["xfer_ascend"]
-        xferDes = flightParams["xfer_descend"]
-        landALt = flightParams["land_altitude"]
+        self.limit = routeParameters["limit"]
+        spd = routeParameters["speed"]
+        alt = routeParameters["altitude"]
+        xferSpd = routeParameters["xfer_speed"]
+        xferAlt = routeParameters["xfer_altitude"]
+        xferAsc = routeParameters["xfer_ascend"]
+        xferDes = routeParameters["xfer_descend"]
+        landALt = routeParameters["land_altitude"]
 
         # take off
         if self.home is not None:

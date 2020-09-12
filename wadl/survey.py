@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 # gis
 import utm
 # lib
-from wadl.lib.maze import Maze
-from wadl.solver.solver import LinkSolver
+from .lib.maze import Maze
+from .solver.solver import LinkSolver
 
 
 class Survey(object):
@@ -19,10 +19,9 @@ class Survey(object):
     top level object for a survey
     this objects holds all the information of a single survey """
 
-    def __init__(self, name, outDir,
-                 solverParam={}, solverType=LinkSolver):
+    def __init__(self, name, outDir):
         # get solver
-        self.solver = solverType(**solverParam)
+        self.solver = LinkSolver()
         # save the name of the survey
         self.name = name
         # save the output directory
@@ -50,6 +49,12 @@ class Survey(object):
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)
+
+    def setSolver(self, solver):
+        self.solver = solver
+
+    def setSolverParamters(self, parameters):
+        self.solver.parameters = parameters
 
     def setKeyPoints(self, points):
         # set the keyPoints in the survey
