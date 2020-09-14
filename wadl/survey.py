@@ -85,13 +85,14 @@ class Survey(object):
         # display
         plt.draw()
 
-    def plan(self, plot=True):
+    def plan(self, plot=True, write=False):
         for task, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             try:
                 solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
-                maze.write(self.outDir)
+                if write:
+                    maze.write(self.outDir)
 
             except RuntimeError as e:
                 print(f"\tfailure in task: {maze.name}")

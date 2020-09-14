@@ -31,7 +31,7 @@ keyPoints = {"oval": (37.4301388, -122.1688323),
 
 # route paramters
 routeParams = RouteParameters()
-routeParams["limit"] = 14*60,  # s
+routeParams["limit"] = 20*60,  # s
 routeParams["speed"] = 5  # m/s
 routeParams["altitude"] = 50.0  # m
 
@@ -56,7 +56,7 @@ survey.setSolverParamters(solverParams)
 survey.setKeyPoints(keyPoints)
 
 survey.addTask(file,
-               step=40,
+               step=100,
                home="oval",
                routeParameters=routeParams,
                )
