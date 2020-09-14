@@ -9,19 +9,38 @@ import glob
 import utm
 # math
 import numpy as np
+# lib
+from .lib.parameters import Parameters
+
+
+class MissionParameters(Parameters):
+    """docstring for MissionParamters"""
+
+    def __init__(self, default=True):
+        super(MissionParameters, self).__init__(default)
+
+    def setDefaults(self):
+        self["autoLand"] = True
+        self["offsetTakeoff"] = True
+        self["offsetLand"] = False
+        self["nBands"] = 1
+        self["bandStart"] = 50
+        self["bandStep"] = 10
+        self["bandRadialOffset"] = 10
 
 
 class Mission(object):
     """creates a UGCS mission from a survey or directory of routes"""
 
-    def __init__(self,
-                 autoLand=True,
-                 nBands=1,
-                 bandStart=50,
-                 bandStep=10):
+    def __init__(self, missionParamters=None):
         self.outDir = ""
         self.name = "mission"
-        self.autoLand = autoLand
+
+        if missionParamters is None:
+            self.paramters = MissionParameters()
+        else:
+            self.parameters = missionParamters
+
         self.data = {"version": {},
                      "payloadProfiles": [],
                      "vehicleProfiles": [self.DJIprofile()],
@@ -29,11 +48,14 @@ class Mission(object):
                      "vehicles": []
                      }
 
+        self.autoLand = self.parameters["autoLand"]
         # altitude bands for vertical seperation
-        self.nBands = nBands
-        self.bandStep = bandStep
-        self.bands = bandStart + np.linspace(0, (nBands-1)*bandStep, nBands)
-        self.bandOffset = 10  # lz offset is 10 m
+        self.nBands = self.parameters["nBands"]
+        bandStep = self.parameters["bandStep"]
+        bandStart = self.parameters["bandStart"]
+        self.bandOffset = self.parameters["bandRadialOffset"]
+        self.bands = bandStart +\
+            np.linspace(0, (self.nBands-1)*bandStep, self.nBands)
 
         self.setVersion()
 
@@ -108,15 +130,10 @@ class Mission(object):
 
         zone_utm = pt0_utm[2:]
         vec = np.array(pt1_utm[:2])-np.array(pt0_utm[:2])
-        print(route)
-        print(pt0, pt1)
 
         # normalize and scale
         vec = vec/np.linalg.norm(vec) * self.bandOffset
-        print(vec)
         offsetPt = np.array(pt0_utm[:2]) + vec
-        print(offsetPt)
-        print(zone_utm)
         lat, lng = utm.to_latlon(*offsetPt, *zone_utm)
         return [lat, lng, *pt0[2:]]
 
@@ -153,11 +170,14 @@ class Mission(object):
                  "segments": [],
                  "takeoffHeight": None,
                  }
+        # calculate offset point from lz
+        offsetPt = self.offsetStart(r)
+
         # take off
-
-        lat, lng, alt, spd = self.offsetStart(r)
-
-        # lat, lng, alt, spd = r[0]
+        if self.parameters["offsetTakeoff"]:
+            lat, lng, alt, spd = offsetPt
+        else:
+            lat, lng, alt, spd = r[0]
         pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd))
         # transit in. point camera down
@@ -182,14 +202,16 @@ class Mission(object):
         pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd))
         # pre land
-        lat, lng, alt, spd = r[-1]
+        if self.parameters["offsetLand"]:
+            lat, lng, alt, spd = offsetPt
+        else:
+            lat, lng, alt, spd = r[-1]
         pt = self.makePoint(lat, lng, alt)
         route["segments"].append(self.makeWaypoint(pt, spd))
 
         # land if autoLand is True
         if self.autoLand:
-            wp = r[-1]
-            pt = self.makePoint(*wp[:2], 0.0)
+            pt = self.makePoint(lat, lng, 0.0)
             route["segments"].append(self.makeLand(pt))
 
         return route
