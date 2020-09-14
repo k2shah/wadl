@@ -4,6 +4,7 @@ import time
 import json
 import csv
 import os.path as osp
+from pathlib import Path
 import glob
 # gis
 import utm
@@ -74,18 +75,18 @@ class Mission(object):
                    }
         self.data["version"] = version
 
-    def fromSurvey(self, survey):
+    def fromSurvey(self, survey, rewrite=True):
         # match the name and output directory
         self.name = survey.name
         self.outDir = survey.outDir
         routes = []
-        # get all the routes in the survey
+        # get all the routes in the survey (from each maze)
         for task, maze in survey.tasks.items():
             print(maze.name)
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
-                routes.append(route.waypoints)
-        self.buildMission(routes)
+                routes.append(route)
+        self.buildMission(routes, rewrite)
 
     def fromDirc(self, srcDir):
         name = srcDir.split('\\')[-1]
@@ -103,7 +104,7 @@ class Mission(object):
                 routes.append(route)
         self.buildMission(routes)
 
-    def buildMission(self, routes):
+    def buildMission(self, routes, rewrite):
         mission = {"name": self.name,
                    "description": None,
                    "creationTime": int(time.time())}
@@ -111,14 +112,21 @@ class Mission(object):
         self.data["mission"] = mission
         # sort the routes angluarly
         routes.sort(key=self.headingAngle)
+        if rewrite:
+            path = Path(self.outDir, "routes")
+            path.mkdir(exist_ok=True)
+            for i, route in enumerate(routes):
+                filename = osp.join(self.outDir, "routes", f"{i}.csv")
+                route.write(filename)
 
         self.data["mission"]["routes"] = self.buildRoutes(routes)
 
     @staticmethod
-    def headingAngle(r):
+    def headingAngle(route):
         # returns the inital heading angle of a route
-        angle = np.arctan2(r[1][1]-r[0][1],
-                           r[1][0]-r[0][0])
+        wp = route.waypoints
+        angle = np.arctan2(wp[1][1]-wp[0][1],
+                           wp[1][0]-wp[0][0])
         return (angle + 2 * np.pi) % (2 * np.pi)
 
     def offsetStart(self, route):
@@ -140,11 +148,11 @@ class Mission(object):
     def buildRoutes(self, routes):
         routeList = []
         RoutePerSector = int(len(routes)/self.nBands) + 1
-        for i, route in enumerate(routes):
+        for i, r in enumerate(routes):
             bandIdx = int(i/RoutePerSector)
             transferAlt = self.bands[bandIdx]
             name = f"{bandIdx}_{int(transferAlt)}_{i}"
-            routeList.append(self.makeRoute(name, route, transferAlt))
+            routeList.append(self.makeRoute(name, r.waypoints, transferAlt))
         return routeList
 
     # helper functions to build the waypoint lists
