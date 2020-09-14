@@ -1,6 +1,5 @@
 #!bin/bash/python3
 import os.path as osp
-import glob
 # import time
 # math
 # plot
@@ -26,7 +25,7 @@ file = osp.join(rootDir, "data", filename)
 
 # PARAMETERS
 
-keyPoints = {"oval": (37.4301388, -122.1688323),
+keyPoints = {"oval": (37.4298541, -122.1694745),
              }
 
 # route paramters
@@ -69,6 +68,8 @@ else:
     # run path solver to plan paths and write output
     survey.plan(plot=True)
 
+plotName = osp.join(outDir, "routes.png")
+plt.savefig(plotName, bbox_inches='tight', dpi=100)
 plt.show()
 
 # make mission

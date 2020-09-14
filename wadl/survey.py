@@ -110,7 +110,5 @@ class Survey(object):
         for task, maze in self.tasks.items():
             self.plotKeyPoints(ax)
             maze.plot(ax)
-            plt.draw()
             plt.axis('square')
             plt.gca().set_aspect('equal', adjustable='box')
-            plt.draw()
