@@ -16,6 +16,8 @@ class SolverParameters(Parameters):
     def setDefaults(self):
         self["subGraph_size"] = 40
         self["SATBound_offset"] = 2
+        self["timeout"] = 60
+        self["maxProblems"] = 10
 
 
 class BaseSolver(object):
@@ -68,7 +70,7 @@ class LinkSolver(BaseSolver):
             solved = False
             sTime = time.time()
             while not solved:
-                if problem.solve(timeout=60):
+                if problem.solve(timeout=self.parameters["timeout"]):
                     solved = True
                     print(f"\t\tsolved in {time.time()-sTime} sec")
                     subPaths.append(problem.output()[0])
@@ -79,7 +81,7 @@ class LinkSolver(BaseSolver):
                     counter += 1
                     solved = False
                 # check counter
-                if counter > 10:
+                if counter > self.parameters["maxProblems"]:
                     raise RuntimeError(f"\tproblem {i} critically infeasible. "
                                        "graph may be degenerate")
 
