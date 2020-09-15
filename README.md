@@ -1,4 +1,4 @@
-# WADL 
+# WADL ![build](https://github.com/k2shah/wadl/workflows/build/badge.svg)
 ## Fighter Planner Software
 ### version 0.5
 
