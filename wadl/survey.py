@@ -97,11 +97,7 @@ class Survey(object):
             print(f"\ttask {maze.name} finished")
         print("done planning")
 
-        # plot result
-        if plot:
-            self.plot()
-
-    def plot(self):
+    def plot(self, save=True):
         # plot task
         fig, ax = plt.subplots(figsize=(16, 16))
         for task, maze in self.tasks.items():
@@ -109,3 +105,6 @@ class Survey(object):
             maze.plot(ax)
             plt.axis('square')
             plt.gca().set_aspect('equal', adjustable='box')
+            filename = self.outDir / "routes.png"
+            plt.savefig(filename, bbox_inches='tight', dpi=100)
+            plt.show()

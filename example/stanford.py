@@ -59,9 +59,7 @@ if view == 1:
 else:
     # run path solver to plan paths and write output
     survey.plan(plot=True)
-
-plt.savefig("routes.png", bbox_inches='tight', dpi=100)
-plt.show()
+    survey.plot()
 
 # make mission
 mission = Mission(missionParams)
