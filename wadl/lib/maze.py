@@ -1,5 +1,5 @@
-# gen
-import os as os
+# io
+from pathlib import Path
 # math
 import numpy as np
 # graph
@@ -21,7 +21,7 @@ class Maze(Fence):
                  rotation=0,
                  home=None,
                  routeParameters=None):
-        super(Maze, self).__init__(file)
+        super(Maze, self).__init__(Path(file))
         # set parameters
         # grid parameters
         self.theta = rotation
@@ -93,27 +93,25 @@ class Maze(Fence):
     def write(self, filePath):
         nRoute = len(self.routeSet)
         self.taskName = self.name + f'_s{self.step}_r{nRoute}'
-        taskDir = os.path.join(filePath, self.taskName)
-        if not os.path.exists(taskDir):  # make dir if not exists
-            os.makedirs(taskDir)
+        taskDir = filePath / self.taskName
+        taskDir.mkdir(exist_ok=True)  # make dir if not exists
         # write maze configuration information
         self.writeInfo(taskDir)
         # write paths as GPS csv files.
-        pathDir = os.path.join(taskDir, "routes")
-        if not os.path.exists(pathDir):  # make dir if not exists
-            os.makedirs(pathDir)
+        pathDir = taskDir / "routes"
+        pathDir.mkdir(exist_ok=True)  # make dir if not exists
         self.writeRoutes(pathDir)
         # save the figure
         fig, ax = plt.subplots(figsize=(16, 16))
         self.plot(ax)
         plt.axis('square')
-        plotName = os.path.join(taskDir, "routes.png")
+        plotName = taskDir / "routes.png"
         plt.savefig(plotName, bbox_inches='tight', dpi=100)
 
     def writeInfo(self, filePath):
         # writes the Maze information of the test
-        outFile = os.path.join(filePath, "info.txt")
-        with open(outFile, 'w') as f:
+        outFile = filePath / "info.txt"
+        with outFile.open('w') as f:
 
             f.write('\nGrid size\n')
             f.write(str(self.nNode))

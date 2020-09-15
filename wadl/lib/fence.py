@@ -17,10 +17,9 @@ class Fence(object):
         """
         self.file = file
         # get name of area
-        name = file.split('\\')[-1]
-        self.name = name.split('.csv')[0]
+        self.name = file.name.split('.csv')[0]
         # parse file
-        print("\nReading coordinate file {:s}".format(file))
+        print(f"\nReading coordinate file {file}")
         self.parseFile(file)
         # build polygon
         self.poly = Polygon(self.UTMCords)
@@ -31,10 +30,10 @@ class Fence(object):
     def parseFile(self, file):
         # parse file as CSV
         # stores the gps cords, utm cords, and utm zones
-        if ".csv" in file:
+        if file.suffix == "csv":
             CSVfile = file
         else:
-            CSVfile = file + ".csv"
+            CSVfile = file.with_suffix(".csv")
         with open(CSVfile, 'r') as csvfile:
             data = [(line[1], line[2])
                     for line in csv.reader(csvfile, delimiter=',')]
