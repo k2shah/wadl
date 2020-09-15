@@ -26,7 +26,7 @@ class Fence(object):
         self.poly = Polygon(self.UTMCords)
         # find bounding box
         minx, miny, maxx, maxy = self.poly.bounds
-        print(f"{self.name}: extends in meters {maxx - minx} by {maxy - miny}")
+        print(f"\textends in meters {maxx - minx} by {maxy - miny}")
 
     def parseFile(self, file):
         # parse file as CSV

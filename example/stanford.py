@@ -1,10 +1,7 @@
 #!bin/bash/python3
-import os.path as osp
-# import time
-# math
 # plot
 import matplotlib.pyplot as plt
-# lib
+# wadl
 from wadl.survey import Survey
 from wadl.mission import Mission
 # paramters
@@ -13,14 +10,9 @@ from wadl.lib.route import RouteParameters
 from wadl.mission import MissionParameters
 
 # suvey design script
-# get list of areas to survey
-rootDir = osp.dirname(__file__)
-dataDir = osp.join(rootDir, "data")
-# files are assumed geofences (ID, lat, long)
 # get file name
-filename = "stanford.csv"
-# resolve path
-file = osp.join(rootDir, "data", filename)
+# files are assumed geofences (ID, lat, long)
+file = "data/stanford.csv"
 
 
 # PARAMETERS
@@ -49,8 +41,8 @@ missionParams["autoLand"] = False
 
 # make survey object and stars adding keypoints and tasks
 name = 'stanford'
-outDir = osp.join(rootDir, 'out')
-survey = Survey(name, outDir)
+survey = Survey(name)
+
 survey.setSolverParamters(solverParams)
 survey.setKeyPoints(keyPoints)
 
@@ -68,8 +60,7 @@ else:
     # run path solver to plan paths and write output
     survey.plan(plot=True)
 
-plotName = osp.join(outDir, "routes.png")
-plt.savefig(plotName, bbox_inches='tight', dpi=100)
+plt.savefig("routes.png", bbox_inches='tight', dpi=100)
 plt.show()
 
 # make mission
