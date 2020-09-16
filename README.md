@@ -19,18 +19,11 @@ see the [example](example/stanford.py) for a complete demonstration
 Frist make a `Survey` object and set the output directory.
 
 ```
-import os.path as osp
 from wadl.survey import Survey
-
 # make survey object
 name = 'stanford'
-rootDir = osp.dirname(__file__)
-outDir = osp.join(rootDir, 'out')
-survey = Survey(name, outDir)
-
-survey.addTask(file,
-               step=100,
-               )
+survey = Survey(name)
+survey.addTask(file, step=100)
 ```
 Where `step` is the desired grid spacing. 
 
