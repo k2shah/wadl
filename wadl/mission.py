@@ -3,9 +3,7 @@ import time
 # io
 import json
 import csv
-import os.path as osp
 from pathlib import Path
-import glob
 # gis
 import utm
 # math
@@ -61,8 +59,8 @@ class Mission(object):
         self.setVersion()
 
     def write(self):
-        filename = osp.join(self.outDir, "mission.json")
-        with open(filename, 'w') as f:
+        filename = self.outDir / "mission.json"
+        with filename.open('w') as f:
             json.dump(self.data, f,
                       indent=2, separators=(',', ': '))
 
@@ -91,12 +89,12 @@ class Mission(object):
     def fromDirc(self, srcDir):
         name = srcDir.split('\\')[-1]
         self.name = name.split('.csv')[0]
-        self.outDir = srcDir
-        routeFiles = glob.glob(osp.join(srcDir, "routes", "*.csv"))
+        self.outDir = Path(srcDir)
+        routeFiles = Path(srcDir, "routes").glob("*.csv")
         print(routeFiles)
         routes = []
         for i, file in enumerate(routeFiles):
-            with open(file, 'r') as csvfile:
+            with file.open('r') as csvfile:
                 reader = csv.reader(csvfile, delimiter=',')
                 route = [list(map(float, row[:4])) for row in reader]
                 print(route)
@@ -116,7 +114,7 @@ class Mission(object):
             path = Path(self.outDir, "routes")
             path.mkdir(exist_ok=True)
             for i, route in enumerate(routes):
-                filename = osp.join(self.outDir, "routes", f"{i}.csv")
+                filename = self.outDir / "routes" / f"{i}.csv"
                 route.write(filename)
 
         self.data["mission"]["routes"] = self.buildRoutes(routes)

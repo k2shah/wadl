@@ -1,6 +1,6 @@
 import pytest
 # os
-import os
+from pathlib import Path
 
 
 @pytest.fixture
@@ -14,12 +14,8 @@ def survey():
     solverParams["SATBound_offset"] = 4
 
     # make survey object
-    path = os.path.join(os.path.dirname(__file__))
-    outDir = os.path.join(path, "out")
-    if not os.path.exists(outDir):
-        os.makedirs(outDir)
-
-    survey = Survey('test', outDir)
+    path = Path(__file__).parent / "out"
+    survey = Survey('test', path)
     survey.setSolverParamters(solverParams)
     return survey
 
@@ -27,8 +23,7 @@ def survey():
 def test_island(survey):
     from wadl.lib.route import RouteParameters
     # get a island ("little norway")
-    path = os.path.join(os.path.dirname(__file__), 'data')
-    file = os.path.join(path, "Little Norway")
+    file = Path(__file__).parent / "data" / "Little Norway"
     routeParams = RouteParameters()
     routeParams["limit"] = 5*60,  # s
     survey.addTask(file, step=35, routeParameters=routeParams)
@@ -38,8 +33,7 @@ def test_island(survey):
 def test_croz(survey):
     from wadl.lib.route import RouteParameters
     # get a island ("little norway")
-    path = os.path.join(os.path.dirname(__file__), 'data')
-    file = os.path.join(path, "croz_west")
+    file = Path(__file__).parent / "data" / "croz_west"
     routeParams = RouteParameters()
     routeParams["limit"] = 5*60,  # s
     routeParams["speed"] = 5,  # m/s
