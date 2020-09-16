@@ -20,7 +20,7 @@ class Survey(object):
         # save the name of the survey
         self.name = name
         # make the output directory
-        self.outDir = Path(name) if outDir is None else outDir
+        self.outDir = Path(name) if outDir is None else Path(outDir)
         self.outDir.mkdir(exist_ok=True)
         # tasks is a dict that maps file name to survey parameters
         self.tasks = dict()
