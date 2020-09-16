@@ -4,7 +4,7 @@
 
 WADL is a python package for planning surveys over large areas using one or more UAV (Unpersoned Aerial Vehicle). WADL take in a geofence and desired gird spacing and produces a series of routes to survey the area inside the geofence. 
 
-The project was motivated by the need for efficient route planning for multi-robot systems. WADL designed and use in a 2019-2020 survey of 
+The project was motivated by the need for efficient route planning for multi-robot systems. WADL was designed and used in a 2019-2020 survey of 
 Adélie penguins over [Cape Crozier, Ross Island, Antarctica](https://goo.gl/maps/wrMTuMq5kyNxZafx8) If you are interested in the technical details please see our paper <> 
 
 This work was supported by grant XX
@@ -50,7 +50,7 @@ keyPoints = {"pt_0": (LAT_0, LONG_0),
 survey.setKeyPoints(keyPoints)
 ```
 ### Task
-Each survey is made up off a set of geofences, each geofence is referred to as a `Task` and expects a home point as the key in the `keyPoints` object. Home points can be shared over multiple tasks. if not home is set, the default location is the most south eastern point. 
+Each survey is made up off a set of geofences, each geofence is referred to as a `Task` and expects a home point as the key in the `keyPoints` dictionary. Home points can be shared over multiple tasks. if no home is set, the default location is the most south eastern point. 
 ```
 survey.addTask(file,
                step=100,
@@ -66,9 +66,9 @@ To visualize the current survey and tasks use
 `survey.view()`
 
 ## Plan
-To plan the survey use
-`survey.plan()`
-which will output a plot of the survey paths. To output the route to a csv pass `write=True` to the `plan()` method. 
+To plan the survey use`survey.plan()`. To output the route to a csv pass `write=True` to the `plan()` method.
+
+`survey.plot()` will output a plot of the survey paths.  
 
 
 ### Parameters
@@ -77,7 +77,7 @@ As seen above, each task can have custom route parameters (flight speed, altitud
 ```
 from wadl.lib.route import RouteParameters
 routeParams = RouteParameters()
-routeParams["limit"] = 13*60  # s
+routeParams["limit"] = 13*60  # s flight time limit in seconds
 routeParams["speed"] = 4.0  # m/s
 routeParams["altitude"] = 35.0  # m
 routeParams["xfer_speed"] = 12.0  # m/s
@@ -87,7 +87,7 @@ routeParams["xfer_descend"] = 4.  # m/s
 routeParams["land_altitude"] = 30  # m
 ```
 #### Solver Parameters
-WADL uses the [Z3 SMT prover from Microsoft Corporation](https://en.wikipedia.org/wiki/Z3_Theorem_Prover) as the underlying route planner. Certain settings can be changed to better suit the user
+WADL uses the [Z3 SMT prover from Microsoft Corporation](https://en.wikipedia.org/wiki/Z3_Theorem_Prover) to encode and solve the underlying route planning problem. Certain settings can be changed to better suit the user
 ```
 from wadl.solver.solver import SolverParameters
 solverParams = SolverParameters()
@@ -108,7 +108,7 @@ solverParams["maxProblems"] = 10
 
 
  ### UGCS
- WADL has support to export route as a `Mission` file to [ugcs](https://www.ugcs.com/)
+ WADL has support to export route as a `mission.json` file to [ugcs](https://www.ugcs.com/)
 ```
 from wadl.mission import Mission
 mission = Mission(missionParams)
@@ -146,3 +146,6 @@ missionParams["bandStep"] = 10
 
 ### Issues
 For any suggestions or bugs please make an issue
+
+### License
+<>
