@@ -1,10 +1,5 @@
 #!bin/bash/python3
-# import warnings as warn
-# import os
-# import csv
-# import glob
-# import sys
-# import time
+from pathlib import Path
 # plot
 import matplotlib.pyplot as plt
 # gis
@@ -19,13 +14,14 @@ class Survey(object):
     top level object for a survey
     this objects holds all the information of a single survey """
 
-    def __init__(self, name, outDir):
+    def __init__(self, name="survey", outDir=None):
         # get solver
         self.solver = LinkSolver()
         # save the name of the survey
         self.name = name
-        # save the output directory
-        self.outDir = outDir
+        # make the output directory
+        self.outDir = Path(name) if outDir is None else Path(outDir)
+        self.outDir.mkdir(exist_ok=True)
         # tasks is a dict that maps file name to survey parameters
         self.tasks = dict()
         # key points to display on the
@@ -33,6 +29,7 @@ class Survey(object):
         # max number of boolean variables to solve for
         # lower for less powerful machines
         self.varMax = 1.5e4
+        print()
 
     def addTask(self, file, **kwargs):
         # add a task to the survey
@@ -100,11 +97,7 @@ class Survey(object):
             print(f"\ttask {maze.name} finished")
         print("done planning")
 
-        # plot result
-        if plot:
-            self.plot()
-
-    def plot(self):
+    def plot(self, save=True):
         # plot task
         fig, ax = plt.subplots(figsize=(16, 16))
         for task, maze in self.tasks.items():
@@ -112,3 +105,6 @@ class Survey(object):
             maze.plot(ax)
             plt.axis('square')
             plt.gca().set_aspect('equal', adjustable='box')
+            filename = self.outDir / "routes.png"
+            plt.savefig(filename, bbox_inches='tight', dpi=100)
+            plt.show()

@@ -1,6 +1,6 @@
 import pytest
-# os
-import os
+# path
+from pathlib import Path
 # plot
 import matplotlib.pyplot as plt
 
@@ -11,10 +11,8 @@ def croz():
     # build fixture
     from wadl.lib.fence import Fence
     # cros test fixture
-    path = os.path.join(os.path.dirname(__file__), 'data')
-    file = os.path.join(path, "croz_west")
-    absfile = os.path.abspath(file)
-    return Fence(absfile)
+    file = Path(__file__).parent / "data" / "croz_west"
+    return Fence(file)
 
 
 def test_fence(croz):
@@ -26,10 +24,8 @@ def test_fence(croz):
     # save figure to disk
     fig, ax = plt.subplots()
     croz.plot(ax)
-    rootDir = os.path.dirname(__file__)
-    pathDir = os.path.join(rootDir, "out")
-    if not os.path.exists(pathDir):  # make dir if not exists
-        os.makedirs(pathDir)
-    fileName = os.path.join(pathDir, 'croz.png')
+    pathDir = Path(__file__).parent / "out"
+    pathDir.mkdir(exist_ok=True)  # make dir if not exists
+    fileName = pathDir / 'croz.png'
     plt.gca().set_aspect('equal', adjustable='box')
     plt.savefig(fileName, bbox_inches='tight', dpi=200)

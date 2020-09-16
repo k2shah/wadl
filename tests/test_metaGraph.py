@@ -1,6 +1,6 @@
 import pytest
-# os
-import os
+# pathlib
+from pathlib import Path
 # graph
 import networkx as nx
 # plot
@@ -13,10 +13,8 @@ def crozMetaGraph():
     from wadl.solver.metaGraph import MetaGraph
     from wadl.lib.maze import Maze
     # cros test fixture
-    path = os.path.join(os.path.dirname(__file__), 'data')
-    file = os.path.join(path, "croz_west")
-    absfile = os.path.abspath(file)
-    crozMaze = Maze(absfile,
+    file = Path(__file__).parent / "data" / "croz_west"
+    crozMaze = Maze(file,
                     step=40,
                     rotation=15)
     return MetaGraph(crozMaze.graph)

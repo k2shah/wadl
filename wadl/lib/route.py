@@ -1,7 +1,6 @@
 #!bin/bash/python3
 # import warnings as warn
 import csv
-import os.path as osp
 # import sys
 # gis
 import utm
@@ -67,7 +66,7 @@ class RouteSet(object):
     def write(self, pathDir):
         print(f"\tgenerated {len(self.routes)} routes")
         for i, route in enumerate(self.routes):
-            filename = osp.join(pathDir, f"{i}.csv")
+            filename = pathDir / f"{i}.csv"
             route.write(filename)
             print(f"\t\troute {i}:\t"
                   f"{route.length:2.2f} m \t{route.ToF:2.2f} sec ")
@@ -232,7 +231,7 @@ class Route(object):
 
     def write(self, filename):
         # writes the waypoints as a txt file
-        with open(filename, 'w', newline='') as csvfile:
+        with filename.open('w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             # take off
             row = self.waypoints[0] + ["FALSE", "", "", ""]
