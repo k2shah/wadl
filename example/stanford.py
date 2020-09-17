@@ -52,7 +52,7 @@ if view == 1:
     survey.view()
 else:
     # run path solver to plan paths and write output
-    survey.plan(plot=True, write=True)
+    survey.plan(plot=True)
     survey.plot()
 
 # make mission
