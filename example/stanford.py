@@ -25,13 +25,13 @@ survey.setKeyPoints(keyPoints)
 
 # route paramters
 routeParams = RouteParameters()
-routeParams["limit"] = 20*60,  # s
+routeParams["limit"] = 30*60,  # s
 routeParams["speed"] = 5  # m/s
 routeParams["altitude"] = 50.0  # m
 # add the tasks
 
 survey.addTask(file,
-               step=100,
+               step=200,
                home="oval",
                routeParameters=routeParams,
                )

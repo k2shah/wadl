@@ -1,5 +1,6 @@
 # gen
 from collections import defaultdict
+import logging
 # math
 import numpy as np
 from math import ceil
@@ -13,6 +14,10 @@ class MetaGraph(object):
     """docstring for MetaGraph"""
 
     def __init__(self, graph, size=40):
+        # logging
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+
         # baseGraph
         self.baseGraph = graph
         # list of graphs who's union is the baseGraph
@@ -119,8 +124,8 @@ class MetaGraph(object):
         # print number of graphs and range of sizes
         maxGraph = max(subGraphs, key=lambda g: len(g))
         minGraph = min(subGraphs, key=lambda g: len(g))
-        print(f"\tfound {len(subGraphs)} subGraphs with "
-              f"{len(minGraph)} to {len(maxGraph)} nodes")
+        self.logger.info(f"found {len(subGraphs)} subGraphs with "
+                         f"{len(minGraph)} to {len(maxGraph)} nodes")
 
         # merge small subgraphs
 
@@ -149,13 +154,12 @@ class MetaGraph(object):
                         if adjIdx != gIdx:
                             mergeScore[adjIdx] += 1
                 # sort candiates and merge into the best one
-                # print(i, nodes, mergeScore)
                 for adjIdx in sorted(mergeScore, key=mergeScore.get,
                                      reverse=True):
                     if len(subGraphs[adjIdx]) + len(graph) < maxSize:
                         # merge the ith subgraph into the kth subgraph
-                        # print(f"Merging subg {i}"
-                        #       f" with {len(nodes)} nodes into subgraph {k}")
+                        self.logger.debug("Merging"
+                                          f" subg {gIdx} into subg {adjIdx}")
                         merged = list(subGraphs[adjIdx]) + list(graph.nodes)
                         subGraphs[adjIdx] = self.baseGraph.subgraph(merged)
                         self.indexSubGraph(subGraphs[adjIdx], adjIdx)
@@ -231,7 +235,7 @@ class MetaGraph(object):
                     # if the subgraph groups are different return True
                     return True, adj
             except KeyError as e:
-                print("no subgraph found for node: ", adj)
+                self.logger.warn("no subgraph found for node: ", adj)
                 print(e)
                 continue
         return False, None

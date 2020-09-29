@@ -1,5 +1,6 @@
 #!bin/bash/python3
 from pathlib import Path
+import logging
 # plot
 import matplotlib.pyplot as plt
 # gis
@@ -22,14 +23,35 @@ class Survey(object):
         # make the output directory
         self.outDir = Path(name) if outDir is None else Path(outDir)
         self.outDir.mkdir(exist_ok=True)
+        # setup logger
+        self.setupLogger()
         # tasks is a dict that maps file name to survey parameters
         self.tasks = dict()
         # key points to display on the
         self.keyPoints = dict()
-        # max number of boolean variables to solve for
-        # lower for less powerful machines
-        self.varMax = 1.5e4
-        print()
+        self.logger.info("WADL Survey Planner")
+
+    def setupLogger(self):
+        # create logger
+        rootLogger = logging.getLogger()
+        rootLogger.setLevel(logging.INFO)
+        # create file handler which logs even debug messages
+        fh = logging.FileHandler(self.outDir/'wadl.log', 'w+')
+        fh.setLevel(logging.DEBUG)
+        # create console handler with a higher log level
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        # create formatter and add it to the handlers
+        formatter = logging.Formatter(
+                     '%(asctime)s| %(name)-25s |%(levelname)8s| %(message)s')
+        fh.setFormatter(formatter)
+        # add the handlers to the logger
+        rootLogger.addHandler(fh)
+        rootLogger.addHandler(ch)
+
+        # local logger
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
 
     def addTask(self, file, **kwargs):
         # add a task to the survey
@@ -42,7 +64,7 @@ class Survey(object):
             homeKey = kwargs["home"]
             kwargs["home"] = self.keyPoints[homeKey]
         except KeyError:
-            print('home not found')
+            self.logger.warn('home not set')
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)
@@ -92,10 +114,10 @@ class Survey(object):
                     maze.write(self.outDir)
 
             except RuntimeError as e:
-                print(f"\tfailure in task: {maze.name}")
+                self.logger.error(f"failure in task: {maze.name}")
                 print(e)
-            print(f"\ttask {maze.name} finished")
-        print("done planning")
+            self.logger.info(f"task {maze.name} finished")
+        self.logger.info("done planning")
 
     def plot(self, save=True):
         # plot task
