@@ -1,5 +1,6 @@
 # gen
 import time
+import logging
 # lib
 from .SATproblem import SATproblem
 from .metaGraph import MetaGraph
@@ -24,6 +25,11 @@ class BaseSolver(object):
     """docstring for Solver"""
 
     def __init__(self, parameters=None):
+        # logging
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+
+        # param
         self.parameters = parameters
         if parameters is None:
             self.parameters = SolverParameters(default=True)
@@ -64,7 +70,7 @@ class LinkSolver(BaseSolver):
         startTime = time.time()
         for i, graph in enumerate(tqdm(self.metaGraph.subGraphs, ascii=True)):
             bound = len(graph) + self._parameters["SATBound_offset"]
-            print(f"\tbuilding problem {i}")
+            self.logger.info(f"building problem {i}")
             problem = SATproblem(graph, bound)
             counter = 0
             solved = False
@@ -72,25 +78,25 @@ class LinkSolver(BaseSolver):
             while not solved:
                 if problem.solve(timeout=self.parameters["timeout"]):
                     solved = True
-                    print(f"\t\tsolved in {time.time()-sTime} sec")
+                    self.logger.info(f"solved in {time.time()-sTime} sec")
                     subPaths.append(problem.output()[0])
                 else:
-                    print(f"\t\tproblem {i} failed, increasing bound")
+                    self.logger.info(f"problem {i} failed, increasing bound")
                     problem.bound += 1
                     problem.make()
                     counter += 1
                     solved = False
                 # check counter
                 if counter > self.parameters["maxProblems"]:
-                    raise RuntimeError(f"\tproblem {i} critically infeasible. "
+                    raise RuntimeError(f"problem {i} critically infeasible. "
                                        "graph may be degenerate")
 
         # build the meta graph
-        print("\tbullding pathGraph")
+        self.logger.info("bullding pathGraph")
         self.metaGraph.buildPathGraph(subPaths)
-        print("\tlinking routes")
+        self.logger.info("linking routes")
         self.metaGraph.link(routeSet)
         # print time
         solTime = time.time()-startTime
-        print("\tsolution time: {:2.5f} sec".format(solTime))
+        self.logger.info("solution time: {:2.5f} sec".format(solTime))
         return solTime

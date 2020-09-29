@@ -81,14 +81,10 @@ class Mission(object):
         routes = []
         # get all the routes in the survey (from each maze)
         for task, maze in survey.tasks.items():
-            print(maze.name)
             if maze.routeSet.home is None:
                 warnings.warn("routeSet has no Home. Disabling route offsets")
                 self.parameters["offsetTakeoff"] = False
                 self.parameters["offsetLand"] = False
-
-            for i, route in enumerate(maze.routeSet.routes):
-                # name = maze.name + "_" + str(i)
                 routes.append(route)
         self.buildMission(routes, rewrite)
 
@@ -350,10 +346,3 @@ class Mission(object):
                                   }
                    }
         return profile
-
-
-if __name__ == '__main__':
-    dirc = "C:\\Users\\kunal\\Documents\\surveys\\monoLake_20\\test\\Pancake_North_South_s20_r4"
-    mission = Mission(autoLand=True)
-    mission.fromDirc(dirc)
-    mission.write()

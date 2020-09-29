@@ -1,5 +1,6 @@
 # io
 from pathlib import Path
+import logging
 # math
 import numpy as np
 # graph
@@ -22,6 +23,8 @@ class Maze(Fence):
                  home=None,
                  routeParameters=None):
         super(Maze, self).__init__(Path(file))
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
         # set parameters
         # grid parameters
         self.theta = rotation
@@ -29,7 +32,7 @@ class Maze(Fence):
         # build grid graph
         self.buildGrid()
         self.nNode = len(self.graph)
-        print(f"\tgenerated maze with {self.nNode} nodes")
+        self.logger.info(f"generated maze with {self.nNode} nodes")
         # UAV path parameters
         self.home = home
         self.nNode = len(self.graph)  # store size of nodes

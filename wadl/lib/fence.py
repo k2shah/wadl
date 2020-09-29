@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import csv
+import logging
 # math
 import numpy as np
 # gis
@@ -16,19 +17,21 @@ class Fence(object):
             file is abs path file
         """
         self.file = file
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
         # get name of area
         self.name = file.name.split('.csv')[0]
         # parse file
-        print(f"\nReading coordinate file {file}")
         self.parseFile(file)
         # build polygon
         self.poly = Polygon(self.UTMCords)
         # find bounding box
         minx, miny, maxx, maxy = self.poly.bounds
-        print(f"\textends in meters {maxx - minx} by {maxy - miny}")
+        self.logger.info(f"extends in meters {maxx - minx} by {maxy - miny}")
 
     def parseFile(self, file):
         # parse file as CSV
+        self.logger.info(f"Reading coordinate file {file}")
         # stores the gps cords, utm cords, and utm zones
         if file.suffix == "csv":
             CSVfile = file
