@@ -1,3 +1,5 @@
+# log
+import logging
 # math
 import numpy as np
 # graph
@@ -10,6 +12,10 @@ class SATproblem(object):
     """docstring for SATSolver"""
 
     def __init__(self, graph, bound):
+
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+
         # unpack
         self.graph = graph
         self.nodes = list(self.graph.nodes)
@@ -35,7 +41,7 @@ class SATproblem(object):
         self.nRmv = len(bList)
         self.makeConts(self.graph, self.satVars, self.starts)
 
-        # print(f"problem {self.nVar-self.nRmv} vars, {self.nRmv} removed")
+        self.logger.debug(f"{self.nVar-self.nRmv} vars, {self.nRmv} removed")
 
     @staticmethod
     def makeVars(nNode, nPath, bound):
