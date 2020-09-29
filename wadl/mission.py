@@ -85,6 +85,8 @@ class Mission(object):
                 warnings.warn("routeSet has no Home. Disabling route offsets")
                 self.parameters["offsetTakeoff"] = False
                 self.parameters["offsetLand"] = False
+            for i, route in enumerate(maze.routeSet.routes):
+                # name = maze.name + "_" + str(i)
                 routes.append(route)
         self.buildMission(routes, rewrite)
 

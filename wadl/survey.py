@@ -43,7 +43,7 @@ class Survey(object):
         ch.setLevel(logging.INFO)
         # create formatter and add it to the handlers
         formatter = logging.Formatter(
-                     '%(asctime)s: %(name)s(%(levelname)s) \t%(message)s')
+                     '%(asctime)s| %(name)-25s |%(levelname)8s| %(message)s')
         fh.setFormatter(formatter)
         # add the handlers to the logger
         rootLogger.addHandler(fh)
@@ -64,7 +64,7 @@ class Survey(object):
             homeKey = kwargs["home"]
             kwargs["home"] = self.keyPoints[homeKey]
         except KeyError:
-            self.logger.info('home not found')
+            self.logger.warn('home not set')
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)
