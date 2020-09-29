@@ -1,5 +1,6 @@
 # gen
 import time
+import warnings
 # io
 import json
 import csv
@@ -81,6 +82,11 @@ class Mission(object):
         # get all the routes in the survey (from each maze)
         for task, maze in survey.tasks.items():
             print(maze.name)
+            if maze.routeSet.home is None:
+                warnings.warn("routeSet has no Home. Disabling route offsets")
+                self.parameters["offsetTakeoff"] = False
+                self.parameters["offsetLand"] = False
+
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
                 routes.append(route)
@@ -176,11 +182,11 @@ class Mission(object):
                  "segments": [],
                  "takeoffHeight": None,
                  }
-        # calculate offset point from lz
-        offsetPt = self.offsetStart(r)
 
         # take off
         if self.parameters["offsetTakeoff"]:
+            # calculate offset point from lz
+            offsetPt = self.offsetStart(r)
             lat, lng, alt, spd = offsetPt
         else:
             lat, lng, alt, spd = r[0]
@@ -209,6 +215,8 @@ class Mission(object):
         route["segments"].append(self.makeWaypoint(pt, spd))
         # pre land
         if self.parameters["offsetLand"]:
+            # calculate offset point from lz
+            offsetPt = self.offsetStart(r)
             lat, lng, alt, spd = offsetPt
         else:
             lat, lng, alt, spd = r[-1]
