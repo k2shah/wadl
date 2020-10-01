@@ -102,7 +102,7 @@ class Survey(object):
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
         # display
-        plt.draw()
+        plt.show()
 
     def plan(self, plot=True, write=False):
         for task, maze in self.tasks.items():
