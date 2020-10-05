@@ -1,6 +1,4 @@
 #!bin/bash/python3
-# plot
-import matplotlib.pyplot as plt
 # wadl
 from wadl.survey import Survey
 from wadl.mission import Mission

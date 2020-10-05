@@ -233,7 +233,7 @@ class MetaGraph(object):
 
         if nNodes != nMergedNodes:
             self.logger.error(f"nodes mismatch {nNodes} vs {nMergedNodes}")
-            raise RuntimeError(f"nodes mismatch")
+            raise RuntimeError("nodes mismatch")
 
         return mergedGraphs
 
