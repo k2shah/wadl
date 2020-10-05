@@ -7,46 +7,33 @@ import networkx as nx
 
 
 @pytest.fixture
-def crozMetaGraph():
+def crozMetaGraphs():
     """test Maze class """
     # build fixture
     from wadl.solver.metaGraph import MetaGraph
     from wadl.lib.maze import Maze
     # cros test fixture
     file = Path(__file__).parent / "data" / "croz_west"
-    crozMaze = Maze(file,
-                    step=40,
-                    rotation=15)
-    return MetaGraph(crozMaze.graph)
+
+    sizes = [15, 20, 25, 27, 28, 30, 35, 40]
+    metaGraphs = []
+    for size in sizes:
+        crozMaze = Maze(file,
+                        step=40,
+                        rotation=15)
+        metaGraphs.append(MetaGraph(crozMaze.graph))
+    return metaGraphs
 
 
-def test_metaGraph(crozMetaGraph):
-    crozMetaGraph = crozMetaGraph
-    subgraphSizes = [13, 18, 20, 29, 36, 41, 44, 36, 36, 10, 21,
-                     11, 16, 26, 36, 36, 27, 32, 38, 25, 13]
+def test_metaGraph(crozMetaGraphs):
 
-    for graph, size in zip(crozMetaGraph.subGraphs, subgraphSizes):
-        assert (len(graph) == size)
-
-    # # save figure to disk
-    # rootDir = os.path.dirname(__file__)
-    # pathDir = os.path.join(rootDir, "out")
-
-    # fig, ax = plt.subplots()
-    # colors = crozMetaGraph.getCols()
-    # crozMaze.plot(ax, showGrid=False)
-    # if not os.path.exists(pathDir):  # make dir if not exists
-    #     os.makedirs(pathDir)
-    # for i, graph in enumerate(crozMetaGraph.subGraphs):
-    #     # print(graph.nodes)
-    #     col = next(colors)
-    #     # print(colors[colIdx])
-    #     crozMaze.plotNodes(ax, nodes=graph.nodes, color=col)
-    # fileName = os.path.join(pathDir, 'croz-metaGraph.png')
-    # plt.savefig(fileName)
+    for metaGraph in crozMetaGraphs:
+        subGraphSizes = sum([len(graph) for graph in metaGraph.subGraphs])
+        assert len(metaGraph.baseGraph) == subGraphSizes
 
 
-def test_metaGraph_connected(crozMetaGraph):
+def test_metaGraph_connected(crozMetaGraphs):
     # detect not connected subgraphs
-    for graph in (crozMetaGraph.subGraphs):
-        assert(nx.is_connected(graph) is True)
+    for metaGraph in crozMetaGraphs:
+        for graph in (metaGraph.subGraphs):
+            assert(nx.is_connected(graph) is True)
