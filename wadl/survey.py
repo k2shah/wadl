@@ -64,7 +64,7 @@ class Survey(object):
             homeKey = kwargs["home"]
             kwargs["home"] = self.keyPoints[homeKey]
         except KeyError:
-            self.logger.warn('home not set')
+            self.logger.warning('home not set')
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)

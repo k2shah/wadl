@@ -129,6 +129,7 @@ class MetaGraph(object):
         # print number of graphs and range of sizes
         maxGraph = max(subGraphs, key=lambda g: len(g))
         minGraph = min(subGraphs, key=lambda g: len(g))
+        self.logger.debug("merging done")
         self.logger.info(f"found {len(subGraphs)} subGraphs with "
                          f"{len(minGraph)} to {len(maxGraph)} nodes")
 
@@ -142,7 +143,7 @@ class MetaGraph(object):
 
         return subGraphs
 
-    def mergeSubGraphs(self, subGraphs, minSize=10, maxSize=60):
+    def mergeSubGraphs(self, subGraphs, minSize=20, maxSize=60):
         # merge small subGraphs into the most connected subGraph
         # if tie pick the smallest subgraph
         merged = dict()
@@ -161,10 +162,14 @@ class MetaGraph(object):
         self.logger.debug(f"merged keys{list(merged)}")
 
         while len(toMerge) > 0:
-            gIdx, graph = toMerge.popitem()
-            self.logger.debug(f"mergeing {gIdx} of size {len(graph)}")
+            sizeOut = sum([len(g) for g in merged.values()])
+            sizeIn = sum([len(g) for g in toMerge.values()])
             self.logger.debug(f"toMerge keys {list(toMerge)}")
             self.logger.debug(f"merged keys{list(merged)}")
+            self.logger.debug(f"sizes {sizeIn} + {sizeOut} = {sizeIn+sizeOut}")
+            # pop item for processing
+            gIdx, graph = toMerge.popitem()
+            self.logger.debug(f"mergeing {gIdx} of size {len(graph)}")
             # keep running score of best merge candidant
             mergeScore = defaultdict(int)
             for node in graph:
@@ -206,6 +211,8 @@ class MetaGraph(object):
                             self.logger.debug(f"updating graph {adjIdx}")
                         else:
                             self.logger.debug(f"new graph {adjIdx}")
+                            toMerge.pop(adjIdx)
+
                         merged[adjIdx] = mergedGraph
                     oldSize = len(oldNodes)
                     self.logger.debug(f"{adjIdx}: {oldSize}=>{newSize}")
@@ -218,13 +225,15 @@ class MetaGraph(object):
         # check if the number of nodes is the same
         mergedGraphs = []
         nMergedNodes = 0
-        for key, graph in merged.items():
+        # sort so the colours are pretty
+        for key in sorted(merged.keys()):
+            graph = merged[key]
             nMergedNodes += len(graph)
             mergedGraphs.append(graph)
 
         if nNodes != nMergedNodes:
             self.logger.error(f"nodes mismatch {nNodes} vs {nMergedNodes}")
-            # raise RuntimeError("nodes mismatch")
+            raise RuntimeError(f"nodes mismatch")
 
         return mergedGraphs
 
@@ -296,7 +305,7 @@ class MetaGraph(object):
                     # if the subgraph groups are different return True
                     return True, adj
             except KeyError as e:
-                self.logger.warn("no subgraph found for node: ", adj)
+                self.logger.warning("no subgraph found for node: ", adj)
                 print(e)
                 continue
         return False, None
