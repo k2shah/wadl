@@ -8,6 +8,7 @@ import utm
 # lib
 from .lib.maze import Maze
 from .solver.solver import LinkSolver
+from .mission import Mission
 
 
 class Survey(object):
@@ -130,3 +131,9 @@ class Survey(object):
             filename = self.outDir / "routes.png"
             plt.savefig(filename, bbox_inches='tight', dpi=100)
             plt.show()
+
+    def mission(self, missionParams):
+        # make a mission.json file
+        mission = Mission(missionParams)
+        mission.fromSurvey(self)
+        mission.write()
