@@ -111,6 +111,7 @@ class MetaGraph(object):
                 self.indexSubGraph(graph, gIdx)
                 gIdx += 1
             else:
+                self.logger.debug("found a non connected section")
                 # find the connected compoents
                 for n in nx.connected_components(graph):
                     # get the graph from nodes
@@ -119,7 +120,11 @@ class MetaGraph(object):
                     self.indexSubGraph(g, gIdx)
                     gIdx += 1
 
+        self.logger.debug(f"number of graphs before merge {len(subGraphs)}")
+        self.logger.debug(f"gIdx counter at {gIdx}")
+
         subGraphs = self.mergeSubGraphs(subGraphs)
+        self.logger.debug(f"number of graphs after merge {len(subGraphs)}")
 
         # print number of graphs and range of sizes
         maxGraph = max(subGraphs, key=lambda g: len(g))
@@ -137,35 +142,91 @@ class MetaGraph(object):
 
         return subGraphs
 
-    def mergeSubGraphs(self, subGraphs, mergeSize=10, maxSize=60):
+    def mergeSubGraphs(self, subGraphs, minSize=10, maxSize=60):
         # merge small subGraphs into the most connected subGraph
         # if tie pick the smallest subgraph
-
-        for graph in subGraphs[:]:
+        merged = dict()
+        toMerge = dict()
+        nNodes = 0
+        for gIdx, graph in enumerate(subGraphs):
+            # keep a running total of the nodes
+            nNodes += len(graph)
             # check if the graph is small
-            if len(graph) < mergeSize:
-                # keep running score of best merge candidant
-                mergeScore = defaultdict(int)
-                for node in graph:
-                    # get the graph index
-                    gIdx = self.baseGraph.nodes[node]['subgraph']
-                    for adj in self.baseGraph.neighbors(node):
-                        adjIdx = self.baseGraph.nodes[adj]['subgraph']
-                        if adjIdx != gIdx:
-                            mergeScore[adjIdx] += 1
-                # sort candiates and merge into the best one
-                for adjIdx in sorted(mergeScore, key=mergeScore.get,
-                                     reverse=True):
-                    if len(subGraphs[adjIdx]) + len(graph) < maxSize:
-                        # merge the ith subgraph into the kth subgraph
-                        self.logger.debug("Merging"
-                                          f" subg {gIdx} into subg {adjIdx}")
-                        merged = list(subGraphs[adjIdx]) + list(graph.nodes)
-                        subGraphs[adjIdx] = self.baseGraph.subgraph(merged)
-                        self.indexSubGraph(subGraphs[adjIdx], adjIdx)
-                        subGraphs[gIdx] = None
-                        break
-        return [g for g in subGraphs if g is not None]
+            if len(graph) > minSize:
+                merged[gIdx] = graph
+            else:
+                toMerge[gIdx] = graph
+
+        self.logger.debug(f"toMerge keys {list(toMerge)}")
+        self.logger.debug(f"merged keys{list(merged)}")
+
+        while len(toMerge) > 0:
+            gIdx, graph = toMerge.popitem()
+            self.logger.debug(f"mergeing {gIdx} of size {len(graph)}")
+            self.logger.debug(f"toMerge keys {list(toMerge)}")
+            self.logger.debug(f"merged keys{list(merged)}")
+            # keep running score of best merge candidant
+            mergeScore = defaultdict(int)
+            for node in graph:
+                # get the node index
+                nIdx = self.baseGraph.nodes[node]['subgraph']
+                for adj in self.baseGraph.neighbors(node):
+                    adjIdx = self.baseGraph.nodes[adj]['subgraph']
+                    if adjIdx != nIdx:
+                        mergeScore[adjIdx] += 1
+            self.logger.debug(f"merge scores for {gIdx}: {mergeScore.items()}")
+            # sort candiates and merge into the best one
+
+            for adjIdx in sorted(mergeScore,
+                                 key=mergeScore.get,
+                                 reverse=True):
+                if adjIdx in toMerge:
+                    oldNodes = list(toMerge[adjIdx])
+                elif adjIdx in merged:
+                    oldNodes = list(merged[adjIdx])
+
+                # new size of the merged subgraph
+                newSize = len(oldNodes) + len(graph)
+
+                if newSize < maxSize:
+                    # merge the ith subgraph into the kth subgraph
+                    self.logger.debug(f"merging subg {gIdx} into {adjIdx}")
+                    # created merged list of nodes
+                    mergedNodes = oldNodes + list(graph.nodes)
+                    # make new subgeraph and reindex
+                    mergedGraph = self.baseGraph.subgraph(mergedNodes)
+                    self.indexSubGraph(mergedGraph, adjIdx)
+
+                    # check where to put new subgraph
+                    if adjIdx in toMerge and newSize < minSize:
+                        toMerge[adjIdx] = mergedGraph
+                        self.logger.debug(f"updating small graph {adjIdx}")
+                    else:
+                        if adjIdx in merged:
+                            self.logger.debug(f"updating graph {adjIdx}")
+                        else:
+                            self.logger.debug(f"new graph {adjIdx}")
+                        merged[adjIdx] = mergedGraph
+                    oldSize = len(oldNodes)
+                    self.logger.debug(f"{adjIdx}: {oldSize}=>{newSize}")
+                    mergeScore = None
+                    break
+            if mergeScore is not None:
+                self.logger.debug(f"graph {gIdx} could not be merged")
+                merged[gIdx] = graph
+
+        # check if the number of nodes is the same
+        mergedGraphs = []
+        nMergedNodes = 0
+        for key, graph in merged.items():
+            nMergedNodes += len(graph)
+            mergedGraphs.append(graph)
+
+        if nNodes != nMergedNodes:
+            self.logger.error(f"nodes mismatch {nNodes} vs {nMergedNodes}")
+            # raise RuntimeError("nodes mismatch")
+
+        return mergedGraphs
 
     def buildPathGraph(self, subPaths):
         # build the pathGraph

@@ -85,13 +85,13 @@ class Survey(object):
             ax.scatter(*cord, color='k', s=1)
             ax.annotate(key, xy=cord, xycoords='data')
 
-    def view(self):
+    def view(self, showGrid=True):
         fig, ax = plt.subplots()
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             cols = self.solver.metaGraph.getCols()
-            maze.plot(ax)
+            maze.plot(ax, showGrid=showGrid)
             for i, graph in enumerate(self.solver.metaGraph.subGraphs):
                 # print(graph.nodes)
                 col = next(cols)
