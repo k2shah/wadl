@@ -135,5 +135,5 @@ class Survey(object):
     def mission(self, missionParams):
         # make a mission.json file
         mission = Mission(missionParams)
-        mission.fromSurvey(survey)
+        mission.fromSurvey(self)
         mission.write()
