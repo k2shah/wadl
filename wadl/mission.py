@@ -21,6 +21,7 @@ class MissionParameters(Parameters):
 
     def setDefaults(self):
         self["autoLand"] = True
+        self["trajectoryType"] = "STRAIGHT"
         self["offsetTakeoff"] = True
         self["offsetLand"] = False
         self["nBands"] = 1
@@ -37,6 +38,7 @@ class Mission(object):
         self.name = "mission"
 
         if missionParamters is None:
+            # get default
             self.paramters = MissionParameters()
         else:
             self.parameters = missionParamters
@@ -169,7 +171,7 @@ class Mission(object):
                  "scheduledTime": None,
                  "startDelay": None,
                  "vehicleProfile": "DJI Matrice 100",
-                 "trajectoryType": "STRAIGHT",
+                 "trajectoryType": self.parameters["trajectoryType"].upper(),
                  "safeAltitude": 50.0,
                  "maxAltitude": 120.0,
                  "initialSpeed": None,
