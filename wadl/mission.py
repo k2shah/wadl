@@ -22,12 +22,14 @@ class MissionParameters(Parameters):
     def setDefaults(self):
         self["autoLand"] = True
         self["trajectoryType"] = "STRAIGHT"
-        self["offsetTakeoff"] = True
-        self["offsetLand"] = False
+        self["hasHome"] = True
         self["nBands"] = 1
         self["bandStart"] = 50
         self["bandStep"] = 10
-        self["bandRadialOffset"] = 10
+        self["offsetTakeoffDist"] = 0
+        self["offsetLandDist"] = 0
+        self["trajectoryResolve"] = {"straight": "STRAIGHT",
+                                     "safe": "STAIR"}
 
 
 class Mission(object):
@@ -55,7 +57,6 @@ class Mission(object):
         self.nBands = self.parameters["nBands"]
         bandStep = self.parameters["bandStep"]
         bandStart = self.parameters["bandStart"]
-        self.bandOffset = self.parameters["bandRadialOffset"]
         self.bands = bandStart +\
             np.linspace(0, (self.nBands-1)*bandStep, self.nBands)
 
@@ -84,9 +85,9 @@ class Mission(object):
         # get all the routes in the survey (from each maze)
         for task, maze in survey.tasks.items():
             if maze.routeSet.home is None:
-                warnings.warn("routeSet has no Home. Disabling route offsets")
-                self.parameters["offsetTakeoff"] = False
-                self.parameters["offsetLand"] = False
+                warnings.warn("no home found. Disabling offsets & autoland")
+                self.parameters["hasHome"] = False
+                self.autoland = False
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
                 routes.append(route)
@@ -133,8 +134,8 @@ class Mission(object):
                            wp[1][0]-wp[0][0])
         return (angle + 2 * np.pi) % (2 * np.pi)
 
-    def offsetStart(self, route):
-        # returns a pt 10m from the 1st pt on the route along the 1st segment
+    def offsetStart(self, route, dist):
+        # returns a pt dist meters from the 1st pt along the 1st segment
         pt0 = route[0]
         pt1 = route[1]
         pt0_utm = utm.from_latlon(*pt0[:2])
@@ -144,7 +145,7 @@ class Mission(object):
         vec = np.array(pt1_utm[:2])-np.array(pt0_utm[:2])
 
         # normalize and scale
-        vec = vec/np.linalg.norm(vec) * self.bandOffset
+        vec = vec/np.linalg.norm(vec) * dist
         offsetPt = np.array(pt0_utm[:2]) + vec
         lat, lng = utm.to_latlon(*offsetPt, *zone_utm)
         return [lat, lng, *pt0[2:]]
@@ -171,7 +172,8 @@ class Mission(object):
                  "scheduledTime": None,
                  "startDelay": None,
                  "vehicleProfile": "DJI Matrice 100",
-                 "trajectoryType": self.parameters["trajectoryType"].upper(),
+                 "trajectoryType": self.parameters["trajectoryResolve"][
+                                    self.parameters["trajectoryType"]],
                  "safeAltitude": 50.0,
                  "maxAltitude": 120.0,
                  "initialSpeed": None,
@@ -184,44 +186,49 @@ class Mission(object):
                  }
 
         # take off
-        if self.parameters["offsetTakeoff"]:
+        shift = 0
+        if self.parameters["hasHome"]:
+            shift = 1
             # calculate offset point from lz
-            offsetPt = self.offsetStart(r)
+            offsetPt = self.offsetStart(r,
+                                        self.parameters["offsetTakeoffDist"])
             lat, lng, alt, spd = offsetPt
+            pt = self.makePoint(lat, lng, bandAlt)
+            route["segments"].append(self.makeWaypoint(pt, spd))
+            # transit in. point camera down
+            lat, lng, alt, spd = r[1]
+            pt = self.makePoint(lat, lng, bandAlt)
+            route["segments"].append(self.makeWaypoint(pt, spd,
+                                                       tilt=90, camera=2))
         else:
             lat, lng, alt, spd = r[0]
-        pt = self.makePoint(lat, lng, bandAlt)
-        route["segments"].append(self.makeWaypoint(pt, spd))
-        # transit in. point camera down
-        lat, lng, alt, spd = r[1]
-        pt = self.makePoint(lat, lng, bandAlt)
-        route["segments"].append(self.makeWaypoint(pt, spd,
-                                                   tilt=90, camera=2))
+            pt = self.makePoint(lat, lng, bandAlt)
+            route["segments"].append(self.makeWaypoint(pt, spd,
+                                                       tilt=90, camera=2))
         # take picture every 2 sec
-        for lat, lng, alt, spd in r[2:-4]:
+        for lat, lng, alt, spd in r[2:-4+shift]:
             pt = self.makePoint(lat, lng, alt)
             route["segments"].append(self.makeWaypoint(pt, spd,  camera=2))
         # turn off camera
-        lat, lng, alt, spd = r[-4]
+        lat, lng, alt, spd = r[-4+shift]
         pt = self.makePoint(lat, lng, alt)
         route["segments"].append(self.makeWaypoint(pt, spd))
         # ascend camera forward
-        lat, lng, alt, spd = r[-3]
+        lat, lng, alt, spd = r[-3+shift]
         pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd, tilt=0))
         # transfer out
-        lat, lng, alt, spd = r[-2]
+        lat, lng, alt, spd = r[-2+shift]
         pt = self.makePoint(lat, lng, bandAlt)
         route["segments"].append(self.makeWaypoint(pt, spd))
         # pre land
-        if self.parameters["offsetLand"]:
+        if self.parameters["hasHome"]:
             # calculate offset point from lz
-            offsetPt = self.offsetStart(r)
+            offsetPt = self.offsetStart(r,
+                                        self.parameters["offsetLandDist"])
             lat, lng, alt, spd = offsetPt
-        else:
-            lat, lng, alt, spd = r[-1]
-        pt = self.makePoint(lat, lng, alt)
-        route["segments"].append(self.makeWaypoint(pt, spd))
+            pt = self.makePoint(lat, lng, alt)
+            route["segments"].append(self.makeWaypoint(pt, spd))
 
         # land if autoLand is True
         if self.autoLand:
