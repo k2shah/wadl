@@ -51,7 +51,7 @@ class RouteSet(object):
     def check(self, cords):
         # builds the route from a UTM waypoint list
         # runs a series of checks to verify the route is viable
-        # returns None if any check fails; the Path otherwise
+        # returns None if any check fails; the Route otherwise
         route = Route(cords, self.zone, self.home)
         route.build(self.routeParameters)
         if route.check():
