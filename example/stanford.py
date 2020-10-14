@@ -18,6 +18,7 @@ survey = Survey(name)
 
 # add the keypoints
 keyPoints = {"oval": (37.4298541, -122.1694745),
+             "MSL":  (37.4266113, -122.173492)
              }
 survey.setKeyPoints(keyPoints)
 
@@ -29,8 +30,8 @@ routeParams["altitude"] = 50.0  # m
 # add the tasks
 
 survey.addTask(file,
-               step=200,
-               home="oval",
+               step=100,
+               home=["oval", "MSL"],
                routeParameters=routeParams,
                )
 
@@ -50,7 +51,7 @@ if view == 1:
     survey.view()
 else:
     # run path solver to plan paths and write output
-    survey.plan(plot=True)
+    survey.plan(plot=True, write=True)
     survey.plot()
 
 # make mission
