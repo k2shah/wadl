@@ -247,7 +247,7 @@ class MetaGraph(object):
         # initialize the path graph
         # sorted the graph between interior and exterior subgraphs
         for i, path in enumerate(self.subPaths):
-            # if any node as less than 4 connections the subgraph is exterior
+            # if any node has less than 4 connections the subgraph is exterior
             if any([len(self.baseGraph[node]) < 4 for node in path]):
                 # print(f"e: {i}")
                 self.pathGraph.add_edge('e', i, weight=len(path))

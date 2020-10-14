@@ -115,22 +115,21 @@ class Route(object):
 
     def setHome(self, home):
         # reolve the home point
-        if isinstance(home, list):
-            # home: (lat, long)
-            # finds the cloest pt on the route to the home
-            (dist, idx) = min([(la.norm(np.array(home)-np.array(pt)), i)
-                               for i, pt in enumerate(self.GPScords)])
-            # sets the route home at the home pt
-            self.home = np.array(home)
-        elif isinstance(home, tuple):
-            homeDist = np.inf
-            for h in home:
-                (dist, i) = min([(la.norm(np.array(h)-np.array(pt)), i)
-                                for i, pt in enumerate(self.GPScords)])
-                if dist < homeDist:
-                    self.home = np.array(h)
-                    idx = i
-                    homeDist = dist
+        # if isinstance(home, tuple):
+        #     # home: (lat, long)
+        #     # finds the cloest pt on the route to the home
+        #     (dist, idx) = min([(la.norm(np.array(home)-np.array(pt)), i)
+        #                        for i, pt in enumerate(self.GPScords)])
+        #     # sets the route home at the home pt
+        #     self.home = np.array(home)
+        homeDist = np.inf
+        for h in home:
+            (dist, i) = min([(la.norm(np.array(h)-np.array(pt)), i)
+                            for i, pt in enumerate(self.GPScords)])
+            if dist < homeDist:
+                self.home = np.array(h)
+                idx = i
+                homeDist = dist
         self.logger.debug(f"home set to {self.home}")
 
         # shift and wrap
