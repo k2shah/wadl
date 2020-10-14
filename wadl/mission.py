@@ -21,7 +21,7 @@ class MissionParameters(Parameters):
 
     def setDefaults(self):
         self["autoLand"] = True
-        self["trajectoryType"] = "STRAIGHT"
+        self["trajectoryType"] = "straight"
         self["hasHome"] = True
         self["nBands"] = 1
         self["bandStart"] = 50

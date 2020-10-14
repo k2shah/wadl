@@ -62,12 +62,11 @@ class Survey(object):
         # limit [1000]: flight time limit in seconds
         # home [None]: key(s) of the home location(s)
         try:
-            if isinstance(kwargs["home"], tuple):
-                kwargs["home"] = tuple(self.keyPoints[h]
-                                       for h in kwargs["home"])
+            if isinstance(kwargs["home"], list):
+                kwargs["home"] = [self.keyPoints[h] for h in kwargs["home"]]
             elif isinstance(kwargs["home"], str):
                 homeKey = kwargs["home"]
-                kwargs["home"] = self.keyPoints[homeKey]
+                kwargs["home"] = [self.keyPoints[homeKey]]
         except KeyError:
             self.logger.warning('home not found')
             kwargs["home"] = None
