@@ -88,6 +88,9 @@ class Mission(object):
                 warnings.warn("no home found. Disabling offsets & autoland")
                 self.parameters["hasHome"] = False
                 self.autoland = False
+            if maze.routeSet.multiHome:
+                warnings.warn("mutli home route. Disabling angular banding")
+                self.parameters["nBands"] = 1
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
                 routes.append(route)
@@ -115,8 +118,14 @@ class Mission(object):
                    "creationTime": int(time.time())}
 
         self.data["mission"] = mission
-        # sort the routes angluarly
-        routes.sort(key=self.headingAngle)
+        # sort the routes
+        if self.parameters["nBands"] > 1:
+            # angularly
+            routes.sort(key=self.headingAngle)
+        else:
+            # east most
+            routes.sort(key=self.eastStart)
+
         if rewrite:
             path = Path(self.outDir, "routes")
             path.mkdir(exist_ok=True)
@@ -133,6 +142,12 @@ class Mission(object):
         angle = np.arctan2(wp[1][1]-wp[0][1],
                            wp[1][0]-wp[0][0])
         return (angle + 2 * np.pi) % (2 * np.pi)
+
+    @staticmethod
+    def eastStart(route):
+        # returns the easting of the starting point
+        route.GPS2UTM()
+        return route.UTMcords[0][0]
 
     def offsetStart(self, route, dist):
         # returns a pt dist meters from the 1st pt along the 1st segment
