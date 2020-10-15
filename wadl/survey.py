@@ -60,12 +60,15 @@ class Survey(object):
         # keyword arguments:
         # step [40]: grid size
         # limit [1000]: flight time limit in seconds
-        # home [None]: key of the home location
+        # home [None]: key(s) of the home location(s)
         try:
-            homeKey = kwargs["home"]
-            kwargs["home"] = self.keyPoints[homeKey]
+            if isinstance(kwargs["home"], list):
+                kwargs["home"] = [self.keyPoints[h] for h in kwargs["home"]]
+            elif isinstance(kwargs["home"], str):
+                homeKey = kwargs["home"]
+                kwargs["home"] = [self.keyPoints[homeKey]]
         except KeyError:
-            self.logger.warning('home not set')
+            self.logger.warning('home not found')
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)

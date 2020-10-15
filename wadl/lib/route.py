@@ -1,7 +1,7 @@
 #!bin/bash/python3
 # import warnings as warn
 import csv
-# import sys
+import logging
 # gis
 import utm
 # math
@@ -32,7 +32,13 @@ class RouteSet(object):
     """docstring for RouteSet"""
 
     def __init__(self, home, zone, routeParameters=None):
+        # loggers
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+
         self.home = home
+        self.multiHome = True if isinstance(home, tuple) else False
+
         self.zone = zone  # store the UTM zone
         self.routes = []
 
@@ -64,18 +70,22 @@ class RouteSet(object):
         self.routes.append(route)
 
     def write(self, pathDir):
-        print(f"\tgenerated {len(self.routes)} routes")
+        self.logger.info(f"\tgenerated {len(self.routes)} routes")
         for i, route in enumerate(self.routes):
             filename = pathDir / f"{i}.csv"
             route.write(filename)
-            print(f"\t\troute {i}:\t"
-                  f"{route.length:2.2f} m \t{route.ToF:2.2f} sec ")
+            self.logger.info(f"\t\troute {i}:\t"
+                             f"{route.length:2.2f} m \t{route.ToF:2.2f} sec ")
 
 
 class Route(object):
     """docstring for Route"""
 
     def __init__(self, cords, zone, home):
+        # loggers
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+
         self.UTMcords = cords  # cords in UTM
         self.UTMZone = zone
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
@@ -104,12 +114,24 @@ class Route(object):
         self.UTMcords = [utm.from_latlon(*cord)[0:2] for cord in self.GPScords]
 
     def setHome(self, home):
-        # home: (lat, long)
-        # sets the route home at the home pt
-        self.home = np.array(home)
-        # finds the cloest pt on the route to the home
-        (pt, idx) = min([(la.norm(np.array(home)-np.array(pt)), i)
-                         for i, pt in enumerate(self.GPScords)])
+        # reolve the home point
+        # if isinstance(home, tuple):
+        #     # home: (lat, long)
+        #     # finds the cloest pt on the route to the home
+        #     (dist, idx) = min([(la.norm(np.array(home)-np.array(pt)), i)
+        #                        for i, pt in enumerate(self.GPScords)])
+        #     # sets the route home at the home pt
+        #     self.home = np.array(home)
+        homeDist = np.inf
+        for h in home:
+            (dist, i) = min([(la.norm(np.array(h)-np.array(pt)), i)
+                            for i, pt in enumerate(self.GPScords)])
+            if dist < homeDist:
+                self.home = np.array(h)
+                idx = i
+                homeDist = dist
+        self.logger.debug(f"home set to {self.home}")
+
         # shift and wrap
         self.GPScords = self.GPScords[idx:] + self.GPScords[1:idx+1]
         # sync the utm
