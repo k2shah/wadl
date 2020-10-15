@@ -1,57 +1,87 @@
 #!bin/bash/python3
-# import warnings as warn
-import os
-import csv
-import glob
-# import sys
-# import time
-# math
-import numpy as np
-#graph 
-import networkx as nx
+from pathlib import Path
+import logging
 # plot
 import matplotlib.pyplot as plt
 # gis
 import utm
-from shapely.geometry import Polygon, Point
 # lib
-from wadl.lib.maze import Maze
-from wadl.solver.solver import BaseSolver, LinkSolver
+from .lib.maze import Maze
+from .solver.solver import LinkSolver
+from .mission import Mission
+
 
 class Survey(object):
     """docstring for Survey
     top level object for a survey
     this objects holds all the information of a single survey """
-    def __init__(self, name, outDir, solver="Base"):
+
+    def __init__(self, name="survey", outDir=None):
         # get solver
-        self.solverType = self.getSolver(solver)
+        self.solver = LinkSolver()
         # save the name of the survey
         self.name = name
-        # save the output directory
-        self.outDir = outDir
+        # make the output directory
+        self.outDir = Path(name) if outDir is None else Path(outDir)
+        self.outDir.mkdir(exist_ok=True)
+        # setup logger
+        self.setupLogger()
         # tasks is a dict that maps file name to survey parameters
         self.tasks = dict()
-        # key points to display on the 
+        # key points to display on the
         self.keyPoints = dict()
-        # max number of boolean variables to solve for
-        # lower for less powerful machines
-        self.varMax = 1.5e4
+        self.logger.info("WADL Survey Planner")
+
+    def setupLogger(self):
+        # create logger
+        rootLogger = logging.getLogger()
+        rootLogger.setLevel(logging.INFO)
+        # create file handler which logs even debug messages
+        fh = logging.FileHandler(self.outDir/'wadl.log', 'w+')
+        fh.setLevel(logging.DEBUG)
+        # create console handler with a higher log level
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        # create formatter and add it to the handlers
+        formatter = logging.Formatter(
+                     '%(asctime)s| %(name)-25s |%(levelname)8s| %(message)s')
+        fh.setFormatter(formatter)
+        # add the handlers to the logger
+        rootLogger.addHandler(fh)
+        rootLogger.addHandler(ch)
+
+        # local logger
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
 
     def addTask(self, file, **kwargs):
         # add a task to the survey
         # expects a file name
-        # keyword arguments for the start locations, step size, and distance limit
+        # keyword arguments:
         # step [40]: grid size
-        # distance [1000]: flight lenght in meters
-        # altitude [50]: flying alt (agl) in meters
-        # speed [5]: flying speed in meters/sec
-        
-        self.tasks[file] = Maze(file, **kwargs) 
+        # limit [1000]: flight time limit in seconds
+        # home [None]: key(s) of the home location(s)
+        try:
+            if isinstance(kwargs["home"], list):
+                kwargs["home"] = [self.keyPoints[h] for h in kwargs["home"]]
+            elif isinstance(kwargs["home"], str):
+                homeKey = kwargs["home"]
+                kwargs["home"] = [self.keyPoints[homeKey]]
+        except KeyError:
+            self.logger.warning('home not found')
+            kwargs["home"] = None
+
+        self.tasks[file] = Maze(file, **kwargs)
+
+    def setSolver(self, solver):
+        self.solver = solver
+
+    def setSolverParamters(self, parameters):
+        self.solver.parameters = parameters
 
     def setKeyPoints(self, points):
         # set the keyPoints in the survey
         self.keyPoints = points
-
 
     def plotKeyPoints(self, ax):
         for key, val in self.keyPoints.items():
@@ -59,51 +89,54 @@ class Survey(object):
             ax.scatter(*cord, color='k', s=1)
             ax.annotate(key, xy=cord, xycoords='data')
 
-    def view(self):
+    def view(self, showGrid=True):
         fig, ax = plt.subplots()
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
-            solver = self.solverType(maze)
-            solver.plot(ax)
+            self.solver.setup(maze.graph)
+            cols = self.solver.metaGraph.getCols()
+            maze.plot(ax, showGrid=showGrid)
+            for i, graph in enumerate(self.solver.metaGraph.subGraphs):
+                # print(graph.nodes)
+                col = next(cols)
+                # print(colors[colIdx])
+                maze.plotNodes(ax, nodes=graph.nodes, color=col)
+                maze.plotEdges(ax, edges=graph.edges, color=col)
 
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
-        # display 
+        # display
         plt.show()
 
-    def plan(self, plot=False):
-        fig, ax = plt.subplots(figsize=(16, 16))     
+    def plan(self, plot=True, write=False):
         for task, maze in self.tasks.items():
+            self.solver.setup(maze.graph)
             try:
-                maze.solve(Solver=self.solverType)
-                if maze.solved:
-                    print(f"writing paths")
+                solTime = self.solver.solve(routeSet=maze.routeSet)
+                maze.solTime = solTime
+                if write:
                     maze.write(self.outDir)
-      
+
             except RuntimeError as e:
-                print(f"failure in task: {maze.name}")
+                self.logger.error(f"failure in task: {maze.name}")
                 print(e)
-            print(f"task {maze.name} finished")
-            #plot task
+            self.logger.info(f"task {maze.name} finished")
+        self.logger.info("done planning")
+
+    def plot(self, save=True):
+        # plot task
+        fig, ax = plt.subplots(figsize=(16, 16))
+        for task, maze in self.tasks.items():
             self.plotKeyPoints(ax)
             maze.plot(ax)
-            plt.draw()
-            plt.axis('square')
-        if plot:
             plt.axis('square')
             plt.gca().set_aspect('equal', adjustable='box')
+            filename = self.outDir / "routes.png"
+            plt.savefig(filename, bbox_inches='tight', dpi=100)
             plt.show()
-        print(f"done")
-        # troll annie a bit
-        annie = ["annie", "Annie", "schmidt"]
-        if any(isAnnie for a in annie if a in self.outDir):
-            print("ANNIE GO PET SCOUT!") 
 
-
-    def getSolver(self, SolverName):
-        if SolverName=="Base":
-            return BaseSolver
-        elif SolverName=="Link":
-            return LinkSolver
-        else:
-            raise RuntimeError('No Solver selected')
+    def mission(self, missionParams):
+        # make a mission.json file
+        mission = Mission(missionParams)
+        mission.fromSurvey(self)
+        mission.write()

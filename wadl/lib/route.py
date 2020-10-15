@@ -1,225 +1,274 @@
 #!bin/bash/python3
 # import warnings as warn
-import os
 import csv
-import json
-import glob
-import time
-import warnings as warn
-# import sys
+import logging
 # gis
 import utm
 # math
 import numpy as np
 import numpy.linalg as la
-# plot
-import matplotlib.pyplot as plt
-import mpl_toolkits.mplot3d.axes3d as axes3d
 # lib
-try:
-    from .utils import *
-    from .fence import Fence, Areas
-except (SystemError, ImportError):
-    from utils import *
-    from fence import Fence, Areas
+from .parameters import Parameters
+
+
+class RouteParameters(Parameters):
+    """docstring for routeParameters"""
+
+    def __init__(self, default=True):
+        super(RouteParameters, self).__init__(default)
+
+    def setDefaults(self):
+        self["limit"] = 13*60  # s
+        self["speed"] = 4.0  # m/s
+        self["altitude"] = 35.0  # m
+        self["xfer_speed"] = 12.0  # m/s
+        self["xfer_altitude"] = 70.0  # m
+        self["xfer_ascend"] = 5.  # m/s
+        self["xfer_descend"] = 4.  # m/s
+        self["land_altitude"] = 30  # m
+
+
+class RouteSet(object):
+    """docstring for RouteSet"""
+
+    def __init__(self, home, zone, routeParameters=None):
+        # loggers
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+
+        self.home = home
+        self.multiHome = True if isinstance(home, tuple) else False
+
+        self.zone = zone  # store the UTM zone
+        self.routes = []
+
+        # set the parameters
+        if routeParameters is None:
+            self.routeParameters = RouteParameters()
+        else:
+            self.routeParameters = routeParameters
+
+    def __len__(self):
+        return len(self.routes)
+
+    def __iter__(self):
+        return iter(self.routes)
+
+    def check(self, cords):
+        # builds the route from a UTM waypoint list
+        # runs a series of checks to verify the route is viable
+        # returns None if any check fails; the Route otherwise
+        route = Route(cords, self.zone, self.home)
+        route.build(self.routeParameters)
+        if route.check():
+            return route
+        else:
+            return None
+
+    def push(self, route):
+        # push the route into the container
+        self.routes.append(route)
+
+    def write(self, pathDir):
+        self.logger.info(f"\tgenerated {len(self.routes)} routes")
+        for i, route in enumerate(self.routes):
+            filename = pathDir / f"{i}.csv"
+            route.write(filename)
+            self.logger.info(f"\t\troute {i}:\t"
+                             f"{route.length:2.2f} m \t{route.ToF:2.2f} sec ")
 
 
 class Route(object):
-    """holds the information of a single UGCS route"""
+    """docstring for Route"""
 
-    def __init__(self, KMLfile, JSONdata):
-        # get the route data from the kml and json
-        self.parseKML(KMLfile)
-        self.readJSON(JSONdata)
-        # check the lenght of the paths
-        if len(self.actions) != (self.cords.shape[0]-1):
-            print(KMLfile)
-            print(len(self.actions))
-            print(self.cords.shape)
-            warn.warn("path lengths do not mathch: {:s}".format(KMLfile))
-        self.cameraSize = (54.5, 72.6)  # m
-        l, w = self.cameraSize
-        self.cameraBox = np.array([[l/2., w/2.],
-                                   [l/2., -w/2.],
-                                   [-l/2., -w/2.],
-                                   [-l/2., w/2.],
-                                   [l/2., w/2.]])
-        self.speed = 4.0  # m/s
-        self.triggerInt = 2  # secs
-        self.interpRoute()
+    def __init__(self, cords, zone, home):
+        # loggers
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
 
-    def parseKML(self, KMLfile):
-        # parse KMLfile
-        cordTag = "coordinates"
-        with open(KMLfile) as f:
-            for line in f:
-                if cordTag in line:
-                    # cut out html tags
-                    data = line.split(">")[1]
-                    data = data.split("<")[0]
-                    # split at each space
-                    data = data.split(" ")
-                    break
-        # extract cords as LNG LAT ALT (AGL)
-        self.cords = np.array([list(map(float, line.split((","))))
-                               for line in data])
-
-    def readJSON(self, JSONdata):
-        actionType = "CameraSeriesByTime"
-        # this is some next level list comp hacking
-        # stupid empty lists
-        self.actions = [wp["actions"][0]["type"]
-                        if wp["actions"] != [] else False
-                        for wp in JSONdata["segments"]]
-
-    def interpRoute(self):
-        self.xpath = []
-        self.ypath = []
-        for i, action in enumerate(self.actions):
-            if action == "CameraSeriesByTime":
-                # 1st cords cuz fwd path progress
-                if len(self.xpath) == 0:
-                    cords = utm.from_latlon(self.cords[i, 1], self.cords[i, 0])
-                    self.xpath.append(cords[0])
-                    self.ypath.append(cords[1])
-                # rest of cords
-                cords = utm.from_latlon(self.cords[i+1, 1], self.cords[i+1, 0])
-                self.xpath.append(cords[0])
-                self.ypath.append(cords[1])
-        self.pathLen = [0]
-        self.UTMZone = cords[2:]
-
-        # get diffs
-        xdiff = np.diff(self.xpath)
-        ydiff = np.diff(self.ypath)
-        # calculate path lenght at each section
-        self.arcLen = np.cumsum([0] +
-                                [la.norm([dx, dy])
-                                 for dx, dy in zip(xdiff, ydiff)])
-        # interp at speed * photo interval
-        # arc lenght is the lambda for x,y = curve(lambda)
-        interpols = np.arange(0, self.arcLen[-1],
-                              self.speed*self.triggerInt)
-        self.xinterp = np.interp(interpols, self.arcLen, self.xpath)
-        self.yinterp = np.interp(interpols, self.arcLen, self.ypath)
-        # get vectors for photo alignments\
-        self.dirInterp = [[dx, dy] for dx, dy
-                          in zip(np.diff(self.xinterp),
-                                 np.diff(self.yinterp))]
-        # copy the last element for the last image
-        self.dirInterp.append(self.dirInterp[-1])
-
-    def pt2gBox(self, p, v):
-        # returns the ground ppints of the image corners
-        alpha = np.arctan2(v[1], v[0])
-        R = rot2D(alpha)
-
-        cameraRot = np.dot(R, self.cameraBox.T).T.tolist()
-        camera = [utm.to_latlon(p[0] + z[0], p[1] + z[1], *self.UTMZone)
-                  for z in cameraRot]
-
-        return camera
-
-    def plotInterp(self, ax, color=(.5625, 0, 0, .6)):
-        # plots the interpolated route
-        for x, y, v in zip(self.xinterp, self.yinterp, self.dirInterp):
-            lat, lng = utm.to_latlon(x, y, *self.UTMZone)
-            # plot the camera
-            camera = np.array(self.pt2gBox([x, y], v))
-            ax.fill(camera[:, 1], camera[:, 0],
-                    color=color)
-            # plot the point
-            # ax.scatter(lng, lat, c='c', s=2)
-            # plt.draw()
-            # plt.pause(.00000001)
-
-    def plotRoute(self, ax):
-        # plots the route
-        for i, action in enumerate(self.actions):
-            # if i < 1 or i > (len(self.actions)-2):
-            #     # skip the 1st and last fe
-            #     continue
-            if action == "CameraSeriesByTime":
-                col = "b"
-            elif action == "CameraControl":
-                col = "g"
-            else:
-                col = "r"
-            ax.plot(self.cords[i:i+2, 0],
-                    self.cords[i:i+2, 1],
-                    c=col)
-
-    def plot(self, ax):
-        # runs all the plot subruts
-        # self.plotRoute(ax)
-        self.plotInterp(ax)
-
-
-def main(mission):
-    # get geo fence
-    fenceFileCroz = '../data/croz_geofence/croz_west_3.csv'
-    crozFence = Fence(fenceFileCroz)
-    fenceFileRook = '../data/croz_east/croz_rook_3.csv'
-    rookFence = Fence(fenceFileRook)
-    # get areas
-    file = "../data/croz_geofence/areas.kml"
-    crozAreas = Areas(file)
-
-    # get route files
-    kmlPath = os.path.join(mission, "*.kml")
-    kmlFiles = glob.glob(kmlPath)
-
-    # read json
-    jsonFile = mission + ".json"
-    with open(jsonFile) as file:
-        jsonData = json.load(file)
-    # make route catalog name : route(datam kml)
-    routes = dict()
-    for routeData in jsonData["mission"]["routes"]:
-        routeName = routeData["name"]
-        KMLfile = os.path.join(mission, routeName+".kml")
-        if os.path.exists(KMLfile):
-            routes[routeData["name"]] = Route(KMLfile, routeData)
+        self.UTMcords = cords  # cords in UTM
+        self.UTMZone = zone
+        self.UTM2GPS(zone)  # set path in GPS (WGS 84)
+        if home is None:
+            self.home = None
         else:
-            print("kml file does not exist: {:s}".format(routeName))
+            self.setHome(home)  # set home pt (in GPS)
+        self.waypoints = []
 
-    # plot stuff
-    fig = plt.figure(figsize=(16, 9))
-    # ax = fig.add_subplot(1, 1, 1, projection='3d')
-    ax = fig.add_subplot(111)
-    # ax.set_xlim(169.18, 169.3)
-    # ax.set_ylim(-77.4660, -77.446)
+        # path limits
+        self.DJIWaypointLimit = 98
 
-    crozFence.plot(ax, color='r')
-    rookFence.plot(ax, color='r')
-    # crozAreas.plot(ax)
+    @staticmethod
+    def DistGPS(gps0, gps1, alt0=0, alt1=0):
+        # calculates the distnce in meters of 2 lat/lng points
+        e0, n0, _, _ = utm.from_latlon(*gps0)
+        e1, n1, _, _ = utm.from_latlon(*gps1)
+        return np.linalg.norm([e0-e1, n0-n1, alt0-alt1])
 
-    # build route sequence
-    routeSeq = [(int(r.split('-')[0].strip('r')), r)
-                for r in list(routes.keys())]
-    routeSeq.sort()
-    print(routeSeq)
-    nColors = 10
-    cm = plt.cm.get_cmap('tab10', nColors)
-    alpha = 1
-    for rnum, key in routeSeq:
-        plt.title(key)
-        color = cm((rnum-1) % nColors)
-        color = (*color[0:3], alpha)
-        routes[key].plotInterp(ax, color=color)
-        # routes[key].plotRoute(ax)
-        plt.draw()
-        plt.pause(.0000001)
-    plt.title("Photo Coverage")
-    plt.axis('off')
-    fig.savefig("photo.png", bbox_inches='tight', dpi=200)
-    plt.show()
+    def UTM2GPS(self, zone):
+        # converts all the UTM cords to GPS
+        self.GPScords = [utm.to_latlon(*cord, *zone) for cord in self.UTMcords]
 
+    def GPS2UTM(self):
+        # converts all the GPS cords to UTM
+        self.UTMcords = [utm.from_latlon(*cord)[0:2] for cord in self.GPScords]
 
-if __name__ == '__main__':
-    missionDir = "../missions"
-    # missionName = "croz2-fine"
-    missionName = "croz4-full"
-    missionPath = os.path.join(missionDir, missionName)
-    main(missionPath)
+    def setHome(self, home):
+        # reolve the home point
+        # if isinstance(home, tuple):
+        #     # home: (lat, long)
+        #     # finds the cloest pt on the route to the home
+        #     (dist, idx) = min([(la.norm(np.array(home)-np.array(pt)), i)
+        #                        for i, pt in enumerate(self.GPScords)])
+        #     # sets the route home at the home pt
+        #     self.home = np.array(home)
+        homeDist = np.inf
+        for h in home:
+            (dist, i) = min([(la.norm(np.array(h)-np.array(pt)), i)
+                            for i, pt in enumerate(self.GPScords)])
+            if dist < homeDist:
+                self.home = np.array(h)
+                idx = i
+                homeDist = dist
+        self.logger.debug(f"home set to {self.home}")
 
+        # shift and wrap
+        self.GPScords = self.GPScords[idx:] + self.GPScords[1:idx+1]
+        # sync the utm
+        self.GPS2UTM()
+
+    def check(self):
+        # attempts to merge the segment into the path
+        # returns False if one of the length checks fail
+
+        # check: under the waypoint limit
+        if len(self.waypoints) > self.DJIWaypointLimit:
+            return False
+        # check: under the time limit
+        self.ToF = 0  # time of flight
+        self.length = 0
+        for wp, nxt in zip(self.waypoints, self.waypoints[1:]):
+            dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
+            self.length += dist
+            self.ToF += dist/wp[3]
+
+        if self.ToF > self.limit:
+            return False
+        return True
+
+    def build(self, routeParameters):
+        # build the path
+
+        # unpack parameters
+        self.limit = routeParameters["limit"]
+        spd = routeParameters["speed"]
+        alt = routeParameters["altitude"]
+        xferSpd = routeParameters["xfer_speed"]
+        xferAlt = routeParameters["xfer_altitude"]
+        xferAsc = routeParameters["xfer_ascend"]
+        xferDes = routeParameters["xfer_descend"]
+        landALt = routeParameters["land_altitude"]
+
+        # take off
+        if self.home is not None:
+            Hlat, Hlng = self.home
+            self.waypoints.append([Hlat, Hlng, xferAlt, xferSpd])
+            # get higher above frist point, point camera down
+        lat, lng = self.GPScords[0]
+        self.waypoints.append([lat, lng, xferAlt, xferDes])
+        # push each waypoint
+        for lat, lng in self.GPScords[:-1]:
+            self.waypoints.append([lat, lng, alt, spd])
+        lat, lng = self.GPScords[-1]
+        # last point to ascend to transfer
+        self.waypoints.append([lat, lng, alt, xferAsc])
+        # get higher above last point, point camera fwd
+        self.waypoints.append([lat, lng, xferAlt, xferSpd])
+        if self.home is not None:
+            # return home
+            self.waypoints.append([Hlat, Hlng, xferAlt, xferDes])
+            # land
+            self.waypoints.append([Hlat, Hlng, landALt, xferDes])
+
+    def __len__(self):
+        # number of waypoints in path
+        return len(self.UTMcords)
+
+    # def parseFile(self):
+    #     pathFiles = glob.glob(os.path.join(self.pathDir, "routes/*"))
+    #     for file in pathFiles:
+    #         self.cords = dict()
+    #         # print(file)
+    #         with open(file) as csvfile:
+    #             for line in csv.reader(csvfile, delimiter=','):
+    #                 if line[2] != '50':
+    #                     continue
+    #                 cords = (line[0], line[1])
+    #                 if cords in self.keyPoints:
+    #                     continue
+    #                 try:
+    #                     self.cords[cords] += 1
+    #                 except KeyError as e:
+    #                     self.cords[cords] = 1
+    #             try:
+    #                 routeEff = self.calcEff()
+    #                 print(file, ": ", routeEff)
+    #                 self.writeEff(file, routeEff)
+    #             except ZeroDivisionError as e:
+    #                 print("invalid file: {:s}".format(file))
+
+    # def calcEff(self):
+    #     nPts = 0
+    #     nPaths = 0
+    #     for keys in self.cords:
+    #         nPaths += self.cords[keys]
+    #         nPts += 1
+    #     return nPts/nPaths
+
+    # def writeEff(self, routeFile, routeEff):
+    #     infoFile = os.path.join(self.pathDir, "info.txt")
+    #     if os.path.exists(infoFile):
+    #         writeMode = 'a'
+    #     else:
+    #         writeMode = 'w'
+    #     with open(infoFile, writeMode) as f:
+    #         routeName = routeFile.split('/')[-1]
+    #         f.write("\n{:s}: {:2.4f}".format(
+    #                 routeName,
+    #                 routeEff))
+
+    def plot(self, ax, color='b'):
+        # path
+        cords = np.array(self.UTMcords)
+        ax.plot(cords[:, 0], cords[:, 1], color=color)
+        # start and end
+        ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
+        ax.scatter(cords[-2, 0], cords[-2, 1], color=color, marker='s')
+        if self.home is not None:
+            # plot the home point as a 'o'
+            HomeUTMx, HomeUTMy = utm.from_latlon(*self.home)[0:2]
+            ax.scatter(HomeUTMx, HomeUTMy, color=color, marker='o')
+            ax.plot([HomeUTMx, cords[0, 0]], [HomeUTMy, cords[0, 1]],
+                    color=color, linestyle="--")
+
+    def write(self, filename):
+        # writes the waypoints as a txt file
+        with filename.open('w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            # take off
+            row = self.waypoints[0] + ["FALSE", "", "", ""]
+            writer.writerow(row)
+            # transfer in
+            row = self.waypoints[1] + ["FALSE", "", "", "90.0"]
+            writer.writerow(row)
+            for wp in self.waypoints[2:-3]:
+                row = wp + ["FALSE", "", "", ""]
+                writer.writerow(row)
+            # transfer out
+            row = self.waypoints[-3] + ["FALSE", "", "", "0.0"]
+            writer.writerow(row)
+            # land
+            row = self.waypoints[-2] + ["FALSE", "", "", ""]
+            writer.writerow(row)
+            row = self.waypoints[-1] + ["FALSE", "", "", ""]
+            writer.writerow(row)

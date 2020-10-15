@@ -1,10 +1,8 @@
 #!/usr/bin/python3
-import os
 import csv
+import logging
 # math
 import numpy as np
-#
-import matplotlib.pyplot as plt
 # gis
 import utm
 from shapely.geometry import Polygon
@@ -19,25 +17,26 @@ class Fence(object):
             file is abs path file
         """
         self.file = file
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
         # get name of area
-        name = file.split('\\')[-1]
-        self.name = name.split('.csv')[0]
+        self.name = file.name.split('.csv')[0]
         # parse file
-        print("\nReading coordinate file {:s}".format(file))
         self.parseFile(file)
         # build polygon
         self.poly = Polygon(self.UTMCords)
         # find bounding box
         minx, miny, maxx, maxy = self.poly.bounds
-        print(f"{self.name}: extends in meters {maxx - minx} by {maxy - miny}")
+        self.logger.info(f"extends in meters {maxx - minx} by {maxy - miny}")
 
     def parseFile(self, file):
         # parse file as CSV
+        self.logger.info(f"Reading coordinate file {file}")
         # stores the gps cords, utm cords, and utm zones
-        if ".csv" in file:
+        if file.suffix == "csv":
             CSVfile = file
         else:
-            CSVfile = file + ".csv"
+            CSVfile = file.with_suffix(".csv")
         with open(CSVfile, 'r') as csvfile:
             data = [(line[1], line[2])
                     for line in csv.reader(csvfile, delimiter=',')]
@@ -56,12 +55,13 @@ class Fence(object):
         ax.plot(*self.poly.exterior.xy, color=color)
         # place label somewhere
         minx, miny, maxx, maxy = self.poly.bounds
-        placement = (maxx, miny)
+        placement = ((minx+maxx)/2, maxy)
         ax.annotate(self.name, xy=placement)
 
 
 class Areas(object):
     """holds the data from a KML file"""
+
     def __init__(self, file):
         self.areas = dict()
         print(file)
@@ -83,8 +83,8 @@ class Areas(object):
                     cords = cords.strip()
                     cords = cords.split(" ")
                     self.areas[name].append(
-                                    np.array([list(map(float, c.split((","))))
-                                              for c in cords]))
+                        np.array([list(map(float, c.split((","))))
+                                  for c in cords]))
                     # print(self.areas[name])
 
     def stripXML(self, string):
@@ -96,18 +96,3 @@ class Areas(object):
         for areaKey in self.areas:
             for ring in self.areas[areaKey]:
                 ax.plot(ring[:, 0], ring[:, 1], 'k')
-
-
-if __name__ == '__main__':
-    # move this test code later
-    path = os.path.join(os.path.dirname( __file__ ), '..', 'data', 'geofences')
-    file = os.path.join(path, "croz_west")
-    
-    absfile = os.path.abspath(file)
-    fence = Fence(absfile)
-    fig, ax = plt.subplots()
-    print(fig)
-    fence.plot(ax)
-    print(sum(fence.UTMCords))
-    print(hash(fig))
-    plt.show()

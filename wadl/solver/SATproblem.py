@@ -1,22 +1,26 @@
-import time
+# log
+import logging
 # math
 import numpy as np
 # graph
 import networkx as nx
-# lib
-from wadl.lib.utils import *
 # solver
 import z3
 
 
 class SATproblem(object):
     """docstring for SATSolver"""
-    def __init__(self, graph, limit, starts=None):
+
+    def __init__(self, graph, bound):
+
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+
         # unpack
         self.graph = graph
         self.nodes = list(self.graph.nodes)
-        self.limit = limit
-        self.starts = starts if starts is not None else [self.nodes[0]]
+        self.bound = bound
+        self.starts = [self.nodes[0]]
 
         # get sizes
         self.nNode = len(self.graph)
@@ -25,8 +29,9 @@ class SATproblem(object):
         self.make()
 
     def make(self):
+        self.isSolved = False
         self.z3 = z3.Solver()
-        self.satVars = self.makeVars(self.nNode, self.nPath, self.limit)
+        self.satVars = self.makeVars(self.nNode, self.nPath, self.bound)
 
         # create blist and for them to be false
         bList = self.L1Prune(self.graph, self.satVars, self.starts)
@@ -36,18 +41,22 @@ class SATproblem(object):
         self.nRmv = len(bList)
         self.makeConts(self.graph, self.satVars, self.starts)
 
-        # print(f"Built problem with {self.nVar-self.nRmv} vars, {self.nRmv} removed")
+        self.logger.debug(f"{self.nVar-self.nRmv} vars, {self.nRmv} removed")
 
-    def makeVars(self, nNode, nPath, limit):
+    @staticmethod
+    def makeVars(nNode, nPath, bound):
         # makes a bool var for each space, time, robot tuple
-        satVars=([[[z3.Bool("x%s_t%s_s%s" % (i, t, s))
-                    for s in range(nNode)]
-                    for t in range(limit)]
+        satVars = ([[[z3.Bool("x%s_t%s_s%s" % (i, t, s))
+                      for s in range(nNode)]
+                     for t in range(bound)]
                     for i in range(nPath)])
-        nVars = nNode * nPath *limit
         return np.array(satVars)
 
     def L1Prune(self, graph, satVars, starts):
+        def L1(a, b):
+            # returns the L1 norm of two vectors that are tuples
+            return sum(abs((np.array(a) - np.array(b))))
+
         bList = []
         # force to false a subset of the variables.
         for i, start in enumerate(starts):
@@ -55,7 +64,7 @@ class SATproblem(object):
             # print(worldBase)
             for si, s in enumerate(graph):
                 # reachable prune
-                worldDist = l1(start, s) # l1 distance between two pts
+                worldDist = L1(start, s)  # l1 distance between two pts
                 for t in range(worldDist):
                     if t < 2:
                         continue
@@ -69,83 +78,79 @@ class SATproblem(object):
     def removeVars(self, bList):
         for boolVar in bList:
             self.z3.add(z3.Not(boolVar))
-    
 
     def makeConts(self, graph, satVars, starts):
         # sets the constraints for the problem
         # running constraints
         T = nx.adjacency_matrix(graph)
         nPath = len(satVars)
-        limit = len(satVars[0])
+        bound = len(satVars[0])
 
         for i in range(self.nPath):
             # for each agent
-            for t in range(limit):
+            for t in range(bound):
                 # one spot per time
                 self.exactlyOne(self.z3, satVars[i][t])
                 # movement
-                if t+1 == limit:
+                if t+1 == bound:
                     # ignore the last bit for the end
                     break
                 for si, s in enumerate(graph):
                     nextMoves = [satVars[i][t+1][ssi]
                                  for ssi, ss in enumerate(graph)
-                                 if T[si, ssi] == 1 ]
+                                 if T[si, ssi] == 1]
                     # add self loop if it's the start or end node
                     if s == starts[i]:
                         nextMoves.append(satVars[i][t+1][si])
-                    # add constraint 
+                    # add constraint
                     self.z3.add(z3.Or(z3.Not(satVars[i][t][si]), *nextMoves))
         # for all agent and times each space must be true at least once
         for si, s in enumerate(graph):
             tempList = []
             for i in range(nPath):
-                tempList.extend([satVars[i][t][si] for t in range(limit)])
+                tempList.extend([satVars[i][t][si] for t in range(bound)])
 
             self.atLeastOne(self.z3, tempList)
         # boundary constants
-        for i, start  in enumerate(starts):
+        for i, start in enumerate(starts):
             startIdx = self.graph.nodes[start]['index']
             self.z3.add(z3.And(satVars[i][0][startIdx],
                                satVars[i][-1][startIdx]))
 
-    def solve(self):
+    def solve(self, timeout=10):
         # solve the problem
-        startTime = time.time()
-        solTime = None
+        # set the timeout
+        self.z3.set("timeout", timeout*1000)
         if self.z3.check() == z3.sat:
-            solTime = (time.time()-startTime)/60.
             # print("Solution Found: {:2.5f} min".format(solTime))
-            self.solved = True
-            return self.solved, self.output(), solTime
+            return True
         else:
-            raise RuntimeError("I will never be satisfiiiiied")
-            self.solved = False
-            return self.solved, None, solTime
+            return False
+        return False
 
-
-
-    def atMostOne(self, problem, varList):
+    @staticmethod
+    def atMostOne(problem, varList):
         # constrains at most one of the vars in the list to be true
         problem.add(z3.PbLe([(v, 1) for v in varList], 1))
 
-    def atLeastOne(self, problem, varList):
+    @staticmethod
+    def atLeastOne(problem, varList):
         # constrains at least one of the vars in the list to be true
         problem.add(z3.PbGe([(v, 1) for v in varList], 1))
 
-    def exactlyOne(self, problem, varList):
+    @staticmethod
+    def exactlyOne(problem, varList):
         # constrains at exactly one of the vars in the list to be true
         problem.add(z3.PbEq([(v, 1) for v in varList], 1))
-
 
     def output(self):
         m = self.z3.model()
         # colors = ['b', 'g', 'r', 'm']
-        nPath, limit, nNode = self.satVars.shape
+        nPath, bound, nNode = self.satVars.shape
         self.paths = []
         for i in range(nPath):
             path = []
-            for t in range(limit):
+            for t in range(bound):
                 for si, s in enumerate(self.graph.nodes):
                     # print(i, t, s)
                     # print(m.evaluate(self.satVars[i][t][s]))
@@ -155,5 +160,3 @@ class SATproblem(object):
             # store the path
             self.paths.append(path)
         return self.paths
-
-

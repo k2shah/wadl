@@ -1,85 +1,102 @@
-#gen 
+# gen
 import time
-# math
-import numpy as np
-#graph 
-import networkx as nx
-#plot
-import matplotlib.pyplot as plt
+import logging
 # lib
-from wadl.solver.SATproblem import SATproblem
-from wadl.graph.multiGraph import MultiGraph
-from wadl.graph.pathGraph import PathGraph
+from .SATproblem import SATproblem
+from .metaGraph import MetaGraph
+from ..lib.parameters import Parameters
+from tqdm import tqdm
+
+
+class SolverParameters(Parameters):
+    """docstring for """
+
+    def __init__(self, default=True):
+        super(SolverParameters, self).__init__(default)
+
+    def setDefaults(self):
+        self["subGraph_size"] = 40
+        self["SATBound_offset"] = 2
+        self["timeout"] = 60
+        self["maxProblems"] = 10
+
 
 class BaseSolver(object):
     """docstring for Solver"""
-    def __init__(self, maze):
-        self.maze = maze
-        self.setup()
 
-    def setup(self):
-        self.problem=SATproblem(self.maze.graph,
-                                self.maze.limit,
-                                self.maze.globalStarts)
+    def __init__(self, parameters=None):
+        # logging
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
 
-    def plot(self, ax):
-        self.maze.plot(ax, showGrid=True)
+        # param
+        self.parameters = parameters
+        if parameters is None:
+            self.parameters = SolverParameters(default=True)
+        else:
+            self.parameters = parameters
+
+    @property
+    def parameters(self):
+        return self._parameters
+
+    @parameters.setter
+    def parameters(self, value):
+        self._parameters = value
+
+    def setup(self, graph):
+        self.graph = graph
 
     def solve(self):
-        #solve the problem
-        return self.problem.solve()
+        # solve the problem
+        bound = len(self.graph) + self._parameters["SATBound_offset"]
+        problem = SATproblem(self.graph, bound)
+        return problem.solve()
 
 
-class LinkSolver(object):
+class LinkSolver(BaseSolver):
     """docstring for LinkSolver"""
 
-    def __init__(self, maze):
-        self.maze = maze
-        self.setup()
+    def __init__(self, parameters=None):
+        super(LinkSolver, self).__init__(parameters)
 
-    def setup(self):
-        self.mGraph = MultiGraph(self.maze.graph)
-        self.problems = []
-        for graph in self.mGraph:
-            limit = len(graph) + 2 #lets try this?
-            self.problems.append(SATproblem(graph, limit))
+    def setup(self, graph):
+        # setup graph
+        self.metaGraph = MetaGraph(graph,
+                                   size=self._parameters["subGraph_size"])
 
-    def plot(self, ax):
-        nGraph = len(self.mGraph)
-        cols = self.mGraph.getCols()
-        for i, graph in enumerate(self.mGraph):
-                # print(graph.nodes)
-                col = next(cols)
-                # print(colors[colIdx])
-                self.maze.plotNodes(ax, nodes=graph.nodes, color=col)
-
-    def presolve(self):
-        paths = []
-        for i, prob in enumerate(self.problems):
+    def solve(self, routeSet):
+        subPaths = []
+        startTime = time.time()
+        for i, graph in enumerate(tqdm(self.metaGraph.subGraphs, ascii=True)):
+            bound = len(graph) + self._parameters["SATBound_offset"]
+            self.logger.info(f"building problem {i}")
+            problem = SATproblem(graph, bound)
             counter = 0
             solved = False
+            sTime = time.time()
             while not solved:
-                try:
-                    solved, path, time = prob.solve()
-                    paths.append(path[0])
-                except RuntimeError as e:
-                    print(f"\tproblem {i} infeasible, increasing limit")
-                    prob.limit += 1 
-                    prob.make()
+                if problem.solve(timeout=self.parameters["timeout"]):
+                    solved = True
+                    self.logger.info(f"solved in {time.time()-sTime} sec")
+                    subPaths.append(problem.output()[0])
+                else:
+                    self.logger.info(f"problem {i} failed, increasing bound")
+                    problem.bound += 1
+                    problem.make()
                     counter += 1
+                    solved = False
+                # check counter
+                if counter > self.parameters["maxProblems"]:
+                    raise RuntimeError(f"problem {i} critically infeasible. "
+                                       "graph may be degenerate")
 
-                if counter > 6:
-                    raise RuntimeError(f"problem {i} critically infeasible. graph may be degenerate")
-        return paths
-
-    def solve(self):
-        startTime = time.time()
-        # presolve for the paths
-        paths = self.presolve()
         # build the meta graph
-        self.pGraph = PathGraph(paths, self.mGraph.baseGraph)
-        paths = self.pGraph.link(self.maze.limit)
+        self.logger.info("bullding pathGraph")
+        self.metaGraph.buildPathGraph(subPaths)
+        self.logger.info("linking routes")
+        self.metaGraph.link(routeSet)
         # print time
         solTime = time.time()-startTime
-        print("solution time: {:2.5f} sec".format(solTime))
-        return True, paths, solTime
+        self.logger.info("solution time: {:2.5f} sec".format(solTime))
+        return solTime
