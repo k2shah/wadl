@@ -1,6 +1,7 @@
 # gen
 import time
 import warnings
+from collections import defaultdict
 # io
 import json
 import csv
@@ -21,15 +22,24 @@ class MissionParameters(Parameters):
 
     def setDefaults(self):
         self["autoLand"] = True
+        self["preLandAlt"] = 30  # m
         self["trajectoryType"] = "straight"
-        self["hasHome"] = True
+        self["trajectoryResolve"] = {"straight": "STRAIGHT",
+                                     "safe": "STAIR"}
+
+        # export options
+        self['groupBy'] = "home"
+        self['sortBy'] = "angle"
+        self['assignBy'] = 'sector'
+
+        # band grouping
         self["nBands"] = 1
         self["bandStart"] = 50
         self["bandStep"] = 10
+
+        # offset from home, requires a not NONE home
         self["offsetTakeoffDist"] = 0
         self["offsetLandDist"] = 0
-        self["trajectoryResolve"] = {"straight": "STRAIGHT",
-                                     "safe": "STAIR"}
 
 
 class Mission(object):
@@ -81,38 +91,16 @@ class Mission(object):
         # match the name and output directory
         self.name = survey.name
         self.outDir = survey.outDir
-        routes = []
-        # get all the routes in the survey (from each maze)
-        for task, maze in survey.tasks.items():
-            if maze.routeSet.home is None:
-                warnings.warn("no home found. Disabling offsets & autoland")
-                self.parameters["hasHome"] = False
-                self.autoland = False
-            if maze.routeSet.multiHome:
-                warnings.warn("mutli home route. Disabling angular banding")
-                self.parameters["nBands"] = 1
-            for i, route in enumerate(maze.routeSet.routes):
-                # name = maze.name + "_" + str(i)
-                routes.append(route)
-        self.buildMission(routes, rewrite)
+
+        # build mission.json header
+        self.buildMission()
+        # oraganze and build routes
+        self.buildRoutes(survey)
 
     def fromDirc(self, srcDir):
-        name = srcDir.split('\\')[-1]
-        self.name = name.split('.csv')[0]
-        self.outDir = Path(srcDir)
-        routeFiles = Path(srcDir, "routes").glob("*.csv")
-        print(routeFiles)
-        routes = []
-        for i, file in enumerate(routeFiles):
-            with file.open('r') as csvfile:
-                reader = csv.reader(csvfile, delimiter=',')
-                route = [list(map(float, row[:4])) for row in reader]
-                print(route)
-                # name = self.name + "_" + str(i)
-                routes.append(route)
-        self.buildMission(routes)
+        raise NotImplementedError()
 
-    def buildMission(self, routes, rewrite):
+    def buildMission(self):
         mission = {"name": self.name,
                    "description": None,
                    "creationTime": int(time.time())}
@@ -135,6 +123,81 @@ class Mission(object):
 
         self.data["mission"]["routes"] = self.buildRoutes(routes)
 
+    def buildRoutes(self, survey):
+        routes = self.groupRoutes(survey)
+        routes = self.sortRoutes(routes)
+
+        # write routes to json and file
+        routeList = []
+        for g, key in enumerate(routes):
+            nRoutes = len(routes[key])
+            if self.parameters["assignBy"] = "sector":
+                RoutePerSector = int(len(routes[key])/self.nBands) + 1
+                transferBands = (self.bands[int(i/RoutePerSector)]
+                                 for i in range(nRoutes))
+
+            elif self.parameters["assignBy"] = "sequence":
+                transferBands = (self.bands[int(i % nRoutes)]
+                                 for i in range(nRoutes))
+
+            for i, (route, band) in enumerate(zip(routes[key], transferBands)):
+                name = f"g{h}_{int(band)}_{i}"
+
+                # encode route
+                routeList.append(self.makeRoute(name, route.waypoints,
+                                                band, route.home))
+
+                # write route
+                path = Path(self.outDir, "routes")
+                path.mkdir(exist_ok=True)
+                for i, route in enumerate(routes):
+                    filename = self.outDir / "routes" / f"{h}_{i}.csv"
+                    route.write(filename)
+        # save the json encoded route list
+        self.data["mission"]["routes"] = routeList
+
+    def groupRoutes(self, survey):
+        # group all the routes
+        routes = defaultdict(list)
+        # get all the routes in the survey (from each maze)
+        for task, maze in survey.tasks.items():
+            if maze.routeSet.home is None and self.autoland:
+                warnings.warn("no home found. Disabling autoland & offsets")
+                self.autoland = False
+                self.parameters["offsetTakeoffDist"] = 0
+                self.parameters["offsetLandDist"] = 0
+            # group into dictionary
+            for i, route in enumerate(maze.routeSet.routes):
+                # name = maze.name + "_" + str(i)
+                if self.parameters['groupBy'] == "home":
+                    routes[route.home].append(route)
+                elif self.parameters['groupBy'] == "task":
+                    routes[maze.name].append(route)
+                else:
+                    raise RuntimeError("groupBy parameters " +
+                                       f"{self.parameters["groupBy"]}" +
+                                       "not recongized")
+        return routes
+
+    def sortRoutes(self, routes):
+        # sort routes by option
+        if self.parameters["sortBy"] = "angle":
+            sortFunc = self.headingAngle
+        elif self.parameters["sortBy"] = "east":
+            sortFunc = self.eastStart
+        elif self.parameters["sortBy"] = "north":
+            sortFunc = self.northStart
+        else:
+            raise RuntimeError("sortBy parameters " +
+                               f"{self.parameters["sortBy"]}" +
+                               "not recongized")
+
+        for key in routes:
+            routes[key].sort(key=sortFunc)
+
+        return routes
+
+    # route sorting methods
     @staticmethod
     def headingAngle(route):
         # returns the inital heading angle of a route
@@ -149,10 +212,14 @@ class Mission(object):
         route.GPS2UTM()
         return route.UTMcords[0][0]
 
-    def offsetStart(self, route, dist):
-        # returns a pt dist meters from the 1st pt along the 1st segment
-        pt0 = route[0]
-        pt1 = route[1]
+    @staticmethod
+    def eastStart(route):
+        # returns the northing of the starting point
+        route.GPS2UTM()
+        return route.UTMcords[0][1]
+
+    def offsetStart(self, pt0, pt1, dist):
+        # returns a pt dist meters from the pt0 along pt0-pt1
         pt0_utm = utm.from_latlon(*pt0[:2])
         pt1_utm = utm.from_latlon(*pt1[:2])
 
@@ -165,92 +232,84 @@ class Mission(object):
         lat, lng = utm.to_latlon(*offsetPt, *zone_utm)
         return [lat, lng, *pt0[2:]]
 
-    def buildRoutes(self, routes):
-        routeList = []
-        RoutePerSector = int(len(routes)/self.nBands) + 1
-        for i, r in enumerate(routes):
-            bandIdx = int(i/RoutePerSector)
-            transferAlt = self.bands[bandIdx]
-            name = f"{bandIdx}_{int(transferAlt)}_{i}"
-            routeList.append(self.makeRoute(name, r.waypoints, transferAlt))
-        return routeList
-
     # helper functions to build the waypoint lists
-    def makeRoute(self, name, r, bandAlt=0):
+    def makeRoute(self, name, route, bandAlt=None, home=None):
         failsafe = {"rcLost": "GO_HOME",
                     "gpsLost": None,
                     "lowBattery": None,
                     "datalinkLost": None
                     }
-        route = {"name": name,
-                 "creationTime": int(time.time()),
-                 "scheduledTime": None,
-                 "startDelay": None,
-                 "vehicleProfile": "DJI Matrice 100",
-                 "trajectoryType": self.parameters["trajectoryResolve"][
-                                    self.parameters["trajectoryType"]],
-                 "safeAltitude": 50.0,
-                 "maxAltitude": 120.0,
-                 "initialSpeed": None,
-                 "maxSpeed": None,
-                 "failsafes": failsafe,
-                 "checkAerodromeNfz": True,
-                 "checkCustomNfz": True,
-                 "segments": [],
-                 "takeoffHeight": None,
-                 }
 
-        # take off
-        shift = 0
-        if self.parameters["hasHome"]:
-            shift = 1
+        routeJson = {"name": name,
+                     "creationTime": int(time.time()),
+                     "scheduledTime": None,
+                     "startDelay": None,
+                     "vehicleProfile": "DJI Matrice 100",
+                     "trajectoryType": self.parameters["trajectoryResolve"][
+                                        self.parameters["trajectoryType"]],
+                     "safeAltitude": 50.0,
+                     "maxAltitude": 120.0,
+                     "initialSpeed": None,
+                     "maxSpeed": None,
+                     "failsafes": failsafe,
+                     "checkAerodromeNfz": True,
+                     "checkCustomNfz": True,
+                     "segments": [],
+                     "takeoffHeight": None,
+                     }
+
+        # check if route has home
+        if home is not None:
+            route = route[1:-2]  # get rid of home in route
+
+            # take off
             # calculate offset point from lz
-            offsetPt = self.offsetStart(r,
+            offsetPt = self.offsetStart(home, route[1]
                                         self.parameters["offsetTakeoffDist"])
             lat, lng, alt, spd = offsetPt
-            pt = self.makePoint(lat, lng, bandAlt)
-            route["segments"].append(self.makeWaypoint(pt, spd))
-            # transit in. point camera down
-            lat, lng, alt, spd = r[1]
-            pt = self.makePoint(lat, lng, bandAlt)
-            route["segments"].append(self.makeWaypoint(pt, spd,
-                                                       tilt=90, camera=2))
-        else:
-            lat, lng, alt, spd = r[0]
-            pt = self.makePoint(lat, lng, bandAlt)
-            route["segments"].append(self.makeWaypoint(pt, spd,
-                                                       tilt=90, camera=2))
-        # take picture every 2 sec
-        for lat, lng, alt, spd in r[2:-4+shift]:
+            alt = alt if bandAlt is not None else bandAlt
             pt = self.makePoint(lat, lng, alt)
-            route["segments"].append(self.makeWaypoint(pt, spd,  camera=2))
+            routeJson["segments"].append(self.makeWaypoint(pt, spd))
+        
+        # transit in. point camera down
+        lat, lng, alt, spd = route[0]
+        alt = alt if bandAlt is not None else bandAlt
+        pt = self.makePoint(lat, lng, bandAlt)
+        routeJson["segments"].append(self.makeWaypoint(pt, spd,
+                                                       tilt=90, camera=2))
+
+        # take picture every 2 sec
+        for lat, lng, alt, spd in route[1:-2]:
+            pt = self.makePoint(lat, lng, alt)
+            routeJson["segments"].append(self.makeWaypoint(pt, spd,  camera=2))
         # turn off camera
-        lat, lng, alt, spd = r[-4+shift]
+        lat, lng, alt, spd = route[-2]
         pt = self.makePoint(lat, lng, alt)
-        route["segments"].append(self.makeWaypoint(pt, spd))
+        routeJson["segments"].append(self.makeWaypoint(pt, spd))
         # ascend camera forward
-        lat, lng, alt, spd = r[-3+shift]
+        lat, lng, alt, spd = route[-1]
+        alt = alt if bandAlt is not None else bandAlt
         pt = self.makePoint(lat, lng, bandAlt)
-        route["segments"].append(self.makeWaypoint(pt, spd, tilt=0))
+        routeJson["segments"].append(self.makeWaypoint(pt, spd, tilt=0))
         # transfer out
-        lat, lng, alt, spd = r[-2+shift]
+        lat, lng, alt, spd = route[-1]
         pt = self.makePoint(lat, lng, bandAlt)
-        route["segments"].append(self.makeWaypoint(pt, spd))
+        routeJson["segments"].append(self.makeWaypoint(pt, spd))
         # pre land
         if self.parameters["hasHome"]:
             # calculate offset point from lz
-            offsetPt = self.offsetStart(r,
+            offsetPt = self.offsetStart(route,
                                         self.parameters["offsetLandDist"])
             lat, lng, alt, spd = offsetPt
             pt = self.makePoint(lat, lng, alt)
-            route["segments"].append(self.makeWaypoint(pt, spd))
+            routeJson["segments"].append(self.makeWaypoint(pt, spd))
 
         # land if autoLand is True
         if self.autoLand:
             pt = self.makePoint(lat, lng, 0.0)
-            route["segments"].append(self.makeLand(pt))
+            routeJson["segments"].append(self.makeLand(pt))
 
-        return route
+        return routeJson
 
     @staticmethod
     def makePoint(lat, lng, alt):

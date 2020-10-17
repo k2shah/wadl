@@ -37,7 +37,7 @@ survey.addTask(file,
 
 # solver parameters
 solverParams = SolverParameters()
-solverParams["subGraph_size"] = 20
+solverParams["subGraph_size"] = 30
 solverParams["SATBound_offset"] = 4
 solverParams["timeout"] = 30
 
