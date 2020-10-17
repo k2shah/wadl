@@ -10,6 +10,8 @@ from pathlib import Path
 import utm
 # math
 import numpy as np
+# plot
+import matplotlib.pyplot as plt
 # lib
 from .lib.parameters import Parameters
 
@@ -21,25 +23,25 @@ class MissionParameters(Parameters):
         super(MissionParameters, self).__init__(default)
 
     def setDefaults(self):
-        self["autoLand"] = True
-        self["preLandAlt"] = 30  # m
-        self["trajectoryType"] = "straight"
-        self["trajectoryResolve"] = {"straight": "STRAIGHT",
-                                     "safe": "STAIR"}
+        self["autoland"] = True
+        self["pre_land_alt"] = None  # m
+        self["trajectory_type"] = "straight"
+        self["trajectory_resolver"] = {"straight": "STRAIGHT",
+                                       "safe": "STAIR"}
 
         # export options
-        self['groupBy'] = "home"
-        self['sortBy'] = "angle"
-        self['assignBy'] = 'sector'
+        self["group"] = "home"
+        self["sort"] = "angle"
+        self["assign"] = 'sector'
 
         # band grouping
-        self["nBands"] = 1
-        self["bandStart"] = 50
-        self["bandStep"] = 10
+        self["N_bands"] = 1
+        self["band_start"] = 50
+        self["band_step"] = 10
 
         # offset from home, requires a not NONE home
-        self["offsetTakeoffDist"] = 0
-        self["offsetLandDist"] = 0
+        self["offset_takeoff_dist"] = 0
+        self["offset_land_dist"] = 0
 
 
 class Mission(object):
@@ -62,11 +64,11 @@ class Mission(object):
                      "vehicles": []
                      }
 
-        self.autoLand = self.parameters["autoLand"]
+        self.autoLand = self.parameters["autoland"]
         # altitude bands for vertical seperation
-        self.nBands = self.parameters["nBands"]
-        bandStep = self.parameters["bandStep"]
-        bandStart = self.parameters["bandStart"]
+        self.nBands = self.parameters["N_bands"]
+        bandStep = self.parameters["band_step"]
+        bandStart = self.parameters["band_start"]
         self.bands = bandStart +\
             np.linspace(0, (self.nBands-1)*bandStep, self.nBands)
 
@@ -87,10 +89,12 @@ class Mission(object):
                    }
         self.data["version"] = version
 
-    def fromSurvey(self, survey, rewrite=True):
+    def fromSurvey(self, survey, plot=False):
         # match the name and output directory
         self.name = survey.name
         self.outDir = survey.outDir
+        # plot new ordering
+        self.plotMission = plot
 
         # build mission.json header
         self.buildMission()
@@ -104,57 +108,60 @@ class Mission(object):
         mission = {"name": self.name,
                    "description": None,
                    "creationTime": int(time.time())}
-
         self.data["mission"] = mission
-        # sort the routes
-        if self.parameters["nBands"] > 1:
-            # angularly
-            routes.sort(key=self.headingAngle)
-        else:
-            # east most
-            routes.sort(key=self.eastStart)
-
-        if rewrite:
-            path = Path(self.outDir, "routes")
-            path.mkdir(exist_ok=True)
-            for i, route in enumerate(routes):
-                filename = self.outDir / "routes" / f"{i}.csv"
-                route.write(filename)
-
-        self.data["mission"]["routes"] = self.buildRoutes(routes)
 
     def buildRoutes(self, survey):
         routes = self.groupRoutes(survey)
         routes = self.sortRoutes(routes)
 
+        if self.plotMission:
+            fig, ax = plt.subplots(figsize=(16, 16))
+            survey.plotKeyPoints(ax)
+            cols = plt.cm.rainbow_r(np.linspace(0, 1, self.nBands))
+            for task, maze in survey.tasks.items():
+                maze.plot(ax, showRoutes=False)
+
         # write routes to json and file
+        path = Path(self.outDir, "routes")
+        path.mkdir(exist_ok=True)
         routeList = []
         for g, key in enumerate(routes):
             nRoutes = len(routes[key])
-            if self.parameters["assignBy"] = "sector":
+            if self.parameters["assign"] == "sector":
                 RoutePerSector = int(len(routes[key])/self.nBands) + 1
-                transferBands = (self.bands[int(i/RoutePerSector)]
-                                 for i in range(nRoutes))
+                assigned = (int(i/RoutePerSector) for i in range(nRoutes))
 
-            elif self.parameters["assignBy"] = "sequence":
-                transferBands = (self.bands[int(i % nRoutes)]
-                                 for i in range(nRoutes))
+            elif self.parameters["assign"] == "sequence":
+                assigned = (int(i % self.nBands) for i in range(nRoutes))
+            else:
+                raise RuntimeError(f"param error")
 
-            for i, (route, band) in enumerate(zip(routes[key], transferBands)):
-                name = f"g{h}_{int(band)}_{i}"
+            for i, (route, assignIdx) in enumerate(zip(routes[key], assigned)):
+                altBand = self.bands[assignIdx]
+                name = f"g{g}_{int(altBand)}_{i}"
 
                 # encode route
                 routeList.append(self.makeRoute(name, route.waypoints,
-                                                band, route.home))
+                                                altBand, route.home))
+
+                # plot route
+                if self.plotMission:
+                    route.plot(ax, cols[assignIdx])
+                    print(assignIdx, altBand, cols[assignIdx])
 
                 # write route
-                path = Path(self.outDir, "routes")
-                path.mkdir(exist_ok=True)
-                for i, route in enumerate(routes):
-                    filename = self.outDir / "routes" / f"{h}_{i}.csv"
-                    route.write(filename)
+                filename = self.outDir / "routes" / f"{g}_{i}.csv"
+                route.write(filename)
         # save the json encoded route list
         self.data["mission"]["routes"] = routeList
+
+        # output plot
+        if self.plotMission:
+            plt.axis('square')
+            plt.gca().set_aspect('equal', adjustable='box')
+            filename = self.outDir / "mission_routes.png"
+            plt.savefig(filename, bbox_inches='tight', dpi=100)
+            plt.show()
 
     def groupRoutes(self, survey):
         # group all the routes
@@ -164,34 +171,29 @@ class Mission(object):
             if maze.routeSet.home is None and self.autoland:
                 warnings.warn("no home found. Disabling autoland & offsets")
                 self.autoland = False
-                self.parameters["offsetTakeoffDist"] = 0
-                self.parameters["offsetLandDist"] = 0
+                self.parameters["offset_takeoff_dist"] = 0
+                self.parameters["offset_land_dist"] = 0
             # group into dictionary
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
-                if self.parameters['groupBy'] == "home":
-                    routes[route.home].append(route)
-                elif self.parameters['groupBy'] == "task":
+                if self.parameters['group'] == "home":
+                    routes[tuple(route.home)].append(route)
+                elif self.parameters['group'] == "task":
                     routes[maze.name].append(route)
                 else:
-                    raise RuntimeError("groupBy parameters " +
-                                       f"{self.parameters["groupBy"]}" +
-                                       "not recongized")
+                    raise RuntimeError(f"param error")
         return routes
 
     def sortRoutes(self, routes):
         # sort routes by option
-        if self.parameters["sortBy"] = "angle":
+        if self.parameters["sort"] == "angle":
             sortFunc = self.headingAngle
-        elif self.parameters["sortBy"] = "east":
+        elif self.parameters["sort"] == "east":
             sortFunc = self.eastStart
-        elif self.parameters["sortBy"] = "north":
+        elif self.parameters["sort"] == "north":
             sortFunc = self.northStart
         else:
-            raise RuntimeError("sortBy parameters " +
-                               f"{self.parameters["sortBy"]}" +
-                               "not recongized")
-
+            raise RuntimeError(f"param error")
         for key in routes:
             routes[key].sort(key=sortFunc)
 
@@ -218,19 +220,19 @@ class Mission(object):
         route.GPS2UTM()
         return route.UTMcords[0][1]
 
-    def offsetStart(self, pt0, pt1, dist):
-        # returns a pt dist meters from the pt0 along pt0-pt1
-        pt0_utm = utm.from_latlon(*pt0[:2])
-        pt1_utm = utm.from_latlon(*pt1[:2])
+    def offsetHome(self, home, pt, dist):
+        # returns a pt dist meters from the home along home-pt
+        home_utm = utm.from_latlon(*home)
+        pt_utm = utm.from_latlon(*pt[:2])
 
-        zone_utm = pt0_utm[2:]
-        vec = np.array(pt1_utm[:2])-np.array(pt0_utm[:2])
+        zone_utm = home_utm[2:]
+        vec = np.array(pt_utm[:2])-np.array(home_utm[:2])
 
         # normalize and scale
         vec = vec/np.linalg.norm(vec) * dist
-        offsetPt = np.array(pt0_utm[:2]) + vec
+        offsetPt = np.array(home_utm[:2]) + vec
         lat, lng = utm.to_latlon(*offsetPt, *zone_utm)
-        return [lat, lng, *pt0[2:]]
+        return [lat, lng, *pt[2:]]
 
     # helper functions to build the waypoint lists
     def makeRoute(self, name, route, bandAlt=None, home=None):
@@ -245,8 +247,8 @@ class Mission(object):
                      "scheduledTime": None,
                      "startDelay": None,
                      "vehicleProfile": "DJI Matrice 100",
-                     "trajectoryType": self.parameters["trajectoryResolve"][
-                                        self.parameters["trajectoryType"]],
+                     "trajectoryType": self.parameters["trajectory_resolver"][
+                                        self.parameters["trajectory_type"]],
                      "safeAltitude": 50.0,
                      "maxAltitude": 120.0,
                      "initialSpeed": None,
@@ -262,15 +264,6 @@ class Mission(object):
         if home is not None:
             route = route[1:-2]  # get rid of home in route
 
-            # take off
-            # calculate offset point from lz
-            offsetPt = self.offsetStart(home, route[1]
-                                        self.parameters["offsetTakeoffDist"])
-            lat, lng, alt, spd = offsetPt
-            alt = alt if bandAlt is not None else bandAlt
-            pt = self.makePoint(lat, lng, alt)
-            routeJson["segments"].append(self.makeWaypoint(pt, spd))
-        
         # transit in. point camera down
         lat, lng, alt, spd = route[0]
         alt = alt if bandAlt is not None else bandAlt
@@ -291,23 +284,33 @@ class Mission(object):
         alt = alt if bandAlt is not None else bandAlt
         pt = self.makePoint(lat, lng, bandAlt)
         routeJson["segments"].append(self.makeWaypoint(pt, spd, tilt=0))
-        # transfer out
-        lat, lng, alt, spd = route[-1]
-        pt = self.makePoint(lat, lng, bandAlt)
-        routeJson["segments"].append(self.makeWaypoint(pt, spd))
-        # pre land
-        if self.parameters["hasHome"]:
+
+        if home is not None:
+            # take off
             # calculate offset point from lz
-            offsetPt = self.offsetStart(route,
-                                        self.parameters["offsetLandDist"])
+            offsetPt = self.offsetHome(home, route[1],
+                                       self.parameters["offset_takeoff_dist"])
             lat, lng, alt, spd = offsetPt
+            alt = alt if bandAlt is not None else bandAlt
+            pt = self.makePoint(lat, lng, alt)
+            routeJson["segments"].insert(0, self.makeWaypoint(pt, spd))
+
+            # transfer out
+            offsetPt = self.offsetHome(home, route[-1],
+                                       self.parameters["offset_land_dist"])
+            lat, lng, alt, spd = offsetPt
+            alt = alt if bandAlt is not None else bandAlt
             pt = self.makePoint(lat, lng, alt)
             routeJson["segments"].append(self.makeWaypoint(pt, spd))
+            # pre land
+            if self.parameters["pre_land_alt"] is not None:
+                pt = self.makePoint(lat, lng, self.parameters["pre_land_alt"])
+                routeJson["segments"].append(self.makeWaypoint(pt, 4))
 
-        # land if autoLand is True
-        if self.autoLand:
-            pt = self.makePoint(lat, lng, 0.0)
-            routeJson["segments"].append(self.makeLand(pt))
+            # land if autoLand is True
+            if self.autoLand:
+                pt = self.makePoint(lat, lng, 0.0)
+                routeJson["segments"].append(self.makeLand(pt))
 
         return routeJson
 

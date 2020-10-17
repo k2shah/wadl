@@ -108,7 +108,7 @@ class Survey(object):
         # display
         plt.show()
 
-    def plan(self, plot=True, write=False):
+    def plan(self, write=True):
         for task, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             try:
@@ -127,13 +127,13 @@ class Survey(object):
         # plot task
         fig, ax = plt.subplots(figsize=(16, 16))
         for task, maze in self.tasks.items():
-            self.plotKeyPoints(ax)
             maze.plot(ax)
-            plt.axis('square')
-            plt.gca().set_aspect('equal', adjustable='box')
-            filename = self.outDir / "routes.png"
-            plt.savefig(filename, bbox_inches='tight', dpi=100)
-            plt.show()
+        self.plotKeyPoints(ax)
+        plt.axis('square')
+        plt.gca().set_aspect('equal', adjustable='box')
+        filename = self.outDir / "routes.png"
+        plt.savefig(filename, bbox_inches='tight', dpi=100)
+        plt.show()
 
     def mission(self, missionParams):
         # make a mission.json file
