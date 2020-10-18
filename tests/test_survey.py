@@ -27,7 +27,7 @@ def test_island(survey):
     routeParams = RouteParameters()
     routeParams["limit"] = 5*60,  # s
     survey.addTask(file, step=35, routeParameters=routeParams)
-    survey.plan(plot=False)
+    survey.plan()
 
 
 def test_croz(survey):
@@ -39,4 +39,4 @@ def test_croz(survey):
     routeParams["speed"] = 5,  # m/s
 
     survey.addTask(file, rotation=15, step=35, routeParameters=routeParams)
-    survey.plan(plot=False)
+    survey.plan()
