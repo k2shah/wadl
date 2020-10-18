@@ -90,7 +90,7 @@ class Survey(object):
             ax.annotate(key, xy=cord, xycoords='data')
 
     def view(self, showGrid=True):
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(16, 16))
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
             self.solver.setup(maze.graph)
