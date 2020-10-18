@@ -2,7 +2,12 @@
 ![build](https://github.com/k2shah/wadl/workflows/build/badge.svg)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-## Fighter Planner Software
+## Coverage Path Planner
+<p float="middle">
+  <img src="https://github.com/k2shah/wadl/blob/devel/example/stanford/grid.png?raw=true" width=470 >
+  <img src="https://github.com/k2shah/wadl/blob/devel/example/stanford/routes.png?raw=true" width=470 >
+</p>
+
 
 WADL is a python package for planning surveys over large areas using one or more UAV (Unpersoned Aerial Vehicle). WADL take in a geofence and desired gird spacing and produces a series of routes to survey the area inside the geofence. 
 
@@ -30,7 +35,8 @@ survey = Survey()
 survey.addTask(<path_to_geofence.csv>, step=100)
 survey.plan()
 ```
-![grid](example/stanford/grid.png "Coverage Grid") ![routes](example/stanford/routes.png "Planned Routes")
+
+
 
 see the [example](example/stanford.py) for a complete demonstration 
 
