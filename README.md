@@ -12,9 +12,24 @@ Adélie penguins over [Cape Crozier, Ross Island, Antarctica](https://goo.gl/map
 This work was supported by grant XX
 
 ## Install
+### pip
+```
+pip install wadl-planner
+```
+### source
+```
+git clone https://github.com/k2shah/wadl.git
 pip install -r requirements.txt
+```
 
 ## Usage
+### Quick Start
+```
+from wadl.survey import Survey
+survey = Survey()
+survey.addTask(<path_to_geofence.csv>, step=100)
+survey.plan()
+```
 see the [example](example/stanford.py) for a complete demonstration 
 
 ### Survey
@@ -102,8 +117,8 @@ solverParams["maxProblems"] = 10
  
 
 
- ### UGCS
- WADL has support to export route as a `mission.json` file to [ugcs](https://www.ugcs.com/)
+### UGCS
+WADL has support to export route as a `mission.json` file to [ugcs](https://www.ugcs.com/)
 ```
 from wadl.mission import Mission
 mission = Mission(missionParams)
@@ -111,6 +126,14 @@ mission.fromSurvey(survey)
 mission.write()
 ```
 This creates a `mission.json` file that can be loaded into UGCS. This will also group the routes by sector to make it easier to field a multi-robot survey. This wiil also modify the transit altitude of the UAVS. The parameters can that be set are below. 
+
+#### UGCS Version 
+To set a UGCS version you can call
+```
+mission.setVersion(major, minor, build)
+```
+Where the ``major.minor.build`` is your version of UGCS
+
 #### Mission Parameters
 
 ```
@@ -118,29 +141,43 @@ from wadl.mission import MissionParameters
 missionParams = MissionParameters()
 
 # will auto land the UAVs at the home position 
-missionParams["autoLand"] = True
+missionParams["autoland"] = True
 
-# offsets the takeoff location by "bandRadialOffset" along the 1st segment 
-missionParams["offsetTakeoff"] = True
+# route organization 
+# once routes are found, they can be organized and encoded into a mission JSON file for UGCS to open
+# these options are for large surveys with multiple UAVs where coordination of the routes and their sequence is needed 
 
-# offsets the land location by "bandRadialOffset" along the 1st segment 
-missionParams["offsetLand"] = False
+# grouping routes
+missionParams["group"] = "home" ## other option is "task"
 
-# offset distance along 1st segment 
-missionParams["bandRadialOffset"] = 10 
+# sorting routes
+# sorts the routes within a group with the following strategy
+missionParams["sort"] = "angle" ## other option is "east" or "north"
+
+# assigning routes
+# routes can be assigned to bands either sequentially or sector
+missionParams["assign"] = "sector ## other option is "sequence"
+
+
+# offseting initial and final points
+# offsets the takeoff location by this distance in m along the first segment 
+missionParams["offset_takeoff_dist"] = 0
+
+# offsets the land location by "bandRadialOffset" along the last segment 
+missionParams["offset_land_dist"] = 0
 
 # number of bands to split the sectors into (normally the number of UAVs used)
-missionParams["nBands"] = 1
+missionParams["N_bands"] = 1
 
 # the started altitutde in m (agl)
-missionParams["bandStart"] = 50
+missionParams["band_start"] = 50
 
 # the altitte band seperation step
-missionParams["bandStep"] = 10
+missionParams["band_step"] = 10
 ```
 
 ### Issues
-For any suggestions or bugs please make an issue
+For any suggestions or bugs please open an issue
 
 ### License
-<>
+This software is licensed under [GNU GENERAL PUBLIC LICENSE verion 3](https://www.gnu.org/licenses/gpl-3.0)
