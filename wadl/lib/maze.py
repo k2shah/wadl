@@ -171,7 +171,7 @@ class Maze(Fence):
         for route in self.routeSet:
             route.plot(ax, color=next(cols))
 
-    def plot(self, ax, showGrid=False):
+    def plot(self, ax, showGrid=False, showRoutes=True):
         # plot the geofence with grid overlay
         # plot fence
         super(Maze, self).plot(ax)
@@ -180,4 +180,5 @@ class Maze(Fence):
         if showGrid:
             # self.plotNodes(ax)
             self.plotEdges(ax)
-        self.plotRoutes(ax)
+        if showRoutes:
+            self.plotRoutes(ax)
