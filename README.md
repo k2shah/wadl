@@ -30,6 +30,8 @@ survey = Survey()
 survey.addTask(<path_to_geofence.csv>, step=100)
 survey.plan()
 ```
+![grid](example/stanford/grid.png "Coverage Grid") ![routes](example/stanford/routes.png "Planned Routes")
+
 see the [example](example/stanford.py) for a complete demonstration 
 
 ### Survey
