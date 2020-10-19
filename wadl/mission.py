@@ -64,7 +64,7 @@ class Mission(object):
                      "vehicles": []
                      }
 
-        self.autoLand = self.parameters["autoland"]
+        self.autoland = self.parameters["autoland"]
         # altitude bands for vertical seperation
         self.nBands = self.parameters["N_bands"]
         bandStep = self.parameters["band_step"]
