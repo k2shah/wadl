@@ -22,7 +22,7 @@ class Survey(object):
         # save the name of the survey
         self.name = name
         # make the output directory
-        self.outDir = Path(name) if outDir is None else Path(outDir)
+        self.outDir = Path(name) if outDir is None else Path(outDir/name)
         self.outDir.mkdir(exist_ok=True)
         # setup logger
         self.setupLogger()

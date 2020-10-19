@@ -16,7 +16,7 @@ def croz():
 
     # make survey object
     path = Path(__file__).parent / "out"
-    survey = Survey('test', path)
+    survey = Survey('croz', path)
     survey.setSolverParamters(solverParams)
 
     # get a island ("little norway")
@@ -47,6 +47,22 @@ def croz():
 def test_group_home_mission(croz):
     from wadl.mission import Mission
     from wadl.mission import MissionParameters
-    
 
+    missionParams = MissionParameters()
+    # will auto land the UAVs at the home position
+    # missionParams["autoland"] = False
+    # # offsets the takeoff location along the 1st segment
+    missionParams["offsetTakeoff"] = 10
+    # # offsets the land location along the 1st segment
+    # missionParams["offsetLand"] = 0
+    # # number of bands to split the sectors into (normally the number of UAVs used)
+    missionParams["N_bands"] = 3
+    # the started altitutde in m (agl)
+    missionParams["band_start"] = 50
+    # the altitte band seperation step
+    missionParams["band_step"] = 10
 
+    # missionParams["trajectory_type"] = "safe"
+
+    mission = Mission(missionParams)
+    mission.fromSurvey(croz)

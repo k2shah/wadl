@@ -15,13 +15,13 @@ def island():
 
     # make survey object
     path = Path(__file__).parent / "out"
-    survey = Survey('test', path)
+    survey = Survey('island', path)
     survey.setSolverParamters(solverParams)
     from wadl.lib.route import RouteParameters
     # get a island ("little norway")
     file = Path(__file__).parent / "data" / "Little Norway"
     routeParams = RouteParameters()
-    routeParams["limit"] = 5*60,  # s
+    routeParams["limit"] = 7*60,  # s
     survey.addTask(file, step=35, routeParameters=routeParams)
     survey.plan()
 
@@ -31,7 +31,7 @@ def island():
 def test_no_home(island):
     from wadl.mission import Mission
     from wadl.mission import MissionParameters
-    
+
     missionParams = MissionParameters()
     # will auto land the UAVs at the home position
     # missionParams["autoland"] = False
@@ -52,4 +52,4 @@ def test_no_home(island):
     # missionParams["trajectory_type"] = "safe"
 
     mission = Mission(missionParams)
-    mission.fromSurvey(croz)
+    mission.fromSurvey(island)

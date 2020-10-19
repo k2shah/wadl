@@ -114,12 +114,12 @@ class Mission(object):
         routes = self.groupRoutes(survey)
         routes = self.sortRoutes(routes)
 
-        if self.plotMission:
-            fig, ax = plt.subplots(figsize=(16, 16))
-            survey.plotKeyPoints(ax)
-            cols = plt.cm.rainbow_r(np.linspace(0, 1, self.nBands))
-            for task, maze in survey.tasks.items():
-                maze.plot(ax, showRoutes=False)
+        # start plottng
+        fig, ax = plt.subplots(figsize=(16, 16))
+        survey.plotKeyPoints(ax)
+        cols = plt.cm.rainbow_r(np.linspace(0, 1, self.nBands))
+        for task, maze in survey.tasks.items():
+            maze.plot(ax, showRoutes=False)
 
         # write routes to json and file
         path = Path(self.outDir, "routes")
@@ -145,9 +145,7 @@ class Mission(object):
                                                 altBand, route.home))
 
                 # plot route
-                if self.plotMission:
-                    route.plot(ax, cols[assignIdx])
-                    print(assignIdx, altBand, cols[assignIdx])
+                route.plot(ax, cols[assignIdx])
 
                 # write route
                 filename = self.outDir / "routes" / f"{g}_{i}.csv"
@@ -156,11 +154,11 @@ class Mission(object):
         self.data["mission"]["routes"] = routeList
 
         # output plot
+        plt.axis('square')
+        plt.gca().set_aspect('equal', adjustable='box')
+        filename = self.outDir / "mission_routes.png"
+        plt.savefig(filename, bbox_inches='tight', dpi=100)
         if self.plotMission:
-            plt.axis('square')
-            plt.gca().set_aspect('equal', adjustable='box')
-            filename = self.outDir / "mission_routes.png"
-            plt.savefig(filename, bbox_inches='tight', dpi=100)
             plt.show()
 
     def groupRoutes(self, survey):
