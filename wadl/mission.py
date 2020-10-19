@@ -308,7 +308,7 @@ class Mission(object):
                 routeJson["segments"].append(self.makeWaypoint(pt, 4))
 
             # land if autoLand is True
-            if self.autoLand:
+            if self.autoland:
                 pt = self.makePoint(lat, lng, 0.0)
                 routeJson["segments"].append(self.makeLand(pt))
 
