@@ -23,7 +23,7 @@ class MissionParameters(Parameters):
         super(MissionParameters, self).__init__(default)
 
     def setDefaults(self):
-        self["autoland"] = True
+        self["autoland"] = False
         self["pre_land_alt"] = None  # m
         self["trajectory_type"] = "straight"
         self["trajectory_resolver"] = {"straight": "STRAIGHT",
@@ -114,12 +114,12 @@ class Mission(object):
         routes = self.groupRoutes(survey)
         routes = self.sortRoutes(routes)
 
-        if self.plotMission:
-            fig, ax = plt.subplots(figsize=(16, 16))
-            survey.plotKeyPoints(ax)
-            cols = plt.cm.rainbow_r(np.linspace(0, 1, self.nBands))
-            for task, maze in survey.tasks.items():
-                maze.plot(ax, showRoutes=False)
+        # start plottng
+        fig, ax = plt.subplots(figsize=(16, 16))
+        survey.plotKeyPoints(ax)
+        cols = plt.cm.rainbow_r(np.linspace(0, 1, self.nBands))
+        for task, maze in survey.tasks.items():
+            maze.plot(ax, showRoutes=False)
 
         # write routes to json and file
         path = Path(self.outDir, "routes")
@@ -145,9 +145,7 @@ class Mission(object):
                                                 altBand, route.home))
 
                 # plot route
-                if self.plotMission:
-                    route.plot(ax, cols[assignIdx])
-                    print(assignIdx, altBand, cols[assignIdx])
+                route.plot(ax, cols[assignIdx])
 
                 # write route
                 filename = self.outDir / "routes" / f"{g}_{i}.csv"
@@ -156,11 +154,11 @@ class Mission(object):
         self.data["mission"]["routes"] = routeList
 
         # output plot
+        plt.axis('square')
+        plt.gca().set_aspect('equal', adjustable='box')
+        filename = self.outDir / "mission_routes.png"
+        plt.savefig(filename, bbox_inches='tight', dpi=100)
         if self.plotMission:
-            plt.axis('square')
-            plt.gca().set_aspect('equal', adjustable='box')
-            filename = self.outDir / "mission_routes.png"
-            plt.savefig(filename, bbox_inches='tight', dpi=100)
             plt.show()
 
     def groupRoutes(self, survey):
@@ -168,16 +166,17 @@ class Mission(object):
         routes = defaultdict(list)
         # get all the routes in the survey (from each maze)
         for task, maze in survey.tasks.items():
-            if maze.routeSet.home is None and self.autoland:
+            if maze.routeSet.home is None or not self.autoland:
                 warnings.warn("no home found. Disabling autoland & offsets")
                 self.autoland = False
                 self.parameters["offset_takeoff_dist"] = 0
                 self.parameters["offset_land_dist"] = 0
+                self.parameters['group'] == "task"
             # group into dictionary
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
                 if self.parameters['group'] == "home":
-                    routes[tuple(route.home)].append(route)
+                    routes[route.home].append(route)
                 elif self.parameters['group'] == "task":
                     routes[maze.name].append(route)
                 else:

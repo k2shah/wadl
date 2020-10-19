@@ -355,7 +355,8 @@ class MetaGraph(object):
                     routeSet.push(lastRoute)
                     del lastRoute
                 except UnboundLocalError:
-                    raise RuntimeError("\t\tpath limit too short")
+                    self.logger.error("limit too short-decrease subgraph size")
+                    raise RuntimeError("path limit too short")
                 # change to interior nodes when external are exhausted
                 if any([n in nodeQueue.keys()
                         for n in self.pathGraph['e']]):

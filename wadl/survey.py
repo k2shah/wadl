@@ -22,8 +22,8 @@ class Survey(object):
         # save the name of the survey
         self.name = name
         # make the output directory
-        self.outDir = Path(name) if outDir is None else Path(outDir)
-        self.outDir.mkdir(exist_ok=True)
+        self.outDir = Path(name) if outDir is None else Path(outDir/name)
+        self.outDir.mkdir(parents=True, exist_ok=True)
         # setup logger
         self.setupLogger()
         # tasks is a dict that maps file name to survey parameters
