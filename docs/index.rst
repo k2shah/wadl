@@ -11,8 +11,11 @@ WADL is a python package for planning surveys over large areas using one or more
 Motivation
 ----------
 
-The project was motivated by the need for efficient route planning for multi-robot systems. WADL was designed and used in a 2019-2020 survey of 
-Adélie penguins over [Cape Crozier, Ross Island, Antarctica](https://goo.gl/maps/wrMTuMq5kyNxZafx8) If you are interested in the technical details please see our paper <> 
+The project was motivated by the need for efficient route planning for multi-robot systems. WADL was designed and used in a 2019-2020 survey of Adélie penguins over `Cape Crozier`_, Ross Island, Antarctica.
+
+.. _Cape Crozier: https://goo.gl/maps/wrMTuMq5kyNxZafx8) 
+
+If you are interested in the technical details please see our paper <> 
 
 ================================
 
