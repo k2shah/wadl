@@ -1,11 +1,12 @@
 # WADL
 ![build](https://github.com/k2shah/wadl/workflows/build/badge.svg)
+[![docs](https://readthedocs.org/projects/wadl/badge/?version=latest)](https://wadl.readthedocs.io/en/latest/?badge=latest)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Coverage Path Planner
-<p float="middle">
-  <img src="https://github.com/k2shah/wadl/blob/devel/example/stanford/grid.png?raw=true" width=470 >
-  <img src="https://github.com/k2shah/wadl/blob/devel/example/stanford/routes.png?raw=true" width=470 >
+<p float="center">
+  <img src="https://github.com/k2shah/wadl/blob/devel/example/stanford/grid.png?raw=true" width=400 >
+  <img src="https://github.com/k2shah/wadl/blob/devel/example/stanford/routes.png?raw=true" width=400 >
 </p>
 
 
