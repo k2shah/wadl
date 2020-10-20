@@ -128,8 +128,11 @@ class Mission(object):
         for g, key in enumerate(routes):
             nRoutes = len(routes[key])
             if self.parameters["assign"] == "sector":
-                RoutePerSector = int(len(routes[key])/self.nBands) + 1
-                assigned = (int(i/RoutePerSector) for i in range(nRoutes))
+                b = int(nRoutes/self.nBands)
+                r = nRoutes % self.nBands
+                s = r*(b+1)
+                assigned = (int(i/(b+1)) if i < s else int((i-s)/b)+r
+                            for i in range(nRoutes))
 
             elif self.parameters["assign"] == "sequence":
                 assigned = (int(i % self.nBands) for i in range(nRoutes))
@@ -166,7 +169,7 @@ class Mission(object):
         routes = defaultdict(list)
         # get all the routes in the survey (from each maze)
         for task, maze in survey.tasks.items():
-            if maze.routeSet.home is None or not self.autoland:
+            if maze.routeSet.home is None:
                 warnings.warn("no home found. Disabling autoland & offsets")
                 self.autoland = False
                 self.parameters["offset_takeoff_dist"] = 0
