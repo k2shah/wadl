@@ -124,7 +124,7 @@ class Route(object):
         #     self.home = np.array(home)
         homeDist = np.inf
         for h in home:
-            (dist, i) = min([(la.norm(np.array(h)-np.array(pt)), i)
+            (dist, i) = min([(self.DistGPS(np.array(h), np.array(pt)), i)
                             for i, pt in enumerate(self.GPScords)])
             if dist < homeDist:
                 self.home = h
