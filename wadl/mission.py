@@ -89,12 +89,12 @@ class Mission(object):
                    }
         self.data["version"] = version
 
-    def fromSurvey(self, survey, plot=False):
+    def fromSurvey(self, survey, showPlot=False):
         # match the name and output directory
         self.name = survey.name
         self.outDir = survey.outDir
         # plot new ordering
-        self.plotMission = plot
+        self.showPlot = showPlot
 
         # build mission.json header
         self.buildMission()
@@ -151,7 +151,7 @@ class Mission(object):
                 route.plot(ax, cols[assignIdx])
 
                 # write route
-                filename = self.outDir / "routes" / f"{g}_{i}.csv"
+                filename = self.outDir / "routes" / f"{key}_{i}.csv"
                 route.write(filename)
         # save the json encoded route list
         self.data["mission"]["routes"] = routeList
@@ -161,7 +161,7 @@ class Mission(object):
         plt.gca().set_aspect('equal', adjustable='box')
         filename = self.outDir / "mission_routes.png"
         plt.savefig(filename, bbox_inches='tight', dpi=100)
-        if self.plotMission:
+        if self.showPlot:
             plt.show()
 
     def groupRoutes(self, survey):
