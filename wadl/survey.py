@@ -108,7 +108,7 @@ class Survey(object):
         # display
         plt.show()
 
-    def plan(self, write=True):
+    def plan(self, write=True, showPlot=False):
         for task, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             try:
@@ -123,7 +123,10 @@ class Survey(object):
             self.logger.info(f"task {maze.name} finished")
         self.logger.info("done planning")
 
-    def plot(self, save=True):
+        # plot
+        self.plot(showPlot)
+
+    def plot(self, showPlot=True):
         # plot task
         fig, ax = plt.subplots(figsize=(16, 16))
         for task, maze in self.tasks.items():
@@ -133,7 +136,8 @@ class Survey(object):
         plt.gca().set_aspect('equal', adjustable='box')
         filename = self.outDir / "routes.png"
         plt.savefig(filename, bbox_inches='tight', dpi=100)
-        plt.show()
+        if showPlot:
+            plt.show()
 
     def mission(self, missionParams):
         # make a mission.json file
