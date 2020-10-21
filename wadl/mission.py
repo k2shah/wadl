@@ -181,7 +181,7 @@ class Mission(object):
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
                 if self.parameters['group'] == "home":
-                    if route.name is None:
+                    if route.home is None:
                         homeKey = None
                     else:
                         homeKey = keyPoints_rev[route.home]
