@@ -120,6 +120,7 @@ class SATproblem(object):
     def solve(self, timeout=10):
         # solve the problem
         # set the timeout
+        self.logger.debug(f"solver timeout is {timeout*1000}")
         self.z3.set("timeout", timeout*1000)
         if self.z3.check() == z3.sat:
             # print("Solution Found: {:2.5f} min".format(solTime))
