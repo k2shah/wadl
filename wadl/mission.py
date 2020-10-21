@@ -141,7 +141,7 @@ class Mission(object):
 
             for i, (route, assignIdx) in enumerate(zip(routes[key], assigned)):
                 altBand = self.bands[assignIdx]
-                name = f"g{g}_{int(altBand)}_{i}"
+                name = f"{key}_{i+1}_{int(altBand)}"
 
                 # encode route
                 routeList.append(self.makeRoute(name, route.waypoints,
@@ -151,7 +151,7 @@ class Mission(object):
                 route.plot(ax, cols[assignIdx])
 
                 # write route
-                filename = self.outDir / "routes" / f"{key}_{i}.csv"
+                filename = self.outDir / "routes" / f"{name}.csv"
                 route.write(filename)
         # save the json encoded route list
         self.data["mission"]["routes"] = routeList
@@ -167,6 +167,8 @@ class Mission(object):
     def groupRoutes(self, survey):
         # group all the routes
         routes = defaultdict(list)
+        # reverse the keyPoints dict to be (gps) -> key
+        keyPoints_rev = {v: i for i, v in survey.keyPoints.items()}
         # get all the routes in the survey (from each maze)
         for task, maze in survey.tasks.items():
             if maze.routeSet.home is None:
@@ -179,7 +181,8 @@ class Mission(object):
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
                 if self.parameters['group'] == "home":
-                    routes[route.home].append(route)
+                    homeKey = keyPoints_rev[route.home]
+                    routes[homeKey].append(route)
                 elif self.parameters['group'] == "task":
                     routes[maze.name].append(route)
                 else:
