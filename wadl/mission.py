@@ -181,7 +181,10 @@ class Mission(object):
             for i, route in enumerate(maze.routeSet.routes):
                 # name = maze.name + "_" + str(i)
                 if self.parameters['group'] == "home":
-                    homeKey = keyPoints_rev[route.home]
+                    if route.name is None:
+                        homeKey = None
+                    else:
+                        homeKey = keyPoints_rev[route.home]
                     routes[homeKey].append(route)
                 elif self.parameters['group'] == "task":
                     routes[maze.name].append(route)
