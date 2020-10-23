@@ -62,15 +62,16 @@ class Survey(object):
     def addTask(self, file, **kwargs):
         """Add a task to the survey.
 
-            Args:
-                file (str): filename of geofence
-                step (int, optional): grid step size. Defaults 40
-                rotation (int, optional): rotation of the grid by radians.
-                limit (float, optional): default flight time limit
-                home (srt, optional): key(s) of home location(s)
-                routeParamters (RouteParameters): Desired settings
-                    for each route in this task
-            """
+        Args:
+            file (str): filename of geofence
+            step (int, optional): grid step size. defaults 40.
+            rotation (int, optional): rotation of the grid by radians.
+            limit (float, optional): default flight time limit
+            home (srt, optional): key(s) of home location(s)
+            routeParamters (RouteParameters): Desired settings
+                for each route in this task
+
+        """
         try:
             if isinstance(kwargs["home"], list):
                 kwargs["home"] = [self.keyPoints[h] for h in kwargs["home"]]
@@ -91,6 +92,7 @@ class Survey(object):
 
         Args:
             parameters (SolverParamters): sets the solver settings
+
         """
         self.solver.parameters = parameters
 
@@ -100,6 +102,7 @@ class Survey(object):
         Args:
             points (dict): map of str->(lat, long) of key points in the survey.
                 These points can be used as home locations.
+
         """
         self.keyPoints = points
 
@@ -115,6 +118,7 @@ class Survey(object):
         Args:
             showGrid (bool): shows the grid lines of the coverage area
                 default True.
+
         """
         fig, ax = plt.subplots(figsize=(16, 16))
         self.plotKeyPoints(ax)
@@ -135,7 +139,7 @@ class Survey(object):
         plt.show()
 
     def plan(self, write=True, showPlot=False):
-        """ Plan the survey
+        """ Plan the survey.
 
         Args:
             write (bool): write the paths as csv file and save the plot of

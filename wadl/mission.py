@@ -17,7 +17,18 @@ from .lib.parameters import Parameters
 
 
 class MissionParameters(Parameters):
-    """docstring for MissionParamters"""
+    """Parameters container for seting missions parameters
+
+    Set paramters directly like how you would for a dictionary.
+    ``missionParameters = MissionParameters``
+    ``missionParameters["Paramter"] = value``
+
+    Paramters:
+        autoland (bool): land after route
+        pre_land_alt (float): lower to this alt after route
+        trajectory_type (str): "straight", or "safe"
+
+    """
 
     def __init__(self, default=True):
         super(MissionParameters, self).__init__(default)
