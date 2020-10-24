@@ -17,8 +17,7 @@ class Survey(object):
     Args:
         name (str, optional): name of the survey
         outDir (str, optional): location of output directory
-    Returns:
-        Survey: Survey object.
+
     """
 
     def __init__(self, name="survey", outDir=None):

@@ -6,17 +6,13 @@ Tutorial
 
 Survey
 ------
-Frist make a ``Survey`` object and set the output directory.
+First make a ``Survey`` object. An optional ``name`` can be specified. 
 ::
 
     from wadl.survey import Survey
     # make survey object
     name = 'stanford'
     survey = Survey(name)
-    survey.addTask(file, step=100)
-
-
-Where ``step`` is the desired grid spacing. 
 
 Geofence
 ++++++++
@@ -47,6 +43,7 @@ Each survey is made up off a set of geofences, each geofence is referred to as a
                    routeParameters=routeParams,
                    )
 
+Where ``step`` is the desired grid spacing. 
 
 Planning 
 --------
@@ -64,6 +61,11 @@ To plan and plot the survey use
 
     survey.plan()
     survey.plot() 
+
+Routes are planned in such a way that the segments between the home and coverage section are at a different altitude than the altitude of the survey.
+
+The routes are composed as follows:
+home - transfer to site -coverage path - transfer to home - land (optional).
 
 Parameters
 ----------
@@ -94,19 +96,23 @@ to encode and solve the underlying route planning problem. Certain settings can 
 
     from wadl.solver.solver import SolverParameters
     solverParams = SolverParameters()
-    # the inital size of each subgraph, decrease for less powerful computer 
+    # the initial size of each subgraph, decrease for less powerful computer 
     solverParams["subGraph_size"] = 40
-    # the inital offset of each subgraph path, increase for faster solve time (less efficient routes)
+    # the initial offset of each subgraph path, increase for faster solve time (less efficient routes)
     solverParams["SATBound_offset"] = 2\
     # timeout (in seconds) of each individual SMT problem 
     solverParams["timeout"] = 60\
     # number of SMT problems attempted for each subgraph, limit increases by 1 for each infeasible subproblem
     solverParams["maxProblems"] = 10
 
+
+After setting the solver parameters set them by calling the ``.setSolverParameters()`` method of the ``survey`` object.
+
 UGCS
 -----
-WADL has support to export route as a ``mission.json`` file to ugcs_.
-.. _ugcs: (https://www.ugcs.com/)
+WADL has support to export route as a ``mission.json`` file to UGCS_.
+
+.. _UGCS: (https://www.ugcs.com/)
 
 ::
 
@@ -115,7 +121,7 @@ WADL has support to export route as a ``mission.json`` file to ugcs_.
     mission.fromSurvey(survey)
     mission.write()
 
-This creates a ``mission.json`` file that can be loaded into UGCS. This will also group the routes by sector to make it easier to field a multi-robot survey. This wiil also modify the transit altitude of the UAVS. The parameters can that be set are below. 
+This creates a ``mission.json`` file that can be loaded into UGCS. This will also group the routes by sector to make it easier to field a multi-robot survey. This will also modify the transit altitude of the UAVS. The parameters can that be set are below. 
 
 UGCS Version 
 ++++++++++++
@@ -166,11 +172,11 @@ Assign Routes::
 
     # assigning routes
     # routes can be assigned to bands either sequentially or sector
-    missionParams["assign"] = "sector ## other option is "sequence"
+    missionParams["assign"] = "sector" ## other option is "sequence"
 
 Offset Routes
 *************
-Offset the start and end of the route a certain amount from the home point, this make it easier to have muitple UAVs have the same home point
+Offset the start and end of the route a certain amount from the home point, this make it easier to have multiple UAVs have the same home point
 ::
 
     # offsets the takeoff location by this distance in m along the first segment 
@@ -186,9 +192,8 @@ You can set the number of bands to split (normally the number of UAVs used) the 
 
     missionParams["N_bands"] = 1
 
-    # the started altitutde in m (agl)
+    # the started altitude in m (agl)
     missionParams["band_start"] = 50
 
-    # the altitte band seperation step
+    # the altitude band separation step
     missionParams["band_step"] = 10
-

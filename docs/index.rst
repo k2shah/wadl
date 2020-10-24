@@ -6,7 +6,9 @@
 Coverage Path Planner
 ========================
 
-WADL is a python package for planning surveys over large areas using one or more UAV (Unpiloted Aerial Vehicle). WADL take in a geofence and desired gird spacing and produces a series of routes to survey the area inside the geofence. 
+``wadl`` is a python package for planning surveys over large areas using one or more UAV (Unpiloted Aerial Vehicle). WADL take in a geofence and desired gird spacing and produces a series of routes to survey the area inside the geofence. 
+
+``wadl`` is licensed under GPL v3. More information can be found in the :ref:`license` section.
 
 Motivation
 ----------
@@ -16,6 +18,16 @@ The project was motivated by the need for efficient route planning for multi-rob
 .. _Cape Crozier: https://goo.gl/maps/wrMTuMq5kyNxZafx8) 
 
 If you are interested in the technical details please see our paper <> 
+
+
+Citing
+------
+
+To cite wadl please use the following publication:
+
+.. only:: html
+
+   `PDF <.pdf>`
 
 ================================
 
@@ -27,7 +39,6 @@ If you are interested in the technical details please see our paper <>
    tutorial
    reference/index
    license
-   citing
 
 
 Indices and tables

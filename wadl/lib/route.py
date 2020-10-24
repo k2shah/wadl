@@ -12,7 +12,23 @@ from .parameters import Parameters
 
 
 class RouteParameters(Parameters):
-    """docstring for routeParameters"""
+    """Parameter container for seting route parameters
+
+    Set paramters directly like how you would for a dictionary.
+    ``routeParameters = RouteParameters``
+    ``routeParameters["Paramter"] = value``
+
+    Args:
+        limit (float): route limit in seconds
+        speed (float): route speed over coverage area in meters/seconds
+        altitude (float): altitude above ground level of the coverage area in m
+        xfer_speed (float): speed for trasnfer segemnts in m/s
+        xfer_altitude (float): altitude for transfer segments in m
+        xfer_ascend (float): ascend rate in m/s
+        xfer_decend (float): decend rate in m/s
+        land_altitude (float): altitude before landing
+
+    """
 
     def __init__(self, default=True):
         super(RouteParameters, self).__init__(default)
@@ -29,15 +45,28 @@ class RouteParameters(Parameters):
 
 
 class RouteSet(object):
-    """docstring for RouteSet"""
+    """container to for a set of routes
+
+    Attributes:
+        routes (list): list of routes
+
+    Args:
+        home (list): list of homes for the routes
+        zone (tuple): tuple of UTM zone ("number", "N" or "S")
+        routeParameters (RouteParameters): desired parameters for the routes.
+
+    """
 
     def __init__(self, home, zone, routeParameters=None):
         # loggers
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
 
-        self.home = home
-        self.multiHome = True if isinstance(home, tuple) else False
+        if isinstance(home, list):
+            self.home = home
+        else:
+            self.logger.error("routeSet home is not a list")
+            raise RuntimeError("routeSet home is not a list")
 
         self.zone = zone  # store the UTM zone
         self.routes = []
@@ -55,9 +84,17 @@ class RouteSet(object):
         return iter(self.routes)
 
     def check(self, cords):
-        # builds the route from a UTM waypoint list
-        # runs a series of checks to verify the route is viable
-        # returns None if any check fails; the Route otherwise
+        """Builds the route from a UTM waypoint list and
+        runs a series of checks to verify the route is viable.
+
+        Args;
+            cords (list): list of UTM waypoints
+
+        Returns:
+            None if any check fails;
+            the Route otherwise
+
+        """
         route = Route(cords, self.zone, self.home)
         route.build(self.routeParameters)
         if route.check():
@@ -70,6 +107,12 @@ class RouteSet(object):
         self.routes.append(route)
 
     def write(self, pathDir):
+        """writes the routes to a file
+
+        Args:
+            pathDir (str): location to save routes.
+
+        """
         self.logger.info(f"\tgenerated {len(self.routes)} routes")
         for i, route in enumerate(self.routes):
             filename = pathDir / f"{i}.csv"
@@ -79,7 +122,18 @@ class RouteSet(object):
 
 
 class Route(object):
-    """docstring for Route"""
+    """A route of points
+
+    Attributes:
+        UTMcords (list): list of points in UTM
+        GPScords (list): list of points in GPS WGS84
+
+    Args:
+        cords (list): list of UTM waypoints of a route
+        home (list): list of homes for the routes
+        zone (tuple): tuple of UTM zone ("number", "N" or "S")
+
+    """
 
     def __init__(self, cords, zone, home):
         # loggers
@@ -125,7 +179,7 @@ class Route(object):
         homeDist = np.inf
         for h in home:
             (dist, i) = min([(self.DistGPS(np.array(h), np.array(pt)), i)
-                            for i, pt in enumerate(self.GPScords)])
+                             for i, pt in enumerate(self.GPScords)])
             if dist < homeDist:
                 self.home = h
                 idx = i
@@ -138,8 +192,12 @@ class Route(object):
         self.GPS2UTM()
 
     def check(self):
-        # attempts to merge the segment into the path
-        # returns False if one of the length checks fail
+        """ run a series of checks to see if this route is feasible
+
+        Return:
+            False if one of the length checks fail
+            True otherwise
+        """
 
         # check: under the waypoint limit
         if len(self.waypoints) > self.DJIWaypointLimit:

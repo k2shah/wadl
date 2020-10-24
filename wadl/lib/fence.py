@@ -14,9 +14,6 @@ class Fence(object):
     Args:
         file (str): (lat,  lng)
 
-    Returns
-        Fence: Geofence object
-
     """
 
     def __init__(self, file):
