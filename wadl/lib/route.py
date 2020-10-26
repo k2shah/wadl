@@ -6,7 +6,6 @@ import logging
 import utm
 # math
 import numpy as np
-import numpy.linalg as la
 # lib
 from .parameters import Parameters
 
@@ -62,11 +61,7 @@ class RouteSet(object):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
 
-        if isinstance(home, list):
-            self.home = home
-        else:
-            self.logger.error("routeSet home is not a list")
-            raise RuntimeError("routeSet home is not a list")
+        self.home = home
 
         self.zone = zone  # store the UTM zone
         self.routes = []
