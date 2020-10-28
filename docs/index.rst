@@ -17,7 +17,11 @@ The project was motivated by the need for efficient route planning for multi-rob
 
 .. _Cape Crozier: https://goo.gl/maps/wrMTuMq5kyNxZafx8) 
 
-If you are interested in the technical details please see our paper <> 
+If you are interested in the technical details please see our paper <>. To cite ``wadl`` please use the following publication:
+
+.. only:: html
+
+   `PDF <.pdf>`
 
 
 Overview
@@ -28,7 +32,7 @@ Overview
 
 ..    <iframe width="300" height="490" src=_static/videos/grid.mp4 frameborder="0" allow="autoplay; </iframe>
 
-.. image:: _static/overview/grid.gif
+.. image:: _static/overview/grid.png
    :width: 600
 
 
@@ -54,14 +58,6 @@ The final set of paths are exported as a csv file and can be imported into other
 
 .. _UGCS: (https://www.ugcs.com/)
 
-Citing
-------
-
-To cite wadl please use the following publication:
-
-.. only:: html
-
-   `PDF <.pdf>`
 
 ================================
 
