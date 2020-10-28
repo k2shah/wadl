@@ -51,15 +51,22 @@ if view == 1:
     survey.view()
 else:
     # run path solver to plan paths and write output
-    survey.plan(plot=True, write=True)
-    survey.plot()
+    survey.plan(write=False)
+    # survey.plot()
 
 # make mission
 # mission paramters
 missionParams = MissionParameters()
-missionParams["nBands"] = 4
-missionParams["autoLand"] = False
+missionParams["N_bands"] = 3
+missionParams["autoland"] = False
+
+missionParams["assign"] = "sequence"
+
+missionParams["offset_takeoff_dist"] = 10
+missionParams["offset_land_dist"] = 10
+
 
 mission = Mission(missionParams)
-mission.fromSurvey(survey)
+mission.fromSurvey(survey, plot=True)
+mission.setVersion(4, 0, 187)
 mission.write()

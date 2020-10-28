@@ -21,7 +21,8 @@ class MetaGraph(object):
         # baseGraph
         self.baseGraph = graph
         # list of graphs who's union is the baseGraph
-        self.subGraphs = self.split(size)
+        self.baseSize = size
+        self.subGraphs = self.split()
         # graph of the paths
         self.pathGraph = nx.DiGraph()
         # reindex all the nodes and store their subgraph
@@ -41,14 +42,15 @@ class MetaGraph(object):
         # returns the linear index on the square index
         return cord[0] + grid[0]*cord[1]
 
-    def split(self, size):
+    def split(self,):
         """splits a graph into sub segments
         size: aprox number of nodes in each sub graph
         """
-        subNodes = self.findSubNodes(size)
+        subNodes = self.findSubNodes()
         return self.buildSubGraphs(subNodes)
 
-    def findSubNodes(self, size):
+    def findSubNodes(self):
+        size = self.baseSize
         self.subGraphs = []
 
         # get bounding box extends on graph
@@ -143,7 +145,7 @@ class MetaGraph(object):
 
         return subGraphs
 
-    def mergeSubGraphs(self, subGraphs, minSize=20, maxSize=60):
+    def mergeSubGraphs(self, subGraphs, minSize=20, maxSize=50):
         # merge small subGraphs into the most connected subGraph
         # if tie pick the smallest subgraph
         merged = dict()
@@ -355,7 +357,8 @@ class MetaGraph(object):
                     routeSet.push(lastRoute)
                     del lastRoute
                 except UnboundLocalError:
-                    raise RuntimeError("\t\tpath limit too short")
+                    self.logger.error("limit too short-decrease subgraph size")
+                    raise RuntimeError("path limit too short")
                 # change to interior nodes when external are exhausted
                 if any([n in nodeQueue.keys()
                         for n in self.pathGraph['e']]):
