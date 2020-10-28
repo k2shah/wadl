@@ -1,6 +1,6 @@
 # WADL
 ![build](https://github.com/k2shah/wadl/workflows/build/badge.svg)
-[![docs](https://readthedocs.org/projects/wadl/badge/?version=latest)](https://wadl.readthedocs.io/en/latest/?badge=latest)
+[![docs](https://readthedocs.org/projects/wadl/badge/?version=master)](https://wadl.readthedocs.io/en/master/?badge=master)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Coverage Path Planner
