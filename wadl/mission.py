@@ -4,7 +4,6 @@ import warnings
 from collections import defaultdict
 # io
 import json
-import csv
 from pathlib import Path
 # gis
 import utm
@@ -13,7 +12,7 @@ import numpy as np
 # plot
 import matplotlib.pyplot as plt
 # lib
-from .lib.parameters import Parameters
+from wadl.lib.parameters import Parameters
 
 
 class MissionParameters(Parameters):

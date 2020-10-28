@@ -17,7 +17,7 @@ setup(
     author_email='k2shah@stanford.edu',
     python_requires='>=3.8',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.8',
@@ -32,6 +32,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/k2shah/wadl',
-    version='0.9.0',
+    version='1.0.0',
     zip_safe=False,
 )

@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 # gis
 import utm
 # lib
-from .lib.maze import Maze
-from .solver.solver import LinkSolver
-from .mission import Mission
+from wadl.lib.maze import Maze
+from wadl.solver.solver import LinkSolver
+from wadl.mission import Mission
 
 
 class Survey(object):

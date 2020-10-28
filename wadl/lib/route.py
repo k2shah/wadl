@@ -7,7 +7,7 @@ import utm
 # math
 import numpy as np
 # lib
-from .parameters import Parameters
+from wadl.lib.parameters import Parameters
 
 
 class RouteParameters(Parameters):

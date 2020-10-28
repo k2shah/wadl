@@ -2,9 +2,9 @@
 import time
 import logging
 # lib
-from .SATproblem import SATproblem
-from .metaGraph import MetaGraph
-from ..lib.parameters import Parameters
+from wadl.solver.SATproblem import SATproblem
+from wadl.solver.metaGraph import MetaGraph
+from wadl.lib.parameters import Parameters
 from tqdm import tqdm
 
 

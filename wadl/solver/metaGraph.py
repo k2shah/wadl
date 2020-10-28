@@ -326,6 +326,7 @@ class MetaGraph(object):
 
     def link(self, routeSet):
         # make a Queue of the of the subgraphs by index
+        self.metaPaths = []
         nodeQueue = dict()
         for i, path in enumerate(self.subPaths):
             pathLen = len(path)
@@ -355,6 +356,7 @@ class MetaGraph(object):
             if len(nodeQueue) == 0 or not newNode:
                 try:
                     routeSet.push(lastRoute)
+                    self.metaPaths.append(metaPath)
                     del lastRoute
                 except UnboundLocalError:
                     self.logger.error("limit too short-decrease subgraph size")

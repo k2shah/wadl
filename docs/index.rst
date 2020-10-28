@@ -17,11 +17,11 @@ The project was motivated by the need for efficient route planning for multi-rob
 
 .. _Cape Crozier: https://goo.gl/maps/wrMTuMq5kyNxZafx8) 
 
-If you are interested in the technical details please see our paper <>. To cite ``wadl`` please use the following publication:
+If you are interested in the technical details please see our paper_. To cite ``wadl`` please use the following
 
-.. only:: html
+.. _paper: https://robotics.sciencemag.org/content/5/47/eabc3000
 
-   `PDF <.pdf>`
+:Citation: K. Shah, G. Ballard, A. Schmidt, M. Schwager, Multidrone aerial surveys of penguin colonies in Antarctica. Sci. Robot. 5, eabc3000 (2020).
 
 
 Overview
