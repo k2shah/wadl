@@ -1,3 +1,5 @@
+.. _reference:
+
 Reference
 *********
 
@@ -6,6 +8,7 @@ Reference
 
    survey
    mission
+   route
    maze
    fence
    

@@ -17,7 +17,26 @@ from .lib.parameters import Parameters
 
 
 class MissionParameters(Parameters):
-    """docstring for MissionParamters"""
+    """Parameter container for seting missions parameters
+
+    Set paramters directly like how you would for a dictionary.
+    ``missionParameters = MissionParameters``
+    ``missionParameters["Paramter"] = value``
+
+    Args:
+        autoland (bool): land after route
+        pre_land_alt (float): lower to this alt after route
+        trajectory_type (str): "straight", or "safe"
+        group (str): grouping option "home" or "task"
+        sort (str): sorting option "angle", "north", or "east"
+        assign (str): assignment option
+        N_bands (int): number of altitude bands
+        band_start (float): starting altitude band
+        band_step (float): step for the altiude bands
+        offset_takeoff_dist (float): takeoff offset distance in (m)
+        offset_landf_dist (float): land offset distance in (m)
+
+    """
 
     def __init__(self, default=True):
         super(MissionParameters, self).__init__(default)
@@ -45,7 +64,12 @@ class MissionParameters(Parameters):
 
 
 class Mission(object):
-    """creates a UGCS mission from a survey or directory of routes"""
+    """Creates a UGCS mission from a survey
+
+    Args:
+        missionParamters (MissionParamters): Parameters for the mission
+
+    """
 
     def __init__(self, missionParamters=None):
         self.outDir = ""
@@ -75,13 +99,24 @@ class Mission(object):
         self.setVersion()
 
     def write(self):
+        """Writes the mission routes and json file
+
+        """
         filename = self.outDir / "mission.json"
         with filename.open('w') as f:
             json.dump(self.data, f,
                       indent=2, separators=(',', ': '))
 
     def setVersion(self, major=3, minor=6, build=225):
-        # set the version of UGSC
+        """set the version of UGSC as major.minor.build
+
+        Args:
+            major (int): major version
+            minor (int): minor version
+            build (int): build version
+
+
+        """
         version = {"major": major,
                    "minor": minor,
                    "build": build,
@@ -90,7 +125,14 @@ class Mission(object):
         self.data["version"] = version
 
     def fromSurvey(self, survey, showPlot=False):
-        # match the name and output directory
+        """ import routes from a Survey
+
+        Args:
+            survey (wadl.Survey): Survey object.
+
+            showPlot (bool, optional): show the plot of the modified routes.
+
+        """
         self.name = survey.name
         self.outDir = survey.outDir
         # plot new ordering
@@ -256,7 +298,7 @@ class Mission(object):
                      "startDelay": None,
                      "vehicleProfile": "DJI Matrice 100",
                      "trajectoryType": self.parameters["trajectory_resolver"][
-                                        self.parameters["trajectory_type"]],
+                         self.parameters["trajectory_type"]],
                      "safeAltitude": 50.0,
                      "maxAltitude": 120.0,
                      "initialSpeed": None,

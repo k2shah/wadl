@@ -9,13 +9,14 @@ from shapely.geometry import Polygon
 
 
 class Fence(object):
-    """Holds the gps cords of the boundary of the area"""
+    """Holds the gps cords of the boundary of the area given by a cvs file
+
+    Args:
+        file (str): (lat,  lng)
+
+    """
 
     def __init__(self, file):
-        """ on init parse the cvs cords file
-            parser assumes "lat,  lng"
-            file is abs path file
-        """
         self.file = file
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
@@ -51,6 +52,14 @@ class Fence(object):
         self.GPSCords = np.array(GPSData)
 
     def plot(self, ax, color='m'):
+        """Plots the geofence in UTM
+
+        Args:
+            ax (pyplot.axis): axis object from pyplot you want to draw on
+            color ('str'): color string for the geofence.
+                default 'm' (magenta).
+
+        """
         # plots are always in utm
         ax.plot(*self.poly.exterior.xy, color=color)
         # place label somewhere
@@ -60,7 +69,15 @@ class Fence(object):
 
 
 class Areas(object):
-    """holds the data from a KML file"""
+    """Holds the gps cords of the set of areas given by a kml file
+
+    Args:
+        file (str): (lat,  lng)
+
+    Returns
+        Area: Container for a set of geofence objects
+
+    """
 
     def __init__(self, file):
         self.areas = dict()
@@ -93,6 +110,12 @@ class Areas(object):
         return temp.split('<')[0]
 
     def plot(self, ax):
+        """Plots the geofence in UTM
+
+        Args:
+            ax (pyplot.axis): axis object from pyplot you want to draw on
+
+        """
         for areaKey in self.areas:
             for ring in self.areas[areaKey]:
                 ax.plot(ring[:, 0], ring[:, 1], 'k')

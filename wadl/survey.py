@@ -12,9 +12,13 @@ from .mission import Mission
 
 
 class Survey(object):
-    """docstring for Survey
-    top level object for a survey
-    this objects holds all the information of a single survey """
+    """Holds all the information of a single survey
+
+    Args:
+        name (str, optional): name of the survey
+        outDir (str, optional): location of output directory
+
+    """
 
     def __init__(self, name="survey", outDir=None):
         # get solver
@@ -55,12 +59,18 @@ class Survey(object):
         self.logger.setLevel(logging.DEBUG)
 
     def addTask(self, file, **kwargs):
-        # add a task to the survey
-        # expects a file name
-        # keyword arguments:
-        # step [40]: grid size
-        # limit [1000]: flight time limit in seconds
-        # home [None]: key(s) of the home location(s)
+        """Add a task to the survey.
+
+        Args:
+            file (str): filename of geofence
+            step (int, optional): grid step size. defaults 40.
+            rotation (int, optional): rotation of the grid by radians.
+            limit (float, optional): default flight time limit
+            home (srt, optional): key(s) of home location(s)
+            routeParamters (RouteParameters): Desired settings
+                for each route in this task
+
+        """
         try:
             if isinstance(kwargs["home"], list):
                 kwargs["home"] = [self.keyPoints[h] for h in kwargs["home"]]
@@ -77,10 +87,22 @@ class Survey(object):
         self.solver = solver
 
     def setSolverParamters(self, parameters):
+        """Set the solver paramters.
+
+        Args:
+            parameters (SolverParamters): sets the solver settings
+
+        """
         self.solver.parameters = parameters
 
     def setKeyPoints(self, points):
-        # set the keyPoints in the survey
+        """Set the keyPoints in the survey.
+
+        Args:
+            points (dict): map of str->(lat, long) of key points in the survey.
+                These points can be used as home locations.
+
+        """
         self.keyPoints = points
 
     def plotKeyPoints(self, ax):
@@ -90,6 +112,13 @@ class Survey(object):
             ax.annotate(key, xy=cord, xycoords='data')
 
     def view(self, showGrid=True):
+        """ View the current survey (unplanned)
+
+        Args:
+            showGrid (bool): shows the grid lines of the coverage area
+                default True.
+
+        """
         fig, ax = plt.subplots(figsize=(16, 16))
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
@@ -109,6 +138,13 @@ class Survey(object):
         plt.show()
 
     def plan(self, write=True, showPlot=False):
+        """ Plan the survey.
+
+        Args:
+            write (bool): write the paths as csv file and save the plot of
+                the route. default True
+            showPlot (bool): show the plot of the routes. default False.
+        """
         for task, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             try:

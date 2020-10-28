@@ -1,9 +1,9 @@
 Install
 ========
 
-Dependeinces
+Dependencies
 ------------
-The dependenices for ``wadl`` can be found in the requirements file
+The dependencies for ``wadl`` can be found in the requirements file
 
 Release
 ----------------------------
@@ -16,9 +16,9 @@ Install the current release of ``wadl`` with ``pip``::
 Development
 ----------------
 
-Install the development verion by checking out the ``devel`` branch
+Install the development version by checking out the ``devel`` branch
 
-Then do::
+::
 
     git clone https://github.com/k2shah/wadl.git
     cd wadl

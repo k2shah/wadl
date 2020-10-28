@@ -16,6 +16,23 @@ from wadl.lib.route import RouteSet
 
 
 class Maze(Fence):
+    """Holds the geofence data, coverage grid, and planned routes
+
+    Attributes:
+        graph (networkx.Graph). coverage grid as a graph
+        routeSet (RouteSet). set of routes that cover the area inside this Maze
+
+    Args:
+        file (str): location of geofence file (csv).
+        step (int, optional): grid spacing in (m).
+            default 40.
+        rotation (float, optional): grid rotation in rads.
+            default 0.
+        home ([tuple], optional): list of (lat, long) of the desired home(s)
+            default none.
+        routeParamters (RouteParameters, optional): desired route parameters.
+
+    """
     def __init__(self,
                  file,
                  step=40,
@@ -25,6 +42,7 @@ class Maze(Fence):
         super(Maze, self).__init__(Path(file))
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
+        self.solved = False
         # set parameters
         # grid parameters
         self.theta = rotation
@@ -94,6 +112,13 @@ class Maze(Fence):
 
     # write
     def write(self, filePath):
+        """Write the maze information to a file
+
+        Args:
+            filePath (str): file path for output location.
+
+        """
+
         nRoute = len(self.routeSet)
         self.taskName = self.name + f'_s{self.step}_r{nRoute}'
         taskDir = filePath / self.taskName
@@ -133,7 +158,12 @@ class Maze(Fence):
         self.routeSet.write(pathDir)
 
     def writeGrid(self, outFile, UTM=True):
-        # writes the grid to file
+        """writes the grid to file
+
+        Args:
+            outFile (str): name of output file
+
+        """
         if UTM:
             with open(outFile, 'w') as f:
                 for node in self.graph:
@@ -172,7 +202,16 @@ class Maze(Fence):
             route.plot(ax, color=next(cols))
 
     def plot(self, ax, showGrid=False, showRoutes=True):
-        # plot the geofence with grid overlay
+        """plot the geofence with grid overlay
+
+        Args:
+            ax (pyplot.axis): axis object from pyplot you want to draw on
+            showGrid (bool, optional): show the grid.
+                default False.
+            showRoutes (bool, optional): show the routes
+                default True.
+        """
+
         # plot fence
         super(Maze, self).plot(ax)
 
