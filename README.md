@@ -5,8 +5,8 @@
 
 ## Coverage Path Planner
 <p float="center">
-  <img src="https://github.com/k2shah/wadl/blob/devel/example/stanford/grid.png?raw=true" width=400 >
-  <img src="https://github.com/k2shah/wadl/blob/devel/example/stanford/routes.png?raw=true" width=400 >
+  <img src="https://github.com/k2shah/wadl/blob/master/example/stanford/grid.png?raw=true" width=400 >
+  <img src="https://github.com/k2shah/wadl/blob/master/example/stanford/routes.png?raw=true" width=400 >
 </p>
 
 
