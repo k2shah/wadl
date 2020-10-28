@@ -12,7 +12,7 @@ import numpy as np
 # plot
 import matplotlib.pyplot as plt
 # lib
-from .lib.parameters import Parameters
+from wadl.lib.parameters import Parameters
 
 
 class MissionParameters(Parameters):
