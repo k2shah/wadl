@@ -12,6 +12,7 @@ setup_requirements = ['pytest-runner', ]
 test_requirements = ['pytest>=3', ]
 
 setup(
+    name="wadl-planner",
     author="Kunal Shah",
     author_email='k2shah@stanford.edu',
     python_requires='>=3.8',
@@ -26,7 +27,6 @@ setup(
     license="GNU General Public License v3 (GPL v3)",
     include_package_data=True,
     keywords='wadl',
-    name='wadl',
     packages=find_packages(include=['wadl', 'wadl.*']),
     setup_requires=setup_requirements,
     test_suite='tests',
