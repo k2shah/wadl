@@ -4,7 +4,6 @@ import warnings
 from collections import defaultdict
 # io
 import json
-import csv
 from pathlib import Path
 # gis
 import utm
