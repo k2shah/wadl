@@ -51,7 +51,7 @@ if view == 1:
     survey.view()
 else:
     # run path solver to plan paths and write output
-    survey.plan(write=False)
+    survey.plan()
     # survey.plot()
 
 # make mission
@@ -67,6 +67,6 @@ missionParams["offset_land_dist"] = 10
 
 
 mission = Mission(missionParams)
-mission.fromSurvey(survey, plot=True)
+mission.fromSurvey(survey, showPlot=True)
 mission.setVersion(4, 0, 187)
 mission.write()
