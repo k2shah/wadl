@@ -3,9 +3,12 @@ import csv
 import logging
 # math
 import numpy as np
+import pandas as pd 
 # gis
 import utm
 from shapely.geometry import Polygon
+#XML parser->   
+from bs4 import BeautifulSoup
 
 
 class Fence(object):
@@ -119,3 +122,44 @@ class Areas(object):
         for areaKey in self.areas:
             for ring in self.areas[areaKey]:
                 ax.plot(ring[:, 0], ring[:, 1], 'k')
+
+    def KML2CSV(self, file):
+        with open(file, 'r') as f: 
+            data = f.read()
+        XML_data = BeautifulSoup(data, "xml") 
+
+        #extracting the coordinates from the XML file
+        jargon = XML_data.find_all('coordinates')
+
+        #extracting the file name found in the KML tag <name> under <Placemark>.
+        name = XML_data.find_all('Placemark')[0].text.split('\n',-1)[1] + ".csv"
+        
+        #jargon is a single string element list->
+        #extracting the coordinate text data from this jargon
+        latlong = [i.text for i in jargon]
+
+        #converting it to list with latitide and longitude strings
+        #by spliiting the string
+        latlong2 = latlong[0].split('\n',-1)
+
+        #adding the lattitudes and longitudes to a dictionary file
+        coordinates ={'fid':[],'lat':[],'lon':[]}
+        i=1
+        for coord in latlong2:
+            # here 20 is taken because "lat,long" string length = 21 which is the minimum req length
+            #removing any leading or trailing whitespaces
+            coord = coord.strip()
+            if len(coord) >2:
+                #splitting the string again into lattitude, longitude and grabage
+                coord = coord.split(',',-1)
+                #print(coord)
+                coordinates['fid'].append(i) # index
+                i = i+1
+                coordinates['lat'].append(float(coord[0]))#storing the lattitde into the dictionary
+                coordinates['lon'].append(float(coord[1]))#storing the logitude into the dictionary
+        
+        #converting to dataframe to save as a CSV.
+        df = pd.DataFrame(coordinates) 
+        
+        #saving as a csv
+        pr = df.to_csv(name,encoding='utf-8' ,index=False)
