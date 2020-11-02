@@ -123,6 +123,7 @@ class Areas(object):
             for ring in self.areas[areaKey]:
                 ax.plot(ring[:, 0], ring[:, 1], 'k')
 
+    # function to export CSV from KML
     def KML2CSV(self, file):
         with open(file, 'r') as f: 
             data = f.read()
