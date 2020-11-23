@@ -16,11 +16,11 @@ from wadl.lib.parameters import Parameters
 
 
 class MissionParameters(Parameters):
-    """Parameter container for seting missions parameters
+    """Parameter container for setting missions parameters
 
-    Set paramters directly like how you would for a dictionary.
+    Set parameters directly like how you would for a dictionary.
     ``missionParameters = MissionParameters``
-    ``missionParameters["Paramter"] = value``
+    ``missionParameters["Parameter"] = value``
 
     Args:
         autoland (bool): land after route
@@ -31,7 +31,7 @@ class MissionParameters(Parameters):
         assign (str): assignment option
         N_bands (int): number of altitude bands
         band_start (float): starting altitude band
-        band_step (float): step for the altiude bands
+        band_step (float): step for the altitude bands
         offset_takeoff_dist (float): takeoff offset distance in (m)
         offset_landf_dist (float): land offset distance in (m)
 
@@ -88,7 +88,7 @@ class Mission(object):
                      }
 
         self.autoland = self.parameters["autoland"]
-        # altitude bands for vertical seperation
+        # altitude bands for vertical separation
         self.nBands = self.parameters["N_bands"]
         bandStep = self.parameters["band_step"]
         bandStart = self.parameters["band_start"]
@@ -155,7 +155,7 @@ class Mission(object):
         routes = self.groupRoutes(survey)
         routes = self.sortRoutes(routes)
 
-        # start plottng
+        # start plotting
         fig, ax = plt.subplots(figsize=(16, 16))
         survey.plotKeyPoints(ax)
         cols = plt.cm.rainbow_r(np.linspace(0, 1, self.nBands))
@@ -352,7 +352,7 @@ class Mission(object):
             alt = alt if bandAlt is None else bandAlt
             pt = self.makePoint(lat, lng, alt)
             routeJson["segments"].append(self.makeWaypoint(pt, spd))
-            # pre land
+            # pre-land
             if self.parameters["pre_land_alt"] is not None:
                 pt = self.makePoint(lat, lng, self.parameters["pre_land_alt"])
                 routeJson["segments"].append(self.makeWaypoint(pt, 4))
@@ -376,7 +376,7 @@ class Mission(object):
 
     @staticmethod
     def makeWaypoint(pt, spd, camera=None, tilt=None):
-        # make paramter
+        # make parameter
         param = {"avoidObstacles": True,
                  "avoidTerrain": True,
                  "speed": spd,
