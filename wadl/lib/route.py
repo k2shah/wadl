@@ -11,20 +11,20 @@ from wadl.lib.parameters import Parameters
 
 
 class RouteParameters(Parameters):
-    """Parameter container for seting route parameters
+    """Parameter container for setting route parameters
 
-    Set paramters directly like how you would for a dictionary.
+    Set parameters directly like how you would for a dictionary.
     ``routeParameters = RouteParameters``
-    ``routeParameters["Paramter"] = value``
+    ``routeParameters["Parameter"] = value``
 
     Args:
         limit (float): route limit in seconds
         speed (float): route speed over coverage area in meters/seconds
         altitude (float): altitude above ground level of the coverage area in m
-        xfer_speed (float): speed for trasnfer segemnts in m/s
+        xfer_speed (float): speed for transfer segments in m/s
         xfer_altitude (float): altitude for transfer segments in m
         xfer_ascend (float): ascend rate in m/s
-        xfer_decend (float): decend rate in m/s
+        xfer_decend (float): descend rate in m/s
         land_altitude (float): altitude before landing
 
     """
@@ -149,7 +149,7 @@ class Route(object):
 
     @staticmethod
     def DistGPS(gps0, gps1, alt0=0, alt1=0):
-        # calculates the distnce in meters of 2 lat/lng points
+        # calculates the distance in meters of 2 lat/long points
         e0, n0, _, _ = utm.from_latlon(*gps0)
         e1, n1, _, _ = utm.from_latlon(*gps1)
         return np.linalg.norm([e0-e1, n0-n1, alt0-alt1])
@@ -163,14 +163,7 @@ class Route(object):
         self.UTMcords = [utm.from_latlon(*cord)[0:2] for cord in self.GPScords]
 
     def setHome(self, home):
-        # reolve the home point
-        # if isinstance(home, tuple):
-        #     # home: (lat, long)
-        #     # finds the cloest pt on the route to the home
-        #     (dist, idx) = min([(la.norm(np.array(home)-np.array(pt)), i)
-        #                        for i, pt in enumerate(self.GPScords)])
-        #     # sets the route home at the home pt
-        #     self.home = np.array(home)
+        # resolve the home point
         homeDist = np.inf
         for h in home:
             (dist, i) = min([(self.DistGPS(np.array(h), np.array(pt)), i)
@@ -226,7 +219,7 @@ class Route(object):
         if self.home is not None:
             Hlat, Hlng = self.home
             self.waypoints.append([Hlat, Hlng, xferAlt, xferSpd])
-            # get higher above frist point, point camera down
+            # get higher above first point, point camera down
         lat, lng = self.GPScords[0]
         self.waypoints.append([lat, lng, xferAlt, xferDes])
         # push each waypoint
@@ -305,7 +298,7 @@ class Route(object):
                     color=color, linestyle="--")
 
     def write(self, filename):
-        # writes the waypoints as a txt file
+        # writes the waypoints as a text file
         with filename.open('w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             # take off

@@ -25,7 +25,7 @@ class MetaGraph(object):
         self.subGraphs = self.split()
         # graph of the paths
         self.pathGraph = nx.DiGraph()
-        # reindex all the nodes and store their subgraph
+        # re-index all the nodes and store their subgraph
         self.nodeIndex = dict()
 
     def getExtends(self, graph):
@@ -44,7 +44,7 @@ class MetaGraph(object):
 
     def split(self,):
         """splits a graph into sub segments
-        size: aprox number of nodes in each sub graph
+        size: approx number of nodes in each sub graph
         """
         subNodes = self.findSubNodes()
         return self.buildSubGraphs(subNodes)
@@ -65,13 +65,9 @@ class MetaGraph(object):
         # find number of subGraphs
         nNode = xDelta * yDelta
         nSubGraph = int(nNode/size)
-        # print(nSubGraph)
+        ar = yDelta/xDelta  # aspect ratio of graph
 
-        # print('delta', xDelta, yDelta)
-        ar = yDelta/xDelta  # aspect raito of graph
-        # print('ar', ar)
-
-        # calculate how many blocks on each axis, be as square as posible
+        # calculate how many blocks on each axis, be as square as possible
         xBlock = (nSubGraph/ar) ** .5
         yBlock = ar*xBlock
         # round up
@@ -86,7 +82,7 @@ class MetaGraph(object):
         subNodes = defaultdict(list)
         for node in self.baseGraph.nodes:
             rNode = (node[0] - xBound[0],
-                     node[1] - yBound[0])  # get node reltative to bottom left
+                     node[1] - yBound[0])  # get node relative to bottom left
             # map square index to linear index
             group = (int(rNode[0]/xStep),  int(rNode[1]/yStep))
 
@@ -114,7 +110,7 @@ class MetaGraph(object):
                 gIdx += 1
             else:
                 self.logger.debug("found a non connected section")
-                # find the connected compoents
+                # find the connected components
                 for n in nx.connected_components(graph):
                     # get the graph from nodes
                     g = self.baseGraph.subgraph(n)
@@ -172,7 +168,7 @@ class MetaGraph(object):
             # pop item for processing
             gIdx, graph = toMerge.popitem()
             self.logger.debug(f"mergeing {gIdx} of size {len(graph)}")
-            # keep running score of best merge candidant
+            # keep running score of best merge candidate
             mergeScore = defaultdict(int)
             for node in graph:
                 # get the node index
@@ -182,7 +178,7 @@ class MetaGraph(object):
                     if adjIdx != nIdx:
                         mergeScore[adjIdx] += 1
             self.logger.debug(f"merge scores for {gIdx}: {mergeScore.items()}")
-            # sort candiates and merge into the best one
+            # sort candidate and merge into the best one
 
             for adjIdx in sorted(mergeScore,
                                  key=mergeScore.get,
@@ -196,11 +192,11 @@ class MetaGraph(object):
                 newSize = len(oldNodes) + len(graph)
 
                 if newSize < maxSize:
-                    # merge the ith subgraph into the kth subgraph
+                    # merge the i-th subgraph into the k-th subgraph
                     self.logger.debug(f"merging subg {gIdx} into {adjIdx}")
                     # created merged list of nodes
                     mergedNodes = oldNodes + list(graph.nodes)
-                    # make new subgeraph and reindex
+                    # make new subgraph and re-index
                     mergedGraph = self.baseGraph.subgraph(mergedNodes)
                     self.indexSubGraph(mergedGraph, adjIdx)
 
@@ -297,6 +293,24 @@ class MetaGraph(object):
                                 edgePair=(adj, adj_nxt, node, nxt),
                                 edgePairIdx=(adjIdx, adjIdx+adjStep, i, i+1))
 
+    def makePathtree(self, routeSet, step=40):
+        # make a tree from the base graph
+        if len(routeSet.home) != 1:
+            errMsg = "cant support a multihome tree"
+            self.logger.error(errMsg)
+            raise RuntimeError(errMsg)
+            return None
+        home = routeSet.home[0]
+        pathTree = nx.DiGraph()
+        pathTree.add_node("home")
+
+
+
+    def nodeDist(n0, n1):
+        # calculates the distance in meters between two nodes with UTM field
+        p0 = np.array(n0["UTM"])
+        np.linalg.norm()
+
     def sharedNode(self, n, baseGraph):
         # checks if the node n has a adj node not in the same subGraph
         grp = baseGraph.nodes[n]['subgraph']
@@ -331,7 +345,6 @@ class MetaGraph(object):
         for i, path in enumerate(self.subPaths):
             pathLen = len(path)
             nodeQueue[i] = pathLen
-
         # greedy fill of paths
         metaPath = ['e']
         while len(nodeQueue) > 0:
