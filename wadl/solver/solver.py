@@ -4,7 +4,7 @@ import logging
 # lib
 from wadl.solver.SATproblem import SATproblem
 from wadl.solver.metaGraph import MetaGraph
-from wadl.solver.metaTree import MetaTree
+from wadl.solver.pathTree import PathTree
 from wadl.lib.parameters import Parameters
 from tqdm import tqdm
 
@@ -67,7 +67,7 @@ class LinkSolver(BaseSolver):
         if self.parameters["stitch"] == "default":
             metaGraphClass = MetaGraph
         elif self.parameters["stitch"] == "tree":
-            metaGraphClass = MetaTree
+            metaGraphClass = PathTree
         else:
             self.logger.warm(f"{self.parameters['stitch']} is not valid")
             metaGraphClass = MetaGraph

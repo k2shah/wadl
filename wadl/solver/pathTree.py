@@ -8,13 +8,15 @@ import networkx as nx
 # plot
 from wadl.solver.metaGraph import MetaGraph
 # gis
+# plot
+import matplotlib.pyplot as plt
 
 
-class Pathtree(MetaGraph):
+class PathTree(MetaGraph):
     # PathTree object
 
-    def __init__(self, graph):
-        super(Pathtree, self).__init__(graph)
+    def __init__(self, graph, **kwargs):
+        super(PathTree, self).__init__(graph, **kwargs)
 
     def buildTree(self, home):
         # make a tree from the base graph
