@@ -22,7 +22,7 @@ keyPoints = {"oval": (37.4298541, -122.1694745),
              }
 survey.setKeyPoints(keyPoints)
 
-# route paramters
+# route parameters
 routeParams = RouteParameters()
 routeParams["limit"] = 30*60,  # s
 routeParams["speed"] = 5  # m/s
@@ -40,6 +40,7 @@ solverParams = SolverParameters()
 solverParams["subGraph_size"] = 20
 solverParams["SATBound_offset"] = 4
 solverParams["timeout"] = 30
+solverParams["stitch"] = "tree"
 
 # set the solver parameters
 survey.setSolverParamters(solverParams)
@@ -51,22 +52,22 @@ if view == 1:
     survey.view()
 else:
     # run path solver to plan paths and write output
-    survey.plan()
+    survey.plan(showPlot=True)
     # survey.plot()
 
 # make mission
-# mission paramters
-missionParams = MissionParameters()
-missionParams["N_bands"] = 3
-missionParams["autoland"] = False
+# mission parameters
+# missionParams = MissionParameters()
+# missionParams["N_bands"] = 3
+# missionParams["autoland"] = False
 
-missionParams["assign"] = "sequence"
+# missionParams["assign"] = "sequence"
 
-missionParams["offset_takeoff_dist"] = 10
-missionParams["offset_land_dist"] = 10
+# missionParams["offset_takeoff_dist"] = 10
+# missionParams["offset_land_dist"] = 10
 
 
-mission = Mission(missionParams)
-mission.fromSurvey(survey, showPlot=True)
-mission.setVersion(4, 0, 187)
-mission.write()
+# mission = Mission(missionParams)
+# mission.fromSurvey(survey, showPlot=True)
+# mission.setVersion(4, 0, 187)
+# mission.write()
