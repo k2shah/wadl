@@ -123,7 +123,7 @@ class Survey(object):
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
             self.solver.setup(maze.graph)
-            cols = self.solver.metaGraph.getCols()
+            cols = self.solver.metaGraph.getSubgraphColors()
             maze.plot(ax, showGrid=showGrid)
             for i, graph in enumerate(self.solver.metaGraph.subGraphs):
                 # print(graph.nodes)

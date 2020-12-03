@@ -4,6 +4,7 @@ import logging
 # lib
 from wadl.solver.SATproblem import SATproblem
 from wadl.solver.metaGraph import MetaGraph
+from wadl.solver.metaTree import MetaTree
 from wadl.lib.parameters import Parameters
 from tqdm import tqdm
 
@@ -19,6 +20,7 @@ class SolverParameters(Parameters):
         self["SATBound_offset"] = 2
         self["timeout"] = 60
         self["maxProblems"] = 10
+        self["stitch"] = "default"
 
 
 class BaseSolver(object):
@@ -29,7 +31,7 @@ class BaseSolver(object):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
 
-        # param
+        # parameters
         self.parameters = parameters
         if parameters is None:
             self.parameters = SolverParameters(default=True)
@@ -60,10 +62,22 @@ class LinkSolver(BaseSolver):
     def __init__(self, parameters=None):
         super(LinkSolver, self).__init__(parameters)
 
+    def metaGraphSelect(self):
+        # select MetaGraph type
+        if self.parameters["stitch"] == "default":
+            metaGraphClass = MetaGraph
+        elif self.parameters["stitch"] == "tree":
+            metaGraphClass = MetaTree
+        else:
+            self.logger.warm(f"{self.parameters['stitch']} is not valid")
+            metaGraphClass = MetaGraph
+        return metaGraphClass
+
     def setup(self, graph):
+        metaGraphClass = self.metaGraphSelect()
         # setup graph
-        self.metaGraph = MetaGraph(graph,
-                                   size=self._parameters["subGraph_size"])
+        self.metaGraph = metaGraphClass(graph,
+                                        size=self._parameters["subGraph_size"])
 
     def solve(self, routeSet):
         startTime = time.time()

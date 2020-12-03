@@ -213,10 +213,10 @@ class Pathtree(MetaGraph):
         return self.steamlinePath(waypoints)
 
     def plot(self, ax):
-        colors = ['k', 'r', 'b', 'g', 'c', 'y', 'm']
+        colors = list(plt.cm.rainbow(np.linspace(0, 1, self.nGroups)))
         for node in self.tree.nodes:
             cord = self.tree.nodes[node]["UTM"]
-            color = colors[self.groups[node] % 6]
+            color = colors[self.groups[node]]
             ax.scatter(*cord, color=color)
         for e1, e2 in self.tree.edges:
             if self.groups[e1] == self.groups[e2]:

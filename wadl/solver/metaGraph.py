@@ -430,5 +430,5 @@ class MetaGraph(object):
         # removes sequentially duplicate points
         return [n for i, n in enumerate(p) if i == 0 or n != p[i-1]]
 
-    def getCols(self):
+    defgetSubgraphColorss(self):
         return iter(plt.cm.rainbow(np.linspace(0, 1, len(self.subGraphs))))
