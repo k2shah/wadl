@@ -66,8 +66,18 @@ class LinkSolver(BaseSolver):
                                    size=self._parameters["subGraph_size"])
 
     def solve(self, routeSet):
-        subPaths = []
         startTime = time.time()
+        # solve each tile
+        subPaths = self.solveTiles()
+        # merge tiles based on the metaGraph selection
+        self.mergeTiles(subPaths, routeSet)
+        # return solution time
+        solveTime = time.time()-startTime
+        self.logger.info("solution time: {:2.5f} sec".format(solveTime))
+        return solveTime
+
+    def solveTiles(self):
+        subPaths = []
         for i, graph in enumerate(tqdm(self.metaGraph.subGraphs, ascii=True)):
             bound = len(graph) + self._parameters["SATBound_offset"]
             self.logger.info(f"building problem {i}")
@@ -90,13 +100,11 @@ class LinkSolver(BaseSolver):
                 if counter > self.parameters["maxProblems"]:
                     raise RuntimeError(f"problem {i} critically infeasible. "
                                        "graph may be degenerate")
+        return subPaths
 
+    def mergeTiles(self, subPaths, routeSet):
         # build the meta graph
         self.logger.info("bullding pathGraph")
         self.metaGraph.buildPathGraph(subPaths)
         self.logger.info("linking routes")
         self.metaGraph.link(routeSet)
-        # print time
-        solTime = time.time()-startTime
-        self.logger.info("solution time: {:2.5f} sec".format(solTime))
-        return solTime

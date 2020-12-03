@@ -42,7 +42,7 @@ class MetaGraph(object):
         # returns the linear index on the square index
         return cord[0] + grid[0]*cord[1]
 
-    def split(self,):
+    def split(self):
         """splits a graph into sub segments
         size: approx number of nodes in each sub graph
         """
@@ -293,19 +293,6 @@ class MetaGraph(object):
                                 edgePair=(adj, adj_nxt, node, nxt),
                                 edgePairIdx=(adjIdx, adjIdx+adjStep, i, i+1))
 
-    def makePathtree(self, routeSet, step=40):
-        # make a tree from the base graph
-        if len(routeSet.home) != 1:
-            errMsg = "cant support a multihome tree"
-            self.logger.error(errMsg)
-            raise RuntimeError(errMsg)
-            return None
-        home = routeSet.home[0]
-        pathTree = nx.DiGraph()
-        pathTree.add_node("home")
-
-
-
     def nodeDist(n0, n1):
         # calculates the distance in meters between two nodes with UTM field
         p0 = np.array(n0["UTM"])
@@ -431,8 +418,7 @@ class MetaGraph(object):
         h = (path[0][0]-path[0][0],
              path[0][1]-path[0][1])
         for c, n in zip(path[1:], path[2:]):
-            # c current pt
-            # n next pt
+            # c current pt, n next pt
             # get next heading
             nh = (n[0]-c[0], n[1]-c[1])
             if nh != h:
