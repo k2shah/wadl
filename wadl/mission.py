@@ -16,11 +16,11 @@ from wadl.lib.parameters import Parameters
 
 
 class MissionParameters(Parameters):
-    """Parameter container for seting missions parameters
+    """Parameter container for setting missions parameters
 
-    Set paramters directly like how you would for a dictionary.
+    Set parameters directly like how you would for a dictionary.
     ``missionParameters = MissionParameters``
-    ``missionParameters["Paramter"] = value``
+    ``missionParameters["Parameter"] = value``
 
     Args:
         autoland (bool): land after route
@@ -31,7 +31,7 @@ class MissionParameters(Parameters):
         assign (str): assignment option
         N_bands (int): number of altitude bands
         band_start (float): starting altitude band
-        band_step (float): step for the altiude bands
+        band_step (float): step for the altitude bands
         offset_takeoff_dist (float): takeoff offset distance in (m)
         offset_landf_dist (float): land offset distance in (m)
 
@@ -88,7 +88,7 @@ class Mission(object):
                      }
 
         self.autoland = self.parameters["autoland"]
-        # altitude bands for vertical seperation
+        # altitude bands for vertical separation
         self.nBands = self.parameters["N_bands"]
         bandStep = self.parameters["band_step"]
         bandStart = self.parameters["band_start"]
@@ -139,7 +139,7 @@ class Mission(object):
 
         # build mission.json header
         self.buildMission()
-        # oraganze and build routes
+        # organize and build routes
         self.buildRoutes(survey)
 
     def fromDirc(self, srcDir):
@@ -155,7 +155,7 @@ class Mission(object):
         routes = self.groupRoutes(survey)
         routes = self.sortRoutes(routes)
 
-        # start plottng
+        # start plotting
         fig, ax = plt.subplots(figsize=(16, 16))
         survey.plotKeyPoints(ax)
         cols = plt.cm.rainbow_r(np.linspace(0, 1, self.nBands))
@@ -251,7 +251,7 @@ class Mission(object):
     # route sorting methods
     @staticmethod
     def headingAngle(route):
-        # returns the inital heading angle of a route
+        # returns the initial heading angle of a route
         wp = route.waypoints
         angle = np.arctan2(wp[1][1]-wp[0][1],
                            wp[1][0]-wp[0][0])
@@ -264,7 +264,7 @@ class Mission(object):
         return route.UTMcords[0][0]
 
     @staticmethod
-    def eastStart(route):
+    def northStart(route):
         # returns the northing of the starting point
         route.GPS2UTM()
         return route.UTMcords[0][1]
@@ -285,6 +285,7 @@ class Mission(object):
 
     # helper functions to build the waypoint lists
     def makeRoute(self, name, route, bandAlt=None, home=None):
+        xferSpd = route[0][3]
         failsafe = {"rcLost": "GO_HOME",
                     "gpsLost": None,
                     "lowBattery": None,
@@ -315,8 +316,8 @@ class Mission(object):
 
         # transit in. point camera down
         lat, lng, alt, spd = route[0]
-        alt = alt if bandAlt is not None else bandAlt
-        pt = self.makePoint(lat, lng, bandAlt)
+        alt = alt if bandAlt is None else bandAlt
+        pt = self.makePoint(lat, lng, alt)
         routeJson["segments"].append(self.makeWaypoint(pt, spd,
                                                        tilt=90, camera=2))
 
@@ -330,8 +331,8 @@ class Mission(object):
         routeJson["segments"].append(self.makeWaypoint(pt, spd))
         # ascend camera forward
         lat, lng, alt, spd = route[-1]
-        alt = alt if bandAlt is not None else bandAlt
-        pt = self.makePoint(lat, lng, bandAlt)
+        alt = alt if bandAlt is None else bandAlt
+        pt = self.makePoint(lat, lng, alt)
         routeJson["segments"].append(self.makeWaypoint(pt, spd, tilt=0))
 
         if home is not None:
@@ -340,18 +341,18 @@ class Mission(object):
             offsetPt = self.offsetHome(home, route[1],
                                        self.parameters["offset_takeoff_dist"])
             lat, lng, alt, spd = offsetPt
-            alt = alt if bandAlt is not None else bandAlt
+            alt = alt if bandAlt is None else bandAlt
             pt = self.makePoint(lat, lng, alt)
-            routeJson["segments"].insert(0, self.makeWaypoint(pt, spd))
+            routeJson["segments"].insert(0, self.makeWaypoint(pt, xferSpd))
 
             # transfer out
             offsetPt = self.offsetHome(home, route[-1],
                                        self.parameters["offset_land_dist"])
             lat, lng, alt, spd = offsetPt
-            alt = alt if bandAlt is not None else bandAlt
+            alt = alt if bandAlt is None else bandAlt
             pt = self.makePoint(lat, lng, alt)
             routeJson["segments"].append(self.makeWaypoint(pt, spd))
-            # pre land
+            # pre-land
             if self.parameters["pre_land_alt"] is not None:
                 pt = self.makePoint(lat, lng, self.parameters["pre_land_alt"])
                 routeJson["segments"].append(self.makeWaypoint(pt, 4))
@@ -375,7 +376,7 @@ class Mission(object):
 
     @staticmethod
     def makeWaypoint(pt, spd, camera=None, tilt=None):
-        # make paramter
+        # make parameter
         param = {"avoidObstacles": True,
                  "avoidTerrain": True,
                  "speed": spd,
