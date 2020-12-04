@@ -78,6 +78,9 @@ class RouteSet(object):
     def __iter__(self):
         return iter(self.routes)
 
+    def setData(self, data):
+        self.data = data
+
     def check(self, cords):
         """Builds the route from a UTM waypoint list and
         runs a series of checks to verify the route is viable.
@@ -113,7 +116,7 @@ class RouteSet(object):
             filename = pathDir / f"{i}.csv"
             route.write(filename)
             self.logger.info(f"\t\troute {i}:\t"
-                             f"{route.length:2.2f} m \t{route.ToF:2.2f} sec ")
+                             f"{route.length:2.2f}m \t{route.ToF/60:2.2f}min ")
 
 
 class Route(object):
@@ -164,14 +167,14 @@ class Route(object):
 
     def setHome(self, home):
         # resolve the home point
-        homeDist = np.inf
+        self.homeDist = np.inf
         for h in home:
             (dist, i) = min([(self.DistGPS(np.array(h), np.array(pt)), i)
                              for i, pt in enumerate(self.GPScords)])
-            if dist < homeDist:
+            if dist < self.homeDist:
                 self.home = h
                 idx = i
-                homeDist = dist
+                self.homeDist = dist
         self.logger.debug(f"home set to {self.home}")
 
         # shift and wrap

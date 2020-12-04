@@ -110,6 +110,23 @@ class Maze(Fence):
         for i, node in enumerate(self.graph):
             self.graph.nodes[node]['index'] = i
 
+    def routeStats(self):
+        self.stats = dict()
+        lengths = [route.length for route in self.routeSet]
+        # find the number of steps
+        nStep = self.routeSet.data['nSteps']
+        eff = self.nNode/nStep
+        # stats
+        self.stats["mean"] = np.mean(lengths)
+        self.stats["std"] = np.std(lengths)
+        # generate output
+        outStr = f"mean:\t{self.stats['mean']:.2f}m"
+        outStr += f"\nstd:\t{self.stats['std']:.2f}m"
+        outStr += f"\nused {nStep} steps for a {self.nNode} graph"
+        outStr += f"\nefficiency:\t{eff:2.2f}%"
+        self.logger.info(outStr)
+        return outStr
+
     # write
     def write(self, filePath):
         """Write the maze information to a file
@@ -136,6 +153,7 @@ class Maze(Fence):
         plotName = taskDir / "routes.png"
         plt.savefig(plotName, bbox_inches='tight', dpi=100)
         plt.close(fig)
+
     def writeInfo(self, filePath):
         # writes the Maze information of the test
         outFile = filePath / "info.txt"
@@ -144,15 +162,12 @@ class Maze(Fence):
             f.write('\nGrid size\n')
             f.write(str(self.nNode))
 
-            # f.write('\nPath limit\n')
-            # f.write(str(self.limit))
-
             f.write('\nSolution time (sec)\n')
             f.write(str(self.solTime))
 
-            # f.write('\nInitial agent positions\n')
-            # for start in self.starts:
-            #     f.write(f"{start}\n")
+            routeStats = self.routeStats()
+            f.write('\nRoute Statistics\n')
+            f.write(routeStats)
 
     def writeRoutes(self, pathDir):
         self.routeSet.write(pathDir)

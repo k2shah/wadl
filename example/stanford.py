@@ -38,7 +38,7 @@ survey.addTask(file,
 # solver parameters
 solverParams = SolverParameters()
 solverParams["subGraph_size"] = 20
-solverParams["SATBound_offset"] = 4
+solverParams["SATBound_offset"] = 2
 solverParams["timeout"] = 10
 solverParams["stitch"] = "tree"
 
