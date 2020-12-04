@@ -135,7 +135,7 @@ class Maze(Fence):
         plt.axis('square')
         plotName = taskDir / "routes.png"
         plt.savefig(plotName, bbox_inches='tight', dpi=100)
-
+        plt.close(fig)
     def writeInfo(self, filePath):
         # writes the Maze information of the test
         outFile = filePath / "info.txt"

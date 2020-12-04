@@ -31,7 +31,7 @@ routeParams["altitude"] = 50.0  # m
 
 survey.addTask(file,
                step=100,
-               home=["oval", "MSL"],
+               home=["MSL"],
                routeParameters=routeParams,
                )
 
@@ -39,7 +39,7 @@ survey.addTask(file,
 solverParams = SolverParameters()
 solverParams["subGraph_size"] = 20
 solverParams["SATBound_offset"] = 4
-solverParams["timeout"] = 30
+solverParams["timeout"] = 10
 solverParams["stitch"] = "tree"
 
 # set the solver parameters

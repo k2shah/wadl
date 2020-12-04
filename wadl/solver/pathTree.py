@@ -50,7 +50,7 @@ class PathTree(MetaGraph):
 
     def minHomeDist(self, home, path):
         # rotates the path to find the smallest home transfer distance
-        dist, idx = min([(np.linalg.norm(home["UTM"], self.getUTM(pt)), i)
+        dist, idx = min([(np.linalg.norm(home["UTM"] - self.getUTM(pt)), i)
                         for i, pt in enumerate(path)])
         return dist, path[idx:] + path[1:idx+1]
 
@@ -66,10 +66,9 @@ class PathTree(MetaGraph):
     def link(self, routeSet):
         # build the path tree
         if len(routeSet.home) != 1:
-            errMsg = "cant support a multihome maze"
+            errMsg = "cant support a multihome maze."
             self.logger.error(errMsg)
-            raise RuntimeError(errMsg)
-            return None
+
         self.buildTree(routeSet.home)
 
         # find groups for each tile
@@ -87,7 +86,7 @@ class PathTree(MetaGraph):
                 # start building a new group
                 queue = SimpleQueue()
                 self.groups[node] = groupIdx
-                self.logger.info(f"route idx: {groupIdx}")
+                self.logger.debug(f"route idx: {groupIdx}")
                 queue.put(node)
                 # reset all the objects
                 metaTree = nx.DiGraph()
@@ -96,7 +95,7 @@ class PathTree(MetaGraph):
                 candiate = self.stitch(metaTree)
                 if (route := routeSet.check(candiate)) is not None:
                     # build the 1st section
-                    self.logger.info(f"accepted {node}")
+                    self.logger.debug(f"accepted {node}")
                 else:
                     raise RuntimeError("path limit too short")
                 # fill the route
@@ -111,13 +110,13 @@ class PathTree(MetaGraph):
                         if (newRoute := routeSet.check(candiate)) is not None:
                             # accept the node
                             queue.put(n_adj)
-                            self.logger.info(f"accepted {node}")
+                            self.logger.debug(f"accepted {node}")
                             self.groups[n_adj] = groupIdx
                             # save the route
                             route = newRoute
                         else:
                             # remove if didn't work
-                            self.logger.info(f"rejected {node}")
+                            self.logger.debug(f"rejected {node}")
                             metaTree.remove_node(n_adj)
 
                 # when done with filling
@@ -127,14 +126,14 @@ class PathTree(MetaGraph):
                     self.logger.error(errMsg)
                     raise RuntimeError(errMsg)
                 else:
-                    self.logger.info(f"pushing {metaTree.nodes}")
+                    self.logger.debug(f"pushing {metaTree.nodes}")
                     routeSet.push(route)
         self.nGroups = groupIdx
 
-    def stitch(self, metaTree):
+    def stitch(self, tree):
         # get edges to travel in a DF manner
         # print("edges ", metaTree.edges)
-        edgeList = nx.dfs_edges(metaTree)
+        edgeList = nx.dfs_edges(tree)
         # add the first metaNode
         startNode = next(edgeList)[1]
         path = [(startNode, 0, len(self.subPaths[startNode])-1)]
@@ -202,17 +201,16 @@ class PathTree(MetaGraph):
     def unravelPath(self, path):
         waypoints = []
         # unravel each section
-        self.logger.info(f"path {path}")
+        self.logger.debug(f"path {path}")
         for section in path:
             node, start, end = section
             # pick the direction
             step = 1 if start < end else -1
             for idx in range(start, end+step, step):
                 # get the world pt
-                pt = self.subPaths[node][idx]
-                # look up and push the UTM
-                waypoints.append(self.baseGraph.nodes[pt]['UTM'])
-        return self.steamlinePath(waypoints)
+                waypoints.append(self.subPaths[node][idx])
+        # stream line the path and convert to UTM
+        return [self.getUTM(pt) for pt in self.steamlinePath(waypoints)]
 
     def plot(self, ax):
         colors = list(plt.cm.rainbow(np.linspace(0, 1, self.nGroups)))
