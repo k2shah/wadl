@@ -150,6 +150,7 @@ class Survey(object):
             try:
                 solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
+                maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
 

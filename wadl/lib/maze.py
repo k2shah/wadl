@@ -110,7 +110,7 @@ class Maze(Fence):
         for i, node in enumerate(self.graph):
             self.graph.nodes[node]['index'] = i
 
-    def routeStats(self):
+    def calcRouteStats(self):
         self.stats = dict()
         lengths = [route.length for route in self.routeSet]
         # find the number of steps
@@ -120,12 +120,13 @@ class Maze(Fence):
         self.stats["mean"] = np.mean(lengths)
         self.stats["std"] = np.std(lengths)
         # generate output
-        outStr = f"mean:\t{self.stats['mean']:.2f}m"
-        outStr += f"\nstd:\t{self.stats['std']:.2f}m"
-        outStr += f"\nused {nStep} steps for a {self.nNode} graph"
-        outStr += f"\nefficiency:\t{eff:2.2f}%"
-        self.logger.info(outStr)
-        return outStr
+        self.routeStats = f"mean:\t{self.stats['mean']:.2f}m"
+        self.routeStats += f"\nstd:\t{self.stats['std']:.2f}m"
+        self.routeStats += f"\nused {nStep} steps for a {self.nNode} graph"
+        self.routeStats += f"\nefficiency:\t{eff:2.2f}%"
+        self.logger.info(self.routeStats)
+        self.routeStats
+        return self.routeStats
 
     # write
     def write(self, filePath):
@@ -165,9 +166,9 @@ class Maze(Fence):
             f.write('\nSolution time (sec)\n')
             f.write(str(self.solTime))
 
-            routeStats = self.routeStats()
+            self.routeStats = self.routeStats()
             f.write('\nRoute Statistics\n')
-            f.write(routeStats)
+            f.write(self.routeStats)
 
     def writeRoutes(self, pathDir):
         self.routeSet.write(pathDir)

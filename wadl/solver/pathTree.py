@@ -3,11 +3,13 @@ from collections import OrderedDict
 from queue import SimpleQueue
 # math
 import numpy as np
+import cvxpy as cvx
 # graph
 import networkx as nx
 # plot
 from wadl.solver.metaGraph import MetaGraph
 # gis
+import utm
 # plot
 import matplotlib.pyplot as plt
 
@@ -22,9 +24,14 @@ class PathTree(MetaGraph):
         # make a tree from the base graph
         self.tree = nx.DiGraph()
         self.makeNodes(home)
-        self.makeEdge()
+        self.makeEdges()
         # CHECK IF GRAPH IS DAG
-        assert nx.is_directed_acyclic_graph(self.tree)
+        try:
+            assert nx.is_directed_acyclic_graph(self.tree)
+        except AssertionError:
+            errMsg = "graph is not DAG"
+            self.logger.error(errMsg)
+            raise RuntimeError(errMsg)
 
     def getUTM(self, pt):
         # gets the UTM of a point
@@ -32,26 +39,28 @@ class PathTree(MetaGraph):
 
     def makeNodes(self, home):
         # make the initial nodes of the graph
-        self.tree.add_node("home", UTM=home[0:2], dist=0, size=0)
+        utmHome = utm.from_latlon(*home)
+        self.tree.add_node("home", UTM=utmHome[0:2], dist=0, size=0)
         for node, path in enumerate(self.subPaths):
             dist, rotatedPath = self.minHomeDist(self.tree.nodes["home"], path)
+            pathLen = self.pathLength(rotatedPath)
             self.tree.add_node(node,
                                UTM=self.getUTM(rotatedPath[0]),
-                               dist=dist,
-                               size=self.pathLength(rotatedPath))
-            self.tree.add_edge("home", node, weight=dist)
+                               dist=dist,  # distance from home
+                               size=pathLen)
+            self.tree.add_edge("home", node, homeDist=dist, weight=pathLen)
 
-    def makeEdge(self):
+    def makeEdges(self):
         for e1, e2 in self.pathGraph.edges:
             if e1 in self.tree and e2 in self.tree:
                 if self.tree.nodes[e1]["dist"] < self.tree.nodes[e2]["dist"]:
                     self.tree.add_edge(
-                        e1, e2, weight=self.tree.nodes[e1]["size"])
+                        e1, e2, weight=self.tree.nodes[e2]["size"])
 
     def minHomeDist(self, home, path):
         # rotates the path to find the smallest home transfer distance
         dist, idx = min([(np.linalg.norm(home["UTM"] - self.getUTM(pt)), i)
-                        for i, pt in enumerate(path)])
+                         for i, pt in enumerate(path)])
         return dist, path[idx:] + path[1:idx+1]
 
     def pathLength(self, path):
@@ -69,8 +78,11 @@ class PathTree(MetaGraph):
             errMsg = "cant support a multihome maze."
             self.logger.error(errMsg)
 
-        self.buildTree(routeSet.home)
+        # build the tree and partition it
+        self.buildTree(routeSet.home[0])
+        self.partition(routeSet)
 
+    def partition(self, routeSet):
         # find groups for each tile
         self.groups = OrderedDict()
         for node in sorted(self.tree.nodes,
@@ -93,7 +105,7 @@ class PathTree(MetaGraph):
                 metaTree.add_edge('home', node)
                 # build the first segment
                 candiate = self.stitch(metaTree)
-                if (route := routeSet.check(candiate)) is not None:
+                if (route:=routeSet.check(candiate)) is not None:
                     # build the 1st section
                     self.logger.debug(f"accepted {node}")
                 else:
@@ -107,7 +119,7 @@ class PathTree(MetaGraph):
                         # test the new route
                         metaTree.add_edge(n, n_adj)
                         candiate = self.stitch(metaTree)
-                        if (newRoute := routeSet.check(candiate)) is not None:
+                        if (newRoute:=routeSet.check(candiate)) is not None:
                             # accept the node
                             queue.put(n_adj)
                             self.logger.debug(f"accepted {node}")
@@ -223,3 +235,86 @@ class PathTree(MetaGraph):
                 line = np.array([self.tree.nodes[e1]["UTM"],
                                  self.tree.nodes[e2]["UTM"]])
                 ax.plot(line[:, 0], line[:, 1], color='k', linewidth=1)
+
+
+class PathTreeMilp(PathTree):
+    """class to split the PathTree with a MILP"""
+
+    def __init__(self, graph, **kwargs):
+        super(PathTreeMilp, self).__init__(graph, **kwargs)
+
+    def makeMilp(self, nGroups):
+        N = len(self.graph)
+        M = len(self.graph.edges)
+
+        # node maps
+        node2idx = {n: i for i, n in enumerate(self.graph)}
+        # edge maps
+        edge2idx = dict()
+        for i, m in enumerate(self.graph.edges):
+            # graph is a dag so only need to cache one direction
+            edge2idx[m] = i
+            edge2idx[tuple(reversed(m))] = i
+
+        k = nGroups
+        # size limit
+        g = self.limit
+
+        # cvx
+        X = cvx.Variable((N, k), boolean=True)
+        Z = cvx.Variable((M, k), boolean=True)
+        # Y = cvx.Variable((N, k), boolean=True)
+        cost = cvx.sum([c @ X[:, i] for i in range(k)])
+        # cost = cvx.sum([(t.T @ Y[:, i]) for i in range(k)])
+        const = []
+        # is assigned
+        const += [cvx.sum(X, axis=1) == np.ones(N)]
+        const += [cvx.sum(Z, axis=1) <= np.ones(M)]
+        # has start node
+        # const += [cvx.sum(Y, axis=0) == np.ones(k)]
+        # start node is in subgraph
+        # const += [Y <= X]
+        for i in range(k):
+            # under limit
+            const += [c @ X[:, i] <= g]
+
+            # min 1 edge max 2 edges per node
+            for n, node in enumerate(self.graph.nodes):
+                const += [X[n, i] <= cvx.sum([Z[edge2idx[e], i]
+                                              for e in self.graph.edges(node)])]
+                const += [cvx.sum([Z[edge2idx[e], i]
+                                   for e in self.graph.edges(node)]) <= 2]
+
+            # edge only allowed if node is in grp
+            for m, edge in enumerate(self.graph.edges):
+                n1 = node2idx[edge[0]]
+                n2 = node2idx[edge[1]]
+                const += [Z[m, i] <= (.5)*(X[n1, i] + X[n2, i])]
+
+            # tree constraint
+            const += [cvx.sum(X[:, i]) == cvx.sum(Z[:, i])+1]
+
+        # form and solve
+        prob = cvx.Problem(cvx.Minimize(cost), const)
+        return prob
+
+    def getCosts(self, routeSet):
+        """use the routeSet parameters and the edges to build the edge cost.
+        Use the distance information in edge and speed in the routeSet to
+        calculate the Edge costs as a time
+        """
+
+        self.limit = routeSet.routeParameters["limit"]
+        transferSpeed = routeSet.routeParameters["xfer_speed"]
+        speed = routeSet.routeParameters["speed"]
+        edgeCosts = dict()
+        for u, v, d in self.graph.edges(data="weight"):
+            if u == "home":
+                cost = d*transferSpeed + 20  # 30 seconds for ascend/descend
+            else:
+                cost = d*speed
+            edgeCosts[(u, v)] = cost
+        return edgeCosts
+
+    def link(self, routeSet):
+        pass
