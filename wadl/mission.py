@@ -88,7 +88,7 @@ class Mission(object):
                      }
 
         self.autoland = self.parameters["autoland"]
-        # altitude bands for vertical seperation
+        # altitude bands for vertical separation
         self.nBands = self.parameters["N_bands"]
         bandStep = self.parameters["band_step"]
         bandStart = self.parameters["band_start"]
@@ -139,7 +139,7 @@ class Mission(object):
 
         # build mission.json header
         self.buildMission()
-        # oraganze and build routes
+        # organize and build routes
         self.buildRoutes(survey)
 
     def fromDirc(self, srcDir):
@@ -155,7 +155,7 @@ class Mission(object):
         routes = self.groupRoutes(survey)
         routes = self.sortRoutes(routes)
 
-        # start plottng
+        # start plotting
         fig, ax = plt.subplots(figsize=(16, 16))
         survey.plotKeyPoints(ax)
         cols = plt.cm.rainbow_r(np.linspace(0, 1, self.nBands))

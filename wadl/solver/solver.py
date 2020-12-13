@@ -5,6 +5,7 @@ import logging
 from wadl.solver.SATproblem import SATproblem
 from wadl.solver.metaGraph import MetaGraph
 from wadl.solver.pathTree import PathTree
+from wadl.solver.pathTreeMilp import PathTreeMilp
 from wadl.lib.parameters import Parameters
 from tqdm import tqdm
 
@@ -68,6 +69,8 @@ class LinkSolver(BaseSolver):
             metaGraphClass = MetaGraph
         elif self.parameters["stitch"] == "tree":
             metaGraphClass = PathTree
+        elif self.parameters["stitch"] == "milp":
+            metaGraphClass = PathTreeMilp
         else:
             self.logger.warm(f"{self.parameters['stitch']} is not valid")
             metaGraphClass = MetaGraph

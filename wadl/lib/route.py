@@ -81,6 +81,10 @@ class RouteSet(object):
     def setData(self, data):
         self.data = data
 
+    def getLimit(self):
+        # get the time limit
+        return self.routeParameters['limit']
+
     def check(self, cords):
         """Builds the route from a UTM waypoint list and
         runs a series of checks to verify the route is viable.
@@ -96,9 +100,9 @@ class RouteSet(object):
         route = Route(cords, self.zone, self.home)
         route.build(self.routeParameters)
         if route.check():
-            return route
+            return True, route
         else:
-            return None
+            return False, route
 
     def push(self, route):
         # push the route into the container
@@ -111,12 +115,10 @@ class RouteSet(object):
             pathDir (str): location to save routes.
 
         """
-        self.logger.info(f"\tgenerated {len(self.routes)} routes")
+        self.logger.info(f"writing routes to {pathDir}")
         for i, route in enumerate(self.routes):
             filename = pathDir / f"{i}.csv"
             route.write(filename)
-            self.logger.info(f"\t\troute {i}:\t"
-                             f"{route.length:2.2f}m \t{route.ToF/60:2.2f}min ")
 
 
 class Route(object):
@@ -133,7 +135,7 @@ class Route(object):
 
     """
 
-    def __init__(self, cords, zone, home):
+    def __init__(self, cords, zone, home=None):
         # loggers
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
@@ -141,9 +143,7 @@ class Route(object):
         self.UTMcords = cords  # cords in UTM
         self.UTMZone = zone
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
-        if home is None:
-            self.home = None
-        else:
+        if home is not None:
             self.setHome(home)  # set home pt (in GPS)
         self.waypoints = []
 
@@ -191,19 +191,47 @@ class Route(object):
         """
 
         # check: under the waypoint limit
-        if len(self.waypoints) > self.DJIWaypointLimit:
-            return False
-        # check: under the time limit
-        self.ToF = 0  # time of flight
         self.length = 0
-        for wp, nxt in zip(self.waypoints, self.waypoints[1:]):
-            dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
-            self.length += dist
-            self.ToF += dist/wp[3]
-
+        self.ToF = 0
+        passed = True
+        if len(self.waypoints) > self.DJIWaypointLimit:
+            passed = False
+        # check: under the time limit
+        if self.home is None:
+            # split transfer and survey sections
+            tran_in, ToF_in = self.calcLength(self.waypoints[0:1])
+            tran_out, ToF_out = self.calcLength(self.waypoints[-2:])
+            self.len_tran = tran_in + tran_out
+            self.ToF_tran = ToF_in, ToF_out
+            # survey
+            self.len_surv, self.ToF_surv = self.calcLength(
+                self.waypoints[1:-2])
+        else:
+            # split transfer and survey sections
+            tran_in, ToF_in = self.calcLength(self.waypoints[0:2])
+            tran_out, ToF_out = self.calcLength(self.waypoints[-4:])
+            self.len_tran = tran_in + tran_out
+            self.ToF_tran = ToF_in + ToF_out
+            # survey
+            self.len_surv, self.ToF_surv = self.calcLength(
+                self.waypoints[2:-4])
+        self.length = self.len_surv + self.len_tran
+        self.ToF = self.ToF_tran + self.ToF_surv
         if self.ToF > self.limit:
-            return False
-        return True
+            passed = False
+        return passed
+
+    def calcLength(self, waypoints):
+        # return the length and ToF of the segment
+        length = 0
+        ToF = 0
+        if len(waypoints) < 2:
+            raise RuntimeError("waypoint segment must have at least 2 pts")
+        for wp, nxt in zip(waypoints, waypoints[1:]):
+            dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
+            length += dist
+            ToF += dist/wp[3]
+        return length, ToF
 
     def build(self, routeParameters):
         # build the path

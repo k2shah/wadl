@@ -20,10 +20,10 @@ class PathTree(MetaGraph):
     def __init__(self, graph, **kwargs):
         super(PathTree, self).__init__(graph, **kwargs)
 
-    def buildTree(self, home):
+    def buildTree(self, routeSet):
         # make a tree from the base graph
         self.tree = nx.DiGraph()
-        self.makeNodes(home)
+        self.makeNodes(routeSet)
         self.makeEdges()
         # CHECK IF GRAPH IS DAG
         try:
@@ -37,25 +37,28 @@ class PathTree(MetaGraph):
         # gets the UTM of a point
         return self.baseGraph.nodes[pt]["UTM"]
 
-    def makeNodes(self, home):
+    def makeNodes(self, routeSet):
         # make the initial nodes of the graph
-        utmHome = utm.from_latlon(*home)
-        self.tree.add_node("home", UTM=utmHome[0:2], dist=0, size=0)
+        utmHome = [utm.from_latlon(*home)[0:2] for home in routeSet.home]
+        self.tree.add_node("home", UTM=utmHome, homeDist=0)
         for node, path in enumerate(self.subPaths):
-            dist, rotatedPath = self.minHomeDist(self.tree.nodes["home"], path)
-            pathLen = self.pathLength(rotatedPath)
+            UTMpath = [self.getUTM(pt) for pt in self.steamlinePath(path)]
+            _, route = routeSet.check(UTMpath)
+            # unpack route metrics into the node
             self.tree.add_node(node,
-                               UTM=self.getUTM(rotatedPath[0]),
-                               dist=dist,  # distance from home
-                               size=pathLen)
-            self.tree.add_edge("home", node, homeDist=dist, weight=pathLen)
+                               UTM=self.getUTM(path[0]),
+                               homeDist=route.len_tran,
+                               homeTime=route.ToF_tran,
+                               survDist=route.len_surv,
+                               survTime=route.ToF_surv
+                               )
+            self.tree.add_edge("home", node)
 
     def makeEdges(self):
         for e1, e2 in self.pathGraph.edges:
             if e1 in self.tree and e2 in self.tree:
-                if self.tree.nodes[e1]["dist"] < self.tree.nodes[e2]["dist"]:
-                    self.tree.add_edge(
-                        e1, e2, weight=self.tree.nodes[e2]["size"])
+                if self.tree.nodes[e1]["homeDist"] < self.tree.nodes[e2]["homeDist"]:
+                    self.tree.add_edge(e1, e2)
 
     def minHomeDist(self, home, path):
         # rotates the path to find the smallest home transfer distance
@@ -73,20 +76,15 @@ class PathTree(MetaGraph):
         return length
 
     def link(self, routeSet):
-        # build the path tree
-        if len(routeSet.home) != 1:
-            errMsg = "cant support a multihome maze."
-            self.logger.error(errMsg)
-
         # build the tree and partition it
-        self.buildTree(routeSet.home[0])
+        self.buildTree(routeSet)
         self.partition(routeSet)
 
     def partition(self, routeSet):
         # find groups for each tile
         self.groups = OrderedDict()
         for node in sorted(self.tree.nodes,
-                           key=lambda x: self.tree.nodes[x]["dist"],
+                           key=lambda x: self.tree.nodes[x]["homeDist"],
                            reverse=True):
             self.groups[node] = 0
         groupIdx = 1
@@ -105,7 +103,8 @@ class PathTree(MetaGraph):
                 metaTree.add_edge('home', node)
                 # build the first segment
                 candiate = self.stitch(metaTree)
-                if (route:=routeSet.check(candiate)) is not None:
+                passed, route = routeSet.check(candiate)
+                if passed:
                     # build the 1st section
                     self.logger.debug(f"accepted {node}")
                 else:
@@ -119,7 +118,8 @@ class PathTree(MetaGraph):
                         # test the new route
                         metaTree.add_edge(n, n_adj)
                         candiate = self.stitch(metaTree)
-                        if (newRoute:=routeSet.check(candiate)) is not None:
+                        passed, newRoute = routeSet.check(candiate)
+                        if passed:
                             # accept the node
                             queue.put(n_adj)
                             self.logger.debug(f"accepted {node}")
@@ -237,84 +237,84 @@ class PathTree(MetaGraph):
                 ax.plot(line[:, 0], line[:, 1], color='k', linewidth=1)
 
 
-class PathTreeMilp(PathTree):
-    """class to split the PathTree with a MILP"""
+# class PathTreeMilp(PathTree):
+#     """class to split the PathTree with a MILP"""
 
-    def __init__(self, graph, **kwargs):
-        super(PathTreeMilp, self).__init__(graph, **kwargs)
+#     def __init__(self, graph, **kwargs):
+#         super(PathTreeMilp, self).__init__(graph, **kwargs)
 
-    def makeMilp(self, nGroups):
-        N = len(self.graph)
-        M = len(self.graph.edges)
+#     def makeMilp(self, nGroups):
+#         N = len(self.graph)
+#         M = len(self.graph.edges)
 
-        # node maps
-        node2idx = {n: i for i, n in enumerate(self.graph)}
-        # edge maps
-        edge2idx = dict()
-        for i, m in enumerate(self.graph.edges):
-            # graph is a dag so only need to cache one direction
-            edge2idx[m] = i
-            edge2idx[tuple(reversed(m))] = i
+#         # node maps
+#         node2idx = {n: i for i, n in enumerate(self.graph)}
+#         # edge maps
+#         edge2idx = dict()
+#         for i, m in enumerate(self.graph.edges):
+#             # graph is a dag so only need to cache one direction
+#             edge2idx[m] = i
+#             edge2idx[tuple(reversed(m))] = i
 
-        k = nGroups
-        # size limit
-        g = self.limit
+#         k = nGroups
+#         # size limit
+#         g = self.limit
 
-        # cvx
-        X = cvx.Variable((N, k), boolean=True)
-        Z = cvx.Variable((M, k), boolean=True)
-        # Y = cvx.Variable((N, k), boolean=True)
-        cost = cvx.sum([c @ X[:, i] for i in range(k)])
-        # cost = cvx.sum([(t.T @ Y[:, i]) for i in range(k)])
-        const = []
-        # is assigned
-        const += [cvx.sum(X, axis=1) == np.ones(N)]
-        const += [cvx.sum(Z, axis=1) <= np.ones(M)]
-        # has start node
-        # const += [cvx.sum(Y, axis=0) == np.ones(k)]
-        # start node is in subgraph
-        # const += [Y <= X]
-        for i in range(k):
-            # under limit
-            const += [c @ X[:, i] <= g]
+#         # cvx
+#         X = cvx.Variable((N, k), boolean=True)
+#         Z = cvx.Variable((M, k), boolean=True)
+#         # Y = cvx.Variable((N, k), boolean=True)
+#         cost = cvx.sum([c @ X[:, i] for i in range(k)])
+#         # cost = cvx.sum([(t.T @ Y[:, i]) for i in range(k)])
+#         const = []
+#         # is assigned
+#         const += [cvx.sum(X, axis=1) == np.ones(N)]
+#         const += [cvx.sum(Z, axis=1) <= np.ones(M)]
+#         # has start node
+#         # const += [cvx.sum(Y, axis=0) == np.ones(k)]
+#         # start node is in subgraph
+#         # const += [Y <= X]
+#         for i in range(k):
+#             # under limit
+#             const += [c @ X[:, i] <= g]
 
-            # min 1 edge max 2 edges per node
-            for n, node in enumerate(self.graph.nodes):
-                const += [X[n, i] <= cvx.sum([Z[edge2idx[e], i]
-                                              for e in self.graph.edges(node)])]
-                const += [cvx.sum([Z[edge2idx[e], i]
-                                   for e in self.graph.edges(node)]) <= 2]
+#             # min 1 edge max 2 edges per node
+#             for n, node in enumerate(self.graph.nodes):
+#                 const += [X[n, i] <= cvx.sum([Z[edge2idx[e], i]
+#                                               for e in self.graph.edges(node)])]
+#                 const += [cvx.sum([Z[edge2idx[e], i]
+#                                    for e in self.graph.edges(node)]) <= 2]
 
-            # edge only allowed if node is in grp
-            for m, edge in enumerate(self.graph.edges):
-                n1 = node2idx[edge[0]]
-                n2 = node2idx[edge[1]]
-                const += [Z[m, i] <= (.5)*(X[n1, i] + X[n2, i])]
+#             # edge only allowed if node is in grp
+#             for m, edge in enumerate(self.graph.edges):
+#                 n1 = node2idx[edge[0]]
+#                 n2 = node2idx[edge[1]]
+#                 const += [Z[m, i] <= (.5)*(X[n1, i] + X[n2, i])]
 
-            # tree constraint
-            const += [cvx.sum(X[:, i]) == cvx.sum(Z[:, i])+1]
+#             # tree constraint
+#             const += [cvx.sum(X[:, i]) == cvx.sum(Z[:, i])+1]
 
-        # form and solve
-        prob = cvx.Problem(cvx.Minimize(cost), const)
-        return prob
+#         # form and solve
+#         prob = cvx.Problem(cvx.Minimize(cost), const)
+#         return prob
 
-    def getCosts(self, routeSet):
-        """use the routeSet parameters and the edges to build the edge cost.
-        Use the distance information in edge and speed in the routeSet to
-        calculate the Edge costs as a time
-        """
+#     def getCosts(self, routeSet):
+#         """use the routeSet parameters and the edges to build the edge cost.
+#         Use the distance information in edge and speed in the routeSet to
+#         calculate the Edge costs as a time
+#         """
 
-        self.limit = routeSet.routeParameters["limit"]
-        transferSpeed = routeSet.routeParameters["xfer_speed"]
-        speed = routeSet.routeParameters["speed"]
-        edgeCosts = dict()
-        for u, v, d in self.graph.edges(data="weight"):
-            if u == "home":
-                cost = d*transferSpeed + 20  # 30 seconds for ascend/descend
-            else:
-                cost = d*speed
-            edgeCosts[(u, v)] = cost
-        return edgeCosts
+#         self.limit = routeSet.routeParameters["limit"]
+#         transferSpeed = routeSet.routeParameters["xfer_speed"]
+#         speed = routeSet.routeParameters["speed"]
+#         edgeCosts = dict()
+#         for u, v, d in self.graph.edges(data="weight"):
+#             if u == "home":
+#                 cost = d*transferSpeed + 20  # 30 seconds for ascend/descend
+#             else:
+#                 cost = d*speed
+#             edgeCosts[(u, v)] = cost
+#         return edgeCosts
 
-    def link(self, routeSet):
-        pass
+#     def link(self, routeSet):
+#         pass

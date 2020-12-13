@@ -7,7 +7,7 @@ from wadl.solver.solver import SolverParameters
 from wadl.lib.route import RouteParameters
 from wadl.mission import MissionParameters
 
-# suvey design script
+# survey design script
 # get file name
 # files are assumed geofences (ID, lat, long)
 file = "data/stanford.csv"
@@ -24,14 +24,14 @@ survey.setKeyPoints(keyPoints)
 
 # route parameters
 routeParams = RouteParameters()
-routeParams["limit"] = 30*60,  # s
+routeParams["limit"] = 30*60  # s
 routeParams["speed"] = 5  # m/s
 routeParams["altitude"] = 50.0  # m
 # add the tasks
 
 survey.addTask(file,
                step=100,
-               home=["MSL"],
+               home=["MSL", "oval"],
                routeParameters=routeParams,
                )
 
@@ -40,7 +40,7 @@ solverParams = SolverParameters()
 solverParams["subGraph_size"] = 20
 solverParams["SATBound_offset"] = 2
 solverParams["timeout"] = 10
-solverParams["stitch"] = "tree"
+solverParams["stitch"] = "milp"
 
 # set the solver parameters
 survey.setSolverParamters(solverParams)
@@ -52,7 +52,7 @@ if view == 1:
     survey.view()
 else:
     # run path solver to plan paths and write output
-    survey.plan(showPlot=True)
+    survey.plan(write=False, showPlot=True)
     # survey.plot()
 
 # make mission

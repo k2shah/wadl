@@ -43,6 +43,7 @@ class Maze(Fence):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
         self.solved = False
+        self.routeStats = None
         # set parameters
         # grid parameters
         self.theta = rotation
@@ -111,6 +112,11 @@ class Maze(Fence):
             self.graph.nodes[node]['index'] = i
 
     def calcRouteStats(self):
+        # log route data
+        self.logger.info(f"\tgenerated {len(self.routeSet)} routes")
+        for i, route in enumerate(self.routeSet):
+            self.logger.info(f"\t\troute {i}:\t"
+                             f"{route.length:2.2f}m \t{route.ToF/60:2.2f}min ")
         self.stats = dict()
         lengths = [route.length for route in self.routeSet]
         # find the number of steps
@@ -166,7 +172,8 @@ class Maze(Fence):
             f.write('\nSolution time (sec)\n')
             f.write(str(self.solTime))
 
-            self.routeStats = self.routeStats()
+            if self.routeStats is None:
+                self.calcRouteStats()
             f.write('\nRoute Statistics\n')
             f.write(self.routeStats)
 

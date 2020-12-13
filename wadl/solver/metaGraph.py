@@ -346,7 +346,8 @@ class MetaGraph(object):
                 candiateRoute = [self.baseGraph.nodes[node]['UTM']
                                  for node in candiatePath]
                 # convert path to route
-                if (route := routeSet.check(candiateRoute)) is not None:
+                passed, route = routeSet.check(candiateRoute)
+                if passed:
                     # add to the path
                     lastRoute = route
                     metaPath.append(nxt)

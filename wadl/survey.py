@@ -175,6 +175,8 @@ class Survey(object):
         plt.savefig(filename, bbox_inches='tight', dpi=100)
         if showPlot:
             plt.show()
+        else:
+            plt.close()
 
     def mission(self, missionParams):
         # make a mission.json file
