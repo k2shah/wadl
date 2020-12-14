@@ -145,6 +145,8 @@ class Route(object):
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
         if home is not None:
             self.setHome(home)  # set home pt (in GPS)
+        else:
+            self.home = home
         self.waypoints = []
 
         # path limits
@@ -191,8 +193,8 @@ class Route(object):
         """
 
         # check: under the waypoint limit
-        self.length = 0
-        self.ToF = 0
+        self.length = 0.0
+        self.ToF = 0.0
         passed = True
         if len(self.waypoints) > self.DJIWaypointLimit:
             passed = False
@@ -202,7 +204,7 @@ class Route(object):
             tran_in, ToF_in = self.calcLength(self.waypoints[0:1])
             tran_out, ToF_out = self.calcLength(self.waypoints[-2:])
             self.len_tran = tran_in + tran_out
-            self.ToF_tran = ToF_in, ToF_out
+            self.ToF_tran = ToF_in + ToF_out
             # survey
             self.len_surv, self.ToF_surv = self.calcLength(
                 self.waypoints[1:-2])
@@ -215,7 +217,7 @@ class Route(object):
             # survey
             self.len_surv, self.ToF_surv = self.calcLength(
                 self.waypoints[2:-4])
-        self.length = self.len_surv + self.len_tran
+        self.length = self.len_tran + self.len_surv
         self.ToF = self.ToF_tran + self.ToF_surv
         if self.ToF > self.limit:
             passed = False

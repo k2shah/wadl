@@ -162,6 +162,8 @@ class Survey(object):
 
         # plot
         self.plot(showPlot)
+        # call shutdowns and free stuff
+        self.close()
 
     def plot(self, showPlot=True):
         # plot task
@@ -177,6 +179,12 @@ class Survey(object):
             plt.show()
         else:
             plt.close()
+
+    def close(self):
+        # release the loggers
+        logging.shutdown()
+        # close plots
+        plt.close()
 
     def mission(self, missionParams):
         # make a mission.json file

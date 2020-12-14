@@ -115,8 +115,7 @@ class Maze(Fence):
         # log route data
         self.logger.info(f"\tgenerated {len(self.routeSet)} routes")
         for i, route in enumerate(self.routeSet):
-            self.logger.info(f"\t\troute {i}:\t"
-                             f"{route.length:2.2f}m \t{route.ToF/60:2.2f}min ")
+            self.logger.info(f"{i}: {route.length:.2f}m \t{route.ToF:.2f}s")
         self.stats = dict()
         lengths = [route.length for route in self.routeSet]
         # find the number of steps
