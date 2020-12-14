@@ -351,11 +351,11 @@ class Mission(object):
             lat, lng, alt, spd = offsetPt
             alt = alt if bandAlt is None else bandAlt
             pt = self.makePoint(lat, lng, alt)
-            routeJson["segments"].append(self.makeWaypoint(pt, spd))
+            routeJson["segments"].append(self.makeWaypoint(pt, 5))
             # pre-land
             if self.parameters["pre_land_alt"] is not None:
                 pt = self.makePoint(lat, lng, self.parameters["pre_land_alt"])
-                routeJson["segments"].append(self.makeWaypoint(pt, 4))
+                routeJson["segments"].append(self.makeWaypoint(pt, 5))
 
             # land if autoLand is True
             if self.autoland:
