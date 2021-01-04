@@ -21,7 +21,7 @@ def island():
     # get a island ("little norway")
     file = Path(__file__).parent / "data" / "Little Norway"
     routeParams = RouteParameters()
-    routeParams["limit"] = 7*60,  # s
+    routeParams["limit"] = 7*60.  # s
     survey.addTask(file, step=35, routeParameters=routeParams)
     survey.plan()
 
