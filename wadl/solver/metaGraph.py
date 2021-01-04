@@ -25,7 +25,7 @@ class MetaGraph(object):
         self.subGraphs = self.split()
         # graph of the paths
         self.pathGraph = nx.DiGraph()
-        # re-index all the nodes and store their subgraph
+        # reindex all the nodes and store their subgraph
         self.nodeIndex = dict()
 
     def getExtends(self, graph):
@@ -42,9 +42,9 @@ class MetaGraph(object):
         # returns the linear index on the square index
         return cord[0] + grid[0]*cord[1]
 
-    def split(self):
+    def split(self,):
         """splits a graph into sub segments
-        size: approx number of nodes in each sub graph
+        size: aprox number of nodes in each sub graph
         """
         subNodes = self.findSubNodes()
         return self.buildSubGraphs(subNodes)
@@ -65,9 +65,13 @@ class MetaGraph(object):
         # find number of subGraphs
         nNode = xDelta * yDelta
         nSubGraph = int(nNode/size)
-        ar = yDelta/xDelta  # aspect ratio of graph
+        # print(nSubGraph)
 
-        # calculate how many blocks on each axis, be as square as possible
+        # print('delta', xDelta, yDelta)
+        ar = yDelta/xDelta  # aspect raito of graph
+        # print('ar', ar)
+
+        # calculate how many blocks on each axis, be as square as posible
         xBlock = (nSubGraph/ar) ** .5
         yBlock = ar*xBlock
         # round up
@@ -82,7 +86,7 @@ class MetaGraph(object):
         subNodes = defaultdict(list)
         for node in self.baseGraph.nodes:
             rNode = (node[0] - xBound[0],
-                     node[1] - yBound[0])  # get node relative to bottom left
+                     node[1] - yBound[0])  # get node reltative to bottom left
             # map square index to linear index
             group = (int(rNode[0]/xStep),  int(rNode[1]/yStep))
 
@@ -110,7 +114,7 @@ class MetaGraph(object):
                 gIdx += 1
             else:
                 self.logger.debug("found a non connected section")
-                # find the connected components
+                # find the connected compoents
                 for n in nx.connected_components(graph):
                     # get the graph from nodes
                     g = self.baseGraph.subgraph(n)
@@ -168,7 +172,7 @@ class MetaGraph(object):
             # pop item for processing
             gIdx, graph = toMerge.popitem()
             self.logger.debug(f"mergeing {gIdx} of size {len(graph)}")
-            # keep running score of best merge candidate
+            # keep running score of best merge candidant
             mergeScore = defaultdict(int)
             for node in graph:
                 # get the node index
@@ -178,7 +182,7 @@ class MetaGraph(object):
                     if adjIdx != nIdx:
                         mergeScore[adjIdx] += 1
             self.logger.debug(f"merge scores for {gIdx}: {mergeScore.items()}")
-            # sort candidate and merge into the best one
+            # sort candiates and merge into the best one
 
             for adjIdx in sorted(mergeScore,
                                  key=mergeScore.get,
@@ -192,11 +196,11 @@ class MetaGraph(object):
                 newSize = len(oldNodes) + len(graph)
 
                 if newSize < maxSize:
-                    # merge the i-th subgraph into the k-th subgraph
+                    # merge the ith subgraph into the kth subgraph
                     self.logger.debug(f"merging subg {gIdx} into {adjIdx}")
                     # created merged list of nodes
                     mergedNodes = oldNodes + list(graph.nodes)
-                    # make new subgraph and re-index
+                    # make new subgeraph and reindex
                     mergedGraph = self.baseGraph.subgraph(mergedNodes)
                     self.indexSubGraph(mergedGraph, adjIdx)
 
@@ -327,6 +331,7 @@ class MetaGraph(object):
         for i, path in enumerate(self.subPaths):
             pathLen = len(path)
             nodeQueue[i] = pathLen
+
         # greedy fill of paths
         metaPath = ['e']
         while len(nodeQueue) > 0:
@@ -341,8 +346,7 @@ class MetaGraph(object):
                 candiateRoute = [self.baseGraph.nodes[node]['UTM']
                                  for node in candiatePath]
                 # convert path to route
-                passed, route = routeSet.check(candiateRoute)
-                if passed:
+                if (route := routeSet.check(candiateRoute)) is not None:
                     # add to the path
                     lastRoute = route
                     metaPath.append(nxt)
@@ -414,7 +418,8 @@ class MetaGraph(object):
         h = (path[0][0]-path[0][0],
              path[0][1]-path[0][1])
         for c, n in zip(path[1:], path[2:]):
-            # c current pt, n next pt
+            # c current pt
+            # n next pt
             # get next heading
             nh = (n[0]-c[0], n[1]-c[1])
             if nh != h:
@@ -426,5 +431,5 @@ class MetaGraph(object):
         # removes sequentially duplicate points
         return [n for i, n in enumerate(p) if i == 0 or n != p[i-1]]
 
-    def getSubgraphColors(self):
+    def getCols(self):
         return iter(plt.cm.rainbow(np.linspace(0, 1, len(self.subGraphs))))
