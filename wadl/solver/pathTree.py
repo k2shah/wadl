@@ -3,7 +3,6 @@ from collections import OrderedDict
 from queue import SimpleQueue
 # math
 import numpy as np
-import cvxpy as cvx
 # graph
 import networkx as nx
 # plot

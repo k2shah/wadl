@@ -293,11 +293,6 @@ class MetaGraph(object):
                                 edgePair=(adj, adj_nxt, node, nxt),
                                 edgePairIdx=(adjIdx, adjIdx+adjStep, i, i+1))
 
-    def nodeDist(n0, n1):
-        # calculates the distance in meters between two nodes with UTM field
-        p0 = np.array(n0["UTM"])
-        np.linalg.norm()
-
     def sharedNode(self, n, baseGraph):
         # checks if the node n has a adj node not in the same subGraph
         grp = baseGraph.nodes[n]['subgraph']
