@@ -123,7 +123,7 @@ class Survey(object):
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
             self.solver.setup(maze.graph)
-            cols = self.solver.metaGraph.getSubgraphColors()
+            cols = self.solver.metaGraph.getCols()
             maze.plot(ax, showGrid=showGrid)
             for i, graph in enumerate(self.solver.metaGraph.subGraphs):
                 # print(graph.nodes)
@@ -150,7 +150,6 @@ class Survey(object):
             try:
                 solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
-                maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
 
@@ -162,8 +161,6 @@ class Survey(object):
 
         # plot
         self.plot(showPlot)
-        # call shutdowns and free stuff
-        self.close()
 
     def plot(self, showPlot=True):
         # plot task
@@ -177,14 +174,6 @@ class Survey(object):
         plt.savefig(filename, bbox_inches='tight', dpi=100)
         if showPlot:
             plt.show()
-        else:
-            plt.close()
-
-    def close(self):
-        # release the loggers
-        logging.shutdown()
-        # close plots
-        plt.close()
 
     def mission(self, missionParams):
         # make a mission.json file

@@ -43,7 +43,6 @@ class Maze(Fence):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
         self.solved = False
-        self.routeStats = None
         # set parameters
         # grid parameters
         self.theta = rotation
@@ -111,28 +110,6 @@ class Maze(Fence):
         for i, node in enumerate(self.graph):
             self.graph.nodes[node]['index'] = i
 
-    def calcRouteStats(self):
-        # log route data
-        self.logger.info(f"\tgenerated {len(self.routeSet)} routes")
-        for i, route in enumerate(self.routeSet):
-            self.logger.info(f"{i}: {route.length:.2f}m \t{route.ToF:.2f}s")
-        self.stats = dict()
-        lengths = [route.length for route in self.routeSet]
-        # find the number of steps
-        nStep = self.routeSet.data['nSteps']
-        eff = self.nNode/nStep
-        # stats
-        self.stats["mean"] = np.mean(lengths)
-        self.stats["std"] = np.std(lengths)
-        # generate output
-        self.routeStats = f"mean:\t{self.stats['mean']:.2f}m"
-        self.routeStats += f"\nstd:\t{self.stats['std']:.2f}m"
-        self.routeStats += f"\nused {nStep} steps for a {self.nNode} graph"
-        self.routeStats += f"\nefficiency:\t{eff:2.2f}%"
-        self.logger.info(self.routeStats)
-        self.routeStats
-        return self.routeStats
-
     # write
     def write(self, filePath):
         """Write the maze information to a file
@@ -158,7 +135,6 @@ class Maze(Fence):
         plt.axis('square')
         plotName = taskDir / "routes.png"
         plt.savefig(plotName, bbox_inches='tight', dpi=100)
-        plt.close(fig)
 
     def writeInfo(self, filePath):
         # writes the Maze information of the test
@@ -168,13 +144,15 @@ class Maze(Fence):
             f.write('\nGrid size\n')
             f.write(str(self.nNode))
 
+            # f.write('\nPath limit\n')
+            # f.write(str(self.limit))
+
             f.write('\nSolution time (sec)\n')
             f.write(str(self.solTime))
 
-            if self.routeStats is None:
-                self.calcRouteStats()
-            f.write('\nRoute Statistics\n')
-            f.write(self.routeStats)
+            # f.write('\nInitial agent positions\n')
+            # for start in self.starts:
+            #     f.write(f"{start}\n")
 
     def writeRoutes(self, pathDir):
         self.routeSet.write(pathDir)
