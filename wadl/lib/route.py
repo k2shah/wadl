@@ -201,7 +201,7 @@ class Route(object):
         # check: under the time limit
         if self.home is None:
             # split transfer and survey sections
-            tran_in, ToF_in = self.calcLength(self.waypoints[0:1])
+            tran_in, ToF_in = self.calcLength(self.waypoints[:2])
             tran_out, ToF_out = self.calcLength(self.waypoints[-2:])
             self.len_tran = tran_in + tran_out
             self.ToF_tran = ToF_in + ToF_out

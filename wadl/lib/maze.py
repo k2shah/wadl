@@ -30,9 +30,10 @@ class Maze(Fence):
             default 0.
         home ([tuple], optional): list of (lat, long) of the desired home(s)
             default none.
-        routeParamters (RouteParameters, optional): desired route parameters.
+        routeParameters (RouteParameters, optional): desired route parameters.
 
     """
+
     def __init__(self,
                  file,
                  step=40,
@@ -133,7 +134,33 @@ class Maze(Fence):
         self.routeStats
         return self.routeStats
 
+    def calcDistMatrix(self):
+        # L1 distance
+        D = np.ones(shape=(self.nNode, self.nNode))
+        for i, ni in enumerate(self.graph):
+            for j, nj in enumerate(self.graph):
+                D[i, j] = abs(ni[0] - nj[0]) + abs(ni[1]-nj[1])
+        return D
+
+    def export_ORTools(self):
+        data = {}
+        # distance matrix
+        data["distance_matrix"] = self.calcDistMatrix()
+        # estimate number of agents
+        limit = self.routeSet.routeParameters["limit"]
+        speed = self.routeSet.routeParameters["speed"]
+        maxDist = limit * speed
+        maxSteps = maxDist/self.step
+
+        data['num_vehicles'] = int(self.nNode/maxSteps)
+        # [START starts_ends]
+        data['starts'] = [0]*data['num_vehicles']
+        data['ends'] = [0]*data['num_vehicles']
+
+        return data
+
     # write
+
     def write(self, filePath):
         """Write the maze information to a file
 
