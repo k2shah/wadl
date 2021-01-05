@@ -83,11 +83,14 @@ class Survey(object):
 
         self.tasks[file] = Maze(file, **kwargs)
 
+    def at(self, sliced):
+        return self.tasks[[*self.tasks][sliced]]
+
     def setSolver(self, solver):
         self.solver = solver
 
     def setSolverParamters(self, parameters):
-        """Set the solver paramters.
+        """Set the solver parameters.
 
         Args:
             parameters (SolverParamters): sets the solver settings
