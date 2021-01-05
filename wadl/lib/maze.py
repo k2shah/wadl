@@ -139,7 +139,7 @@ class Maze(Fence):
         D = np.ones(shape=(self.nNode, self.nNode))
         for i, ni in enumerate(self.graph):
             for j, nj in enumerate(self.graph):
-                D[i, j] = abs(ni[0] - nj[0]) + abs(ni[1]-nj[1])
+                D[i, j] = abs(ni[0] - nj[0]) + abs(ni[1]-nj[1])*self.step
         return D
 
     def export_ORTools(self):
@@ -150,12 +150,12 @@ class Maze(Fence):
         limit = self.routeSet.routeParameters["limit"]
         speed = self.routeSet.routeParameters["speed"]
         maxDist = limit * speed
-        maxSteps = maxDist/self.step
 
-        data['num_vehicles'] = int(self.nNode/maxSteps)
+        data['num_vehicles'] = int((self.nNode*self.step)/maxDist)+1
         # [START starts_ends]
         data['starts'] = [0]*data['num_vehicles']
         data['ends'] = [0]*data['num_vehicles']
+        data['maxDist'] = int(maxDist)
 
         return data
 
