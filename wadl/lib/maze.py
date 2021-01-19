@@ -154,7 +154,7 @@ class Maze(Fence):
                     D[i, j] = l1*self.step
         return D
 
-    def export_ORTools(self, cutoff=1, num_vehicles=None):
+    def export_ORTools(self, cutoff=1, nAgent=None):
         data = {}
         limit = self.routeSet.routeParameters["limit"]
         speed = self.routeSet.routeParameters["speed"]
@@ -170,20 +170,17 @@ class Maze(Fence):
 
         # SAVE home utms as ind -> utm
         data['homeUTM'] = {}
-        homeSnapGrid = []
         for i, pt in enumerate(self.home):
             pt_utm = np.array(utm.from_latlon(*pt)[0:2])
             data['homeUTM'][self.nNode+i] = pt_utm
-            distances = [(np.linalg.norm(self.graph.nodes[node]['UTM']-pt_utm), i)
-                         for i, node in enumerate(self.graph)]
-            dist, idx = min(distances)
-            homeSnapGrid.append(idx)
-            # homeDists.append(distances)
-        # homeDists = np.array(homeDists)/xferSpeed
+            distances = [np.linalg.norm(self.graph.nodes[node]['UTM']-pt_utm)
+                         for node in self.graph]
+            homeDists.append(distances)
+        homeDists = np.array(homeDists)/xferSpeed
         # block arrangement
-        # homeBlock = 10000*(np.ones((nHome, nHome))-np.eye(nHome))
-        # D = np.block([[D, homeDists.T],
-        #               [homeDists, homeBlock]])
+        homeBlock = 10000*(np.ones((nHome, nHome))-np.eye(nHome))
+        D = np.block([[D, homeDists.T],
+                      [homeDists, homeBlock]])
 
         data["distance_matrix"] = D.astype(int)
         data["ind2node"] = list(self.graph.nodes)
@@ -193,9 +190,7 @@ class Maze(Fence):
             num_vehicles = int((self.nNode*self.step)/maxDist)+1
         data['num_vehicles'] = num_vehicles
         # [START starts_ends]
-        # data['starts'] = [self.nNode + (i % nHome)
-        #                   for i in range(num_vehicles)]
-        data['starts'] = [homeSnapGrid[i % nHome]
+        data['starts'] = [self.nNode + (i % nHome)
                           for i in range(num_vehicles)]
         data['ends'] = data['starts']
         data['maxDist'] = int(maxDist)
