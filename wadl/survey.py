@@ -39,6 +39,12 @@ class Survey(object):
     def setupLogger(self):
         # create logger
         rootLogger = logging.getLogger()
+
+        # clean up old loggers
+        rootLogger.propagate = False
+        if (rootLogger.hasHandlers()):
+            rootLogger.handlers.clear()
+        # set the new ones
         rootLogger.setLevel(logging.INFO)
         # create file handler which logs even debug messages
         fh = logging.FileHandler(self.outDir/'wadl.log', 'w+')

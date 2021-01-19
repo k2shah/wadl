@@ -115,47 +115,94 @@ class Maze(Fence):
     def calcRouteStats(self):
         # log route data
         self.logger.info(f"\tgenerated {len(self.routeSet)} routes")
+        surveyTofs = 0
+        transferTofs = 0
         for i, route in enumerate(self.routeSet):
             self.logger.info(f"{i}: {route.length:.2f}m \t{route.ToF:.2f}s")
+            surveyTofs += route.ToF_surv
+            transferTofs += route.ToF_tran
+        ratio = surveyTofs/transferTofs
         self.stats = dict()
         lengths = [route.length for route in self.routeSet]
         # find the number of steps
         nStep = self.routeSet.data['nSteps']
         eff = self.nNode/nStep
+        self.stats["efficiency"] = eff
         # stats
         self.stats["mean"] = np.mean(lengths)
         self.stats["std"] = np.std(lengths)
+        self.stats["ToF_ratio"] = ratio
         # generate output
-        self.routeStats = f"mean:\t{self.stats['mean']:.2f}m"
-        self.routeStats += f"\nstd:\t{self.stats['std']:.2f}m"
-        self.routeStats += f"\nused {nStep} steps for a {self.nNode} graph"
-        self.routeStats += f"\nefficiency:\t{eff:2.2f}%"
-        self.logger.info(self.routeStats)
-        self.routeStats
-        return self.routeStats
+        self.statsString = f"mean:\t{self.stats['mean']:.2f}m"
+        self.statsString += f"\nstd:\t{self.stats['std']:.2f}m"
+        self.statsString += f"\nused {nStep} steps for a {self.nNode} graph"
+        self.statsString += f"\nefficiency:\t{eff*100:2.2f}%"
+        self.statsString += f"\nToF ratio: \t{ratio:.3f}"
+        self.logger.info(self.statsString)
+        return self.statsString
 
-    def calcDistMatrix(self):
+    def calcDistMatrix(self, cutoff=2):
         # L1 distance
-        D = np.ones(shape=(self.nNode, self.nNode))
+        soft_inf = 1000000000
+        D = np.ones(shape=(self.nNode, self.nNode))*soft_inf
         for i, ni in enumerate(self.graph):
             for j, nj in enumerate(self.graph):
-                D[i, j] = abs(ni[0] - nj[0]) + abs(ni[1]-nj[1])*self.step
+                l1 = (abs(ni[0] - nj[0]) + abs(ni[1]-nj[1]))
+                if l1 > cutoff:
+                    D[i, j] = soft_inf
+                else:
+                    D[i, j] = l1*self.step
         return D
 
-    def export_ORTools(self):
+    def export_ORTools(self, cutoff=1, num_vehicles=None):
         data = {}
-        # distance matrix
-        data["distance_matrix"] = self.calcDistMatrix()
-        # estimate number of agents
         limit = self.routeSet.routeParameters["limit"]
         speed = self.routeSet.routeParameters["speed"]
-        maxDist = limit * speed
+        xferSpeed = self.routeSet.routeParameters["xfer_speed"]
+        # distance matrix
+        D = self.calcDistMatrix(cutoff=cutoff)
+        D = D/speed
+        # expand the distance matrix withe home point
+        homeDists = []
+        nHome = len(self.home)
+        data['UTM'] = {node: self.graph.nodes[node]['UTM']
+                       for node in self.graph}
 
-        data['num_vehicles'] = int((self.nNode*self.step)/maxDist)+1
+        # SAVE home utms as ind -> utm
+        data['homeUTM'] = {}
+        homeSnapGrid = []
+        for i, pt in enumerate(self.home):
+            pt_utm = np.array(utm.from_latlon(*pt)[0:2])
+            data['homeUTM'][self.nNode+i] = pt_utm
+            distances = [(np.linalg.norm(self.graph.nodes[node]['UTM']-pt_utm), i)
+                         for i, node in enumerate(self.graph)]
+            dist, idx = min(distances)
+            homeSnapGrid.append(idx)
+            # homeDists.append(distances)
+        # homeDists = np.array(homeDists)/xferSpeed
+        # block arrangement
+        # homeBlock = 10000*(np.ones((nHome, nHome))-np.eye(nHome))
+        # D = np.block([[D, homeDists.T],
+        #               [homeDists, homeBlock]])
+
+        data["distance_matrix"] = D.astype(int)
+        data["ind2node"] = list(self.graph.nodes)
+        # estimate number of agents
+        maxDist = limit * speed
+        if num_vehicles is None:
+            num_vehicles = int((self.nNode*self.step)/maxDist)+1
+        data['num_vehicles'] = num_vehicles
         # [START starts_ends]
-        data['starts'] = [0]*data['num_vehicles']
-        data['ends'] = [0]*data['num_vehicles']
+        # data['starts'] = [self.nNode + (i % nHome)
+        #                   for i in range(num_vehicles)]
+        data['starts'] = [homeSnapGrid[i % nHome]
+                          for i in range(num_vehicles)]
+        data['ends'] = data['starts']
         data['maxDist'] = int(maxDist)
+        data['maxTime'] = int(limit)
+        data['nNode'] = self.nNode
+        data['nHome'] = nHome
+        data['UTMZone'] = self.UTMZone
 
         return data
 
@@ -198,10 +245,10 @@ class Maze(Fence):
             f.write('\nSolution time (sec)\n')
             f.write(str(self.solTime))
 
-            if self.routeStats is None:
+            if self.statsString is None:
                 self.calcRouteStats()
             f.write('\nRoute Statistics\n')
-            f.write(self.routeStats)
+            f.write(self.statsString)
 
     def writeRoutes(self, pathDir):
         self.routeSet.write(pathDir)

@@ -77,24 +77,24 @@ class PathTree(MetaGraph):
     def link(self, routeSet):
         # build the tree and partition it
         self.buildTree(routeSet)
-        self.partition(routeSet)
+        self.groups, self.nGroups = self.partition(routeSet)
 
     def partition(self, routeSet):
         # find groups for each tile
-        self.groups = OrderedDict()
+        groups = OrderedDict()
         for node in sorted(self.tree.nodes,
                            key=lambda x: self.tree.nodes[x]["homeDist"],
                            reverse=True):
-            self.groups[node] = 0
+            groups[node] = 0
         groupIdx = 1
-        for node in self.groups:
+        for node in groups:
             if node == 'home':
                 continue
-            group = self.groups[node]
+            group = groups[node]
             if group == 0:
                 # start building a new group
                 queue = SimpleQueue()
-                self.groups[node] = groupIdx
+                groups[node] = groupIdx
                 self.logger.debug(f"route idx: {groupIdx}")
                 queue.put(node)
                 # reset all the objects
@@ -112,7 +112,7 @@ class PathTree(MetaGraph):
                 while not queue.empty():
                     n = queue.get()
                     for n_adj, _ in self.tree.in_edges(n):
-                        if n_adj == 'home' or self.groups[n_adj] != 0:
+                        if n_adj == 'home' or groups[n_adj] != 0:
                             continue
                         # test the new route
                         metaTree.add_edge(n, n_adj)
@@ -122,7 +122,7 @@ class PathTree(MetaGraph):
                             # accept the node
                             queue.put(n_adj)
                             self.logger.debug(f"accepted {node}")
-                            self.groups[n_adj] = groupIdx
+                            groups[n_adj] = groupIdx
                             # save the route
                             route = newRoute
                         else:
@@ -139,7 +139,8 @@ class PathTree(MetaGraph):
                 else:
                     self.logger.debug(f"pushing {metaTree.nodes}")
                     routeSet.push(route)
-        self.nGroups = groupIdx
+        nGroups = groupIdx
+        return groups, nGroups
 
     def stitch(self, tree):
         # get edges to travel in a DF manner
@@ -224,7 +225,7 @@ class PathTree(MetaGraph):
         return [self.getUTM(pt) for pt in self.steamlinePath(waypoints)]
 
     def plot(self, ax):
-        colors = list(plt.cm.rainbow(np.linspace(0, 1, self.nGroups)))
+        colors = list(plt.cm.rainbow(np.linspace(0, 1, len(self.groups))))
         for node in self.tree.nodes:
             cord = self.tree.nodes[node]["UTM"]
             color = colors[self.groups[node]]
@@ -234,86 +235,3 @@ class PathTree(MetaGraph):
                 line = np.array([self.tree.nodes[e1]["UTM"],
                                  self.tree.nodes[e2]["UTM"]])
                 ax.plot(line[:, 0], line[:, 1], color='k', linewidth=1)
-
-
-# class PathTreeMilp(PathTree):
-#     """class to split the PathTree with a MILP"""
-
-#     def __init__(self, graph, **kwargs):
-#         super(PathTreeMilp, self).__init__(graph, **kwargs)
-
-#     def makeMilp(self, nGroups):
-#         N = len(self.graph)
-#         M = len(self.graph.edges)
-
-#         # node maps
-#         node2idx = {n: i for i, n in enumerate(self.graph)}
-#         # edge maps
-#         edge2idx = dict()
-#         for i, m in enumerate(self.graph.edges):
-#             # graph is a dag so only need to cache one direction
-#             edge2idx[m] = i
-#             edge2idx[tuple(reversed(m))] = i
-
-#         k = nGroups
-#         # size limit
-#         g = self.limit
-
-#         # cvx
-#         X = cvx.Variable((N, k), boolean=True)
-#         Z = cvx.Variable((M, k), boolean=True)
-#         # Y = cvx.Variable((N, k), boolean=True)
-#         cost = cvx.sum([c @ X[:, i] for i in range(k)])
-#         # cost = cvx.sum([(t.T @ Y[:, i]) for i in range(k)])
-#         const = []
-#         # is assigned
-#         const += [cvx.sum(X, axis=1) == np.ones(N)]
-#         const += [cvx.sum(Z, axis=1) <= np.ones(M)]
-#         # has start node
-#         # const += [cvx.sum(Y, axis=0) == np.ones(k)]
-#         # start node is in subgraph
-#         # const += [Y <= X]
-#         for i in range(k):
-#             # under limit
-#             const += [c @ X[:, i] <= g]
-
-#             # min 1 edge max 2 edges per node
-#             for n, node in enumerate(self.graph.nodes):
-#                 const += [X[n, i] <= cvx.sum([Z[edge2idx[e], i]
-#                                               for e in self.graph.edges(node)])]
-#                 const += [cvx.sum([Z[edge2idx[e], i]
-#                                    for e in self.graph.edges(node)]) <= 2]
-
-#             # edge only allowed if node is in grp
-#             for m, edge in enumerate(self.graph.edges):
-#                 n1 = node2idx[edge[0]]
-#                 n2 = node2idx[edge[1]]
-#                 const += [Z[m, i] <= (.5)*(X[n1, i] + X[n2, i])]
-
-#             # tree constraint
-#             const += [cvx.sum(X[:, i]) == cvx.sum(Z[:, i])+1]
-
-#         # form and solve
-#         prob = cvx.Problem(cvx.Minimize(cost), const)
-#         return prob
-
-#     def getCosts(self, routeSet):
-#         """use the routeSet parameters and the edges to build the edge cost.
-#         Use the distance information in edge and speed in the routeSet to
-#         calculate the Edge costs as a time
-#         """
-
-#         self.limit = routeSet.routeParameters["limit"]
-#         transferSpeed = routeSet.routeParameters["xfer_speed"]
-#         speed = routeSet.routeParameters["speed"]
-#         edgeCosts = dict()
-#         for u, v, d in self.graph.edges(data="weight"):
-#             if u == "home":
-#                 cost = d*transferSpeed + 20  # 30 seconds for ascend/descend
-#             else:
-#                 cost = d*speed
-#             edgeCosts[(u, v)] = cost
-#         return edgeCosts
-
-#     def link(self, routeSet):
-#         pass

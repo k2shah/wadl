@@ -4,6 +4,7 @@ from itertools import compress
 import numpy as np
 import networkx as nx
 
+
 class PathTreeMilp(PathTree):
     """class to split the PathTree with a MILP"""
 
@@ -154,9 +155,15 @@ class PathTreeMilp(PathTree):
         nGroups = max(1, nGroups-1)
         while not solved:
             print(f"linking with {nGroups} groups")
-            status, groups = self.runMilp(costDict, nGroups=nGroups)
+            status, edgeGroups = self.runMilp(costDict, nGroups=nGroups)
             solved = status == "optimal"
             nGroups += 1
 
-        self.extractPaths(groups, routeSet)
-        return groups
+        self.extractPaths(edgeGroups, routeSet)
+
+        # return set of assignments for the nodes as map: node -> group
+        groups = {}
+        for i, edgeGroup in enumerate(edgeGroups):
+            for _, node in edgeGroup:
+                groups[node] = i
+        return groups, nGroups

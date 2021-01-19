@@ -152,6 +152,9 @@ class Route(object):
         # path limits
         self.DJIWaypointLimit = 98
 
+    def __repr__(self):
+        return self.waypoints.__repr__()
+
     @staticmethod
     def DistGPS(gps0, gps1, alt0=0, alt1=0):
         # calculates the distance in meters of 2 lat/long points
@@ -228,7 +231,8 @@ class Route(object):
         length = 0
         ToF = 0
         if len(waypoints) < 2:
-            raise RuntimeError("waypoint segment must have at least 2 pts")
+            self.logger.debug("waypoint segment does not have at least 2 pts")
+            return 0,0
         for wp, nxt in zip(waypoints, waypoints[1:]):
             dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
             length += dist
@@ -272,49 +276,6 @@ class Route(object):
     def __len__(self):
         # number of waypoints in path
         return len(self.UTMcords)
-
-    # def parseFile(self):
-    #     pathFiles = glob.glob(os.path.join(self.pathDir, "routes/*"))
-    #     for file in pathFiles:
-    #         self.cords = dict()
-    #         # print(file)
-    #         with open(file) as csvfile:
-    #             for line in csv.reader(csvfile, delimiter=','):
-    #                 if line[2] != '50':
-    #                     continue
-    #                 cords = (line[0], line[1])
-    #                 if cords in self.keyPoints:
-    #                     continue
-    #                 try:
-    #                     self.cords[cords] += 1
-    #                 except KeyError as e:
-    #                     self.cords[cords] = 1
-    #             try:
-    #                 routeEff = self.calcEff()
-    #                 print(file, ": ", routeEff)
-    #                 self.writeEff(file, routeEff)
-    #             except ZeroDivisionError as e:
-    #                 print("invalid file: {:s}".format(file))
-
-    # def calcEff(self):
-    #     nPts = 0
-    #     nPaths = 0
-    #     for keys in self.cords:
-    #         nPaths += self.cords[keys]
-    #         nPts += 1
-    #     return nPts/nPaths
-
-    # def writeEff(self, routeFile, routeEff):
-    #     infoFile = os.path.join(self.pathDir, "info.txt")
-    #     if os.path.exists(infoFile):
-    #         writeMode = 'a'
-    #     else:
-    #         writeMode = 'w'
-    #     with open(infoFile, writeMode) as f:
-    #         routeName = routeFile.split('/')[-1]
-    #         f.write("\n{:s}: {:2.4f}".format(
-    #                 routeName,
-    #                 routeEff))
 
     def plot(self, ax, color='b'):
         # path
