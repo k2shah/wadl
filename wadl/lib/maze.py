@@ -121,13 +121,17 @@ class Maze(Fence):
             self.logger.info(f"{i}: {route.length:.2f}m \t{route.ToF:.2f}s")
             surveyTofs += route.ToF_surv
             transferTofs += route.ToF_tran
+        totalTime = surveyTofs + transferTofs 
         ratio = surveyTofs/transferTofs
         self.stats = dict()
         lengths = [route.length for route in self.routeSet]
         # find the number of steps
         nStep = self.routeSet.data['nSteps']
         eff = self.nNode/nStep
-        self.stats["efficiency"] = eff
+        self.stats["path efficiency"] = eff
+        totalEff = (eff*surveyTofs)/totalTime
+        self.stats["total efficiency"] = totalEff
+        self.stats["total time"] = totalTime
         # stats
         self.stats["mean"] = np.mean(lengths)
         self.stats["std"] = np.std(lengths)
@@ -136,8 +140,10 @@ class Maze(Fence):
         self.statsString = f"mean:\t{self.stats['mean']:.2f}m"
         self.statsString += f"\nstd:\t{self.stats['std']:.2f}m"
         self.statsString += f"\nused {nStep} steps for a {self.nNode} graph"
-        self.statsString += f"\nefficiency:\t{eff*100:2.2f}%"
+        self.statsString += f"\npath efficiency:\t{eff*100:2.2f}%"
+        self.statsString += f"\ntotal efficiency:\t{totalEff*100:2.2f}%"
         self.statsString += f"\nToF ratio: \t{ratio:.3f}"
+        self.statsString += f"\ntotal ToF: \t{totalTime:.3f}s"
         self.logger.info(self.statsString)
         return self.statsString
 
@@ -154,7 +160,7 @@ class Maze(Fence):
                     D[i, j] = l1*self.step
         return D
 
-    def export_ORTools(self, cutoff=1, nAgent=None):
+    def export_ORTools(self, cutoff=1, num_vehicles=None):
         data = {}
         limit = self.routeSet.routeParameters["limit"]
         speed = self.routeSet.routeParameters["speed"]
