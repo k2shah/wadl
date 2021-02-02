@@ -82,9 +82,15 @@ class PathTreeMilp(PathTree):
 
         # form and return
         prob = cvx.Problem(cvx.Minimize(c), q)
-        prob.solve(solver=cvx.GUROBI,
-                   #                    verbose=True
-                   )
+        try:
+            prob.solve(solver=cvx.GUROBI,
+                       TimeLimit=10*60)
+        except Exception as e:
+            # print(e)
+            # print("AHHHHHHHHHHHH")
+            self.logger.warn("cvx timeout")
+            return prob.status, None
+
         print(f"problem status: {prob.status} with value {prob.value:1.2f}")
 
         if prob.status == "optimal":
@@ -152,13 +158,14 @@ class PathTreeMilp(PathTree):
         nGroups = self.nGroupsEstimate(routeSet, costDict)
         solved = False
         #  guard for some small ones to  make sure there's at least 1 partition
-        nGroups = max(1, nGroups-1)
+        nGroups = max(1, nGroups-2)
         while not solved:
-            print(f"linking with {nGroups} groups")
+            nGroups += 1
+            self.logger.debug(f"linking with {nGroups} groups")
             status, edgeGroups = self.runMilp(costDict, nGroups=nGroups)
             solved = status == "optimal"
-            nGroups += 1
 
+        self.edgeGroups = edgeGroups
         self.extractPaths(edgeGroups, routeSet)
 
         # return set of assignments for the nodes as map: node -> group
