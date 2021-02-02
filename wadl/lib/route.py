@@ -282,8 +282,9 @@ class Route(object):
         cords = np.array(self.UTMcords)
         ax.plot(cords[:, 0], cords[:, 1], color=color)
         # start and end
-        ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
-        ax.scatter(cords[-2, 0], cords[-2, 1], color=color, marker='s')
+        if len(cords) > 3:
+            ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
+            ax.scatter(cords[-2, 0], cords[-2, 1], color=color, marker='s')
         if self.home is not None:
             # plot the home point as a 'o'
             HomeUTMx, HomeUTMy = utm.from_latlon(*self.home)[0:2]

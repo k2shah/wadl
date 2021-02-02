@@ -42,7 +42,7 @@ class PathTree(MetaGraph):
         self.tree.add_node("home", UTM=utmHome, homeDist=0)
         for node, path in enumerate(self.subPaths):
             UTMpath = [self.getUTM(pt) for pt in self.steamlinePath(path)]
-            _, route = routeSet.check(UTMpath)
+            _, route = routeSet.check(UTMpath[:-1])
             # unpack route metrics into the node
             self.tree.add_node(node,
                                UTM=self.getUTM(path[0]),
@@ -81,6 +81,7 @@ class PathTree(MetaGraph):
 
     def partition(self, routeSet):
         # find groups for each tile
+        self.edgeGroups = []
         groups = OrderedDict()
         for node in sorted(self.tree.nodes,
                            key=lambda x: self.tree.nodes[x]["homeDist"],
