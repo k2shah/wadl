@@ -139,14 +139,23 @@ class PathTree(MetaGraph):
                     raise RuntimeError(errMsg)
                 else:
                     self.logger.debug(f"pushing {metaTree.nodes}")
+                    self.edgeGroups.append(metaTree.edges)
                     routeSet.push(route)
-        nGroups = groupIdx
+        nGroups = groupIdx-1
         return groups, nGroups
 
     def stitch(self, tree):
+        # takes a tree and appends the home to the closest node
+        # then builds the complete path from the tree
+        # get the close
         # get edges to travel in a DF manner
-        # print("edges ", metaTree.edges)
-        edgeList = nx.dfs_edges(tree)
+        bestNode = min(tree.nodes,
+                       key=lambda x: self.tree.nodes[x]["homeDist"])
+        tree.add_edge('home', bestNode)
+        edgeList = nx.dfs_edges(tree, 'home')
+        print(tree.edges)
+        print(list(edgeList))
+
         # add the first metaNode
         startNode = next(edgeList)[1]
         path = [(startNode, 0, len(self.subPaths[startNode])-1)]
@@ -228,10 +237,14 @@ class PathTree(MetaGraph):
     def plot(self, ax):
         colors = list(plt.cm.rainbow(np.linspace(0, 1, len(self.groups))))
         for node in self.tree.nodes:
+            if node == "home":
+                continue
             cord = self.tree.nodes[node]["UTM"]
             color = colors[self.groups[node]]
             ax.scatter(*cord, color=color)
         for e1, e2 in self.tree.edges:
+            if e1 == "home":
+                continue
             if self.groups[e1] == self.groups[e2]:
                 line = np.array([self.tree.nodes[e1]["UTM"],
                                  self.tree.nodes[e2]["UTM"]])
