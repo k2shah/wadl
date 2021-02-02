@@ -99,8 +99,8 @@ class PathTree(MetaGraph):
                 self.logger.debug(f"route idx: {groupIdx}")
                 queue.put(node)
                 # reset all the objects
-                metaTree = nx.DiGraph()
-                metaTree.add_edge('home', node)
+                metaTree = nx.Graph()
+                metaTree.add_node(node)
                 # build the first segment
                 candiate = self.stitch(metaTree)
                 passed, route = routeSet.check(candiate)
@@ -149,9 +149,7 @@ class PathTree(MetaGraph):
         # then builds the complete path from the tree
         # get the close
         # get edges to travel in a DF manner
-        bestNode = min(tree.nodes,
-                       key=lambda x: self.tree.nodes[x]["homeDist"])
-        tree.add_edge('home', bestNode)
+        self.updateHomeEdge(tree)
         edgeList = nx.dfs_edges(tree, 'home')
         print(tree.edges)
         print(list(edgeList))
@@ -165,6 +163,14 @@ class PathTree(MetaGraph):
                 continue
             path = self.insertTile(path, edge[0], edge[1])
         return self.unravelPath(path)
+
+    def updateHomeEdge(self, tree):
+        """checks the home edge on the meta tree and updates it if a new node
+        is better """
+        tree.remove_node('home')
+        bestNode = min(tree.nodes,
+                       key=lambda x: self.tree.nodes[x]["homeDist"])
+        tree.add_edge('home', bestNode)
 
     def insertTile(self, path, n_in, n_out):
         # adds the n_out tile to the path at n_in tile at the correct spot
