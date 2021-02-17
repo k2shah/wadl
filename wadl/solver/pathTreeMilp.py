@@ -3,6 +3,7 @@ import cvxpy as cvx
 from itertools import compress
 import numpy as np
 import networkx as nx
+import time
 
 
 class PathTreeMilp(PathTree):
@@ -84,16 +85,17 @@ class PathTreeMilp(PathTree):
         prob = cvx.Problem(cvx.Minimize(c), q)
         try:
             prob.solve(solver=cvx.GUROBI,
-                       TimeLimit=10*60)
+                       # verbose=True,)
+                       TimeLimit=1*60)
         except Exception as e:
-            # print(e)
-            # print("AHHHHHHHHHHHH")
-            self.logger.warn("cvx timeout")
+            # print(time.time()-st)
+            self.logger.info(e)
+            self.logger.warn(f"cvx timeout for {k} groups")
             return prob.status, None
 
         print(f"problem status: {prob.status} with value {prob.value:1.2f}")
 
-        if prob.status == "optimal":
+        if prob.status in ["optimal", "user_limit"] and prob.value < np.inf:
             subEdges = [list(compress(self.tree.edges, Z[:, i].value))
                         for i in range(k)]
             edgeGroups = list(filter(lambda x: len(x) > 0, subEdges))
@@ -131,7 +133,7 @@ class PathTreeMilp(PathTree):
         for i, edges in enumerate(groups):
             tree = nx.DiGraph()
             tree.add_edges_from(edges)
-            path = self.stitch(tree)
+            path, _ = self.stitch(tree)
             passed, route = routeSet.check(path)
             if passed is False:
                 print(f"route{i} failed:\n")
@@ -159,11 +161,18 @@ class PathTreeMilp(PathTree):
         solved = False
         #  guard for some small ones to  make sure there's at least 1 partition
         nGroups = max(1, nGroups-2)
+        counter = 0
         while not solved:
             nGroups += 1
             self.logger.debug(f"linking with {nGroups} groups")
             status, edgeGroups = self.runMilp(costDict, nGroups=nGroups)
-            solved = status == "optimal"
+            if edgeGroups is not None:
+                solved = True
+            counter += 1
+            if counter > 5:
+                errmsg = 'failed to solve MILP'
+                self.logger.error(errmsg)
+                raise RuntimeError(errmsg)
 
         self.edgeGroups = edgeGroups
         self.extractPaths(edgeGroups, routeSet)
