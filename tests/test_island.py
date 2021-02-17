@@ -44,9 +44,9 @@ def test_no_home(island):
     missionParams["assign"] = "sequence"
     # # number of bands to split the sectors into (normally the number of UAVs used)
     missionParams["N_bands"] = 2
-    # the started altitutde in m (agl)
+    # the started altitude in m (agl)
     missionParams["band_start"] = 50
-    # the altitte band seperation step
+    # the altitude band separation step
     missionParams["band_step"] = 10
 
     # missionParams["trajectory_type"] = "safe"
