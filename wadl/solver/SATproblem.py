@@ -30,7 +30,8 @@ class SATproblem(object):
 
     def make(self):
         self.isSolved = False
-        self.z3 = z3.Solver()
+        # self.z3 = z3.Solver()
+        self.z3 = z3.SolverFor("QF_FD")
         self.satVars = self.makeVars(self.nNode, self.nPath, self.bound)
 
         # create blist and for them to be false

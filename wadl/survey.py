@@ -120,7 +120,7 @@ class Survey(object):
             ax.scatter(*cord, color='k', s=1)
             ax.annotate(key, xy=cord, xycoords='data')
 
-    def view(self, showGrid=True):
+    def view(self, showGrid=True, save=None):
         """ View the current survey (unplanned)
 
         Args:
@@ -144,7 +144,10 @@ class Survey(object):
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
         # display
-        plt.show()
+        if save is not None:
+            plt.savefig(save, bbox_inches='tight', dpi=100)
+        else:
+            plt.show()
 
     def plan(self, write=True, showPlot=False):
         """ Plan the survey.
