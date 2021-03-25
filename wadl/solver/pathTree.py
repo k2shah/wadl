@@ -42,7 +42,7 @@ class PathTree(MetaGraph):
         self.tree.add_node("home", UTM=utmHome, homeDist=0)
         for node, path in enumerate(self.subPaths):
             UTMpath = [self.getUTM(pt) for pt in self.steamlinePath(path)]
-            _, route = routeSet.check(UTMpath)
+            _, route = routeSet.check(UTMpath[:-1])
             # unpack route metrics into the node
             self.tree.add_node(node,
                                UTM=self.getUTM(path[0]),
@@ -77,31 +77,32 @@ class PathTree(MetaGraph):
     def link(self, routeSet):
         # build the tree and partition it
         self.buildTree(routeSet)
-        self.partition(routeSet)
+        self.groups, self.nGroups = self.partition(routeSet)
 
     def partition(self, routeSet):
         # find groups for each tile
-        self.groups = OrderedDict()
+        self.edgeGroups = []
+        groups = OrderedDict()
         for node in sorted(self.tree.nodes,
                            key=lambda x: self.tree.nodes[x]["homeDist"],
                            reverse=True):
-            self.groups[node] = 0
+            groups[node] = 0
         groupIdx = 1
-        for node in self.groups:
+        for node in groups:
             if node == 'home':
                 continue
-            group = self.groups[node]
+            group = groups[node]
             if group == 0:
                 # start building a new group
                 queue = SimpleQueue()
-                self.groups[node] = groupIdx
+                groups[node] = groupIdx
                 self.logger.debug(f"route idx: {groupIdx}")
                 queue.put(node)
                 # reset all the objects
-                metaTree = nx.DiGraph()
+                metaTree = nx.Graph()
                 metaTree.add_edge('home', node)
                 # build the first segment
-                candiate = self.stitch(metaTree)
+                candiate, edgeList = self.stitch(metaTree)
                 passed, route = routeSet.check(candiate)
                 if passed:
                     # build the 1st section
@@ -112,23 +113,24 @@ class PathTree(MetaGraph):
                 while not queue.empty():
                     n = queue.get()
                     for n_adj, _ in self.tree.in_edges(n):
-                        if n_adj == 'home' or self.groups[n_adj] != 0:
+                        if n_adj == 'home' or groups[n_adj] != 0:
                             continue
                         # test the new route
                         metaTree.add_edge(n, n_adj)
-                        candiate = self.stitch(metaTree)
+                        candiate, edgeList = self.stitch(metaTree)
                         passed, newRoute = routeSet.check(candiate)
                         if passed:
                             # accept the node
                             queue.put(n_adj)
                             self.logger.debug(f"accepted {node}")
-                            self.groups[n_adj] = groupIdx
+                            groups[n_adj] = groupIdx
                             # save the route
                             route = newRoute
                         else:
                             # remove if didn't work
                             self.logger.debug(f"rejected {node}")
                             metaTree.remove_node(n_adj)
+                            edgeList = self.updateHomeEdge(metaTree)
 
                 # when done with filling
                 groupIdx += 1
@@ -138,22 +140,36 @@ class PathTree(MetaGraph):
                     raise RuntimeError(errMsg)
                 else:
                     self.logger.debug(f"pushing {metaTree.nodes}")
+                    self.edgeGroups.append(edgeList)
                     routeSet.push(route)
-        self.nGroups = groupIdx
+        nGroups = groupIdx-1
+        return groups, nGroups
 
     def stitch(self, tree):
+        # takes a tree and appends the home to the closest node
+        # then builds the complete path from the tree
+        # get the close
         # get edges to travel in a DF manner
-        # print("edges ", metaTree.edges)
-        edgeList = nx.dfs_edges(tree)
+        edgeList = self.updateHomeEdge(tree)
+
         # add the first metaNode
-        startNode = next(edgeList)[1]
+        startNode = edgeList[0][1]
         path = [(startNode, 0, len(self.subPaths[startNode])-1)]
 
         for edge in edgeList:
-            if edge[0] == "home":
+            if "home" in edge:
                 continue
             path = self.insertTile(path, edge[0], edge[1])
-        return self.unravelPath(path)
+        return self.unravelPath(path), edgeList
+
+    def updateHomeEdge(self, tree):
+        """checks the home edge on the meta tree and updates it if a new node
+        is better """
+        tree.remove_node('home')
+        bestNode = min(tree.nodes,
+                       key=lambda x: self.tree.nodes[x]["homeDist"])
+        tree.add_edge('home', bestNode)
+        return list(nx.dfs_edges(tree, source='home'))
 
     def insertTile(self, path, n_in, n_out):
         # adds the n_out tile to the path at n_in tile at the correct spot
@@ -224,96 +240,17 @@ class PathTree(MetaGraph):
         return [self.getUTM(pt) for pt in self.steamlinePath(waypoints)]
 
     def plot(self, ax):
-        colors = list(plt.cm.rainbow(np.linspace(0, 1, self.nGroups)))
+        colors = list(plt.cm.rainbow(np.linspace(0, 1, len(self.groups))))
         for node in self.tree.nodes:
+            if node == "home":
+                continue
             cord = self.tree.nodes[node]["UTM"]
             color = colors[self.groups[node]]
             ax.scatter(*cord, color=color)
         for e1, e2 in self.tree.edges:
+            if e1 == "home":
+                continue
             if self.groups[e1] == self.groups[e2]:
                 line = np.array([self.tree.nodes[e1]["UTM"],
                                  self.tree.nodes[e2]["UTM"]])
                 ax.plot(line[:, 0], line[:, 1], color='k', linewidth=1)
-
-
-# class PathTreeMilp(PathTree):
-#     """class to split the PathTree with a MILP"""
-
-#     def __init__(self, graph, **kwargs):
-#         super(PathTreeMilp, self).__init__(graph, **kwargs)
-
-#     def makeMilp(self, nGroups):
-#         N = len(self.graph)
-#         M = len(self.graph.edges)
-
-#         # node maps
-#         node2idx = {n: i for i, n in enumerate(self.graph)}
-#         # edge maps
-#         edge2idx = dict()
-#         for i, m in enumerate(self.graph.edges):
-#             # graph is a dag so only need to cache one direction
-#             edge2idx[m] = i
-#             edge2idx[tuple(reversed(m))] = i
-
-#         k = nGroups
-#         # size limit
-#         g = self.limit
-
-#         # cvx
-#         X = cvx.Variable((N, k), boolean=True)
-#         Z = cvx.Variable((M, k), boolean=True)
-#         # Y = cvx.Variable((N, k), boolean=True)
-#         cost = cvx.sum([c @ X[:, i] for i in range(k)])
-#         # cost = cvx.sum([(t.T @ Y[:, i]) for i in range(k)])
-#         const = []
-#         # is assigned
-#         const += [cvx.sum(X, axis=1) == np.ones(N)]
-#         const += [cvx.sum(Z, axis=1) <= np.ones(M)]
-#         # has start node
-#         # const += [cvx.sum(Y, axis=0) == np.ones(k)]
-#         # start node is in subgraph
-#         # const += [Y <= X]
-#         for i in range(k):
-#             # under limit
-#             const += [c @ X[:, i] <= g]
-
-#             # min 1 edge max 2 edges per node
-#             for n, node in enumerate(self.graph.nodes):
-#                 const += [X[n, i] <= cvx.sum([Z[edge2idx[e], i]
-#                                               for e in self.graph.edges(node)])]
-#                 const += [cvx.sum([Z[edge2idx[e], i]
-#                                    for e in self.graph.edges(node)]) <= 2]
-
-#             # edge only allowed if node is in grp
-#             for m, edge in enumerate(self.graph.edges):
-#                 n1 = node2idx[edge[0]]
-#                 n2 = node2idx[edge[1]]
-#                 const += [Z[m, i] <= (.5)*(X[n1, i] + X[n2, i])]
-
-#             # tree constraint
-#             const += [cvx.sum(X[:, i]) == cvx.sum(Z[:, i])+1]
-
-#         # form and solve
-#         prob = cvx.Problem(cvx.Minimize(cost), const)
-#         return prob
-
-#     def getCosts(self, routeSet):
-#         """use the routeSet parameters and the edges to build the edge cost.
-#         Use the distance information in edge and speed in the routeSet to
-#         calculate the Edge costs as a time
-#         """
-
-#         self.limit = routeSet.routeParameters["limit"]
-#         transferSpeed = routeSet.routeParameters["xfer_speed"]
-#         speed = routeSet.routeParameters["speed"]
-#         edgeCosts = dict()
-#         for u, v, d in self.graph.edges(data="weight"):
-#             if u == "home":
-#                 cost = d*transferSpeed + 20  # 30 seconds for ascend/descend
-#             else:
-#                 cost = d*speed
-#             edgeCosts[(u, v)] = cost
-#         return edgeCosts
-
-#     def link(self, routeSet):
-#         pass

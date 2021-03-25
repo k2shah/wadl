@@ -65,7 +65,7 @@ class Fence(object):
         # place label somewhere
         minx, miny, maxx, maxy = self.poly.bounds
         placement = ((minx+maxx)/2, maxy)
-        ax.annotate(self.name, xy=placement)
+        # ax.annotate(self.name, xy=placement)
 
 
 class Areas(object):

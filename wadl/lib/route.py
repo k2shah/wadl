@@ -152,6 +152,9 @@ class Route(object):
         # path limits
         self.DJIWaypointLimit = 98
 
+    def __repr__(self):
+        return self.waypoints.__repr__()
+
     @staticmethod
     def DistGPS(gps0, gps1, alt0=0, alt1=0):
         # calculates the distance in meters of 2 lat/long points
@@ -201,7 +204,7 @@ class Route(object):
         # check: under the time limit
         if self.home is None:
             # split transfer and survey sections
-            tran_in, ToF_in = self.calcLength(self.waypoints[0:1])
+            tran_in, ToF_in = self.calcLength(self.waypoints[:2])
             tran_out, ToF_out = self.calcLength(self.waypoints[-2:])
             self.len_tran = tran_in + tran_out
             self.ToF_tran = ToF_in + ToF_out
@@ -228,7 +231,8 @@ class Route(object):
         length = 0
         ToF = 0
         if len(waypoints) < 2:
-            raise RuntimeError("waypoint segment must have at least 2 pts")
+            self.logger.debug("waypoint segment does not have at least 2 pts")
+            return 0,0
         for wp, nxt in zip(waypoints, waypoints[1:]):
             dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
             length += dist
@@ -273,56 +277,14 @@ class Route(object):
         # number of waypoints in path
         return len(self.UTMcords)
 
-    # def parseFile(self):
-    #     pathFiles = glob.glob(os.path.join(self.pathDir, "routes/*"))
-    #     for file in pathFiles:
-    #         self.cords = dict()
-    #         # print(file)
-    #         with open(file) as csvfile:
-    #             for line in csv.reader(csvfile, delimiter=','):
-    #                 if line[2] != '50':
-    #                     continue
-    #                 cords = (line[0], line[1])
-    #                 if cords in self.keyPoints:
-    #                     continue
-    #                 try:
-    #                     self.cords[cords] += 1
-    #                 except KeyError as e:
-    #                     self.cords[cords] = 1
-    #             try:
-    #                 routeEff = self.calcEff()
-    #                 print(file, ": ", routeEff)
-    #                 self.writeEff(file, routeEff)
-    #             except ZeroDivisionError as e:
-    #                 print("invalid file: {:s}".format(file))
-
-    # def calcEff(self):
-    #     nPts = 0
-    #     nPaths = 0
-    #     for keys in self.cords:
-    #         nPaths += self.cords[keys]
-    #         nPts += 1
-    #     return nPts/nPaths
-
-    # def writeEff(self, routeFile, routeEff):
-    #     infoFile = os.path.join(self.pathDir, "info.txt")
-    #     if os.path.exists(infoFile):
-    #         writeMode = 'a'
-    #     else:
-    #         writeMode = 'w'
-    #     with open(infoFile, writeMode) as f:
-    #         routeName = routeFile.split('/')[-1]
-    #         f.write("\n{:s}: {:2.4f}".format(
-    #                 routeName,
-    #                 routeEff))
-
     def plot(self, ax, color='b'):
         # path
         cords = np.array(self.UTMcords)
         ax.plot(cords[:, 0], cords[:, 1], color=color)
         # start and end
-        ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
-        ax.scatter(cords[-2, 0], cords[-2, 1], color=color, marker='s')
+        if len(cords) > 3:
+            ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
+            ax.scatter(cords[-2, 0], cords[-2, 1], color=color, marker='s')
         if self.home is not None:
             # plot the home point as a 'o'
             HomeUTMx, HomeUTMy = utm.from_latlon(*self.home)[0:2]

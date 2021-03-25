@@ -39,6 +39,12 @@ class Survey(object):
     def setupLogger(self):
         # create logger
         rootLogger = logging.getLogger()
+
+        # clean up old loggers
+        rootLogger.propagate = False
+        if (rootLogger.hasHandlers()):
+            rootLogger.handlers.clear()
+        # set the new ones
         rootLogger.setLevel(logging.INFO)
         # create file handler which logs even debug messages
         fh = logging.FileHandler(self.outDir/'wadl.log', 'w+')
@@ -83,11 +89,14 @@ class Survey(object):
 
         self.tasks[file] = Maze(file, **kwargs)
 
+    def at(self, sliced):
+        return self.tasks[[*self.tasks][sliced]]
+
     def setSolver(self, solver):
         self.solver = solver
 
     def setSolverParamters(self, parameters):
-        """Set the solver paramters.
+        """Set the solver parameters.
 
         Args:
             parameters (SolverParamters): sets the solver settings
@@ -111,7 +120,7 @@ class Survey(object):
             ax.scatter(*cord, color='k', s=1)
             ax.annotate(key, xy=cord, xycoords='data')
 
-    def view(self, showGrid=True):
+    def view(self, showGrid=True, save=None):
         """ View the current survey (unplanned)
 
         Args:
@@ -124,7 +133,7 @@ class Survey(object):
         for file, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             cols = self.solver.metaGraph.getSubgraphColors()
-            maze.plot(ax, showGrid=showGrid)
+            maze.plot(ax, showGrid=showGrid, showRoutes=False)
             for i, graph in enumerate(self.solver.metaGraph.subGraphs):
                 # print(graph.nodes)
                 col = next(cols)
@@ -135,7 +144,10 @@ class Survey(object):
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
         # display
-        plt.show()
+        if save is not None:
+            plt.savefig(save, bbox_inches='tight', dpi=100)
+        else:
+            plt.show()
 
     def plan(self, write=True, showPlot=False):
         """ Plan the survey.
