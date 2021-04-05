@@ -29,3 +29,10 @@ def test_fence(croz):
     fileName = pathDir / 'croz.png'
     plt.gca().set_aspect('equal', adjustable='box')
     plt.savefig(fileName, bbox_inches='tight', dpi=200)
+
+
+def test_areas():
+    from wadl.lib.fence import Areas
+    file = Path("data/HMR_tree_polygon_v2/doc.kml")
+    areas = Areas(file)
+    assert len(areas) == 7
