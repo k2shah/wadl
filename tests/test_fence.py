@@ -33,6 +33,6 @@ def test_fence(croz):
 
 def test_areas():
     from wadl.lib.fence import Areas
-    file = Path("data/HMR_tree_polygon_v2/doc.kml")
+    file = Path(__file__).parent / "data/HMR_tree_polygon_v2/doc.kml"
     areas = Areas(file)
     assert len(areas) == 7
