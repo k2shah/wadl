@@ -232,7 +232,7 @@ class Route(object):
         ToF = 0
         if len(waypoints) < 2:
             self.logger.debug("waypoint segment does not have at least 2 pts")
-            return 0,0
+            return 0, 0
         for wp, nxt in zip(waypoints, waypoints[1:]):
             dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
             length += dist
