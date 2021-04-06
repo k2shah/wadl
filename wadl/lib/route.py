@@ -35,6 +35,7 @@ class RouteParameters(Parameters):
     def setDefaults(self):
         self["limit"] = 13*60  # s
         self["speed"] = 4.0  # m/s
+        self["prio_speed"] = 3.0  # m/s
         self["altitude"] = 35.0  # m
         self["xfer_speed"] = 12.0  # m/s
         self["xfer_altitude"] = 70.0  # m

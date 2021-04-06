@@ -73,6 +73,7 @@ class Survey(object):
             rotation (int, optional): rotation of the grid by radians.
             limit (float, optional): default flight time limit
             home (srt, optional): key(s) of home location(s)
+            priority (wadl.lib.Areas): Areas object of high priority sections
             routeParamters (RouteParameters): Desired settings
                 for each route in this task
 
@@ -88,6 +89,10 @@ class Survey(object):
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)
+
+        # add priority
+        if "priority" in kwargs:
+            self.tasks[file].setPriority(kwargs["priority"])
 
     def at(self, sliced):
         return self.tasks[[*self.tasks][sliced]]

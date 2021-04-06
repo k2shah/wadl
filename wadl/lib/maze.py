@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import utm
 from shapely.geometry import Polygon, Point, LineString
 # lib
-from wadl.lib.fence import Fence
+from wadl.lib.fence import Fence, Areas
 from wadl.lib.route import RouteSet
 
 
@@ -39,6 +39,7 @@ class Maze(Fence):
                  step=40,
                  rotation=0,
                  home=None,
+                 priority=None,
                  routeParameters=None):
         super(Maze, self).__init__(Path(file))
         self.logger = logging.getLogger(__name__)
@@ -51,6 +52,10 @@ class Maze(Fence):
         self.step = step
         # build grid graph
         self.buildGrid()
+        if priority is not None:
+            self.setPriority(priority)
+        else:
+            self.priority = None
         self.nNode = len(self.graph)
         self.logger.info(f"generated maze with {self.nNode} nodes")
         # UAV path parameters
@@ -111,6 +116,14 @@ class Maze(Fence):
         # save the index of each node
         for i, node in enumerate(self.graph):
             self.graph.nodes[node]['index'] = i
+
+    def setPriority(self, priority):
+        """Add a priority area to the survey.
+
+        Args:
+            priority (str): file for priority area
+        """
+        self.priority = Areas(Path(priority))
 
     def calcRouteStats(self):
         # log route data
@@ -293,6 +306,9 @@ class Maze(Fence):
             ax.plot(line[:, 0], line[:, 1],
                     color=color, linewidth=1)
 
+    def plotPriority(self, ax, color='m'):
+        self.priority.plot(ax, color=color)
+
     def plotRoutes(self, ax):
         cols = iter(plt.cm.rainbow(np.linspace(0, 1, len(self.routeSet))))
         for route in self.routeSet:
@@ -318,3 +334,5 @@ class Maze(Fence):
             self.plotEdges(ax)
         if showRoutes:
             self.plotRoutes(ax)
+        if self.priority is not None:
+            self.plotPriority(ax, color='tab:purple')  # purple for priority
