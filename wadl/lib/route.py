@@ -90,14 +90,12 @@ class RouteSet(object):
         # get the time limit
         return self.routeParameters['limit']
 
-    def check(self, cords, priority=None):
+    def check(self, cords):
         """Builds the route from a UTM waypoint list and
         runs a series of checks to verify the route is viable.
 
         Args;
             cords (list): list of UTM waypoints
-            priority (list:bool) list of bools if pt is priority
-                same len as cords
 
         Returns:
             None if any check fails;
@@ -105,7 +103,7 @@ class RouteSet(object):
 
         """
         route = Route(cords, self.zone, self.home)
-        route.build(self.routeParameters, priority)
+        route.build(self.routeParameters, priority=self.data["priority"])
         if route.check():
             return True, route
         else:
@@ -246,12 +244,12 @@ class Route(object):
             ToF += dist/wp[3]
         return length, ToF
 
-    def build(self, routeParameters):
+    def build(self, routeParameters, priority=set()):
         # build the path
-
         # unpack parameters
         self.limit = routeParameters["limit"]
         spd = routeParameters["speed"]
+        priSpd = routeParameters["prio_speed"]
         alt = routeParameters["altitude"]
         xferSpd = routeParameters["xfer_speed"]
         xferAlt = routeParameters["xfer_altitude"]
@@ -267,8 +265,11 @@ class Route(object):
         lat, lng = self.GPScords[0]
         self.waypoints.append([lat, lng, xferAlt, xferDes])
         # push each waypoint
-        for lat, lng in self.GPScords[:-1]:
-            self.waypoints.append([lat, lng, alt, spd])
+        for gpsPt, utmPt in zip(self.GPScords[:-1], self.UTMcords[:-1]):
+            lat, lng = gpsPt
+            roundedUTM = tuple(map(int, utmPt))
+            s = priSpd if roundedUTM in priority else spd
+            self.waypoints.append([lat, lng, alt, s])
         lat, lng = self.GPScords[-1]
         # last point to ascend to transfer
         self.waypoints.append([lat, lng, alt, xferAsc])

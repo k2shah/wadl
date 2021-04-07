@@ -125,28 +125,29 @@ class Maze(Fence):
         for i, node in enumerate(self.graph):
             self.graph.nodes[node]['index'] = i
 
-    def setPriority(self, priority):
+    def setPriority(self, file):
         """Add a priority area to the survey.
 
         Args:
             priority (str): file for priority area
         """
-        self.priorityArea = Areas(Path(priority))
+        self.priorityArea = Areas(Path(file))
         # assign points based on priority
         self.prioritySet = set()
         for n0, n1 in self.graph.edges:
-            line = LineString([self.graph.nodes[n0]['UTM'],
-                               self.graph.nodes[n1]['UTM']])
-            if self.priority is not None:
-                if self.isPriority(line):
-                    self.graph.nodes[n0]['priority'] = True
-                    self.graph.nodes[n1]['priority'] = True
-                    self.prioritySet.update(n0, n1)
+            p0 = self.graph.nodes[n0]['UTM']
+            p1 = self.graph.nodes[n1]['UTM']
+            line = LineString([p0, p1])
+            if self.isPriority(line):
+                self.graph.nodes[n0]['priority'] = True
+                self.graph.nodes[n1]['priority'] = True
+                self.prioritySet.add(tuple(map(int, tuple(p0))))
+                self.prioritySet.add(tuple(map(int, tuple(p1))))
         self.logger.info(f"found {len(self.prioritySet)} priority points")
 
     def isPriority(self, line):
         """checks if a line in in a priority polygon"""
-        for poly in self.priority:
+        for poly in self.priorityArea:
             if line.intersects(poly):
                 return True
         return False
@@ -318,7 +319,7 @@ class Maze(Fence):
             nodes = self.graph.nodes
 
         for node in nodes:
-            marker = "p" if self.graph.nodes[node]['priority'] else "."
+            marker = "s" if self.graph.nodes[node]['priority'] else "."
             ax.scatter(*self.graph.nodes[node]["UTM"],
                        color=color, s=5, marker=marker)
 
@@ -334,7 +335,7 @@ class Maze(Fence):
                     color=color, linewidth=1)
 
     def plotPriority(self, ax, color='m'):
-        self.priority.plot(ax, color=color)
+        self.priorityArea.plot(ax, color=color)
 
     def plotRoutes(self, ax):
         cols = iter(plt.cm.rainbow(np.linspace(0, 1, len(self.routeSet))))
@@ -361,5 +362,5 @@ class Maze(Fence):
             self.plotEdges(ax)
         if showRoutes:
             self.plotRoutes(ax)
-        if self.priority is not None:
+        if self.priorityArea is not None:
             self.plotPriority(ax, color='tab:purple')  # purple for priority

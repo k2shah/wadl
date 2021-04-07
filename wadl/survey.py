@@ -174,6 +174,7 @@ class Survey(object):
             except RuntimeError as e:
                 self.logger.error(f"failure in task: {maze.name}")
                 print(e)
+                print("\n")
             self.logger.info(f"task {maze.name} finished")
         self.logger.info("done planning")
 

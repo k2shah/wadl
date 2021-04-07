@@ -97,7 +97,6 @@ class LinkSolver(BaseSolver):
         return solveTime
 
     def getRouteData(self):
-        data = dict()
         # calculate various metrics and push them to the routeSet container
         nGraphs = len(self.metaGraph.subGraphs)
         nSteps = sum([len(path)-1 for path in self.metaGraph.subPaths])
