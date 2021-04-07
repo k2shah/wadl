@@ -61,6 +61,7 @@ class RouteSet(object):
         # loggers
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
+        self.data = dict()
 
         self.home = home
 
@@ -79,19 +80,24 @@ class RouteSet(object):
     def __iter__(self):
         return iter(self.routes)
 
-    def setData(self, data):
-        self.data = data
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def __getitem__(self, key):
+        return self.data[key]
 
     def getLimit(self):
         # get the time limit
         return self.routeParameters['limit']
 
-    def check(self, cords):
+    def check(self, cords, priority=None):
         """Builds the route from a UTM waypoint list and
         runs a series of checks to verify the route is viable.
 
         Args;
             cords (list): list of UTM waypoints
+            priority (list:bool) list of bools if pt is priority
+                same len as cords
 
         Returns:
             None if any check fails;
@@ -99,7 +105,7 @@ class RouteSet(object):
 
         """
         route = Route(cords, self.zone, self.home)
-        route.build(self.routeParameters)
+        route.build(self.routeParameters, priority)
         if route.check():
             return True, route
         else:

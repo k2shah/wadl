@@ -50,18 +50,25 @@ class Maze(Fence):
         # grid parameters
         self.theta = rotation
         self.step = step
+      
         # build grid graph
         self.buildGrid()
-        if priority is not None:
-            self.setPriority(priority)
-        else:
-            self.priority = None
         self.nNode = len(self.graph)
         self.logger.info(f"generated maze with {self.nNode} nodes")
+
+
         # UAV path parameters
         self.home = home
         self.nNode = len(self.graph)  # store size of nodes
         self.routeSet = RouteSet(self.home, self.UTMZone, routeParameters)
+
+        # resolve priority
+        if priority is not None:
+            self.setPriority(priority)
+        else:
+            self.priorityArea = None
+            self.prioritySet = None
+        self.routeSet["priority"] = self.prioritySet
 
     def __len__(self):
         # number of nodes
@@ -101,6 +108,7 @@ class Maze(Fence):
                     utmCord = self.R.T @ np.array([x, y])
                     # store utm cord in graph
                     self.graph.nodes[(i, j)]['UTM'] = utmCord
+                    self.graph.nodes[(i, j)]['priority'] = False
                 else:
                     self.graph.remove_node((i, j))
 
@@ -123,7 +131,25 @@ class Maze(Fence):
         Args:
             priority (str): file for priority area
         """
-        self.priority = Areas(Path(priority))
+        self.priorityArea = Areas(Path(priority))
+        # assign points based on priority
+        self.prioritySet = set()
+        for n0, n1 in self.graph.edges:
+            line = LineString([self.graph.nodes[n0]['UTM'],
+                               self.graph.nodes[n1]['UTM']])
+            if self.priority is not None:
+                if self.isPriority(line):
+                    self.graph.nodes[n0]['priority'] = True
+                    self.graph.nodes[n1]['priority'] = True
+                    self.prioritySet.update(n0, n1)
+        self.logger.info(f"found {len(self.prioritySet)} priority points")
+
+    def isPriority(self, line):
+        """checks if a line in in a priority polygon"""
+        for poly in self.priority:
+            if line.intersects(poly):
+                return True
+        return False
 
     def calcRouteStats(self):
         # log route data
@@ -134,7 +160,7 @@ class Maze(Fence):
             self.logger.info(f"{i}: {route.length:.2f}m \t{route.ToF:.2f}s")
             surveyTofs += route.ToF_surv
             transferTofs += route.ToF_tran
-        totalTime = surveyTofs + transferTofs 
+        totalTime = surveyTofs + transferTofs
         ratio = surveyTofs/transferTofs
         self.stats = dict()
         lengths = [route.length for route in self.routeSet]
@@ -292,8 +318,9 @@ class Maze(Fence):
             nodes = self.graph.nodes
 
         for node in nodes:
+            marker = "p" if self.graph.nodes[node]['priority'] else "."
             ax.scatter(*self.graph.nodes[node]["UTM"],
-                       color=color, s=5)
+                       color=color, s=5, marker=marker)
 
     def plotEdges(self, ax, color='k', edges=None):
         # plot edges

@@ -90,12 +90,12 @@ class Survey(object):
 
         self.tasks[file] = Maze(file, **kwargs)
 
-        # add priority
-        if "priority" in kwargs:
-            self.tasks[file].setPriority(kwargs["priority"])
+    def __getitem__(self, idx):
+        key = [*self.tasks][idx]
+        return self.tasks[key]
 
     def at(self, sliced):
-        return self.tasks[[*self.tasks][sliced]]
+        return self.__getitem__(sliced)
 
     def setSolver(self, solver):
         self.solver = solver

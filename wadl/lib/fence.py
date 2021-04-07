@@ -106,7 +106,7 @@ class Areas(object):
         k = kml.KML()
         k.from_string(doc.encode('utf-8'))
         self.findPlacemarks(list(k.features()))
-        self.logger.info(f"found {len(self.areas)} objects")
+        self.logger.info(f"found {len(self.areas)} kml polygons")
 
     def findPlacemarks(self, features):
         # parse features throughout the KML File
