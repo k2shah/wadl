@@ -244,7 +244,7 @@ class Route(object):
             ToF += dist/wp[3]
         return length, ToF
 
-    def build(self, routeParameters, priority=set()):
+    def build(self, routeParameters, priority=None):
         # build the path
         # unpack parameters
         self.limit = routeParameters["limit"]
@@ -256,6 +256,9 @@ class Route(object):
         xferAsc = routeParameters["xfer_ascend"]
         xferDes = routeParameters["xfer_descend"]
         landALt = routeParameters["land_altitude"]
+
+        if priority is None:
+            priority = set()
 
         # take off
         if self.home is not None:

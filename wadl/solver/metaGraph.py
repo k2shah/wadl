@@ -141,7 +141,7 @@ class MetaGraph(object):
 
         return subGraphs
 
-    def mergeSubGraphs(self, subGraphs, minSize=20, maxSize=50):
+    def mergeSubGraphs(self, subGraphs, minSize=25, maxSize=50):
         # merge small subGraphs into the most connected subGraph
         # if tie pick the smallest subgraph
         merged = dict()
