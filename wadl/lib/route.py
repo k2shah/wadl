@@ -35,6 +35,7 @@ class RouteParameters(Parameters):
     def setDefaults(self):
         self["limit"] = 13*60  # s
         self["speed"] = 4.0  # m/s
+        self["prio_speed"] = 3.0  # m/s
         self["altitude"] = 35.0  # m
         self["xfer_speed"] = 12.0  # m/s
         self["xfer_altitude"] = 70.0  # m
@@ -60,6 +61,7 @@ class RouteSet(object):
         # loggers
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
+        self.data = dict()
 
         self.home = home
 
@@ -78,8 +80,11 @@ class RouteSet(object):
     def __iter__(self):
         return iter(self.routes)
 
-    def setData(self, data):
-        self.data = data
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def __getitem__(self, key):
+        return self.data[key]
 
     def getLimit(self):
         # get the time limit
@@ -98,7 +103,7 @@ class RouteSet(object):
 
         """
         route = Route(cords, self.zone, self.home)
-        route.build(self.routeParameters)
+        route.build(self.routeParameters, priority=self.data["priority"])
         if route.check():
             return True, route
         else:
@@ -239,18 +244,21 @@ class Route(object):
             ToF += dist/wp[3]
         return length, ToF
 
-    def build(self, routeParameters):
+    def build(self, routeParameters, priority=None):
         # build the path
-
         # unpack parameters
         self.limit = routeParameters["limit"]
         spd = routeParameters["speed"]
+        priSpd = routeParameters["prio_speed"]
         alt = routeParameters["altitude"]
         xferSpd = routeParameters["xfer_speed"]
         xferAlt = routeParameters["xfer_altitude"]
         xferAsc = routeParameters["xfer_ascend"]
         xferDes = routeParameters["xfer_descend"]
         landALt = routeParameters["land_altitude"]
+
+        if priority is None:
+            priority = set()
 
         # take off
         if self.home is not None:
@@ -260,8 +268,11 @@ class Route(object):
         lat, lng = self.GPScords[0]
         self.waypoints.append([lat, lng, xferAlt, xferDes])
         # push each waypoint
-        for lat, lng in self.GPScords[:-1]:
-            self.waypoints.append([lat, lng, alt, spd])
+        for gpsPt, utmPt in zip(self.GPScords[:-1], self.UTMcords[:-1]):
+            lat, lng = gpsPt
+            roundedUTM = tuple(map(int, utmPt))
+            s = priSpd if roundedUTM in priority else spd
+            self.waypoints.append([lat, lng, alt, s])
         lat, lng = self.GPScords[-1]
         # last point to ascend to transfer
         self.waypoints.append([lat, lng, alt, xferAsc])

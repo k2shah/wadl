@@ -40,18 +40,18 @@ class PathTree(MetaGraph):
         # make the initial nodes of the graph
         utmHome = [utm.from_latlon(*home)[0:2] for home in routeSet.home]
         self.tree.add_node("home", UTM=utmHome, homeDist=0)
-        for node, path in enumerate(self.subPaths):
+        for tile, path in enumerate(self.subPaths):
             UTMpath = [self.getUTM(pt) for pt in self.steamlinePath(path)]
             _, route = routeSet.check(UTMpath[:-1])
             # unpack route metrics into the node
-            self.tree.add_node(node,
+            self.tree.add_node(tile,
                                UTM=self.getUTM(path[0]),
                                homeDist=route.len_tran,
                                homeTime=route.ToF_tran,
                                survDist=route.len_surv,
                                survTime=route.ToF_surv
                                )
-            self.tree.add_edge("home", node)
+            self.tree.add_edge("home", tile)
 
     def makeEdges(self):
         for e1, e2 in self.pathGraph.edges:

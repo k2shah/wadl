@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import utm
 from shapely.geometry import Polygon, Point, LineString
 # lib
-from wadl.lib.fence import Fence
+from wadl.lib.fence import Fence, Areas
 from wadl.lib.route import RouteSet
 
 
@@ -39,6 +39,7 @@ class Maze(Fence):
                  step=40,
                  rotation=0,
                  home=None,
+                 priority=None,
                  routeParameters=None):
         super(Maze, self).__init__(Path(file))
         self.logger = logging.getLogger(__name__)
@@ -49,14 +50,25 @@ class Maze(Fence):
         # grid parameters
         self.theta = rotation
         self.step = step
+      
         # build grid graph
         self.buildGrid()
         self.nNode = len(self.graph)
         self.logger.info(f"generated maze with {self.nNode} nodes")
+
+
         # UAV path parameters
         self.home = home
         self.nNode = len(self.graph)  # store size of nodes
         self.routeSet = RouteSet(self.home, self.UTMZone, routeParameters)
+
+        # resolve priority
+        if priority is not None:
+            self.setPriority(priority)
+        else:
+            self.priorityArea = None
+            self.prioritySet = None
+        self.routeSet["priority"] = self.prioritySet
 
     def __len__(self):
         # number of nodes
@@ -96,6 +108,7 @@ class Maze(Fence):
                     utmCord = self.R.T @ np.array([x, y])
                     # store utm cord in graph
                     self.graph.nodes[(i, j)]['UTM'] = utmCord
+                    self.graph.nodes[(i, j)]['priority'] = False
                 else:
                     self.graph.remove_node((i, j))
 
@@ -112,6 +125,33 @@ class Maze(Fence):
         for i, node in enumerate(self.graph):
             self.graph.nodes[node]['index'] = i
 
+    def setPriority(self, file):
+        """Add a priority area to the survey.
+
+        Args:
+            priority (str): file for priority area
+        """
+        self.priorityArea = Areas(Path(file))
+        # assign points based on priority
+        self.prioritySet = set()
+        for n0, n1 in self.graph.edges:
+            p0 = self.graph.nodes[n0]['UTM']
+            p1 = self.graph.nodes[n1]['UTM']
+            line = LineString([p0, p1])
+            if self.isPriority(line):
+                self.graph.nodes[n0]['priority'] = True
+                self.graph.nodes[n1]['priority'] = True
+                self.prioritySet.add(tuple(map(int, tuple(p0))))
+                self.prioritySet.add(tuple(map(int, tuple(p1))))
+        self.logger.info(f"found {len(self.prioritySet)} priority points")
+
+    def isPriority(self, line):
+        """checks if a line in in a priority polygon"""
+        for poly in self.priorityArea:
+            if line.intersects(poly):
+                return True
+        return False
+
     def calcRouteStats(self):
         # log route data
         self.logger.info(f"\tgenerated {len(self.routeSet)} routes")
@@ -121,7 +161,7 @@ class Maze(Fence):
             self.logger.info(f"{i}: {route.length:.2f}m \t{route.ToF:.2f}s")
             surveyTofs += route.ToF_surv
             transferTofs += route.ToF_tran
-        totalTime = surveyTofs + transferTofs 
+        totalTime = surveyTofs + transferTofs
         ratio = surveyTofs/transferTofs
         self.stats = dict()
         lengths = [route.length for route in self.routeSet]
@@ -279,8 +319,9 @@ class Maze(Fence):
             nodes = self.graph.nodes
 
         for node in nodes:
+            marker = "s" if self.graph.nodes[node]['priority'] else "."
             ax.scatter(*self.graph.nodes[node]["UTM"],
-                       color=color, s=5)
+                       color=color, s=5, marker=marker)
 
     def plotEdges(self, ax, color='k', edges=None):
         # plot edges
@@ -292,6 +333,9 @@ class Maze(Fence):
                              self.graph.nodes[e2]["UTM"]])
             ax.plot(line[:, 0], line[:, 1],
                     color=color, linewidth=1)
+
+    def plotPriority(self, ax, color='m'):
+        self.priorityArea.plot(ax, color=color)
 
     def plotRoutes(self, ax):
         cols = iter(plt.cm.rainbow(np.linspace(0, 1, len(self.routeSet))))
@@ -318,3 +362,5 @@ class Maze(Fence):
             self.plotEdges(ax)
         if showRoutes:
             self.plotRoutes(ax)
+        if self.priorityArea is not None:
+            self.plotPriority(ax, color='tab:purple')  # purple for priority

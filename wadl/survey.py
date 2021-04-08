@@ -73,6 +73,7 @@ class Survey(object):
             rotation (int, optional): rotation of the grid by radians.
             limit (float, optional): default flight time limit
             home (srt, optional): key(s) of home location(s)
+            priority (wadl.lib.Areas): Areas object of high priority sections
             routeParamters (RouteParameters): Desired settings
                 for each route in this task
 
@@ -89,8 +90,12 @@ class Survey(object):
 
         self.tasks[file] = Maze(file, **kwargs)
 
+    def __getitem__(self, idx):
+        key = [*self.tasks][idx]
+        return self.tasks[key]
+
     def at(self, sliced):
-        return self.tasks[[*self.tasks][sliced]]
+        return self.__getitem__(sliced)
 
     def setSolver(self, solver):
         self.solver = solver
@@ -169,6 +174,7 @@ class Survey(object):
             except RuntimeError as e:
                 self.logger.error(f"failure in task: {maze.name}")
                 print(e)
+                print("\n")
             self.logger.info(f"task {maze.name} finished")
         self.logger.info("done planning")
 

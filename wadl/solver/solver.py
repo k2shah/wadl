@@ -91,15 +91,16 @@ class LinkSolver(BaseSolver):
         # return solution time
         solveTime = time.time()-startTime
         self.logger.info("solution time: {:2.5f} sec".format(solveTime))
-        routeSet.setData(self.getRouteData())
+        nGraph, nSteps = self.getRouteData()
+        routeSet["nGraphs"] = nGraph
+        routeSet["nSteps"] = nSteps
         return solveTime
 
     def getRouteData(self):
-        data = dict()
         # calculate various metrics and push them to the routeSet container
-        data["nGraphs"] = len(self.metaGraph.subGraphs)
-        data["nSteps"] = sum([len(path)-1 for path in self.metaGraph.subPaths])
-        return data
+        nGraphs = len(self.metaGraph.subGraphs)
+        nSteps = sum([len(path)-1 for path in self.metaGraph.subPaths])
+        return nGraphs, nSteps
 
     def solveTiles(self):
         subPaths = []
