@@ -77,25 +77,25 @@ class PathTree(MetaGraph):
     def link(self, routeSet):
         # build the tree and partition it
         self.buildTree(routeSet)
-        self.groups, self.nGroups = self.partition(routeSet)
+        self.nGroups = self.partition(routeSet)
 
     def partition(self, routeSet):
         # find groups for each tile
         self.edgeGroups = []
-        groups = OrderedDict()
+        self.groups = OrderedDict()
         for node in sorted(self.tree.nodes,
                            key=lambda x: self.tree.nodes[x]["homeDist"],
                            reverse=True):
-            groups[node] = 0
+            self.groups[node] = 0
         groupIdx = 1
-        for node in groups:
+        for node in self.groups:
             if node == 'home':
                 continue
-            group = groups[node]
+            group = self.groups[node]
             if group == 0:
                 # start building a new group
                 queue = SimpleQueue()
-                groups[node] = groupIdx
+                self.groups[node] = groupIdx
                 self.logger.debug(f"route idx: {groupIdx}")
                 queue.put(node)
                 # reset all the objects
@@ -112,8 +112,9 @@ class PathTree(MetaGraph):
                 # fill the route
                 while not queue.empty():
                     n = queue.get()
-                    for n_adj, _ in self.tree.in_edges(n):
-                        if n_adj == 'home' or groups[n_adj] != 0:
+                    inEdges = sorted(self.tree.in_edges(n), key=self.inScore)
+                    for n_adj, _ in inEdges:
+                        if n_adj == 'home' or self.groups[n_adj] != 0:
                             continue
                         # test the new route
                         metaTree.add_edge(n, n_adj)
@@ -123,7 +124,7 @@ class PathTree(MetaGraph):
                             # accept the node
                             queue.put(n_adj)
                             self.logger.debug(f"accepted {node}")
-                            groups[n_adj] = groupIdx
+                            self.groups[n_adj] = groupIdx
                             # save the route
                             route = newRoute
                         else:
@@ -143,7 +144,18 @@ class PathTree(MetaGraph):
                     self.edgeGroups.append(edgeList)
                     routeSet.push(route)
         nGroups = groupIdx-1
-        return groups, nGroups
+        return nGroups
+
+    def inScore(self, edge):
+        # returns the in degree of the edge minus the assigned groups
+        # essentially returns the number of free nodes into this node
+        localEdges = self.tree.edges(edge[0])
+        # get initial score
+        score = len(localEdges)
+        for n0, n1 in localEdges:
+            if self.groups[n0] != 0 or self.groups[n1] != 0:
+                score -= 1
+        return score
 
     def stitch(self, tree):
         # takes a tree and appends the home to the closest node

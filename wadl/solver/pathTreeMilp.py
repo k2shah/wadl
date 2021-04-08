@@ -178,8 +178,8 @@ class PathTreeMilp(PathTree):
         self.extractPaths(edgeGroups, routeSet)
 
         # return set of assignments for the nodes as map: node -> group
-        groups = {}
+        self.groups = {}
         for i, edgeGroup in enumerate(edgeGroups):
             for _, node in edgeGroup:
-                groups[node] = i
-        return groups, nGroups
+                self.groups[node] = i
+        return nGroups
