@@ -94,6 +94,9 @@ class Survey(object):
         key = [*self.tasks][idx]
         return self.tasks[key]
 
+    def __iter__(self):
+        return iter(self.tasks.values())
+
     def at(self, sliced):
         return self.__getitem__(sliced)
 
