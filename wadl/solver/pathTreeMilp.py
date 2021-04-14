@@ -86,7 +86,7 @@ class PathTreeMilp(PathTree):
         try:
             prob.solve(solver=cvx.GUROBI,
                        # verbose=True,)
-                       TimeLimit=1*60)
+                       TimeLimit=10*60)
         except Exception as e:
             # print(time.time()-st)
             self.logger.info(e)
@@ -169,7 +169,7 @@ class PathTreeMilp(PathTree):
             if edgeGroups is not None:
                 solved = True
             counter += 1
-            if counter > 5:
+            if counter > 8:
                 errmsg = 'failed to solve MILP'
                 self.logger.error(errmsg)
                 raise RuntimeError(errmsg)
