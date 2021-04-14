@@ -11,20 +11,20 @@ from wadl.lib.parameters import Parameters
 
 
 class RouteParameters(Parameters):
-    """Parameter container for seting route parameters
+    """Parameter container for setting route parameters
 
-    Set paramters directly like how you would for a dictionary.
+    Set parameters directly like how you would for a dictionary.
     ``routeParameters = RouteParameters``
-    ``routeParameters["Paramter"] = value``
+    ``routeParameters["Parameter"] = value``
 
     Args:
         limit (float): route limit in seconds
         speed (float): route speed over coverage area in meters/seconds
         altitude (float): altitude above ground level of the coverage area in m
-        xfer_speed (float): speed for trasnfer segemnts in m/s
+        xfer_speed (float): speed for transfer segments in m/s
         xfer_altitude (float): altitude for transfer segments in m
         xfer_ascend (float): ascend rate in m/s
-        xfer_decend (float): decend rate in m/s
+        xfer_decend (float): descend rate in m/s
         land_altitude (float): altitude before landing
 
     """
@@ -35,6 +35,7 @@ class RouteParameters(Parameters):
     def setDefaults(self):
         self["limit"] = 13*60  # s
         self["speed"] = 4.0  # m/s
+        self["prio_speed"] = 3.0  # m/s
         self["altitude"] = 35.0  # m
         self["xfer_speed"] = 12.0  # m/s
         self["xfer_altitude"] = 70.0  # m
@@ -60,6 +61,7 @@ class RouteSet(object):
         # loggers
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
+        self.data = dict()
 
         self.home = home
 
@@ -78,6 +80,16 @@ class RouteSet(object):
     def __iter__(self):
         return iter(self.routes)
 
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def getLimit(self):
+        # get the time limit
+        return self.routeParameters['limit']
+
     def check(self, cords):
         """Builds the route from a UTM waypoint list and
         runs a series of checks to verify the route is viable.
@@ -91,11 +103,11 @@ class RouteSet(object):
 
         """
         route = Route(cords, self.zone, self.home)
-        route.build(self.routeParameters)
+        route.build(self.routeParameters, priority=self.data["priority"])
         if route.check():
-            return route
+            return True, route
         else:
-            return None
+            return False, route
 
     def push(self, route):
         # push the route into the container
@@ -108,12 +120,10 @@ class RouteSet(object):
             pathDir (str): location to save routes.
 
         """
-        self.logger.info(f"\tgenerated {len(self.routes)} routes")
+        self.logger.info(f"writing routes to {pathDir}")
         for i, route in enumerate(self.routes):
             filename = pathDir / f"{i}.csv"
             route.write(filename)
-            self.logger.info(f"\t\troute {i}:\t"
-                             f"{route.length:2.2f} m \t{route.ToF:2.2f} sec ")
 
 
 class Route(object):
@@ -130,7 +140,7 @@ class Route(object):
 
     """
 
-    def __init__(self, cords, zone, home):
+    def __init__(self, cords, zone, home=None):
         # loggers
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
@@ -138,18 +148,21 @@ class Route(object):
         self.UTMcords = cords  # cords in UTM
         self.UTMZone = zone
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
-        if home is None:
-            self.home = None
-        else:
+        if home is not None:
             self.setHome(home)  # set home pt (in GPS)
+        else:
+            self.home = home
         self.waypoints = []
 
         # path limits
         self.DJIWaypointLimit = 98
 
+    def __repr__(self):
+        return self.waypoints.__repr__()
+
     @staticmethod
     def DistGPS(gps0, gps1, alt0=0, alt1=0):
-        # calculates the distnce in meters of 2 lat/lng points
+        # calculates the distance in meters of 2 lat/long points
         e0, n0, _, _ = utm.from_latlon(*gps0)
         e1, n1, _, _ = utm.from_latlon(*gps1)
         return np.linalg.norm([e0-e1, n0-n1, alt0-alt1])
@@ -163,22 +176,15 @@ class Route(object):
         self.UTMcords = [utm.from_latlon(*cord)[0:2] for cord in self.GPScords]
 
     def setHome(self, home):
-        # reolve the home point
-        # if isinstance(home, tuple):
-        #     # home: (lat, long)
-        #     # finds the cloest pt on the route to the home
-        #     (dist, idx) = min([(la.norm(np.array(home)-np.array(pt)), i)
-        #                        for i, pt in enumerate(self.GPScords)])
-        #     # sets the route home at the home pt
-        #     self.home = np.array(home)
-        homeDist = np.inf
+        # resolve the home point
+        self.homeDist = np.inf
         for h in home:
             (dist, i) = min([(self.DistGPS(np.array(h), np.array(pt)), i)
                              for i, pt in enumerate(self.GPScords)])
-            if dist < homeDist:
+            if dist < self.homeDist:
                 self.home = h
                 idx = i
-                homeDist = dist
+                self.homeDist = dist
         self.logger.debug(f"home set to {self.home}")
 
         # shift and wrap
@@ -195,26 +201,55 @@ class Route(object):
         """
 
         # check: under the waypoint limit
+        self.length = 0.0
+        self.ToF = 0.0
+        passed = True
         if len(self.waypoints) > self.DJIWaypointLimit:
-            return False
+            passed = False
         # check: under the time limit
-        self.ToF = 0  # time of flight
-        self.length = 0
-        for wp, nxt in zip(self.waypoints, self.waypoints[1:]):
-            dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
-            self.length += dist
-            self.ToF += dist/wp[3]
-
+        if self.home is None:
+            # split transfer and survey sections
+            tran_in, ToF_in = self.calcLength(self.waypoints[:2])
+            tran_out, ToF_out = self.calcLength(self.waypoints[-2:])
+            self.len_tran = tran_in + tran_out
+            self.ToF_tran = ToF_in + ToF_out
+            # survey
+            self.len_surv, self.ToF_surv = self.calcLength(
+                self.waypoints[1:-2])
+        else:
+            # split transfer and survey sections
+            tran_in, ToF_in = self.calcLength(self.waypoints[0:2])
+            tran_out, ToF_out = self.calcLength(self.waypoints[-4:])
+            self.len_tran = tran_in + tran_out
+            self.ToF_tran = ToF_in + ToF_out
+            # survey
+            self.len_surv, self.ToF_surv = self.calcLength(
+                self.waypoints[2:-4])
+        self.length = self.len_tran + self.len_surv
+        self.ToF = self.ToF_tran + self.ToF_surv
         if self.ToF > self.limit:
-            return False
-        return True
+            passed = False
+        return passed
 
-    def build(self, routeParameters):
+    def calcLength(self, waypoints):
+        # return the length and ToF of the segment
+        length = 0
+        ToF = 0
+        if len(waypoints) < 2:
+            self.logger.debug("waypoint segment does not have at least 2 pts")
+            return 0, 0
+        for wp, nxt in zip(waypoints, waypoints[1:]):
+            dist = self.DistGPS(wp[0:2], nxt[0:2], wp[2], nxt[2])
+            length += dist
+            ToF += dist/wp[3]
+        return length, ToF
+
+    def build(self, routeParameters, priority=None):
         # build the path
-
         # unpack parameters
         self.limit = routeParameters["limit"]
         spd = routeParameters["speed"]
+        priSpd = routeParameters["prio_speed"]
         alt = routeParameters["altitude"]
         xferSpd = routeParameters["xfer_speed"]
         xferAlt = routeParameters["xfer_altitude"]
@@ -222,16 +257,22 @@ class Route(object):
         xferDes = routeParameters["xfer_descend"]
         landALt = routeParameters["land_altitude"]
 
+        if priority is None:
+            priority = set()
+
         # take off
         if self.home is not None:
             Hlat, Hlng = self.home
             self.waypoints.append([Hlat, Hlng, xferAlt, xferSpd])
-            # get higher above frist point, point camera down
+            # get higher above first point, point camera down
         lat, lng = self.GPScords[0]
         self.waypoints.append([lat, lng, xferAlt, xferDes])
         # push each waypoint
-        for lat, lng in self.GPScords[:-1]:
-            self.waypoints.append([lat, lng, alt, spd])
+        for gpsPt, utmPt in zip(self.GPScords[:-1], self.UTMcords[:-1]):
+            lat, lng = gpsPt
+            roundedUTM = tuple(map(int, utmPt))
+            s = priSpd if roundedUTM in priority else spd
+            self.waypoints.append([lat, lng, alt, s])
         lat, lng = self.GPScords[-1]
         # last point to ascend to transfer
         self.waypoints.append([lat, lng, alt, xferAsc])
@@ -247,56 +288,14 @@ class Route(object):
         # number of waypoints in path
         return len(self.UTMcords)
 
-    # def parseFile(self):
-    #     pathFiles = glob.glob(os.path.join(self.pathDir, "routes/*"))
-    #     for file in pathFiles:
-    #         self.cords = dict()
-    #         # print(file)
-    #         with open(file) as csvfile:
-    #             for line in csv.reader(csvfile, delimiter=','):
-    #                 if line[2] != '50':
-    #                     continue
-    #                 cords = (line[0], line[1])
-    #                 if cords in self.keyPoints:
-    #                     continue
-    #                 try:
-    #                     self.cords[cords] += 1
-    #                 except KeyError as e:
-    #                     self.cords[cords] = 1
-    #             try:
-    #                 routeEff = self.calcEff()
-    #                 print(file, ": ", routeEff)
-    #                 self.writeEff(file, routeEff)
-    #             except ZeroDivisionError as e:
-    #                 print("invalid file: {:s}".format(file))
-
-    # def calcEff(self):
-    #     nPts = 0
-    #     nPaths = 0
-    #     for keys in self.cords:
-    #         nPaths += self.cords[keys]
-    #         nPts += 1
-    #     return nPts/nPaths
-
-    # def writeEff(self, routeFile, routeEff):
-    #     infoFile = os.path.join(self.pathDir, "info.txt")
-    #     if os.path.exists(infoFile):
-    #         writeMode = 'a'
-    #     else:
-    #         writeMode = 'w'
-    #     with open(infoFile, writeMode) as f:
-    #         routeName = routeFile.split('/')[-1]
-    #         f.write("\n{:s}: {:2.4f}".format(
-    #                 routeName,
-    #                 routeEff))
-
     def plot(self, ax, color='b'):
         # path
         cords = np.array(self.UTMcords)
         ax.plot(cords[:, 0], cords[:, 1], color=color)
         # start and end
-        ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
-        ax.scatter(cords[-2, 0], cords[-2, 1], color=color, marker='s')
+        if len(cords) > 3:
+            ax.scatter(cords[0, 0], cords[0, 1], color=color, marker='^')
+            ax.scatter(cords[-2, 0], cords[-2, 1], color=color, marker='s')
         if self.home is not None:
             # plot the home point as a 'o'
             HomeUTMx, HomeUTMy = utm.from_latlon(*self.home)[0:2]
@@ -305,7 +304,7 @@ class Route(object):
                     color=color, linestyle="--")
 
     def write(self, filename):
-        # writes the waypoints as a txt file
+        # writes the waypoints as a text file
         with filename.open('w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             # take off
