@@ -1,11 +1,14 @@
 #!bin/bash/python3
 from pathlib import Path
+# deep copying
+import copy
 import logging
 # plot
 import matplotlib.pyplot as plt
 # gis
 import utm
 # lib
+from wadl.lib.route import RouteSet
 from wadl.lib.maze import Maze
 from wadl.solver.solver import LinkSolver
 from wadl.mission import Mission
@@ -157,7 +160,7 @@ class Survey(object):
         else:
             plt.show()
 
-    def plan(self, write=True, showPlot=False):
+    def plan(self, write=True, showPlot=False, relinking=False):
         """ Plan the survey.
 
         Args:
@@ -165,15 +168,45 @@ class Survey(object):
                 the route. default True
             showPlot (bool): show the plot of the routes. default False.
         """
+        # create dict mapping maze to solver
+        self.solvers = dict()
         for task, maze in self.tasks.items():
             self.solver.setup(maze.graph)
             try:
                 solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
+                # store copy of paths
+                self.solvers[maze] = self.solver.copy
                 maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
 
+            except RuntimeError as e:
+                self.logger.error(f"failure in task: {maze.name}")
+                print(e)
+                print("\n")
+            self.logger.info(f"task {maze.name} finished")
+        self.logger.info("done planning")
+
+        # plot
+        self.plot(showPlot)
+        # call shutdowns and free stuff
+        if (not relinking):
+            self.close()
+
+    def relink(self, routeParameters, write=True, showPlot=False):
+        for task, maze in self.tasks.items():
+            curSolver = self.solvers[maze]
+            curSolver.metaGraph = copy.deepcopy(curSolver.metaGraphCopy)
+            subPaths = copy.deepcopy(curSolver.subPathsCopy)
+
+            maze.routeSet.routeParameters = routeParameters
+
+            try:
+                curSolver.mergeTiles(subPaths, maze.routeSet)
+                maze.calcRouteStats()
+                if write:
+                    maze.write(self.outDir)
             except RuntimeError as e:
                 self.logger.error(f"failure in task: {maze.name}")
                 print(e)

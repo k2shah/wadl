@@ -1,6 +1,7 @@
 # gen
 import time
 import logging
+import copy
 # lib
 from wadl.solver.SATproblem import SATproblem
 from wadl.solver.metaGraph import MetaGraph
@@ -85,7 +86,12 @@ class LinkSolver(BaseSolver):
     def solve(self, routeSet):
         startTime = time.time()
         # solve each tile
+        # save subPaths, metaGraph after initially found so that they can be reused
         subPaths = self.solveTiles()
+        self.subPathsCopy = copy.deepcopy(subPaths)
+        self.metaGraphCopy = copy.deepcopy(self.metaGraph)
+        # copy before merging tiles
+        self.copy = copy.deepcopy(self)
         # merge tiles based on the metaGraph selection
         self.mergeTiles(subPaths, routeSet)
         # return solution time
