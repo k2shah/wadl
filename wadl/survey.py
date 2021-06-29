@@ -25,6 +25,7 @@ class Survey(object):
 
     def __init__(self, name="survey", outDir=None):
         # get solver
+        self.solvers = dict()
         self.solver = LinkSolver()
         # save the name of the survey
         self.name = name
@@ -92,6 +93,8 @@ class Survey(object):
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)
+        # add to solvers
+        #self.solvers[self.tasks[file]] = LinkSolver()
 
     def __getitem__(self, idx):
         key = [*self.tasks][idx]
@@ -171,12 +174,16 @@ class Survey(object):
         # create dict mapping maze to solver
         self.solvers = dict()
         for task, maze in self.tasks.items():
+
             self.solver.setup(maze.graph)
-            try:
+            #self.solvers[maze].setup(maze.graph)
+            
+            try: # issue: maze is changed in setup
+                #solTime = self.solvers[maze].solve(routeSet=maze.routeSet)
                 solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
                 # store copy of paths
-                self.solvers[maze] = self.solver.copy
+                self.solvers[maze] = copy.deepcopy(self.solver)
                 maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
@@ -190,20 +197,20 @@ class Survey(object):
 
         # plot
         self.plot(showPlot)
-        # call shutdowns and free stuff
+        # call shutdowns
         if (not relinking):
             self.close()
 
     def relink(self, routeParameters, write=True, showPlot=False):
+        # reset route parameters and relink subPaths
         for task, maze in self.tasks.items():
             curSolver = self.solvers[maze]
-            curSolver.metaGraph = copy.deepcopy(curSolver.metaGraphCopy)
-            subPaths = copy.deepcopy(curSolver.subPathsCopy)
+            #curSolver.metaGraph = copy.deepcopy(curSolver.metaGraphCopy) # dont need?
 
             maze.routeSet.routeParameters = routeParameters
 
             try:
-                curSolver.mergeTiles(subPaths, maze.routeSet)
+                curSolver.mergeTiles(curSolver.subPaths, maze.routeSet)
                 maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)

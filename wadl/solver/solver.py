@@ -87,13 +87,9 @@ class LinkSolver(BaseSolver):
         startTime = time.time()
         # solve each tile
         # save subPaths, metaGraph after initially found so that they can be reused
-        subPaths = self.solveTiles()
-        self.subPathsCopy = copy.deepcopy(subPaths)
-        self.metaGraphCopy = copy.deepcopy(self.metaGraph)
-        # copy before merging tiles
-        self.copy = copy.deepcopy(self)
+        self.subPaths = self.solveTiles()
         # merge tiles based on the metaGraph selection
-        self.mergeTiles(subPaths, routeSet)
+        self.mergeTiles(self.subPaths, routeSet)
         # return solution time
         solveTime = time.time()-startTime
         self.logger.info("solution time: {:2.5f} sec".format(solveTime))
