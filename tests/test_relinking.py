@@ -5,7 +5,7 @@ from pathlib import Path
 
 # make sure relinked paths are same as those completely recalculated
 
-
+@pytest.fixture
 def stanford(speed):
     """test solver class """
     # build survey test fixture
@@ -53,6 +53,9 @@ def stanford(speed):
     return survey
 
 def relink():
+    '''
+    resets route speed twice, and verifies new number of routes is same as would be originally recalculated
+    '''
     from wadl.lib.route import RouteParameters
     file = Path(__file__).parent.parent / "example" / "data" / "stanford.csv"
 
@@ -73,10 +76,10 @@ def relink():
     surveyComp = stanford(500)
     surveyComp.plan(write=False)
 
+    # subtracts initial number of routes because routeSet isn't being rewritten during relinking
     secondary = len(survey.tasks[file].routeSet)-initial
 
-    print(len(surveyComp.tasks[file].routeSet))
-    print(len(survey.tasks[file].routeSet)-initial)
+    assert(len(surveyComp.tasks[file].routeSet) == len(survey.tasks[file].routeSet)-initial), "# routes mismatch"
 
     # reset route paramters
     routeParams = RouteParameters()
@@ -87,35 +90,8 @@ def relink():
     surveyComp = stanford(100)
     surveyComp.plan(write=False)
 
-    print(len(surveyComp.tasks[file].routeSet))
-    print(len(survey.tasks[file].routeSet)-initial-secondary)
-
-    '''
-    relinked = []
-    original = []
-
-    for speed in speeds:
-        routeParams = RouteParameters()
-        routeParams["speed"] = speed  # m/s
-
-        survey.relink(routeParams)
-
-        surveyComp = stanford(speed)
-        surveyComp.plan(write=False)
-
-        if (len(relinked) != 0):
-            relinked.append(len(survey.tasks[file].routeSet) - relinked[-1])
-        else:
-            relinked.append(len(survey.tasks[file].routeSet)/2)
-        original.append(len(surveyComp.tasks[file].routeSet))
-
-    print(original)
-    print(relinked)
-    '''
+    assert(len(surveyComp.tasks[file].routeSet) == len(survey.tasks[file].routeSet)-initial-secondary), "# routes mismatch"
     
-    
-
-relink()
 
 
 

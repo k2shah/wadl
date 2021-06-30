@@ -26,7 +26,7 @@ class Survey(object):
     def __init__(self, name="survey", outDir=None):
         # get solver
         self.solvers = dict()
-        self.solver = LinkSolver()
+        #self.solver = LinkSolver()
         # save the name of the survey
         self.name = name
         # make the output directory
@@ -94,7 +94,7 @@ class Survey(object):
 
         self.tasks[file] = Maze(file, **kwargs)
         # add to solvers
-        #self.solvers[self.tasks[file]] = LinkSolver()
+        self.solvers[self.tasks[file]] = LinkSolver()
 
     def __getitem__(self, idx):
         key = [*self.tasks][idx]
@@ -106,6 +106,7 @@ class Survey(object):
     def at(self, sliced):
         return self.__getitem__(sliced)
 
+    # where is this used?
     def setSolver(self, solver):
         self.solver = solver
 
@@ -116,7 +117,9 @@ class Survey(object):
             parameters (SolverParamters): sets the solver settings
 
         """
-        self.solver.parameters = parameters
+        for task, maze in self.tasks.items():
+            self.solvers[maze].parameters = parameters
+        #self.solver.parameters = parameters
 
     def setKeyPoints(self, points):
         """Set the keyPoints in the survey.
@@ -172,18 +175,18 @@ class Survey(object):
             showPlot (bool): show the plot of the routes. default False.
         """
         # create dict mapping maze to solver
-        self.solvers = dict()
+        #self.solvers = dict()
         for task, maze in self.tasks.items():
 
-            self.solver.setup(maze.graph)
-            #self.solvers[maze].setup(maze.graph)
+            #self.solver.setup(maze.graph)
+            self.solvers[maze].setup(maze.graph)
             
             try: # issue: maze is changed in setup
-                #solTime = self.solvers[maze].solve(routeSet=maze.routeSet)
-                solTime = self.solver.solve(routeSet=maze.routeSet)
+                solTime = self.solvers[maze].solve(routeSet=maze.routeSet)
+                #solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
                 # store copy of paths
-                self.solvers[maze] = copy.deepcopy(self.solver)
+                #self.solvers[maze] = copy.deepcopy(self.solver)
                 maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
