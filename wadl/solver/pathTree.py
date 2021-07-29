@@ -36,6 +36,7 @@ class PathTree(MetaGraph):
         # gets the UTM of a point
         return self.baseGraph.nodes[pt]["UTM"]
 
+    # create a node for every subPath, link to "home"
     def makeNodes(self, routeSet):
         # make the initial nodes of the graph
         utmHome = [utm.from_latlon(*home)[0:2] for home in routeSet.home]
@@ -56,6 +57,7 @@ class PathTree(MetaGraph):
     def makeEdges(self):
         for e1, e2 in self.pathGraph.edges:
             if e1 in self.tree and e2 in self.tree:
+                #edge between adjacent nodes if first one in edge list is closer to home dist
                 if self.tree.nodes[e1]["homeDist"] < self.tree.nodes[e2]["homeDist"]:
                     self.tree.add_edge(e1, e2)
 
@@ -112,11 +114,13 @@ class PathTree(MetaGraph):
                 # fill the route
                 while not queue.empty():
                     n = queue.get()
+                    # predecessors of node
                     inEdges = sorted(self.tree.in_edges(n), key=self.inScore)
                     for n_adj, _ in inEdges:
                         if n_adj == 'home' or self.groups[n_adj] != 0:
                             continue
                         # test the new route
+                        # subNodes of the route are in the metaTree for this iteration
                         metaTree.add_edge(n, n_adj)
                         candiate, edgeList = self.stitch(metaTree)
                         passed, newRoute = routeSet.check(candiate)
@@ -134,6 +138,7 @@ class PathTree(MetaGraph):
                             edgeList = self.updateHomeEdge(metaTree)
 
                 # when done with filling
+                route.group = groupIdx
                 groupIdx += 1
                 if route is None:
                     errMsg = "critcal errror is path linking"

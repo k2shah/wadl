@@ -148,6 +148,10 @@ class Route(object):
         self.UTMcords = cords  # cords in UTM
         self.UTMZone = zone
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
+        self.uncompleted = None
+        self.lastNode = None
+        self.linked = False
+        self.group = -1
         if home is not None:
             self.setHome(home)  # set home pt (in GPS)
         else:

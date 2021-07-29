@@ -1,7 +1,8 @@
 #!bin/bash/python3
 from pathlib import Path
 # deep copying
-import copy
+import numpy as np
+import random
 import logging
 # plot
 import matplotlib.pyplot as plt
@@ -175,7 +176,6 @@ class Survey(object):
             showPlot (bool): show the plot of the routes. default False.
         """
         # create dict mapping maze to solver
-        #self.solvers = dict()
         for task, maze in self.tasks.items():
 
             #self.solver.setup(maze.graph)
@@ -186,7 +186,6 @@ class Survey(object):
                 #solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
                 # store copy of paths
-                #self.solvers[maze] = copy.deepcopy(self.solver)
                 maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
@@ -228,6 +227,105 @@ class Survey(object):
         self.plot(showPlot)
         # call shutdowns and free stuff
         self.close()
+
+    
+    def partialComplete(self, completePct):
+        # randomly remove last portion of each path to simulate partial completion
+        for file, maze in self.tasks.items():
+            for i, route in enumerate(maze.routeSet.routes):
+                x = random.random()
+                # if k == 2 or k == 8 or k == 0 or k==4:
+                #     x = .8
+                # else:
+                #     x = .1
+                # of routes will complete
+                if x > completePct:
+                    print("broken: ", i)
+                    # completes random proportion of route
+                    y = random.randint(0, len(route.UTMcords))
+                    #y = 25
+                    route.lastNode = y
+                    route.uncompleted = route.UTMcords[y:]
+                    # link start to end (generate cycle) and reverse
+                    print(len(route.uncompleted))
+                    route.uncompleted.append(route.uncompleted[0])
+                    route.uncompleted.reverse()
+                    route.UTMcords = route.UTMcords[:y]
+
+    def recomplete(self):
+        # list with cords for new routes
+        # randomly remove last portion of each path to simulate partial completion
+        print("recomplete")
+        for file, maze in self.tasks.items():
+            new_routes = []
+            # preserve only routes that are uncompleted
+            maze.routeSet.routes = list(filter(lambda x: x.uncompleted is not None, maze.routeSet.routes))
+            lost_groups=[]
+            linked = []
+            # for each route, go through all the nodes, check what connects to them, try to merge route
+            for i in maze.routeSet.routes:
+                if i.group in linked:
+                    continue
+
+                lost_groups.append(i.group)
+                linkable = []
+
+                # remember prev attributes
+                uncompleted = i.uncompleted
+
+                #find the closest point to home
+                i.UTM2GPS(i.UTMZone)
+                (dist, idx) = min([(i.DistGPS(np.array(i.home), np.array(pt)), idx)
+                         for idx, pt in enumerate(i.GPScords)])
+                i.UTMcords = uncompleted[idx:] + uncompleted[1:idx+1]
+
+                # find all nodes in group
+                route_subnodes = list(filter(lambda x: self.solvers[maze].metaGraph.groups[x] == i.group, self.solvers[maze].metaGraph.tree.nodes))
+                for node in route_subnodes:
+                    # check neighbors if in another lost group
+                    for adj in self.solvers[maze].metaGraph.tree.neighbors(node):
+                        if self.solvers[maze].metaGraph.groups[adj] in lost_groups and self.solvers[maze].metaGraph.groups[adj] != i.group:
+                            linkable.append(self.solvers[maze].metaGraph.groups[adj])
+
+                _, new = maze.routeSet.check(i.UTMcords)
+
+                for j in maze.routeSet.routes:
+                    if j.group in linkable:
+                        print("attempting to link: ")
+                        print(i.group, " ", j.group)
+
+                        # link at closest point (hacky)
+                        cur_min = 99999999999
+                        i_idx=0
+                        j_idx=0
+                        for idx2, pt1 in enumerate(j.GPScords):
+                            (dist, idx1) = min([(i.DistGPS(np.array(pt2), np.array(pt1)), idx)
+                                for idx, pt2 in enumerate(i.GPScords)])
+                            if dist < cur_min:
+                                cur_min = dist
+                                i_idx=idx1
+                                j_idx=idx2
+
+                        linked = i.UTMcords[:i_idx] + j.UTMcords[:j_idx] + i.UTMcords[i_idx:] + j.UTMcords[j_idx:]
+
+                        passed, candidate = maze.routeSet.check(linked)
+                        if passed:
+                            i.UTMcords = linked
+                            new = candidate
+                            linked.append(j.group)
+                        print(passed)
+
+                new.group = i.group
+                new_routes.append(new)
+
+            maze.routeSet.routes = []
+            for route in new_routes:
+                if route.group not in linked:
+                    maze.routeSet.push(route)
+
+
+
+
 
     def plot(self, showPlot=True):
         # plot task
