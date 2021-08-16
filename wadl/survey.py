@@ -1,11 +1,14 @@
 #!bin/bash/python3
 from pathlib import Path
+# deep copying
+import copy
 import logging
 # plot
 import matplotlib.pyplot as plt
 # gis
 import utm
 # lib
+from wadl.lib.route import RouteSet
 from wadl.lib.maze import Maze
 from wadl.solver.solver import LinkSolver
 from wadl.mission import Mission
@@ -22,7 +25,8 @@ class Survey(object):
 
     def __init__(self, name="survey", outDir=None):
         # get solver
-        self.solver = LinkSolver()
+        self.solvers = dict()
+        #self.solver = LinkSolver()
         # save the name of the survey
         self.name = name
         # make the output directory
@@ -89,6 +93,8 @@ class Survey(object):
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)
+        # add to solvers
+        self.solvers[self.tasks[file]] = LinkSolver()
 
     def __getitem__(self, idx):
         key = [*self.tasks][idx]
@@ -100,6 +106,7 @@ class Survey(object):
     def at(self, sliced):
         return self.__getitem__(sliced)
 
+    # where is this used?
     def setSolver(self, solver):
         self.solver = solver
 
@@ -110,7 +117,9 @@ class Survey(object):
             parameters (SolverParamters): sets the solver settings
 
         """
-        self.solver.parameters = parameters
+        for task, maze in self.tasks.items():
+            self.solvers[maze].parameters = parameters
+        #self.solver.parameters = parameters
 
     def setKeyPoints(self, points):
         """Set the keyPoints in the survey.
@@ -157,7 +166,7 @@ class Survey(object):
         else:
             plt.show()
 
-    def plan(self, write=True, showPlot=False):
+    def plan(self, write=True, showPlot=False, relinking=False):
         """ Plan the survey.
 
         Args:
@@ -165,15 +174,49 @@ class Survey(object):
                 the route. default True
             showPlot (bool): show the plot of the routes. default False.
         """
+        # create dict mapping maze to solver
+        #self.solvers = dict()
         for task, maze in self.tasks.items():
-            self.solver.setup(maze.graph)
-            try:
-                solTime = self.solver.solve(routeSet=maze.routeSet)
+
+            #self.solver.setup(maze.graph)
+            self.solvers[maze].setup(maze.graph)
+            
+            try: # issue: maze is changed in setup
+                solTime = self.solvers[maze].solve(routeSet=maze.routeSet)
+                #solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
+                # store copy of paths
+                #self.solvers[maze] = copy.deepcopy(self.solver)
                 maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
 
+            except RuntimeError as e:
+                self.logger.error(f"failure in task: {maze.name}")
+                print(e)
+                print("\n")
+            self.logger.info(f"task {maze.name} finished")
+        self.logger.info("done planning")
+
+        # plot
+        self.plot(showPlot)
+        # call shutdowns
+        if (not relinking):
+            self.close()
+
+    def relink(self, routeParameters, write=True, showPlot=False):
+        # reset route parameters and relink subPaths
+        for task, maze in self.tasks.items():
+            curSolver = self.solvers[maze]
+            #curSolver.metaGraph = copy.deepcopy(curSolver.metaGraphCopy) # dont need?
+
+            maze.routeSet.routeParameters = routeParameters
+
+            try:
+                curSolver.mergeTiles(curSolver.subPaths, maze.routeSet)
+                maze.calcRouteStats()
+                if write:
+                    maze.write(self.outDir)
             except RuntimeError as e:
                 self.logger.error(f"failure in task: {maze.name}")
                 print(e)
