@@ -52,6 +52,7 @@ class Maze(Fence):
         self.step = step
       
         # build grid graph
+        self.UTM2Grid= dict()
         self.buildGrid()
         self.nNode = len(self.graph)
         self.logger.info(f"generated maze with {self.nNode} nodes")
@@ -108,6 +109,7 @@ class Maze(Fence):
                     utmCord = self.R.T @ np.array([x, y])
                     # store utm cord in graph
                     self.graph.nodes[(i, j)]['UTM'] = utmCord
+                    self.UTM2Grid[(int(utmCord[0]), int(utmCord[1]))] = (i,j)
                     self.graph.nodes[(i, j)]['priority'] = False
                 else:
                     self.graph.remove_node((i, j))

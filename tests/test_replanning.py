@@ -1,12 +1,11 @@
 import pytest
-import copy
 # path
 from pathlib import Path
 
 # make sure relinked paths are same as those completely recalculated
 
 #@pytest.fixture
-def stanford(speed):
+def stanford():
     """test solver class """
     # build survey test fixture
     from wadl.survey import Survey
@@ -31,7 +30,7 @@ def stanford(speed):
     # route paramters
     routeParams = RouteParameters()
     routeParams["limit"] = 30*60,  # s
-    routeParams["speed"] = speed  # m/s
+    routeParams["speed"] = 10  # m/s
     routeParams["altitude"] = 50.0  # m
     # add the tasks
 
@@ -46,54 +45,28 @@ def stanford(speed):
     solverParams["subGraph_size"] = 20
     solverParams["SATBound_offset"] = 4
     solverParams["timeout"] = 30
+    solverParams["stitch"] = "tree"
 
     # set the solver parameters
     survey.setSolverParamters(solverParams)
 
     return survey
 
-def relink():
+def replan():
     '''
     resets route speed twice, and verifies new number of routes is same as would be originally recalculated
     '''
     from wadl.lib.route import RouteParameters
     file = Path(__file__).parent.parent / "example" / "data" / "stanford.csv"
 
-    survey = stanford(5)
+    for i in range(1):
+        survey = stanford()
+        survey.plan(write=False)
+        survey.partialComplete(0.4)
+        survey.recompleteBFS()
+        for _, maze in survey.tasks.items():
+            metaGraph = survey.solvers[maze].metaGraph
+            assert(metaGraph.oldTotal-metaGraph.merges==metaGraph.newTotal), "# merging error"
+            print("success")
 
-    survey.plan(write=False)
-
-    initial = len(survey.tasks[file].routeSet)
-    
-    # reset route paramters
-    routeParams = RouteParameters()
-    routeParams["speed"] = 500  # m/s
-
-    survey.relink(routeParams, showPlot=True)
-    
-    # corroborate with initial speed 500
-
-    surveyComp = stanford(500)
-    surveyComp.plan(write=False)
-
-    # subtracts initial number of routes because routeSet isn't being rewritten during relinking
-    secondary = len(survey.tasks[file].routeSet)-initial
-
-    assert(len(surveyComp.tasks[file].routeSet) == len(survey.tasks[file].routeSet)-initial), "# routes mismatch"
-
-    # reset route paramters
-    routeParams = RouteParameters()
-    routeParams["speed"] = 100  # m/s
-
-    survey.relink(routeParams, showPlot=True)
-
-    surveyComp = stanford(100)
-    surveyComp.plan(write=False)
-
-    assert(len(surveyComp.tasks[file].routeSet) == len(survey.tasks[file].routeSet)-initial-secondary), "# routes mismatch"
-    
-
-relink()
-
-
-
+replan()

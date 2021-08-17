@@ -102,7 +102,9 @@ class RouteSet(object):
             the Route otherwise
 
         """
+        #print(cords)
         route = Route(cords, self.zone, self.home)
+        #print(route.UTMcords)
         route.build(self.routeParameters, priority=self.data["priority"])
         if route.check():
             return True, route
@@ -144,8 +146,10 @@ class Route(object):
         # loggers
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
+        #print(cords)
 
         self.UTMcords = cords  # cords in UTM
+        #print(self.UTMcords)
         self.UTMZone = zone
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
         self.uncompleted = None
@@ -171,6 +175,38 @@ class Route(object):
         e1, n1, _, _ = utm.from_latlon(*gps1)
         return np.linalg.norm([e0-e1, n0-n1, alt0-alt1])
 
+    def approx(self, a, b):
+        # accepts 2 utm points and return true if they are approximately the same value
+        if abs(a[0]-b[0]) < 0.1 and abs(a[1]-b[1]) < 0.1:
+            return True
+        return False
+
+    def setMaze(self, maze):
+        self.maze = maze
+
+    def unstreamline(self, metaGraph, i):
+        j=i+1
+        if len(self.UTMcords)<2 or j >= len(self.UTMcords) or i < 0:
+            return
+        maze=self.maze
+        oldLen = len(self.UTMcords)
+        # adds intermediate pts between two utm cords in a route (i and j are adjacent indices)
+        iGrid = maze.UTM2Grid[(int(self.UTMcords[i][0]),int(self.UTMcords[i][1]))]
+        jGrid = maze.UTM2Grid[(int(self.UTMcords[j][0]),int(self.UTMcords[j][1]))]
+        new = []
+        if abs(iGrid[0]-jGrid[0]) > 1 and iGrid[1]==jGrid[1]:
+            sign = -(iGrid[0]-jGrid[0])/abs(iGrid[0]-jGrid[0])
+            for d in range(1,abs(iGrid[0]-jGrid[0])):
+                utmPt = metaGraph.getUTM((iGrid[0]+sign*d,iGrid[1]))
+                new += [(utmPt[0],utmPt[1])]
+        elif abs(iGrid[1]-jGrid[1]) > 1 and iGrid[0]==jGrid[0]:
+            sign = -(iGrid[1]-jGrid[1])/abs(iGrid[1]-jGrid[1])
+            for d in range(1,abs(iGrid[1]-jGrid[1])):
+                utmPt = metaGraph.getUTM((iGrid[0],iGrid[1]+d*sign))
+                new.append((utmPt[0],utmPt[1]))
+        nextUTM = self.UTMcords[:j] + new + self.UTMcords[j:]
+        self.UTMcords = nextUTM
+
     def UTM2GPS(self, zone):
         # converts all the UTM cords to GPS
         self.GPScords = [utm.to_latlon(*cord, *zone) for cord in self.UTMcords]
@@ -192,7 +228,8 @@ class Route(object):
         self.logger.debug(f"home set to {self.home}")
 
         # shift and wrap
-        self.GPScords = self.GPScords[idx:] + self.GPScords[1:idx+1]
+        #self.GPScords = self.GPScords[idx:] + self.GPScords[1:idx+1]
+        self.GPScords = self.GPScords[idx:] + self.GPScords[:idx+1]
         # sync the utm
         self.GPS2UTM()
 
@@ -295,6 +332,7 @@ class Route(object):
     def plot(self, ax, color='b'):
         # path
         cords = np.array(self.UTMcords)
+        #print(cords)
         ax.plot(cords[:, 0], cords[:, 1], color=color)
         # start and end
         if len(cords) > 3:

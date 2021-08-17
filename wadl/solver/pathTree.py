@@ -3,6 +3,8 @@ from collections import OrderedDict
 from queue import SimpleQueue
 # math
 import numpy as np
+# nest for loop
+from itertools import product
 # graph
 import networkx as nx
 # plot
@@ -32,9 +34,26 @@ class PathTree(MetaGraph):
             self.logger.error(errMsg)
             raise RuntimeError(errMsg)
 
+    def rebuildTree(self, routeSet):
+        # rebuilding tree for offline replanning
+        # make a tree from the base graph
+        self.tree = nx.DiGraph()
+        self.remakeNodes(routeSet)
+        self.remakeEdges()
+        # CHECK IF GRAPH IS DAG
+        try:
+            assert nx.is_directed_acyclic_graph(self.tree)
+        except AssertionError:
+            errMsg = "graph is not DAG"
+            self.logger.error(errMsg)
+            raise RuntimeError(errMsg)
+
     def getUTM(self, pt):
         # gets the UTM of a point
         return self.baseGraph.nodes[pt]["UTM"]
+
+    def setMaze(self, maze):
+        self.maze=maze
 
     # create a node for every subPath, link to "home"
     def makeNodes(self, routeSet):
@@ -54,12 +73,39 @@ class PathTree(MetaGraph):
                                )
             self.tree.add_edge("home", tile)
 
+    def remakeNodes(self, routeSet):
+        # remaking nodes for offline replanning
+        # make the initial nodes of the graph
+        utmHome = [utm.from_latlon(*home)[0:2] for home in routeSet.home]
+        self.tree.add_node("home", UTM=utmHome, homeDist=0)
+        #create tile for every lost path
+        for tile, path in enumerate(routeSet.routes):
+            # unpack route metrics into the node
+            self.tree.add_node(tile,
+                               UTM=path.UTMcords,
+                               homeDist=path.len_tran,
+                               homeTime=path.ToF_tran,
+                               survDist=path.len_surv,
+                               survTime=path.ToF_surv
+                               )
+            self.tree.add_edge("home", tile)
+
     def makeEdges(self):
         for e1, e2 in self.pathGraph.edges:
             if e1 in self.tree and e2 in self.tree:
                 #edge between adjacent nodes if first one in edge list is closer to home dist
                 if self.tree.nodes[e1]["homeDist"] < self.tree.nodes[e2]["homeDist"]:
                     self.tree.add_edge(e1, e2)
+
+    def remakeEdges(self):
+        # reamke nodes for offline replanning
+        for n1 in self.tree.nodes:
+            for n2 in self.tree.nodes:
+                #edge between adjacent nodes if first one in edge list is closer to home dist
+                if n1=="home" or n2=="home":
+                    continue
+                if self.tree.nodes[n1]["homeDist"] < self.tree.nodes[n2]["homeDist"]:
+                    self.tree.add_edge(n1, n2)
 
     def minHomeDist(self, home, path):
         # rotates the path to find the smallest home transfer distance
@@ -116,6 +162,7 @@ class PathTree(MetaGraph):
                     n = queue.get()
                     # predecessors of node
                     inEdges = sorted(self.tree.in_edges(n), key=self.inScore)
+                    #inEdges = sorted(self.tree.in_edges(n), key=lambda x: x[0])
                     for n_adj, _ in inEdges:
                         if n_adj == 'home' or self.groups[n_adj] != 0:
                             continue
@@ -151,6 +198,240 @@ class PathTree(MetaGraph):
         nGroups = groupIdx-1
         return nGroups
 
+    def getClosest(self, i, j, route):
+        # accept two complete lists of GPS cords i, j and a route object
+        # return the closest pair of points in  i, j
+        # cur_min = float('inf')
+        # i_idx=0
+        # j_idx=0
+        # for idx2, pt2 in enumerate(j):
+        #     (dist, idx1) = min([(route.DistGPS(np.array(pt2), np.array(pt)), idx)
+        #          for idx, pt in enumerate(i)])
+        #     if dist < cur_min:
+        #         cur_min = dist
+        #         i_idx=idx1
+        #         j_idx=idx2
+        
+        (dist, i_idx, j_idx) = min([(route.DistGPS(np.array(p1), np.array(p2)), i1, i2)
+            for (i1, p1), (i2, p2) in product(enumerate(i),enumerate(j))])
+
+        return i_idx, j_idx, dist
+
+    def getClosestDist(self,i,j,route):
+        # returns the closest distance between points in a pair of lists i, j
+        _,_, dist = self.getClosest(i,j,route)
+        return dist
+
+    def closestHome(self, r):
+        # reorders path for route r so that first point is closest to home
+        r.UTM2GPS(r.UTMZone)
+        (dist, idx) = min([(r.DistGPS(np.array(r.home), np.array(pt)), idx)
+            for idx, pt in enumerate(r.GPScords)])
+
+
+
+
+        for i in range(idx-1,idx+1):
+            if i>=0 and i < len(r.UTMcords)-1:
+                r.unstreamline(self,i)
+        r.UTMcords = r.UTMcords[idx:] + r.UTMcords[:idx]
+
+
+    def mergePaths(self,i,j):
+        # accepts a pair of route objects i, j and merges there paths at closest point
+        # returns a list of UTM cords
+        candiate=[]
+        i_idx, j_idx, _ = self.getClosest(i.GPScords,j.GPScords, i)
+ 
+        iPrev=len(i.UTMcords)
+        iBack=i_idx-1
+        if iBack>=0:
+            i.unstreamline(self,i_idx-1)
+        else:
+            iBack=0
+        if i_idx+len(i.UTMcords)-iPrev+1 < len(i.UTMcords)-1:
+            i.unstreamline(self,i_idx+len(i.UTMcords)-iPrev+1)
+
+        jPrev=len(j.UTMcords)
+        jBack=j_idx-1
+        if jBack>=0:
+            j.unstreamline(self,j_idx-1)
+        else:
+            jBack=0
+        if j_idx+len(j.UTMcords)-jPrev+1 < len(j.UTMcords)-1:
+            j.unstreamline(self,j_idx+len(j.UTMcords)-jPrev+1)
+
+        iVals=range(iBack, i_idx+len(i.UTMcords)-iPrev+2)
+        iVals = list(filter(lambda x: x < len(i.UTMcords) and x >= 0, iVals))
+        jVals=range(jBack, j_idx+len(j.UTMcords)-jPrev+2)
+        jVals = list(filter(lambda x: x < len(j.UTMcords) and x >= 0, jVals))
+     
+        i.UTM2GPS(i.UTMZone)
+        j.UTM2GPS(j.UTMZone)
+
+        # find closest point
+        # cur_min = float('inf')
+        i_idx=0
+        i_idx2=0
+        j_idx=0
+        j_idx2=0
+        # if len(iVals)!=0 and len(jVals)!=0:
+        #     for j1, j2, i1, i2 in product(jVals,jVals,iVals,iVals):
+        #         if abs(j1-j2)==1 and abs(i1-i2)==1:
+        #             iDist=i.DistGPS(np.array(i.GPScords[i1]), np.array(j.GPScords[j1]))
+        #             jDist=j.DistGPS(np.array(i.GPScords[i2]), np.array(j.GPScords[j2]))
+        #             if iDist+jDist<cur_min:
+        #                 cur_min=iDist+jDist
+        #                 i_idx=i1
+                        # i_idx2=i2
+                        # j_idx=j1
+                        # j_idx2=j2
+        if len(iVals)!=0 and len(jVals)!=0:
+            (dist, i_idx, i_idx2, j_idx, j_idx2) = min([(i.DistGPS(np.array(i.GPScords[i1]), np.array(j.GPScords[j1]))+j.DistGPS(np.array(i.GPScords[i2]), np.array(j.GPScords[j2])), i1, i2, j1, j2)
+                for i1,i2,j1,j2 in product(iVals,iVals,jVals,jVals) if abs(j1-j2)==1 and abs(i1-i2)==1])
+
+        #ensure paths do not cross at merging
+        if i_idx<i_idx2:
+            if j_idx2 > j_idx:
+                prev=len(j.UTMcords)
+                j.UTMcords.reverse()
+                j_idx=len(j.UTMcords)-j_idx-1
+                j.unstreamline(self,j_idx-1)
+                j_idx+=len(j.UTMcords)-prev
+        else:
+            if j_idx2 < j_idx:
+                prev=len(j.UTMcords)
+                j.UTMcords.reverse()
+                j_idx=len(j.UTMcords)-j_idx2-1
+                j.unstreamline(self,j_idx-1)
+                j_idx+=len(j.UTMcords)-prev
+        j.UTM2GPS(j.UTMZone)
+
+        #ensure clean merge
+        # iwaypoints = []
+        # for pt in i.UTMcords:
+        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
+        # print(iwaypoints)
+        # iwaypoints = []
+        # for pt in j.UTMcords:
+        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
+        # print(iwaypoints)
+        i.unstreamline(self,min(i_idx,i_idx2))
+        j.unstreamline(self,j_idx-1)
+        # iwaypoints = []
+        # for pt in i.UTMcords:
+        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
+        # print(iwaypoints)
+        # iwaypoints = []
+        # for pt in j.UTMcords:
+        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
+        # print(iwaypoints)
+
+        candiate = i.UTMcords[:min(i_idx,i_idx2)+1] + j.UTMcords[j_idx:] + j.UTMcords[:j_idx] + i.UTMcords[min(i_idx,i_idx2)+1:]
+
+        # iwaypoints = []
+        # for pt in candiate:
+        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
+        # print(iwaypoints)
+
+        #streamline path
+        waypoints = []
+        for pt in candiate:
+            waypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
+        candiate = [self.getUTM(pt) for pt in self.steamlinePath(waypoints)]
+        return candiate
+
+
+    def repartition(self, routeSet):
+        # find groups for each tile
+        routes = []
+        old = []
+        self.oldTotal = len(routeSet.routes)
+        self.merges = 0
+        for r in routeSet.routes:
+            #find the closest point to home
+            r.UTM2GPS(r.UTMZone)
+            self.closestHome(r)
+            old.append(r)
+
+        self.groups = OrderedDict()
+        # sort nodes based on dist from closest home pt
+        for node in sorted(self.tree.nodes,
+                           key=lambda x: self.tree.nodes[x]["homeDist"],
+                           reverse=True):
+            self.groups[node] = 0
+        groupIdx = 1
+   
+        for node in self.groups:
+            if node == 'home':
+                continue
+            group = self.groups[node]
+            if group == 0:
+                # start building a new group
+                queue = SimpleQueue()
+                self.groups[node] = groupIdx
+                self.logger.debug(f"route idx: {groupIdx}")
+                queue.put(node)
+                route = old[node]
+                cur_cords = route.UTMcords
+                # fill the route
+                while not queue.empty():
+                    n = queue.get()
+                    print("cur node: ", n)
+                    # predecessors of node
+
+                    edges = list(filter(lambda x: x[0] != "home",self.tree.in_edges(n)))
+                    inEdges = sorted(edges, key=lambda x: self.getClosestDist(routeSet.routes[x[0]].GPScords,routeSet.routes[n].GPScords,routeSet.routes[n]))
+
+                    for n_adj, _ in inEdges:
+                        if n_adj == 'home' or self.groups[n_adj] != 0:
+                            continue
+                        
+                        i = routeSet.routes[n]
+                        i.UTMcords = cur_cords
+                        j = routeSet.routes[n_adj]
+
+                        # merging routes here
+                        print("attempting: ", n, n_adj)
+
+                        candiate = self.mergePaths(i,j)
+
+                        passed, newRoute = routeSet.check(candiate)
+                        print(passed)
+
+                        if passed:
+                            # accept the node
+                            self.merges+=1
+                            i.UTMcords = candiate
+                            j.UTMcords = candiate
+                            cur_cords = candiate
+                            queue.put(n_adj)
+                            self.logger.debug(f"accepted {node}")
+                            self.groups[n_adj] = groupIdx
+                            # save the route
+                            route = newRoute
+                        else:
+                            # remove if didn't work
+                            self.logger.debug(f"rejected {node}")
+
+                # when done with filling
+                route.group = groupIdx
+                groupIdx += 1
+                if route is None:
+                    errMsg = "critcal errror is path linking"
+                    self.logger.error(errMsg)
+                    raise RuntimeError(errMsg)
+                else:
+                    routes.append(route)
+        nGroups = groupIdx-1
+        routeSet.routes = []
+        for i, r in enumerate(routes):
+            r.setMaze(self.maze)
+            self.closestHome(r)
+            routeSet.push(r)
+        self.newTotal = nGroups
+        return nGroups
+
     def inScore(self, edge):
         # returns the in degree of the edge minus the assigned groups
         # essentially returns the number of free nodes into this node
@@ -178,6 +459,7 @@ class PathTree(MetaGraph):
                 continue
             path = self.insertTile(path, edge[0], edge[1])
         return self.unravelPath(path), edgeList
+
 
     def updateHomeEdge(self, tree):
         """checks the home edge on the meta tree and updates it if a new node
@@ -254,6 +536,8 @@ class PathTree(MetaGraph):
                 # get the world pt
                 waypoints.append(self.subPaths[node][idx])
         # stream line the path and convert to UTM
+        # x = [self.getUTM(pt) for pt in waypoints]
+        # print(x)
         return [self.getUTM(pt) for pt in self.steamlinePath(waypoints)]
 
     def plot(self, ax):
