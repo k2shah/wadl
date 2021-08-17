@@ -201,16 +201,6 @@ class PathTree(MetaGraph):
     def getClosest(self, i, j, route):
         # accept two complete lists of GPS cords i, j and a route object
         # return the closest pair of points in  i, j
-        # cur_min = float('inf')
-        # i_idx=0
-        # j_idx=0
-        # for idx2, pt2 in enumerate(j):
-        #     (dist, idx1) = min([(route.DistGPS(np.array(pt2), np.array(pt)), idx)
-        #          for idx, pt in enumerate(i)])
-        #     if dist < cur_min:
-        #         cur_min = dist
-        #         i_idx=idx1
-        #         j_idx=idx2
         
         (dist, i_idx, j_idx) = min([(route.DistGPS(np.array(p1), np.array(p2)), i1, i2)
             for (i1, p1), (i2, p2) in product(enumerate(i),enumerate(j))])
@@ -228,21 +218,14 @@ class PathTree(MetaGraph):
         (dist, idx) = min([(r.DistGPS(np.array(r.home), np.array(pt)), idx)
             for idx, pt in enumerate(r.GPScords)])
 
-
-
-
-        for i in range(idx-1,idx+1):
-            if i>=0 and i < len(r.UTMcords)-1:
-                r.unstreamline(self,i)
+        lenPrev = len(r.UTMcords)
+        r.unstreamline(self,idx-1)
+        idx+=len(r.UTMcords)-lenPrev
         r.UTMcords = r.UTMcords[idx:] + r.UTMcords[:idx]
 
-
-    def mergePaths(self,i,j):
-        # accepts a pair of route objects i, j and merges there paths at closest point
-        # returns a list of UTM cords
-        candiate=[]
-        i_idx, j_idx, _ = self.getClosest(i.GPScords,j.GPScords, i)
- 
+    def mergePts(self, i, i_idx):
+        # prepare route object i to be streamlined at index i_idx
+        # return list of mergeable pts
         iPrev=len(i.UTMcords)
         iBack=i_idx-1
         if iBack>=0:
@@ -252,41 +235,33 @@ class PathTree(MetaGraph):
         if i_idx+len(i.UTMcords)-iPrev+1 < len(i.UTMcords)-1:
             i.unstreamline(self,i_idx+len(i.UTMcords)-iPrev+1)
 
-        jPrev=len(j.UTMcords)
-        jBack=j_idx-1
-        if jBack>=0:
-            j.unstreamline(self,j_idx-1)
-        else:
-            jBack=0
-        if j_idx+len(j.UTMcords)-jPrev+1 < len(j.UTMcords)-1:
-            j.unstreamline(self,j_idx+len(j.UTMcords)-jPrev+1)
-
+        # find candidate pts for merging
         iVals=range(iBack, i_idx+len(i.UTMcords)-iPrev+2)
         iVals = list(filter(lambda x: x < len(i.UTMcords) and x >= 0, iVals))
-        jVals=range(jBack, j_idx+len(j.UTMcords)-jPrev+2)
-        jVals = list(filter(lambda x: x < len(j.UTMcords) and x >= 0, jVals))
      
         i.UTM2GPS(i.UTMZone)
-        j.UTM2GPS(j.UTMZone)
 
+        return iVals
+
+
+    def mergePaths(self,i,j):
+        # accepts a pair of route objects i, j and merges there paths at closest point
+        # returns a list of UTM cords
+        candiate=[]
+        i_idx, j_idx, _ = self.getClosest(i.GPScords,j.GPScords, i)
+ 
+        #unstreamline closest pts to find closest pairs
+        iVals=self.mergePts(i, i_idx)
+        jVals=self.mergePts(j, j_idx)
+     
         # find closest point
-        # cur_min = float('inf')
         i_idx=0
         i_idx2=0
         j_idx=0
         j_idx2=0
-        # if len(iVals)!=0 and len(jVals)!=0:
-        #     for j1, j2, i1, i2 in product(jVals,jVals,iVals,iVals):
-        #         if abs(j1-j2)==1 and abs(i1-i2)==1:
-        #             iDist=i.DistGPS(np.array(i.GPScords[i1]), np.array(j.GPScords[j1]))
-        #             jDist=j.DistGPS(np.array(i.GPScords[i2]), np.array(j.GPScords[j2]))
-        #             if iDist+jDist<cur_min:
-        #                 cur_min=iDist+jDist
-        #                 i_idx=i1
-                        # i_idx2=i2
-                        # j_idx=j1
-                        # j_idx2=j2
-        if len(iVals)!=0 and len(jVals)!=0:
+        if len(iVals)>1 and len(jVals)>1:
+            #print(iVals)
+            #print(jVals)
             (dist, i_idx, i_idx2, j_idx, j_idx2) = min([(i.DistGPS(np.array(i.GPScords[i1]), np.array(j.GPScords[j1]))+j.DistGPS(np.array(i.GPScords[i2]), np.array(j.GPScords[j2])), i1, i2, j1, j2)
                 for i1,i2,j1,j2 in product(iVals,iVals,jVals,jVals) if abs(j1-j2)==1 and abs(i1-i2)==1])
 
@@ -307,32 +282,10 @@ class PathTree(MetaGraph):
                 j_idx+=len(j.UTMcords)-prev
         j.UTM2GPS(j.UTMZone)
 
-        #ensure clean merge
-        # iwaypoints = []
-        # for pt in i.UTMcords:
-        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
-        # print(iwaypoints)
-        # iwaypoints = []
-        # for pt in j.UTMcords:
-        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
-        # print(iwaypoints)
+        # construct candidate path
         i.unstreamline(self,min(i_idx,i_idx2))
         j.unstreamline(self,j_idx-1)
-        # iwaypoints = []
-        # for pt in i.UTMcords:
-        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
-        # print(iwaypoints)
-        # iwaypoints = []
-        # for pt in j.UTMcords:
-        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
-        # print(iwaypoints)
-
         candiate = i.UTMcords[:min(i_idx,i_idx2)+1] + j.UTMcords[j_idx:] + j.UTMcords[:j_idx] + i.UTMcords[min(i_idx,i_idx2)+1:]
-
-        # iwaypoints = []
-        # for pt in candiate:
-        #     iwaypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
-        # print(iwaypoints)
 
         #streamline path
         waypoints = []

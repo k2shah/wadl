@@ -232,6 +232,7 @@ class Survey(object):
 
 
     def partialComplete(self, completePct):
+        # accepts completePct, a percentage of routes that are desired to complete
         # randomly remove last portion of each path to simulate partial completion
         for file, maze in self.tasks.items():
             solver = self.solvers[maze]
@@ -239,41 +240,19 @@ class Survey(object):
             for i, route in enumerate(maze.routeSet.routes):
                 route.setMaze(maze)
                 x = random.random()
-                # if i==0 or i==10 or i==9:
-                #     x = .8
-                # else:
-                #     x = .1
                 # of routes will complete
                 if x > completePct:
-                    print("broken: ", i)
                     # completes random portion of route
                     y = random.randint(2, len(route.UTMcords)-2)
-                    # if len(route.UTMcords)>5:
-                    #     y=5
-                    # if i==0:
-                    #     y=29
-                    # if i==9:
-                    #     y=10
-                    # if i==10:
-                    #     y=13
-                    # if i==8:
-                    #     y=28
-                    # if i==9:
-                    #     y=33
-                    # if i==7:
-                    #     y=39
-                    # if i==8:
-                    #     y=26
-                    print("i", y)
                     route.unstreamline(solver.metaGraph,y-1)
                     route.uncompleted = route.UTMcords[y:]
                     # link start to end (generate cycle) and reverse
-                    #route.uncompleted.append(route.uncompleted[0])
                     route.uncompleted.reverse()
                     route.UTMcords = route.UTMcords[:y]
                     
 
     def recompleteBFS(self):
+        # repartition uncompleted routes to build new routes
         # generate new path tree
         print("recomplete")
         for file, maze in self.tasks.items():

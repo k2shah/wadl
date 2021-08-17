@@ -4,7 +4,7 @@ from pathlib import Path
 
 # make sure relinked paths are same as those completely recalculated
 
-#@pytest.fixture
+@pytest.fixture
 def stanford():
     """test solver class """
     # build survey test fixture
@@ -68,5 +68,3 @@ def replan():
             metaGraph = survey.solvers[maze].metaGraph
             assert(metaGraph.oldTotal-metaGraph.merges==metaGraph.newTotal), "# merging error"
             print("success")
-
-replan()

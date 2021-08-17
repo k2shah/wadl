@@ -5,7 +5,7 @@ import copy
 
 # make sure relinked paths are same as those completely recalculated
 
-#@pytest.fixture
+@pytest.fixture
 def stanford():
     """test solver class """
     # build survey test fixture
@@ -53,6 +53,7 @@ def stanford():
 
     return survey
 
+@pytest.fixture
 def fillRoute(survey,maze,route):
     metaGraph = survey.solvers[maze].metaGraph
     route.setMaze(maze)
@@ -77,11 +78,11 @@ def replan():
     prevs = []
     news=[]
     difs=[]
+    # simulate 100 replanning sessions, ensure all pts are reached each times
     for i in range(100):
         survey = copy.deepcopy(survey1)
         nodes = []
    
-
         unreachedNodes = []
 
         survey.partialComplete(0.7)
@@ -158,6 +159,3 @@ def replan():
     variance = sum([((x - sum(difs)/len(difs)) ** 2) for x in difs]) / len(difs)
     res = variance ** 0.5
     print(res)
-        
-
-replan()

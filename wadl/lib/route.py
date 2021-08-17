@@ -185,6 +185,8 @@ class Route(object):
         self.maze = maze
 
     def unstreamline(self, metaGraph, i):
+        # accepts a metaGraph object and i, an index to unstreamline UTMcords at
+        # adds intermediate pts between i and the next index
         j=i+1
         if len(self.UTMcords)<2 or j >= len(self.UTMcords) or i < 0:
             return
