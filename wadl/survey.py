@@ -249,6 +249,24 @@ class Survey(object):
                     # link start to end (generate cycle) and reverse
                     route.uncompleted.reverse()
                     route.UTMcords = route.UTMcords[:y]
+
+    def uncomplete(self, uncompleted):
+        # accepts uncompleted, a dictionary mapping uncompleted routes to pts of malfunction
+        # randomly remove last portion of each path to simulate partial completion
+        for file, maze in self.tasks.items():
+            solver = self.solvers[maze]
+            #print("subpaths: ", solver.metaGraph.subPaths)
+            for i, route in enumerate(maze.routeSet.routes):
+                route.setMaze(maze)
+                # of routes will complete
+                if i in uncompleted:
+                    # completes only portion of route
+                    y = uncompleted[i]
+                    route.unstreamline(solver.metaGraph,y-1)
+                    route.uncompleted = route.UTMcords[y:]
+                    # link start to end (generate cycle) and reverse
+                    route.uncompleted.reverse()
+                    route.UTMcords = route.UTMcords[:y]
                     
 
     def recompleteBFS(self):

@@ -47,6 +47,19 @@ You now have a complete Survey object with pre-planned UAV paths.
 Robot malfunction
 ------
 Unfortunately, you may have to replan robot paths during malfunction.
+
+Call ``survey.uncomplete`` to input information about UAV malfunction. ``survey.uncomplete``
+accepts a dictionary that maps failed route numbers to points of malfunction. In tshis
+example, route 1 failed at point 23 and route 7 failed at point 42.
+::
+    uncompleted = dict()
+    uncompleted[1] = 23
+    uncompleted[7] = 42
+    survey.uncomplete(uncompleted)
+    # visualize routes
+    survey.plot()
+
+Plan new routes to survey the uncompleted points.
 ::
 
     survey.recompleteBFS()
