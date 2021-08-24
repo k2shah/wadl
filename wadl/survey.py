@@ -1,8 +1,8 @@
 #!bin/bash/python3
 from pathlib import Path
-# deep copying
 import numpy as np
 import random
+
 import logging
 # plot
 import matplotlib.pyplot as plt
@@ -186,6 +186,7 @@ class Survey(object):
                 #solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
                 # store copy of paths
+
                 maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
@@ -211,6 +212,7 @@ class Survey(object):
 
             maze.routeSet.routeParameters = routeParameters
             maze.routeSet.routes=[]
+
 
             try:
                 curSolver.mergeTiles(curSolver.subPaths, maze.routeSet)
