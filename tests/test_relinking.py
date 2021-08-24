@@ -5,7 +5,7 @@ from pathlib import Path
 
 # make sure relinked paths are same as those completely recalculated
 
-#@pytest.fixture
+@pytest.fixture
 def stanford(speed):
     """test solver class """
     # build survey test fixture
@@ -92,8 +92,6 @@ def relink():
 
     assert(len(surveyComp.tasks[file].routeSet) == len(survey.tasks[file].routeSet)-initial-secondary), "# routes mismatch"
     
-
-relink()
 
 
 
