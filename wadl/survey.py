@@ -205,12 +205,15 @@ class Survey(object):
 
     def relink(self, routeParameters, write=True, showPlot=False):
         # reset route parameters and relink subPaths
+        print("tasks: ",self.tasks.items())
         for task, maze in self.tasks.items():
             curSolver = self.solvers[maze]
-            #curSolver.metaGraph = copy.deepcopy(curSolver.metaGraphCopy) # dont need?
 
-            maze.routeSet.routeParameters = routeParameters
-            maze.routeSet.routes=[]
+            routeSetPrev = maze.routeSet
+            maze.routeSet = RouteSet(routeSetPrev.home, routeSetPrev.zone, routeParameters)
+            maze.routeSet.data=routeSetPrev.data
+            # maze.routeSet.routeParameters = routeParameters
+            # maze.routeSet.routes=[]
 
             try:
                 curSolver.mergeTiles(curSolver.subPaths, maze.routeSet)
@@ -228,6 +231,31 @@ class Survey(object):
         self.plot(showPlot)
         # call shutdowns and free stuff
         self.close()
+
+    def stop(self, index, broken=-1):
+        # stops each route at index
+        # accepts an argument broken for a route that is discontinued at index
+        newRoutes=[]
+        for file, maze in self.tasks.items():
+            solver = self.solvers[maze]
+            #print("subpaths: ", solver.metaGraph.subPaths)
+            for i, route in enumerate(maze.routeSet.routes):
+                route.setMaze(maze)
+                if len(route.UTMcords) > index:
+                    if i==broken:
+                        #index is different
+                        route.unstreamlineRoute(solver.metaGraph)
+                        route.uncompleted = route.UTMcords[index:]
+                        route.prev=route.UTMcords[:index]
+                        route.UTMcords=route.prev
+                    else:
+                        route.unfinished = route.UTMcords[index:]                 
+                    #route.UTMcords = route.UTMcords[:index]
+                    #newRoutes.append(route)
+                else:
+                    route.unfinished=[route.UTMcords[-1]]
+                newRoutes.append(route)
+            maze.routeSet.routes=newRoutes
 
 
 
@@ -268,6 +296,26 @@ class Survey(object):
                     route.uncompleted.reverse()
                     route.UTMcords = route.UTMcords[:y]
                     
+    def recompleteOnline(self):
+        for file, maze in self.tasks.items():
+            lost=None
+            maze.routeSet.routes = list(filter(lambda x: x.UTMcords is not None, maze.routeSet.routes))
+            solver = self.solvers[maze]
+            for route in maze.routeSet.routes:
+                route.setMaze(maze)
+                if route.uncompleted != None:
+                    lost = route
+                    lost.UTMcords=lost.uncompleted
+                    lost.UTM2GPS(route.UTMZone)
+                elif route.UTMcords != None:
+                    route.prev=route.UTMcords
+                    route.UTMcords = route.unfinished
+            
+            solver.metaGraph.setMaze(maze)
+            if lost != None:
+                solver.metaGraph.reroute(maze.routeSet, lost)
+
+
 
     def recompleteBFS(self):
         # repartition uncompleted routes to build new routes
