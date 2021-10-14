@@ -148,10 +148,11 @@ class Survey(object):
         fig, ax = plt.subplots(figsize=(16, 16))
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
-            self.solver.setup(maze.graph)
-            cols = self.solver.metaGraph.getSubgraphColors()
+            self.solvers[maze].setup(maze.graph)
+            solver = self.solvers[maze]
+            cols = solver.metaGraph.getSubgraphColors()
             maze.plot(ax, showGrid=showGrid, showRoutes=False)
-            for i, graph in enumerate(self.solver.metaGraph.subGraphs):
+            for i, graph in enumerate(solver.metaGraph.subGraphs):
                 # print(graph.nodes)
                 col = next(cols)
                 # print(colors[colIdx])
