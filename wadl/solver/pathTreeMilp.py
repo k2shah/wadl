@@ -153,7 +153,12 @@ class PathTreeMilp(PathTree):
                 tileLengths.append(costDict[(u, v)])
         nTiles_route = (self.limit - np.min(transferDists)) / \
             np.mean(tileLengths)
-        return int(len(self.subGraphs)/nTiles_route)
+
+        val = len(self.subGraphs)/nTiles_route
+        try:
+            return int(val)
+        except ValueError:
+            return 1  # guard against very small graphs
 
     def partition(self, routeSet):
         costDict = self.getCosts(routeSet)
