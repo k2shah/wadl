@@ -153,6 +153,8 @@ class Route(object):
         self.UTMZone = zone
         self.UTM2GPS(zone)  # set path in GPS (WGS 84)
         self.uncompleted = None
+        self.unfinished = None
+        self.prev=None
         self.lastNode = None
         self.linked = False
         self.group = -1
@@ -208,6 +210,16 @@ class Route(object):
                 new.append((utmPt[0],utmPt[1]))
         nextUTM = self.UTMcords[:j] + new + self.UTMcords[j:]
         self.UTMcords = nextUTM
+        self.UTM2GPS(self.UTMZone)
+
+    def unstreamlineRoute(self, metaGraph):
+        i=0
+        while i < len(self.UTMcords)-1:
+            prev = len(self.UTMcords)
+            self.unstreamline(metaGraph, i)
+            delta = len(self.UTMcords)-prev
+            i += 1 + delta
+        self.UTM2GPS(self.UTMZone)
 
     def UTM2GPS(self, zone):
         # converts all the UTM cords to GPS

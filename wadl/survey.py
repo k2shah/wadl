@@ -205,7 +205,6 @@ class Survey(object):
 
     def relink(self, routeParameters, write=True, showPlot=False):
         # reset route parameters and relink subPaths
-        print("tasks: ",self.tasks.items())
         for task, maze in self.tasks.items():
             curSolver = self.solvers[maze]
 
@@ -315,8 +314,6 @@ class Survey(object):
             if lost != None:
                 solver.metaGraph.reroute(maze.routeSet, lost)
 
-
-
     def recompleteBFS(self):
         # repartition uncompleted routes to build new routes
         # generate new path tree
@@ -332,6 +329,119 @@ class Survey(object):
             solver.metaGraph.rebuildTree(maze.routeSet)
             solver.metaGraph.repartition(maze.routeSet)
         return len(maze.routeSet.routes), initial
+
+    def fullSweep(self):
+        for task, maze in self.tasks.items():
+            curSolver = self.solvers[maze]
+            metaGraph = curSolver.metaGraph
+            routeSet = maze.routeSet
+            for route in routeSet.routes:
+                # route.UTMcords = [route.UTMcords[0]]
+
+                route.setMaze(maze)
+                route.unstreamlineRoute(metaGraph)
+
+                newRoute = []
+
+                while (len(route.UTMcords) != 0):
+                    newRoute += self.sweep(metaGraph, maze, route, newRoute)
+                
+                route.UTMcords = newRoute
+                route.UTM2GPS(route.UTMZone)
+       
+    
+    def sweep(self, metaGraph, maze, route, cur):
+        # convert to gridpts
+        gridPts = []
+        for pt in route.UTMcords:
+            gridPts.append(maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
+        # check which side is empty
+
+        # go to closest corner
+        xBot = min([(pt[0]) for pt in gridPts])
+        xTop = max([(pt[0]) for pt in gridPts])
+        yBot = min([(pt[1]) for pt in gridPts if pt[0]==xBot])
+        yTop = max([(pt[1]) for pt in gridPts if pt[0]==xBot])
+        yCorners = [yTop, yBot]
+
+        up=True
+
+        if len(cur) == 0:
+            yStart = min([(pt[1]) for pt in gridPts if pt[0]==xBot])
+            # also intelligently choose which direction to sweep
+        else:
+            # print(cur[-1])
+            # print(pt)
+            # print("yc: ",yCorners)
+            cGrid = maze.UTM2Grid[(int(cur[-1][0]),int(cur[-1][1]))]
+            _, yStart = min([(abs(cGrid[1] - pt1), pt1)
+                         for pt1 in yCorners])
+            if yStart == yTop:
+                up=False
+
+        startPt = (xBot,yStart)
+        print(startPt)
+
+
+        # go to top
+        newRoute = [metaGraph.getUTM(startPt)]
+        curPt = startPt
+                
+        while True:
+            # try to go up
+            if up:
+                above = max([(pt[1]) for pt in gridPts if pt[0]==curPt[0]])
+                if above != curPt[1]:
+                    curPt = (curPt[0], above)
+                    newRoute.append(metaGraph.getUTM(curPt))
+                else:
+                    break
+                # print("above", curPt)
+                # go right
+                right = (curPt[0]+1, curPt[1])
+                if right in gridPts: 
+                    curPt = (right[0], max([(pt[1]) for pt in gridPts if pt[0]==right[0]]))
+                    newRoute.append(metaGraph.getUTM(curPt))
+                else:
+                    break
+                # print("right", curPt)
+                up=True
+            # try to go up
+            below = min([(pt[1]) for pt in gridPts if pt[0]==curPt[0]])
+            if below != curPt[1]:
+                curPt = (curPt[0], below)
+                newRoute.append(metaGraph.getUTM(curPt))
+            else:
+                break
+            # print("below", curPt)
+            # go right
+            right = (curPt[0]+1, curPt[1])
+            if right in gridPts: 
+                curPt = (right[0], min([(pt[1]) for pt in gridPts if pt[0]==right[0]]))
+
+                newRoute.append(metaGraph.getUTM(curPt))
+            else:
+                break
+            # print("right", curPt)
+        
+        prev=route.UTMcords
+        route.UTMcords = newRoute
+        route.unstreamlineRoute(metaGraph)
+        newGridPts=[]    
+        for pt in route.UTMcords:
+            newGridPts.append(maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
+        remaining = []
+        for pt in gridPts:
+            if pt not in newGridPts:
+                remaining.append(pt)
+        route.UTMcords = [metaGraph.getUTM(pt) for pt in remaining]
+        return newRoute
+        # for pt in newGridPts:
+        #     if pt not in gridPts:
+        #         print("broke", pt)
+        #         route.UTMcords=prev
+                        
+
 
 
 

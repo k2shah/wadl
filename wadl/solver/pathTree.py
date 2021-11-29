@@ -13,6 +13,7 @@ from wadl.solver.metaGraph import MetaGraph
 import utm
 # plot
 import matplotlib.pyplot as plt
+import copy
 
 
 class PathTree(MetaGraph):
@@ -248,6 +249,8 @@ class PathTree(MetaGraph):
         # accepts a pair of route objects i, j and merges there paths at closest point
         # returns a list of UTM cords
         candiate=[]
+        i.UTM2GPS(i.UTMZone)
+        j.UTM2GPS(j.UTMZone)
         i_idx, j_idx, _ = self.getClosest(i.GPScords,j.GPScords, i)
  
         #unstreamline closest pts to find closest pairs
@@ -260,10 +263,9 @@ class PathTree(MetaGraph):
         j_idx=0
         j_idx2=0
         if len(iVals)>1 and len(jVals)>1:
-            #print(iVals)
-            #print(jVals)
             (dist, i_idx, i_idx2, j_idx, j_idx2) = min([(i.DistGPS(np.array(i.GPScords[i1]), np.array(j.GPScords[j1]))+j.DistGPS(np.array(i.GPScords[i2]), np.array(j.GPScords[j2])), i1, i2, j1, j2)
                 for i1,i2,j1,j2 in product(iVals,iVals,jVals,jVals) if abs(j1-j2)==1 and abs(i1-i2)==1])
+                
 
         #ensure paths do not cross at merging
         if i_idx<i_idx2:
@@ -293,6 +295,118 @@ class PathTree(MetaGraph):
             waypoints.append(self.maze.UTM2Grid[(int(pt[0]),int(pt[1]))])
         candiate = [self.getUTM(pt) for pt in self.steamlinePath(waypoints)]
         return candiate
+
+    def closestEndPt(self, r, lost):
+        # figure out which endpt in lost is closer to r
+        # reverse route if last pt is closer
+
+        _, _, dStart = self.getClosest(r.GPScords, [lost.GPScords[0]], r)
+        _, _, dEnd = self.getClosest(r.GPScords, [lost.GPScords[len(lost.GPScords)-1]], r)
+        if dEnd < dStart:
+            lost.UTMcords.reverse()
+            lost.UTM2GPS(lost.UTMZone)
+
+    def sortRoutes(self, routeSet, lost):
+        candiates = dict()
+        unchanged = []
+        for route in routeSet.routes:
+            if route.uncompleted == None:
+                prev1=route
+                # should check front and back
+                
+                #self.closestEndPt(route, lost)
+                _, trial = routeSet.check([lost.UTMcords[0]])
+                #r_idx, l_idx, _ = self.getClosest(route.GPScords,trial.GPScords, route)
+                trial.setMaze(self.maze)
+                route.UTM2GPS(route.UTMZone)
+                trial.UTM2GPS(trial.UTMZone)
+                #check front and back for merging
+                r_idx, _, _ = self.getClosest(route.GPScords, trial.GPScords, route)
+                route.unstreamline(self, r_idx)
+                new = route.UTMcords[:r_idx+1] + trial.UTMcords + route.UTMcords[r_idx+1:]
+                #prev cords are just those that have already been completed
+                passed, av = routeSet.check(route.prev+new)
+
+                if passed:
+                    print(passed)
+                    route.UTMcords=route.prev+route.UTMcords
+                    route.UTM2GPS(route.UTMZone)
+                    candiates[route] = av.ToF - av.limit
+                else:
+                    route.UTMcords = route.prev+route.UTMcords
+                    route.UTM2GPS(route.UTMZone)
+                    unchanged.append(route)
+        return unchanged, candiates
+
+
+    def reroute(self, routeSet, lost):
+        print("lost", len(lost.UTMcords))
+        print("prev", len(lost.prev))
+        newRoutes=[]
+        unchanged, p_candiates = self.sortRoutes(routeSet, lost)
+        print("cands:", len(p_candiates))
+        newRoutes=unchanged
+        # sort based on dist from start of lost cords
+        s_candiates = sorted(p_candiates, key=lambda x: self.getClosestDist([lost.GPScords[0]], x.GPScords, lost))
+        candiates=dict()
+        for c in s_candiates:
+            candiates[c]=p_candiates[c]
+        for route in candiates.keys():
+            # append if possible
+            remaining = abs(candiates[route])
+            #print("r", remaining)
+            #adjust per route (not const)
+            remainingDist = remaining*5
+            outDist = remainingDist/2
+            print("od", outDist)
+            route.UTM2GPS(route.UTMZone)
+            self.closestEndPt(route, lost)
+            r_idx, l_idx, _ = self.getClosest(route.GPScords,[lost.GPScords[0]], route)
+
+            addPts = []
+            ol = lost.UTMcords
+            lost.UTM2GPS(lost.UTMZone)
+            #print(ol)
+            #print(lost.GPScords)
+            while outDist > 0:
+                print(outDist)
+                if len(lost.UTMcords)==0:
+                    break
+                #lost.unstreamline(self, 0)
+                addPts.append(lost.UTMcords[0])
+                if len(lost.UTMcords)<2:
+                    break
+                d = route.DistGPS(np.array(lost.GPScords[0]), np.array(lost.GPScords[1]))
+                #print(d)
+                #print(lost.GPScords[0],lost.GPScords[1])
+                outDist-=d
+                lost.UTMcords=lost.UTMcords[1:]
+                lost.UTM2GPS(lost.UTMZone)
+            route.UTM2GPS(route.UTMZone)
+
+            if len(addPts)!=0:
+                print("recovered: ", len(addPts))
+                route.unstreamline(self, r_idx)
+                route.UTMcords = route.UTMcords[:r_idx+1]+addPts+route.UTMcords[r_idx+1:]
+                p, route = routeSet.check(route.UTMcords)
+                print(p)
+            newRoutes.append(route)
+
+
+        routeSet.routes=[]
+        # lost.UTMcords = ol
+        if len(lost.UTMcords)!=0:
+            print("needs new route")
+            print(len(lost.UTMcords))
+            lost.UTMcords=lost.prev
+            lost.UTM2GPS(lost.UTMZone)
+        else:
+            print("full recomplete")
+            lost.UTMcords=lost.prev
+            lost.UTM2GPS(lost.UTMZone)
+        routeSet.push(lost)
+        for r in newRoutes:
+            routeSet.push(r)
 
 
     def repartition(self, routeSet):
