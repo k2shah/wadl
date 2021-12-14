@@ -67,6 +67,13 @@ class RouteSet(object):
 
         self.zone = zone  # store the UTM zone
         self.routes = []
+        #uncomp
+        self.uncomp = []
+        # map uncompleted points to their route
+        self.uncomp_routes = dict()
+        # routes that can accept more pts
+        self.cands = []
+        self.lost = []
 
         # set the parameters
         if routeParameters is None:
@@ -158,6 +165,11 @@ class Route(object):
         self.lastNode = None
         self.linked = False
         self.group = -1
+        self.remaining = None
+        self.excess = 0
+        self.recomp = []
+        self.id = -1
+        self.test = False
         if home is not None:
             self.setHome(home)  # set home pt (in GPS)
         else:

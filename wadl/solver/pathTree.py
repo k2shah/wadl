@@ -326,9 +326,10 @@ class PathTree(MetaGraph):
                 new = route.UTMcords[:r_idx+1] + trial.UTMcords + route.UTMcords[r_idx+1:]
                 #prev cords are just those that have already been completed
                 passed, av = routeSet.check(route.prev+new)
+                route.remaining = av.ToF
 
                 if passed:
-                    print(passed)
+                    #print(passed)
                     route.UTMcords=route.prev+route.UTMcords
                     route.UTM2GPS(route.UTMZone)
                     candiates[route] = av.ToF - av.limit
@@ -358,7 +359,7 @@ class PathTree(MetaGraph):
             #adjust per route (not const)
             remainingDist = remaining*5
             outDist = remainingDist/2
-            print("od", outDist)
+            # print("od", outDist)
             route.UTM2GPS(route.UTMZone)
             self.closestEndPt(route, lost)
             r_idx, l_idx, _ = self.getClosest(route.GPScords,[lost.GPScords[0]], route)
@@ -368,8 +369,9 @@ class PathTree(MetaGraph):
             lost.UTM2GPS(lost.UTMZone)
             #print(ol)
             #print(lost.GPScords)
+            cur=[]
             while outDist > 0:
-                print(outDist)
+                # print(outDist)
                 if len(lost.UTMcords)==0:
                     break
                 #lost.unstreamline(self, 0)
@@ -380,16 +382,33 @@ class PathTree(MetaGraph):
                 #print(d)
                 #print(lost.GPScords[0],lost.GPScords[1])
                 outDist-=d
+                routeSet.uncomp_routes[lost.GPScords[0]] = route
+                # print(lost.GPScords[0])
+                # print(routeSet.uncomp_routes[lost.GPScords[0]])
+                routeSet.uncomp.append(lost.GPScords[0])
+                cur.append(lost.GPScords[0])
+                # print(routeSet.uncomp[len(routeSet.uncomp)-1])
+                # print("x")
                 lost.UTMcords=lost.UTMcords[1:]
                 lost.UTM2GPS(lost.UTMZone)
             route.UTM2GPS(route.UTMZone)
+            # print(route.recomp)
 
             if len(addPts)!=0:
                 print("recovered: ", len(addPts))
+
                 route.unstreamline(self, r_idx)
                 route.UTMcords = route.UTMcords[:r_idx+1]+addPts+route.UTMcords[r_idx+1:]
                 p, route = routeSet.check(route.UTMcords)
-                print(p)
+                for h in cur:
+                    routeSet.uncomp_routes[h]=route
+                # print(route.GPScords)
+                # print(cur)
+                route.remaining = route.ToF
+
+                if route not in routeSet.cands:
+                    routeSet.cands.append(route)
+                # print(p)
             newRoutes.append(route)
 
 
@@ -407,6 +426,9 @@ class PathTree(MetaGraph):
         routeSet.push(lost)
         for r in newRoutes:
             routeSet.push(r)
+        print("end:",len(routeSet.uncomp_routes))
+        for p in routeSet.uncomp:
+            x = routeSet.uncomp_routes[p]
 
 
     def repartition(self, routeSet):
@@ -464,7 +486,7 @@ class PathTree(MetaGraph):
                         candiate = self.mergePaths(i,j)
 
                         passed, newRoute = routeSet.check(candiate)
-                        print(passed)
+                        #print(passed)
 
                         if passed:
                             # accept the node

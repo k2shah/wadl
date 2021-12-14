@@ -25,12 +25,11 @@ def croz():
     routeParams["limit"] = 13*60.  # s
     routeParams["speed"] = 5.0  # m/s
 
-    keyPoints = {"p": (-77.455917, 169.21753),
-                 "c": (-77.454753, 169.216886),
-                 "bn": (-77.44906, 169.22322),
-                 "mle": (-77.45362, 169.23247),
-                 "fg": (-77.459294, 169.245182)}
-    survey.setKeyPoints(keyPoints)
+    # add the keypoints
+keyPoints = {"oval": (37.4298541, -122.1694745),
+             "MSL":  (37.4266113, -122.173492)
+             }
+survey.setKeyPoints(keyPoints)
 
     survey.addTask(file,
                    rotation=15,

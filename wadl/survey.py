@@ -4,6 +4,7 @@ from pathlib import Path
 import numpy as np
 import random
 import logging
+import copy
 # plot
 import matplotlib.pyplot as plt
 # gis
@@ -245,6 +246,7 @@ class Survey(object):
                         #index is different
                         route.unstreamlineRoute(solver.metaGraph)
                         route.uncompleted = route.UTMcords[index:]
+                        # maze.routeSet.uncomp = route.GPScords[index:]
                         route.prev=route.UTMcords[:index]
                         route.UTMcords=route.prev
                     else:
@@ -440,8 +442,223 @@ class Survey(object):
         #     if pt not in gridPts:
         #         print("broke", pt)
         #         route.UTMcords=prev
-                        
 
+    def calculateCost(self, routeSet):
+        cost = 0
+        # how much we care about going over limit
+        penalty = 0
+        for route in routeSet.routes:
+            # add distance
+            _, av = routeSet.check(route.UTMcords)
+            route.remaining = av.ToF
+            route.excess = max(av.ToF - av.limit, 0)
+            cost += route.remaining
+            cost += penalty * route.excess
+        return cost
+
+    # def insertPt(self, pt, route, route2, routeSet):
+    #     # print(route2.GPScords)
+    #     minDist = 99999999
+    #     min_idx = -1
+    #     for i, mergePt in enumerate(route.GPScords):
+    #         dist = route.DistGPS(np.array(pt), np.array(mergePt))
+    #         if dist < minDist:
+    #             min_idx = i
+    #             minDist = dist
+    #     route2.GPScords = route2.GPScords[:min_idx] + [pt] + route2.GPScords[min_idx:]
+    #     # print(pt)
+    #     # print(route.GPScords)
+    #     route.GPScords.remove(pt)
+    #     route2.GPS2UTM()
+    #     route.GPS2UTM()
+    #     # check cost
+    #     passed, av = routeSet.check(route2.UTMcords)
+    #     route2.excess = max(0, av.ToF - av.limit)
+    #     route2.remaining = av.ToF
+    #     passed, av = routeSet.check(route.UTMcords)
+    #     route.excess = max(0, av.ToF - av.limit)
+    #     route.remaining = av.ToF
+    #     return routeSet
+    
+    def insertPt(self, pt, route2, routeSet):
+        # print(route2.GPScords)
+        minDist = 99999999
+        min_idx = -1
+        for i, mergePt in enumerate(route2.GPScords):
+            dist = route2.DistGPS(np.array(pt), np.array(mergePt))
+            if dist < minDist:
+                min_idx = i
+                minDist = dist
+        route2.GPScords = route2.GPScords[:min_idx] + [pt] + route2.GPScords[min_idx:]
+        # print(pt)
+        # print(route.GPScords)
+        route2.GPS2UTM()
+        # check cost
+        passed, av = routeSet.check(route2.UTMcords)
+        route2.excess = max(0, av.ToF - av.limit)
+        route2.remaining = av.ToF
+        return route2
+
+    def updateUncomp(self, routeSet, new):
+        for r in routeSet.uncomp:
+            print("ok")
+
+    def check(self,routeSet):
+        for p in routeSet.uncomp:
+            x = routeSet.uncomp_routes[p]
+            if p in x.GPScords:
+                print("True")
+            else:
+                print("False")
+
+
+
+    def neighborhoodSearch(self, routeSet):
+        # go through every point in route, try adding to a different route
+        # inserting a pt is a move
+        # moving all pts is an iteration
+
+        # for i, r in enumerate(routeSet.routes):
+        #     route.id = i
+
+        # uncompIds = dict()
+        # for p in routeSet.uncomp:
+        #     uncompIds[p] = uncomp_routes[p].id
+
+        cost_move = self.calculateCost(routeSet)
+        # should only go through remaining pts
+        for pt1 in routeSet.uncomp:
+            # print("point: ")
+            others = []
+            [others.append(x) for x in routeSet.uncomp_routes.values() if x not in others and x!=routeSet.uncomp_routes[pt1]]
+            route1copy = copy.deepcopy(routeSet.uncomp_routes[pt1])
+            # print(routeSet.uncomp_routes[pt1].GPScords)
+            # print(pt1)
+            route = routeSet.uncomp_routes[pt1]
+            route.GPScords.remove(pt1)
+            route.GPS2UTM()
+            # creat a route ID since the routes change every time, dictionary doesnt make sense
+            # 
+
+            moved = False
+
+            passed, av = routeSet.check(route.UTMcords)
+            route.excess = max(0, av.ToF - av.limit)
+            route.remaining = av.ToF
+
+            for route2 in others:
+                # make a copy of the two routes
+                # replace routes in routeSet
+                # compare changes
+                route2copy = copy.deepcopy(route2)
+                self.insertPt(pt1, route2, routeSet)
+                # is it better than base?
+                if self.calculateCost(routeSet)>cost_move:
+                    routeSet.push(route2copy)
+                    routeSet.routes.remove(route2)
+                    for p in routeSet.uncomp:
+                        if routeSet.uncomp_routes[p] == route2:
+                            routeSet.uncomp_routes[p]=route2copy
+                else:
+                    cost_move=self.calculateCost(routeSet)
+                    routeSet.uncomp_routes[pt1] = route2
+                    # print("moved")
+                    moved = True
+
+            #print(route in routeSet.routes)
+            
+            if not moved:
+                routeSet.routes.remove(route)
+                routeSet.push(route1copy)
+                for p in routeSet.uncomp:
+                    if routeSet.uncomp_routes[p] == route:
+                        routeSet.uncomp_routes[p]=route1copy
+                routeSet.uncomp_routes[pt1]=route1copy
+
+            # else:
+            #     updateUncomp(routeSet, route1copy, routeSet.routes[len(routeSet.routes) - 1])
+        
+
+
+
+        # lost = None
+
+        # for r in routeSet.routes:
+        #     if r.uncompleted != None:
+        #         lost = r
+
+        # movePts = routeSet.uncomp
+
+        # cost_move = self.calculateCost(routeSet)
+        # move = copy.deepcopy(routeSet)
+        # routeSetTry = copy.deepcopy(move)
+        # routeSetTest = copy.deepcopy(routeSetTry)
+
+        # for i, r in enumerate(routeSetTry.routes):
+        #     print("route: ", i)
+        #     route = routeSetTest.routes[i]
+        #     for u, pt in enumerate(route.GPScords):
+        #         utm = route.UTMcords[u]
+        #         prev = copy.deepcopy(routeSetTest)
+        #         for j, route2 in enumerate(routeSetTest.routes):
+        #             # print("during", route2.GPScords)
+        #             if route2 != route and utm in route.recomp:
+        #                 # print("original",pt)
+        #                 # print(route.GPScords)
+        #                 attempt = copy.deepcopy(routeSetTest)
+        #                 print("inserting...")
+        #                 self.insertPt(pt, copy.deepcopy(route), copy.deepcopy(route2), attempt)
+        #                 cost = self.calculateCost(attempt)
+        #                 # set move to best cost
+        #                 if cost < cost_move:
+        #                     routeSetTry = copy.deepcopy(attempt)
+        #                     cost_move = cost
+        #                     # should also append to tabu list
+                #     routeSetTest = copy.deepcopy(prev)
+                # routeSetTest = copy.deepcopy(routeSetTry)
+
+        # feasible = True
+        # for r in move.routes:
+        #     passed, r = move.check(r.UTMcords)
+        #     if not passed:
+        #         feasible = False
+        #self.check(routeSet)
+        feasible = True
+        for r in routeSet.routes:
+            r.GPS2UTM()
+            passed, r = routeSet.check(r.UTMcords)
+            if not passed:
+                feasible = False
+        return feasible, routeSet
+
+
+
+    def tabuSearch(self, iterations):
+        l=None
+        z=[]
+        for file, maze in self.tasks.items():
+            #check if initial route is feasible
+            feasible = True
+            for r in maze.routeSet.routes:
+                r.GPS2UTM()
+                passed, r = maze.routeSet.check(r.UTMcords)
+                print(r.ToF, r.limit)
+                if not passed:
+                    feasible = False
+            if not feasible:
+                print("initial route not possible")
+
+            for i in range(iterations):
+                test = copy.deepcopy(maze.routeSet)
+                print("iteration: ", i)
+                print("initial cost:", self.calculateCost(maze.routeSet))
+                feasible, attempt = self.neighborhoodSearch(test)
+                print(feasible)
+                print("final cost:", self.calculateCost(test))
+                z.append(self.calculateCost(test))
+                # if feasible:
+                maze.routeSet = copy.deepcopy(test)
+        return z
 
 
 
