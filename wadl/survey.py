@@ -1,11 +1,14 @@
 #!bin/bash/python3
 from pathlib import Path
+# deep copying
+import copy
 import logging
 # plot
 import matplotlib.pyplot as plt
 # gis
 import utm
 # lib
+from wadl.lib.route import RouteSet
 from wadl.lib.maze import Maze
 from wadl.solver.solver import LinkSolver
 from wadl.mission import Mission
@@ -22,7 +25,8 @@ class Survey(object):
 
     def __init__(self, name="survey", outDir=None):
         # get solver
-        self.solver = LinkSolver()
+        self.solvers = dict()
+        #self.solver = LinkSolver()
         # save the name of the survey
         self.name = name
         # make the output directory
@@ -39,6 +43,12 @@ class Survey(object):
     def setupLogger(self):
         # create logger
         rootLogger = logging.getLogger()
+
+        # clean up old loggers
+        rootLogger.propagate = False
+        if (rootLogger.hasHandlers()):
+            rootLogger.handlers.clear()
+        # set the new ones
         rootLogger.setLevel(logging.INFO)
         # create file handler which logs even debug messages
         fh = logging.FileHandler(self.outDir/'wadl.log', 'w+')
@@ -67,6 +77,7 @@ class Survey(object):
             rotation (int, optional): rotation of the grid by radians.
             limit (float, optional): default flight time limit
             home (srt, optional): key(s) of home location(s)
+            priority (wadl.lib.Areas): Areas object of high priority sections
             routeParamters (RouteParameters): Desired settings
                 for each route in this task
 
@@ -82,18 +93,33 @@ class Survey(object):
             kwargs["home"] = None
 
         self.tasks[file] = Maze(file, **kwargs)
+        # add to solvers
+        self.solvers[self.tasks[file]] = LinkSolver()
 
+    def __getitem__(self, idx):
+        key = [*self.tasks][idx]
+        return self.tasks[key]
+
+    def __iter__(self):
+        return iter(self.tasks.values())
+
+    def at(self, sliced):
+        return self.__getitem__(sliced)
+
+    # where is this used?
     def setSolver(self, solver):
         self.solver = solver
 
     def setSolverParamters(self, parameters):
-        """Set the solver paramters.
+        """Set the solver parameters.
 
         Args:
             parameters (SolverParamters): sets the solver settings
 
         """
-        self.solver.parameters = parameters
+        for task, maze in self.tasks.items():
+            self.solvers[maze].parameters = parameters
+        #self.solver.parameters = parameters
 
     def setKeyPoints(self, points):
         """Set the keyPoints in the survey.
@@ -111,7 +137,7 @@ class Survey(object):
             ax.scatter(*cord, color='k', s=1)
             ax.annotate(key, xy=cord, xycoords='data')
 
-    def view(self, showGrid=True):
+    def view(self, showGrid=True, save=None):
         """ View the current survey (unplanned)
 
         Args:
@@ -122,10 +148,11 @@ class Survey(object):
         fig, ax = plt.subplots(figsize=(16, 16))
         self.plotKeyPoints(ax)
         for file, maze in self.tasks.items():
-            self.solver.setup(maze.graph)
-            cols = self.solver.metaGraph.getCols()
-            maze.plot(ax, showGrid=showGrid)
-            for i, graph in enumerate(self.solver.metaGraph.subGraphs):
+            self.solvers[maze].setup(maze.graph)
+            solver = self.solvers[maze]
+            cols = solver.metaGraph.getSubgraphColors()
+            maze.plot(ax, showGrid=showGrid, showRoutes=False)
+            for i, graph in enumerate(solver.metaGraph.subGraphs):
                 # print(graph.nodes)
                 col = next(cols)
                 # print(colors[colIdx])
@@ -135,9 +162,12 @@ class Survey(object):
         # figure formats
         plt.gca().set_aspect('equal', adjustable='box')
         # display
-        plt.show()
+        if save is not None:
+            plt.savefig(save, bbox_inches='tight', dpi=100)
+        else:
+            plt.show()
 
-    def plan(self, write=True, showPlot=False):
+    def plan(self, write=True, showPlot=False, relinking=False):
         """ Plan the survey.
 
         Args:
@@ -145,22 +175,60 @@ class Survey(object):
                 the route. default True
             showPlot (bool): show the plot of the routes. default False.
         """
+        # create dict mapping maze to solver
+        #self.solvers = dict()
         for task, maze in self.tasks.items():
-            self.solver.setup(maze.graph)
-            try:
-                solTime = self.solver.solve(routeSet=maze.routeSet)
+
+            #self.solver.setup(maze.graph)
+            self.solvers[maze].setup(maze.graph)
+            
+            try: # issue: maze is changed in setup
+                solTime = self.solvers[maze].solve(routeSet=maze.routeSet)
+                #solTime = self.solver.solve(routeSet=maze.routeSet)
                 maze.solTime = solTime
+                # store copy of paths
+                #self.solvers[maze] = copy.deepcopy(self.solver)
+                maze.calcRouteStats()
                 if write:
                     maze.write(self.outDir)
 
             except RuntimeError as e:
                 self.logger.error(f"failure in task: {maze.name}")
                 print(e)
+                print("\n")
             self.logger.info(f"task {maze.name} finished")
         self.logger.info("done planning")
 
         # plot
         self.plot(showPlot)
+        # call shutdowns
+        if (not relinking):
+            self.close()
+
+    def relink(self, routeParameters, write=True, showPlot=False):
+        # reset route parameters and relink subPaths
+        for task, maze in self.tasks.items():
+            curSolver = self.solvers[maze]
+            #curSolver.metaGraph = copy.deepcopy(curSolver.metaGraphCopy) # dont need?
+
+            maze.routeSet.routeParameters = routeParameters
+
+            try:
+                curSolver.mergeTiles(curSolver.subPaths, maze.routeSet)
+                maze.calcRouteStats()
+                if write:
+                    maze.write(self.outDir)
+            except RuntimeError as e:
+                self.logger.error(f"failure in task: {maze.name}")
+                print(e)
+                print("\n")
+            self.logger.info(f"task {maze.name} finished")
+        self.logger.info("done planning")
+
+        # plot
+        self.plot(showPlot)
+        # call shutdowns and free stuff
+        self.close()
 
     def plot(self, showPlot=True):
         # plot task
@@ -174,6 +242,14 @@ class Survey(object):
         plt.savefig(filename, bbox_inches='tight', dpi=100)
         if showPlot:
             plt.show()
+        else:
+            plt.close()
+
+    def close(self):
+        # release the loggers
+        logging.shutdown()
+        # close plots
+        plt.close()
 
     def mission(self, missionParams):
         # make a mission.json file

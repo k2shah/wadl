@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import utm
 from shapely.geometry import Polygon, Point, LineString
 # lib
-from wadl.lib.fence import Fence
+from wadl.lib.fence import Fence, Areas
 from wadl.lib.route import RouteSet
 
 
@@ -30,31 +30,45 @@ class Maze(Fence):
             default 0.
         home ([tuple], optional): list of (lat, long) of the desired home(s)
             default none.
-        routeParamters (RouteParameters, optional): desired route parameters.
+        routeParameters (RouteParameters, optional): desired route parameters.
 
     """
+
     def __init__(self,
                  file,
                  step=40,
                  rotation=0,
                  home=None,
+                 priority=None,
                  routeParameters=None):
         super(Maze, self).__init__(Path(file))
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
         self.solved = False
+        self.routeStats = None
         # set parameters
         # grid parameters
         self.theta = rotation
         self.step = step
+      
         # build grid graph
         self.buildGrid()
         self.nNode = len(self.graph)
         self.logger.info(f"generated maze with {self.nNode} nodes")
+
+
         # UAV path parameters
         self.home = home
         self.nNode = len(self.graph)  # store size of nodes
         self.routeSet = RouteSet(self.home, self.UTMZone, routeParameters)
+
+        # resolve priority
+        if priority is not None:
+            self.setPriority(priority)
+        else:
+            self.priorityArea = None
+            self.prioritySet = None
+        self.routeSet["priority"] = self.prioritySet
 
     def __len__(self):
         # number of nodes
@@ -94,6 +108,7 @@ class Maze(Fence):
                     utmCord = self.R.T @ np.array([x, y])
                     # store utm cord in graph
                     self.graph.nodes[(i, j)]['UTM'] = utmCord
+                    self.graph.nodes[(i, j)]['priority'] = False
                 else:
                     self.graph.remove_node((i, j))
 
@@ -110,7 +125,130 @@ class Maze(Fence):
         for i, node in enumerate(self.graph):
             self.graph.nodes[node]['index'] = i
 
+    def setPriority(self, file):
+        """Add a priority area to the survey.
+
+        Args:
+            priority (str): file for priority area
+        """
+        self.priorityArea = Areas(Path(file))
+        # assign points based on priority
+        self.prioritySet = set()
+        for n0, n1 in self.graph.edges:
+            p0 = self.graph.nodes[n0]['UTM']
+            p1 = self.graph.nodes[n1]['UTM']
+            line = LineString([p0, p1])
+            if self.isPriority(line):
+                self.graph.nodes[n0]['priority'] = True
+                self.graph.nodes[n1]['priority'] = True
+                self.prioritySet.add(tuple(map(int, tuple(p0))))
+                self.prioritySet.add(tuple(map(int, tuple(p1))))
+        self.logger.info(f"found {len(self.prioritySet)} priority points")
+
+    def isPriority(self, line):
+        """checks if a line in in a priority polygon"""
+        for poly in self.priorityArea:
+            if line.intersects(poly):
+                return True
+        return False
+
+    def calcRouteStats(self):
+        # log route data
+        self.logger.info(f"\tgenerated {len(self.routeSet)} routes")
+        surveyTofs = 0
+        transferTofs = 0
+        for i, route in enumerate(self.routeSet):
+            self.logger.info(f"{i}: {route.length:.2f}m \t{route.ToF:.2f}s")
+            surveyTofs += route.ToF_surv
+            transferTofs += route.ToF_tran
+        totalTime = surveyTofs + transferTofs
+        ratio = surveyTofs/transferTofs
+        self.stats = dict()
+        lengths = [route.length for route in self.routeSet]
+        # find the number of steps
+        nStep = self.routeSet.data['nSteps']
+        eff = self.nNode/nStep
+        self.stats["path efficiency"] = eff
+        totalEff = (eff*surveyTofs)/totalTime
+        self.stats["total efficiency"] = totalEff
+        self.stats["total time"] = totalTime
+        # stats
+        self.stats["mean"] = np.mean(lengths)
+        self.stats["std"] = np.std(lengths)
+        self.stats["ToF_ratio"] = ratio
+        # generate output
+        self.statsString = f"mean:\t{self.stats['mean']:.2f}m"
+        self.statsString += f"\nstd:\t{self.stats['std']:.2f}m"
+        self.statsString += f"\nused {nStep} steps for a {self.nNode} graph"
+        self.statsString += f"\npath efficiency:\t{eff*100:2.2f}%"
+        self.statsString += f"\ntotal efficiency:\t{totalEff*100:2.2f}%"
+        self.statsString += f"\nToF ratio: \t{ratio:.3f}"
+        self.statsString += f"\ntotal ToF: \t{totalTime:.3f}s"
+        self.logger.info(self.statsString)
+        return self.statsString
+
+    def calcDistMatrix(self, cutoff=2):
+        # L1 distance
+        soft_inf = 1000000000
+        D = np.ones(shape=(self.nNode, self.nNode))*soft_inf
+        for i, ni in enumerate(self.graph):
+            for j, nj in enumerate(self.graph):
+                l1 = (abs(ni[0] - nj[0]) + abs(ni[1]-nj[1]))
+                if l1 > cutoff:
+                    D[i, j] = soft_inf
+                else:
+                    D[i, j] = l1*self.step
+        return D
+
+    def export_ORTools(self, cutoff=1, num_vehicles=None):
+        data = {}
+        limit = self.routeSet.routeParameters["limit"]
+        speed = self.routeSet.routeParameters["speed"]
+        xferSpeed = self.routeSet.routeParameters["xfer_speed"]
+        # distance matrix
+        D = self.calcDistMatrix(cutoff=cutoff)
+        D = D/speed
+        # expand the distance matrix withe home point
+        homeDists = []
+        nHome = len(self.home)
+        data['UTM'] = {node: self.graph.nodes[node]['UTM']
+                       for node in self.graph}
+
+        # SAVE home utms as ind -> utm
+        data['homeUTM'] = {}
+        for i, pt in enumerate(self.home):
+            pt_utm = np.array(utm.from_latlon(*pt)[0:2])
+            data['homeUTM'][self.nNode+i] = pt_utm
+            distances = [np.linalg.norm(self.graph.nodes[node]['UTM']-pt_utm)
+                         for node in self.graph]
+            homeDists.append(distances)
+        homeDists = np.array(homeDists)/xferSpeed
+        # block arrangement
+        homeBlock = 10000*(np.ones((nHome, nHome))-np.eye(nHome))
+        D = np.block([[D, homeDists.T],
+                      [homeDists, homeBlock]])
+
+        data["distance_matrix"] = D.astype(int)
+        data["ind2node"] = list(self.graph.nodes)
+        # estimate number of agents
+        maxDist = limit * speed
+        if num_vehicles is None:
+            num_vehicles = int((self.nNode*self.step)/maxDist)+1
+        data['num_vehicles'] = num_vehicles
+        # [START starts_ends]
+        data['starts'] = [self.nNode + (i % nHome)
+                          for i in range(num_vehicles)]
+        data['ends'] = data['starts']
+        data['maxDist'] = int(maxDist)
+        data['maxTime'] = int(limit)
+        data['nNode'] = self.nNode
+        data['nHome'] = nHome
+        data['UTMZone'] = self.UTMZone
+
+        return data
+
     # write
+
     def write(self, filePath):
         """Write the maze information to a file
 
@@ -135,6 +273,7 @@ class Maze(Fence):
         plt.axis('square')
         plotName = taskDir / "routes.png"
         plt.savefig(plotName, bbox_inches='tight', dpi=100)
+        plt.close(fig)
 
     def writeInfo(self, filePath):
         # writes the Maze information of the test
@@ -144,15 +283,13 @@ class Maze(Fence):
             f.write('\nGrid size\n')
             f.write(str(self.nNode))
 
-            # f.write('\nPath limit\n')
-            # f.write(str(self.limit))
-
             f.write('\nSolution time (sec)\n')
             f.write(str(self.solTime))
 
-            # f.write('\nInitial agent positions\n')
-            # for start in self.starts:
-            #     f.write(f"{start}\n")
+            if self.statsString is None:
+                self.calcRouteStats()
+            f.write('\nRoute Statistics\n')
+            f.write(self.statsString)
 
     def writeRoutes(self, pathDir):
         self.routeSet.write(pathDir)
@@ -182,8 +319,9 @@ class Maze(Fence):
             nodes = self.graph.nodes
 
         for node in nodes:
+            marker = "s" if self.graph.nodes[node]['priority'] else "."
             ax.scatter(*self.graph.nodes[node]["UTM"],
-                       color=color, s=5)
+                       color=color, s=5, marker=marker)
 
     def plotEdges(self, ax, color='k', edges=None):
         # plot edges
@@ -195,6 +333,9 @@ class Maze(Fence):
                              self.graph.nodes[e2]["UTM"]])
             ax.plot(line[:, 0], line[:, 1],
                     color=color, linewidth=1)
+
+    def plotPriority(self, ax, color='m'):
+        self.priorityArea.plot(ax, color=color)
 
     def plotRoutes(self, ax):
         cols = iter(plt.cm.rainbow(np.linspace(0, 1, len(self.routeSet))))
@@ -221,3 +362,5 @@ class Maze(Fence):
             self.plotEdges(ax)
         if showRoutes:
             self.plotRoutes(ax)
+        if self.priorityArea is not None:
+            self.plotPriority(ax, color='tab:purple')  # purple for priority

@@ -1,9 +1,12 @@
 # gen
 import time
 import logging
+import copy
 # lib
 from wadl.solver.SATproblem import SATproblem
 from wadl.solver.metaGraph import MetaGraph
+from wadl.solver.pathTree import PathTree
+from wadl.solver.pathTreeMilp import PathTreeMilp
 from wadl.lib.parameters import Parameters
 from tqdm import tqdm
 
@@ -19,6 +22,7 @@ class SolverParameters(Parameters):
         self["SATBound_offset"] = 2
         self["timeout"] = 60
         self["maxProblems"] = 10
+        self["stitch"] = "default"
 
 
 class BaseSolver(object):
@@ -29,7 +33,7 @@ class BaseSolver(object):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
 
-        # param
+        # parameters
         self.parameters = parameters
         if parameters is None:
             self.parameters = SolverParameters(default=True)
@@ -60,14 +64,48 @@ class LinkSolver(BaseSolver):
     def __init__(self, parameters=None):
         super(LinkSolver, self).__init__(parameters)
 
+    def metaGraphSelect(self):
+        # select MetaGraph type
+        if self.parameters["stitch"] == "default":
+            metaGraphClass = MetaGraph
+        elif self.parameters["stitch"] == "tree":
+            metaGraphClass = PathTree
+        elif self.parameters["stitch"] == "milp":
+            metaGraphClass = PathTreeMilp
+        else:
+            self.logger.warm(f"{self.parameters['stitch']} is not valid")
+            metaGraphClass = MetaGraph
+        return metaGraphClass
+
     def setup(self, graph):
+        metaGraphClass = self.metaGraphSelect()
         # setup graph
-        self.metaGraph = MetaGraph(graph,
-                                   size=self._parameters["subGraph_size"])
+        self.metaGraph = metaGraphClass(graph,
+                                        size=self._parameters["subGraph_size"])
 
     def solve(self, routeSet):
-        subPaths = []
         startTime = time.time()
+        # solve each tile
+        # save subPaths, metaGraph after initially found so that they can be reused
+        self.subPaths = self.solveTiles()
+        # merge tiles based on the metaGraph selection
+        self.mergeTiles(self.subPaths, routeSet)
+        # return solution time
+        solveTime = time.time()-startTime
+        self.logger.info("solution time: {:2.5f} sec".format(solveTime))
+        nGraph, nSteps = self.getRouteData()
+        routeSet["nGraphs"] = nGraph
+        routeSet["nSteps"] = nSteps
+        return solveTime
+
+    def getRouteData(self):
+        # calculate various metrics and push them to the routeSet container
+        nGraphs = len(self.metaGraph.subGraphs)
+        nSteps = sum([len(path)-1 for path in self.metaGraph.subPaths])
+        return nGraphs, nSteps
+
+    def solveTiles(self):
+        subPaths = []
         for i, graph in enumerate(tqdm(self.metaGraph.subGraphs, ascii=True)):
             bound = len(graph) + self._parameters["SATBound_offset"]
             self.logger.info(f"building problem {i}")
@@ -90,13 +128,11 @@ class LinkSolver(BaseSolver):
                 if counter > self.parameters["maxProblems"]:
                     raise RuntimeError(f"problem {i} critically infeasible. "
                                        "graph may be degenerate")
+        return subPaths
 
+    def mergeTiles(self, subPaths, routeSet):
         # build the meta graph
         self.logger.info("bullding pathGraph")
         self.metaGraph.buildPathGraph(subPaths)
         self.logger.info("linking routes")
         self.metaGraph.link(routeSet)
-        # print time
-        solTime = time.time()-startTime
-        self.logger.info("solution time: {:2.5f} sec".format(solTime))
-        return solTime

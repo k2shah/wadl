@@ -22,8 +22,8 @@ def croz():
     # get a island ("little norway")
     file = Path(__file__).parent / "data" / "croz_west"
     routeParams = RouteParameters()
-    routeParams["limit"] = 13*60,  # s
-    routeParams["speed"] = 5,  # m/s
+    routeParams["limit"] = 13*60.  # s
+    routeParams["speed"] = 5.0  # m/s
 
     keyPoints = {"p": (-77.455917, 169.21753),
                  "c": (-77.454753, 169.216886),
