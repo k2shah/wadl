@@ -129,7 +129,7 @@ class Areas(object):
                 self.getUTMpoly(placemark.geometry)
             if isinstance(placemark.geometry, geometry.MultiPolygon):
                 # print("found MultiPolygon")
-                for poly in placemark.geometry:
+                for poly in placemark.geometry.geoms:
                     self.getUTMpoly(poly.exterior)
             else:
                 print(placemark.geometry, " object has no handler")
